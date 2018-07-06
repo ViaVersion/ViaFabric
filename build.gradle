@@ -1,0 +1,69 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'https://www.dimdev.org/maven/' }
+        maven { url 'https://www.dimdev.org/maven/' }
+        maven { url = 'https://repo.spongepowered.org/maven/' }
+    }
+    dependencies {
+        classpath 'org.dimdev:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.tweaker-client'
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'java'
+
+group 'com.github.creeper123123321.viarift'
+version '1.0.1'
+archivesBaseName = 'ViaRift'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven { url 'https://libraries.minecraft.net/' }
+    maven {url 'https://oss.sonatype.org/content/repositories/snapshots'}
+    maven { url 'https://www.dimdev.org/maven/' }
+    maven { url = 'https://repo.viaversion.com/'}
+}
+
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
+dependencies {
+    shade ('us.myles:viaversion:1.4.1') { transitive = false }
+    implementation 'org.dimdev:mixin:0.7.11-SNAPSHOT'
+    compile 'org.dimdev.rift:Rift:1.0.1:dev'
+}
+
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+            exclude 'us/myles/ViaVersion/SpongePlugin.class'
+        }
+    }
+}
+
+reobf {
+    jar {
+        extraLines += "PK: us/myles com/github/creeper123123321/viarift/shaded/us/myles"
+    }
+}
+
+mixin {
+    defaultObfuscationEnv notch
+    add sourceSets.main, 'mixins.viarift.refmap.json'
+}
+
+minecraft {
+    version = '1.13'
+    mappings = 'snapshot_3'
+    runDir = 'run'
+    tweakClass = 'org.dimdev.riftloader.launch.RiftLoaderTweaker'
+}

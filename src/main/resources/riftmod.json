@@ -1,0 +1,10 @@
+{
+  "id": "viarift",
+  "name": "ViaRift",
+  "authors": [
+    "creeper123123321"
+  ],
+  "listeners": [
+    "com.github.creeper123123321.viarift.ViaRift"
+  ]
+}
