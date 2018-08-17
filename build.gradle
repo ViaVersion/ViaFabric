@@ -36,7 +36,7 @@ configurations {
 }
 
 dependencies {
-    shade ('us.myles:viaversion:1.4.1') { transitive = false }
+    shade ('us.myles:viaversion:1.4.2-SNAPSHOT') { transitive = false }
     implementation 'org.dimdev:mixin:0.7.11-SNAPSHOT'
     compile 'org.dimdev.rift:Rift:1.0.1:dev'
 }

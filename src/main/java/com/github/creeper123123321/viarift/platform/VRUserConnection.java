@@ -7,6 +7,7 @@ import io.netty.channel.socket.SocketChannel;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.type.Type;
+import us.myles.ViaVersion.util.PipelineUtil;
 
 
 public class VRUserConnection extends UserConnection {
@@ -28,14 +29,14 @@ public class VRUserConnection extends UserConnection {
         final Channel channel = this.getChannel();
         if (currentThread) {
             try {
-                channel.pipeline().context("decoder").fireChannelRead(copy);
+                PipelineUtil.getContextBefore("decoder", channel.pipeline()).fireChannelRead(copy);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             channel.eventLoop().submit(() -> {
                 try {
-                    channel.pipeline().context("decoder").fireChannelRead(copy);
+                    PipelineUtil.getContextBefore("decoder", channel.pipeline()).fireChannelRead(copy);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -55,7 +56,7 @@ public class VRUserConnection extends UserConnection {
         packet.release();
         final Channel channel = this.getChannel();
         try {
-            channel.pipeline().context("decoder").fireChannelRead(copy);
+            PipelineUtil.getContextBefore("decoder", channel.pipeline()).fireChannelRead(copy);
         } catch (Exception e) {
             e.printStackTrace();
         }
