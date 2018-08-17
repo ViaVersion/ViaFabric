@@ -34,10 +34,10 @@ public class VRInHandler extends ByteToMessageDecoder {
         if (user.isActive()) {
             // Handle ID
             int id = Type.VAR_INT.read(msg);
-            // Transform
-            ByteBuf newPacket = msg.alloc().buffer();
 
             if (id != PacketWrapper.PASSTHROUGH_ID) {
+                // Transform
+                ByteBuf newPacket = msg.alloc().buffer();
                 try {
                     PacketWrapper wrapper = new PacketWrapper(id, msg, user);
                     ProtocolInfo protInfo = user.get(ProtocolInfo.class);

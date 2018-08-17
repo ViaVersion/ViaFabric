@@ -1,5 +1,6 @@
 package com.github.creeper123123321.viarift.platform;
 
+import com.github.creeper123123321.viarift.util.PipelineUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -7,7 +8,6 @@ import io.netty.channel.socket.SocketChannel;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.type.Type;
-import us.myles.ViaVersion.util.PipelineUtil;
 
 
 public class VRUserConnection extends UserConnection {
