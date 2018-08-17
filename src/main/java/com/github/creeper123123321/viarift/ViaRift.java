@@ -17,5 +17,6 @@ public class ViaRift implements InitializationListener {
         Mixins.addConfiguration("mixins.viarift.main.json");
         Via.init(ViaManager.builder().injector(new VRInjector()).loader(new VRLoader()).platform(new VRPlatform()).build());
         Via.getManager().init();
+        //Via.getManager().setDebug(true);
     }
 }

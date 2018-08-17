@@ -21,11 +21,11 @@ public class VRInjector implements ViaInjector {
 
     @Override
     public String getEncoderName() {
-        return "decoder";
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getDecoderName() {
-        return "encoder";
+        throw new UnsupportedOperationException();
     }
 }

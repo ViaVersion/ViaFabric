@@ -26,9 +26,11 @@ public class VROutHandler extends MessageToByteEncoder {
     protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
         // Based on Sponge ViaVersion decoder code
 
+        ByteBuf pre = out.alloc().buffer();
+
         // call minecraft encoder
         try {
-            PipelineUtil.callEncode(this.minecraftEncoder, ctx, msg, out);
+            PipelineUtil.callEncode(this.minecraftEncoder, ctx, msg, pre);
         } catch (InvocationTargetException e) {
             if (e.getCause() instanceof Exception) {
                 throw (Exception) e.getCause();
@@ -36,7 +38,7 @@ public class VROutHandler extends MessageToByteEncoder {
         }
 
         // use transformers
-        if (out.readableBytes() > 0) {
+        if (pre.readableBytes() > 0) {
             // Ignore if pending disconnect
             if (user.isPendingDisconnect()) {
                 return;
@@ -51,16 +53,16 @@ public class VROutHandler extends MessageToByteEncoder {
 
             if (user.isActive()) {
                 // Handle ID
-                int id = Type.VAR_INT.read(out);
+                int id = Type.VAR_INT.read(pre);
                 // Transform
-                ByteBuf oldPacket = out.copy();
-                out.clear();
+                ByteBuf oldPacket = pre.copy();
                 try {
                     if (id != PacketWrapper.PASSTHROUGH_ID) {
                         PacketWrapper wrapper = new PacketWrapper(id, oldPacket, user);
                         ProtocolInfo protInfo = user.get(ProtocolInfo.class);
                         protInfo.getPipeline().transform(Direction.INCOMING, protInfo.getState(), wrapper);
-                        wrapper.writeToBuffer(out);
+                        pre.clear();
+                        wrapper.writeToBuffer(pre);
                     }
                 } catch (Exception e) {
                     if (!(e instanceof CancelException))
@@ -71,6 +73,9 @@ public class VROutHandler extends MessageToByteEncoder {
                 }
             }
         }
+
+        out.writeBytes(pre);
+        pre.release();
     }
 
 

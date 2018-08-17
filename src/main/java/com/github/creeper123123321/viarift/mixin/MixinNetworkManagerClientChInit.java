@@ -2,6 +2,7 @@ package com.github.creeper123123321.viarift.mixin;
 
 import com.github.creeper123123321.viarift.handler.VRInHandler;
 import com.github.creeper123123321.viarift.handler.VROutHandler;
+import com.github.creeper123123321.viarift.platform.VRUserConnection;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.socket.SocketChannel;
@@ -20,7 +21,7 @@ public class MixinNetworkManagerClientChInit {
     private void onInitChannel(Channel channel, CallbackInfo ci) {
         System.out.println(channel);
         if (channel instanceof SocketChannel) {
-            UserConnection user = new UserConnection((SocketChannel) channel);
+            UserConnection user = new VRUserConnection((SocketChannel) channel);
             new ProtocolPipeline(user);
 
             MessageToByteEncoder oldEncoder = (MessageToByteEncoder) channel.pipeline().get("encoder");
