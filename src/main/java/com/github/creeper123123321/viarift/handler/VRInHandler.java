@@ -30,41 +30,43 @@ public class VRInHandler extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
         // Based on ViaVersion Sponge encoder code
 
+        ByteBuf buf = msg.alloc().buffer().writeBytes(msg);
+
         // Increment sent
         user.incrementSent();
         if (user.isActive()) {
             // Handle ID
-            int id = Type.VAR_INT.read(msg);
+            int id = Type.VAR_INT.read(buf);
 
             if (id != PacketWrapper.PASSTHROUGH_ID) {
                 // Transform
-                ByteBuf old = msg.alloc().buffer().writeBytes(msg);
-                ByteBuf newPacket = msg.alloc().buffer();
+                ByteBuf newPacket = buf.alloc().buffer();
                 try {
-                    PacketWrapper wrapper = new PacketWrapper(id, old, user);
+                    PacketWrapper wrapper = new PacketWrapper(id, buf, user);
                     ProtocolInfo protInfo = user.get(ProtocolInfo.class);
                     protInfo.getPipeline().transform(Direction.OUTGOING, protInfo.getState(), wrapper);
                     wrapper.writeToBuffer(newPacket);
-                    old.release();
-                    msg = newPacket;
+                    buf.clear();
+                    buf.writeBytes(newPacket);
                 } catch (Exception e) {
-                    if (!(e instanceof CancelException))
-                        e.printStackTrace();
-                    msg.clear();
+                    buf.clear();
                     throw e;
+                } finally {
+                    newPacket.release();
                 }
             }
         }
 
         // call minecraft encoder
         try {
-            out.addAll(PipelineUtil.callDecode(this.minecraftDecoder, ctx, msg));
+            out.addAll(PipelineUtil.callDecode(this.minecraftDecoder, ctx, buf));
         } catch (InvocationTargetException e) {
             e.printStackTrace();
             if (e.getCause() instanceof Exception) {
                 throw (Exception) e.getCause();
             }
         }
+        buf.release();
     }
 
 

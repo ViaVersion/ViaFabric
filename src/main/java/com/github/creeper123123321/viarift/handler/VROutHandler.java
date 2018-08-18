@@ -46,30 +46,28 @@ public class VROutHandler extends MessageToByteEncoder {
             // Increment received
             boolean second = user.incrementReceived();
             // Check PPS
-            if (second) {
-                if (user.handlePPS())
-                    return;
-            }
+            if (second && user.handlePPS())
+                return;
 
             if (user.isActive()) {
                 // Handle ID
                 int id = Type.VAR_INT.read(pre);
                 // Transform
-                ByteBuf oldPacket = pre.copy();
+                ByteBuf newPacket = pre.alloc().buffer();
                 try {
                     if (id != PacketWrapper.PASSTHROUGH_ID) {
-                        PacketWrapper wrapper = new PacketWrapper(id, oldPacket, user);
+                        PacketWrapper wrapper = new PacketWrapper(id, pre, user);
                         ProtocolInfo protInfo = user.get(ProtocolInfo.class);
                         protInfo.getPipeline().transform(Direction.INCOMING, protInfo.getState(), wrapper);
+                        wrapper.writeToBuffer(newPacket);
                         pre.clear();
-                        wrapper.writeToBuffer(pre);
+                        pre.writeBytes(newPacket);
                     }
                 } catch (Exception e) {
-                    if (!(e instanceof CancelException))
-                        e.printStackTrace();
+                    pre.clear();
                     throw e;
                 } finally {
-                    oldPacket.release();
+                    newPacket.release();
                 }
             }
         }
