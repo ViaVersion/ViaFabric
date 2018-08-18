@@ -14,6 +14,7 @@ public class DelayedRunnable implements Runnable {
         try {
             Thread.sleep(delay);
         } catch (InterruptedException ignored) {
+            return;
         }
         runnable.run();
     }

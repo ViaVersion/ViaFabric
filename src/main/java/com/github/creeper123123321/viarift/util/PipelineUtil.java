@@ -13,8 +13,4 @@ public class PipelineUtil {
         }
         return pipe.context(previous);
     }
-
-    public static ChannelHandlerContext getContextAfter(String name, ChannelPipeline pipe) {
-        return us.myles.ViaVersion.util.PipelineUtil.getContextBefore(name, pipe);
-    }
 }

@@ -4,7 +4,6 @@ import com.github.creeper123123321.viarift.handler.VRInHandler;
 import com.github.creeper123123321.viarift.handler.VROutHandler;
 import com.github.creeper123123321.viarift.platform.VRUserConnection;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.MessageToByteEncoder;

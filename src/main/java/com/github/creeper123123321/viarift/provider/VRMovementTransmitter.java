@@ -1,6 +1,5 @@
 package com.github.creeper123123321.viarift.provider;
 
-import com.github.creeper123123321.viarift.util.PipelineUtil;
 import io.netty.buffer.ByteBuf;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.data.UserConnection;

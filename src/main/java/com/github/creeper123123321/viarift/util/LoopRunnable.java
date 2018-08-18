@@ -16,6 +16,7 @@ public class LoopRunnable implements Runnable {
             try {
                 Thread.sleep(interval);
             } catch (InterruptedException ignored) {
+                return;
             }
         }
     }
