@@ -19,7 +19,6 @@ import us.myles.ViaVersion.api.protocol.ProtocolPipeline;
 public class MixinNetworkManagerClientChInit {
     @Inject(method = "initChannel(Lio/netty/channel/Channel;)V", at = @At(value = "TAIL"))
     private void onInitChannel(Channel channel, CallbackInfo ci) {
-        System.out.println(channel);
         if (channel instanceof SocketChannel) {
             UserConnection user = new VRUserConnection((SocketChannel) channel);
             new ProtocolPipeline(user);
