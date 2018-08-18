@@ -38,12 +38,14 @@ public class VRInHandler extends ByteToMessageDecoder {
 
             if (id != PacketWrapper.PASSTHROUGH_ID) {
                 // Transform
+                ByteBuf old = msg.alloc().buffer().writeBytes(msg);
                 ByteBuf newPacket = msg.alloc().buffer();
                 try {
-                    PacketWrapper wrapper = new PacketWrapper(id, msg, user);
+                    PacketWrapper wrapper = new PacketWrapper(id, old, user);
                     ProtocolInfo protInfo = user.get(ProtocolInfo.class);
                     protInfo.getPipeline().transform(Direction.OUTGOING, protInfo.getState(), wrapper);
                     wrapper.writeToBuffer(newPacket);
+                    old.release();
                     msg = newPacket;
                 } catch (Exception e) {
                     if (!(e instanceof CancelException))
