@@ -68,7 +68,7 @@ public class VRViaConfig implements ViaVersionConfig {
 
     @Override
     public boolean isAutoTeam() {
-        return true;
+        return false;
     }
 
     @Override

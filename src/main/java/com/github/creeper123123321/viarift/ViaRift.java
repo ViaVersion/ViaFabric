@@ -10,7 +10,7 @@ import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
 
 public class ViaRift implements InitializationListener {
-    public static int fakeServerVersion = 340; // TODO
+    public static int fakeServerVersion = 393; // TODO
     @Override
     public void onInitialization() {
         MixinBootstrap.init();
