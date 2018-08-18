@@ -16,6 +16,6 @@ public class VRLoader implements ViaPlatformLoader {
 
     @Override
     public void unload() {
-
+        // Nothing to do
     }
 }

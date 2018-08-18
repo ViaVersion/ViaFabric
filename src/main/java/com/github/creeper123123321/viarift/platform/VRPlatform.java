@@ -34,7 +34,7 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public String getPluginVersion() {
-        return VersionInfo.VERSION;
+        return "ViaRift-" + VersionInfo.VERSION;
     }
 
     @Override
@@ -111,7 +111,7 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public void onReload() {
-
+        // Nothing to do
     }
 
     @Override
