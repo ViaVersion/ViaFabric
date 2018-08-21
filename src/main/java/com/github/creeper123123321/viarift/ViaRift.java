@@ -4,6 +4,8 @@ import com.github.creeper123123321.viarift.platform.VRInjector;
 import com.github.creeper123123321.viarift.platform.VRLoader;
 import com.github.creeper123123321.viarift.platform.VRPlatform;
 import com.github.creeper123123321.viarift.util.JLoggerToLog4j;
+import io.netty.channel.DefaultEventLoop;
+import io.netty.channel.EventLoop;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dimdev.riftloader.listener.InitializationListener;
@@ -16,6 +18,7 @@ public class ViaRift implements InitializationListener {
     public static int fakeServerVersion = 393; // TODO
     public static final Logger LOGGER = LogManager.getLogger();
     public static final java.util.logging.Logger JLOGGER = new JLoggerToLog4j(LOGGER);
+    public static final EventLoop EVENT_LOOP = new DefaultEventLoop();
     @Override
     public void onInitialization() {
         MixinBootstrap.init();

@@ -1,8 +1,8 @@
 package com.github.creeper123123321.viarift.platform;
 
 import com.github.creeper123123321.viarift.ViaRift;
-import com.github.creeper123123321.viarift.util.DelayedRunnable;
-import com.github.creeper123123321.viarift.util.LoopRunnable;
+import com.github.creeper123123321.viarift.util.FutureTaskId;
+import com.github.creeper123123321.viarift.util.ThreadTaskId;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 import us.myles.ViaVersion.api.ViaAPI;
@@ -15,6 +15,7 @@ import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.viaversion.libs.gson.JsonObject;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class VRPlatform implements ViaPlatform {
@@ -42,34 +43,30 @@ public class VRPlatform implements ViaPlatform {
     public TaskId runAsync(Runnable runnable) {
         Thread t = new Thread(runnable, "ViaRift Async Task");
         t.start();
-        return new VRTaskId(t);
+        return new ThreadTaskId(t);
     }
 
     @Override
     public TaskId runSync(Runnable runnable) {
-        Thread t = new Thread(runnable, "ViaRift Sync Task");
-        t.start();
-        return new VRTaskId(t);
+        return new FutureTaskId(ViaRift.EVENT_LOOP.submit(runnable));
     }
 
     @Override
-    public TaskId runSync(Runnable runnable, Long aLong) {
-        Thread t = new Thread(new DelayedRunnable(runnable, aLong * 50), "ViaRift Sync Delayed Task");
-        t.start();
-        return new VRTaskId(t);
+    public TaskId runSync(Runnable runnable, Long ticks) {
+        return new FutureTaskId(ViaRift.EVENT_LOOP.schedule(runnable, ticks * 50, TimeUnit.SECONDS));
     }
 
     @Override
-    public TaskId runRepeatingSync(Runnable runnable, Long aLong) {
-        Thread t = new Thread(new LoopRunnable(runnable, aLong * 50), "ViaRift Sync Repeating Task");
-        t.start();
-        return new VRTaskId(t);
+    public TaskId runRepeatingSync(Runnable runnable, Long ticks) {
+        return new FutureTaskId(ViaRift.EVENT_LOOP.scheduleAtFixedRate(runnable, 0, ticks * 50, TimeUnit.SECONDS));
     }
 
     @Override
     public void cancelTask(TaskId taskId) {
-        if (taskId instanceof VRTaskId) {
-            ((VRTaskId) taskId).getObject().interrupt();
+        if (taskId instanceof ThreadTaskId) {
+            ((ThreadTaskId) taskId).getObject().interrupt();
+        } else if (taskId instanceof FutureTaskId) {
+            ((FutureTaskId) taskId).getObject().cancel(false);
         }
     }
 
