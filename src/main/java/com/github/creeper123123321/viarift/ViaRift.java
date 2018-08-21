@@ -3,6 +3,9 @@ package com.github.creeper123123321.viarift;
 import com.github.creeper123123321.viarift.platform.VRInjector;
 import com.github.creeper123123321.viarift.platform.VRLoader;
 import com.github.creeper123123321.viarift.platform.VRPlatform;
+import com.github.creeper123123321.viarift.util.JLoggerToLog4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dimdev.riftloader.listener.InitializationListener;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
@@ -11,6 +14,8 @@ import us.myles.ViaVersion.api.Via;
 
 public class ViaRift implements InitializationListener {
     public static int fakeServerVersion = 393; // TODO
+    public static final Logger LOGGER = LogManager.getLogger();
+    public static final java.util.logging.Logger JLOGGER = new JLoggerToLog4j(LOGGER);
     @Override
     public void onInitialization() {
         MixinBootstrap.init();

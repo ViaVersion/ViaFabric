@@ -1,5 +1,6 @@
 package com.github.creeper123123321.viarift.platform;
 
+import com.github.creeper123123321.viarift.ViaRift;
 import com.github.creeper123123321.viarift.util.DelayedRunnable;
 import com.github.creeper123123321.viarift.util.LoopRunnable;
 import net.minecraft.client.Minecraft;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
 public class VRPlatform implements ViaPlatform {
     @Override
     public Logger getLogger() {
-        return Logger.getLogger("ViaRift");
+        return ViaRift.JLOGGER;
     }
 
     @Override

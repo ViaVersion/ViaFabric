@@ -60,6 +60,6 @@ public class VRUserConnection extends UserConnection {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return channel.newSucceededFuture();
     }
 }
