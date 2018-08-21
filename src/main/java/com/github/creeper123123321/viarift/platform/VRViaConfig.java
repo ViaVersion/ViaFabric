@@ -1,59 +1,86 @@
 package com.github.creeper123123321.viarift.platform;
 
 import us.myles.ViaVersion.api.ViaVersionConfig;
+import us.myles.ViaVersion.util.Config;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
-public class VRViaConfig implements ViaVersionConfig {
+public class VRViaConfig extends Config implements ViaVersionConfig {
+    // Based on Sponge ViaVersion
+    private static List<String> UNSUPPORTED = Arrays.asList("anti-xray-patch", "bungee-ping-interval", "bungee-ping-save", "bungee-servers", "quick-move-action-fix", "nms-player-ticking", "item-cache");
+
+    public VRViaConfig(File configFile) {
+        super(new File(configFile, "config.yml"));
+        // Load config
+        reloadConfig();
+    }
+
     @Override
+    public URL getDefaultConfigURL() {
+        return getClass().getClassLoader().getResource("assets/viaversion/config.yml");
+    }
+
+    @Override
+    protected void handleConfig(Map<String, Object> config) {
+        // Nothing Currently
+    }
+
+    @Override
+    public List<String> getUnsupportedOptions() {
+        return UNSUPPORTED;
+    }
+
     public boolean isCheckForUpdates() {
-        return false;
+        return getBoolean("checkforupdates", true);
     }
 
     @Override
     public boolean isPreventCollision() {
-        return true;
+        return getBoolean("prevent-collision", true);
     }
 
     @Override
     public boolean isNewEffectIndicator() {
-        return true;
+        return getBoolean("use-new-effect-indicator", true);
     }
 
     @Override
     public boolean isShowNewDeathMessages() {
-        return false;
+        return getBoolean("use-new-deathmessages", true);
     }
 
     @Override
     public boolean isSuppressMetadataErrors() {
-        return false;
+        return getBoolean("suppress-metadata-errors", false);
     }
 
     @Override
     public boolean isShieldBlocking() {
-        return true;
+        return getBoolean("shield-blocking", true);
     }
 
     @Override
     public boolean isHologramPatch() {
-        return true;
+        return getBoolean("hologram-patch", false);
     }
 
     @Override
     public boolean isPistonAnimationPatch() {
-        return false;
+        return getBoolean("piston-animation-patch", false);
     }
 
     @Override
     public boolean isBossbarPatch() {
-        return true;
+        return getBoolean("bossbar-patch", true);
     }
 
     @Override
     public boolean isBossbarAntiflicker() {
-        return false;
+        return getBoolean("bossbar-anti-flicker", false);
     }
 
     @Override
@@ -63,12 +90,7 @@ public class VRViaConfig implements ViaVersionConfig {
 
     @Override
     public double getHologramYOffset() {
-        return -0.96;
-    }
-
-    @Override
-    public boolean isAutoTeam() {
-        return false;
+        return getDouble("hologram-y", -0.96D);
     }
 
     @Override
@@ -78,32 +100,32 @@ public class VRViaConfig implements ViaVersionConfig {
 
     @Override
     public int getMaxPPS() {
-        return -1;
+        return getInt("max-pps", 800);
     }
 
     @Override
     public String getMaxPPSKickMessage() {
-        return null;
+        return getString("max-pps-kick-msg", "Sending packets too fast? lag?");
     }
 
     @Override
     public int getTrackingPeriod() {
-        return -1;
+        return getInt("tracking-period", 6);
     }
 
     @Override
     public int getWarningPPS() {
-        return -1;
+        return getInt("tracking-warning-pps", 120);
     }
 
     @Override
     public int getMaxWarnings() {
-        return -1;
+        return getInt("tracking-max-warnings", 3);
     }
 
     @Override
     public String getMaxWarningsKickMessage() {
-        return "";
+        return getString("tracking-max-kick-msg", "You are sending too many packets, :(");
     }
 
     @Override
@@ -113,12 +135,12 @@ public class VRViaConfig implements ViaVersionConfig {
 
     @Override
     public boolean isSendSupportedVersions() {
-        return false;
+        return getBoolean("send-supported-versions", false);
     }
 
     @Override
     public boolean isStimulatePlayerTick() {
-        return true;
+        return getBoolean("simulate-pt", true);
     }
 
     @Override
@@ -133,27 +155,27 @@ public class VRViaConfig implements ViaVersionConfig {
 
     @Override
     public boolean isReplacePistons() {
-        return false;
+        return getBoolean("replace-pistons", false);
     }
 
     @Override
     public int getPistonReplacementId() {
-        return -1;
+        return getInt("replacement-piston-id", 0);
+    }
+
+    public boolean isAutoTeam() {
+        // Collision has to be enabled first
+        return isPreventCollision() && getBoolean("auto-team", true);
     }
 
     @Override
     public boolean isForceJsonTransform() {
-        return false;
+        return getBoolean("force-json-transform", false);
     }
 
     @Override
     public boolean is1_12NBTArrayFix() {
-        return true;
-    }
-
-    @Override
-    public boolean is1_13TeamColourFix() {
-        return false;
+        return getBoolean("chat-nbt-fix", true);
     }
 
     @Override
@@ -163,16 +185,26 @@ public class VRViaConfig implements ViaVersionConfig {
 
     @Override
     public List<Integer> getBlockedProtocols() {
-        return new ArrayList<>();
+        return getIntegerList("block-protocols");
     }
 
     @Override
     public String getBlockedDisconnectMsg() {
-        return "";
+        return getString("block-disconnect-msg", "You are using an unsupported Minecraft version!");
     }
 
     @Override
     public String getReloadDisconnectMsg() {
-        return "";
+        return getString("reload-disconnect-msg", "Server reload, please rejoin!");
+    }
+
+    @Override
+    public boolean is1_13TeamColourFix() {
+        return getBoolean("team-colour-fix", true);
+    }
+
+    //@Override
+    public boolean isSuppress1_13ConversionErrors() {
+        return getBoolean("suppress-1_13-conversion-errors", false);
     }
 }

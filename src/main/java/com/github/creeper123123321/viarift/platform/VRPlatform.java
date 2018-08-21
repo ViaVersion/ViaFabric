@@ -14,11 +14,14 @@ import us.myles.ViaVersion.api.platform.ViaPlatform;
 import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.viaversion.libs.gson.JsonObject;
 
+import java.io.File;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class VRPlatform implements ViaPlatform {
+    private VRViaConfig config = new VRViaConfig(new File("config/ViaRift/config.yml"));
+
     @Override
     public Logger getLogger() {
         return ViaRift.JLOGGER;
@@ -99,12 +102,12 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public ViaVersionConfig getConf() {
-        return new VRViaConfig();
+        return config;
     }
 
     @Override
     public ConfigurationProvider getConfigurationProvider() {
-        throw new UnsupportedOperationException();
+        return config;
     }
 
     @Override
