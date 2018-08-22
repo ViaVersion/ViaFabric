@@ -50,6 +50,7 @@ jar {
         from(project.zipTree(dep)){
             exclude 'META-INF', 'META-INF/**'
             exclude 'us/myles/ViaVersion/SpongePlugin.class'
+            exclude 'javassist/**'
         }
     }
 }
