@@ -57,9 +57,10 @@ public class VRUserConnection extends UserConnection {
         final Channel channel = this.getChannel();
         try {
             PipelineUtil.getContextBefore("decoder", channel.pipeline()).fireChannelRead(copy);
+            return channel.newSucceededFuture();
         } catch (Exception e) {
             e.printStackTrace();
+            return channel.newFailedFuture(e);
         }
-        return channel.newSucceededFuture();
     }
 }

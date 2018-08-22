@@ -15,7 +15,7 @@ import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
 
 public class ViaRift implements InitializationListener {
-    public static int fakeServerVersion = 393; // TODO
+    public static int fakeServerVersion = 393;
     public static final Logger LOGGER = LogManager.getLogger();
     public static final java.util.logging.Logger JLOGGER = new JLoggerToLog4j(LOGGER);
     public static final EventLoop EVENT_LOOP = new DefaultEventLoop();

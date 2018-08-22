@@ -34,11 +34,6 @@ public abstract class MixinGuiMultiplayer extends GuiScreen {
         protocolVersion.func_195608_a(p_1, p_2, p_3);
     }
 
-    //@Inject(method = "keyPressed", at = @At("TAIL"))
-    //private void onKeyPressed(int p_1, int p_2, int p_3, CallbackInfoReturnable<Boolean> cir) {
-    //    protocolVersion.keyPressed(p_1, p_2, p_3);
-    //}
-
     @Inject(method = "updateScreen", at = @At("TAIL"))
     private void onUpdateScreen(CallbackInfo ci) {
         protocolVersion.updateCursorCounter();
