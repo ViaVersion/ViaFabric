@@ -24,7 +24,7 @@ targetCompatibility = 1.8
 repositories {
     mavenCentral()
     maven { url 'https://libraries.minecraft.net/' }
-    maven { url 'https://repo.viaversion.com/'}
+    maven { url 'https://repo.viaversion.com/' }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     maven { url 'https://www.dimdev.org/maven/' }
     maven { url 'https://jitpack.io' }
@@ -36,7 +36,7 @@ configurations {
 }
 
 dependencies {
-    shade ('us.myles:viaversion:1.4.2-SNAPSHOT') {
+    shade ('us.myles:viaversion:1.5.1-SNAPSHOT') {
         transitive = false
         changing = true
     }

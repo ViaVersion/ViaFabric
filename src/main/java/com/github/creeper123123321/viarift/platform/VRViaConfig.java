@@ -203,7 +203,7 @@ public class VRViaConfig extends Config implements ViaVersionConfig {
         return getBoolean("team-colour-fix", true);
     }
 
-    //@Override
+    @Override
     public boolean isSuppress1_13ConversionErrors() {
         return getBoolean("suppress-1_13-conversion-errors", false);
     }
