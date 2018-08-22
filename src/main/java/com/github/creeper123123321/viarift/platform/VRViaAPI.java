@@ -6,24 +6,35 @@ import us.myles.ViaVersion.api.ViaAPI;
 import us.myles.ViaVersion.api.boss.BossBar;
 import us.myles.ViaVersion.api.boss.BossColor;
 import us.myles.ViaVersion.api.boss.BossStyle;
+import us.myles.ViaVersion.api.data.UserConnection;
+import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
+import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 
 import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.UUID;
 
-public class VRViaAPI implements ViaAPI {
+public class VRViaAPI implements ViaAPI<Void> {
     @Override
-    public int getPlayerVersion(Object o) {
-        throw new UnsupportedOperationException();
+    public int getPlayerVersion(Void o) {
+        throw new UnsupportedOperationException("WHAT??? A INSTANCE OF VOID???");
     }
 
     @Override
     public int getPlayerVersion(UUID uuid) {
-        throw new UnsupportedOperationException();
+        if (!isPorted(uuid)) {
+            try {
+                return Via.getManager().getInjector().getServerProtocolVersion();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return Via.getManager().getPortedPlayers().get(uuid).get(ProtocolInfo.class).getProtocolVersion();
     }
 
     @Override
     public boolean isPorted(UUID uuid) {
-        throw new UnsupportedOperationException();
+        return Via.getManager().getPortedPlayers().containsKey(uuid);
     }
 
     @Override
@@ -32,13 +43,14 @@ public class VRViaAPI implements ViaAPI {
     }
 
     @Override
-    public void sendRawPacket(Object o, ByteBuf byteBuf) throws IllegalArgumentException {
-        throw new UnsupportedOperationException();
+    public void sendRawPacket(Void o, ByteBuf byteBuf) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("WHAT??? A INSTANCE OF VOID???");
     }
 
     @Override
     public void sendRawPacket(UUID uuid, ByteBuf byteBuf) throws IllegalArgumentException {
-        throw new UnsupportedOperationException();
+        UserConnection ci = Via.getManager().getPortedPlayers().get(uuid);
+        ci.sendRawPacket(byteBuf);
     }
 
     @Override
@@ -53,6 +65,9 @@ public class VRViaAPI implements ViaAPI {
 
     @Override
     public SortedSet<Integer> getSupportedVersions() {
-        throw new UnsupportedOperationException();
+        SortedSet<Integer> outputSet = new TreeSet<>(ProtocolRegistry.getSupportedVersions());
+        outputSet.removeAll(Via.getPlatform().getConf().getBlockedProtocols());
+
+        return outputSet;
     }
 }

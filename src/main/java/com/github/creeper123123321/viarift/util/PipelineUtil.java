@@ -4,7 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
 
 public class PipelineUtil {
-    public static ChannelHandlerContext getContextBefore(String name, ChannelPipeline pipe) {
+    public static ChannelHandlerContext getPreviousContext(String name, ChannelPipeline pipe) {
         String previous = null;
         for (String current : pipe.names()) {
             if (name.equals(current))

@@ -29,14 +29,14 @@ public class VRUserConnection extends UserConnection {
         final Channel channel = this.getChannel();
         if (currentThread) {
             try {
-                PipelineUtil.getContextBefore("decoder", channel.pipeline()).fireChannelRead(copy);
+                PipelineUtil.getPreviousContext("decoder", channel.pipeline()).fireChannelRead(copy);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
             channel.eventLoop().submit(() -> {
                 try {
-                    PipelineUtil.getContextBefore("decoder", channel.pipeline()).fireChannelRead(copy);
+                    PipelineUtil.getPreviousContext("decoder", channel.pipeline()).fireChannelRead(copy);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -56,7 +56,7 @@ public class VRUserConnection extends UserConnection {
         packet.release();
         final Channel channel = this.getChannel();
         try {
-            PipelineUtil.getContextBefore("decoder", channel.pipeline()).fireChannelRead(copy);
+            PipelineUtil.getPreviousContext("decoder", channel.pipeline()).fireChannelRead(copy);
             return channel.newSucceededFuture();
         } catch (Exception e) {
             e.printStackTrace();

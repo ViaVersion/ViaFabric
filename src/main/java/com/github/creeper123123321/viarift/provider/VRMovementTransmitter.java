@@ -31,11 +31,8 @@ public class VRMovementTransmitter extends MovementTransmitterProvider {
         ByteBuf buf = userConnection.getChannel().alloc().buffer();
 
         try {
-            //Type.VAR_INT.write(buf, PacketWrapper.PASSTHROUGH_ID);
             packet.writeToBuffer(buf);
-            //PipelineUtil.getContextAfter("encoder", userConnection.getChannel().pipeline()).writeAndFlush(buf);
             userConnection.getChannel().pipeline().context("encoder").writeAndFlush(buf);
-            //PipelineUtil.getContextBefore("encoder", userConnection.getChannel().pipeline()).writeAndFlush(buf);
             userConnection.get(MovementTracker.class).incrementIdlePacket();
         } catch (Exception e) {
             e.printStackTrace();
