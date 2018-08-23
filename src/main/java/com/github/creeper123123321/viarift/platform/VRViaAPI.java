@@ -41,7 +41,7 @@ import java.util.UUID;
 public class VRViaAPI implements ViaAPI<Void> {
     @Override
     public int getPlayerVersion(Void o) {
-        throw new UnsupportedOperationException("WHAT??? A INSTANCE OF VOID???");
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -68,7 +68,7 @@ public class VRViaAPI implements ViaAPI<Void> {
 
     @Override
     public void sendRawPacket(Void o, ByteBuf byteBuf) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("WHAT??? A INSTANCE OF VOID???");
+        throw new UnsupportedOperationException();
     }
 
     @Override
