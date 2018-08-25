@@ -29,12 +29,16 @@ import java.util.function.Predicate;
 public class IntegerFormatFilter implements Predicate<String> {
     @Override
     public boolean test(String s) {
-        if (s.isEmpty()) return true;
         try {
             Integer.parseInt(s);
             return true;
         } catch (NumberFormatException e) {
-            return false;
+            try {
+                Integer.parseInt(s + '0');
+                return true;
+            } catch (NumberFormatException e2) {
+                return false;
+            }
         }
     }
 }
