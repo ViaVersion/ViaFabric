@@ -68,24 +68,36 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public TaskId runAsync(Runnable runnable) {
-        Thread t = new Thread(runnable, "ViaRift Async Task");
+        Thread t = ViaRift.THREAD_FACTORY.newThread(runnable);
         t.start();
         return new ThreadTaskId(t);
     }
 
     @Override
     public TaskId runSync(Runnable runnable) {
-        return new FutureTaskId(ViaRift.EVENT_LOOP.submit(runnable));
+        return new FutureTaskId(ViaRift.EVENT_LOOP.submit(runnable).addListener(future -> {
+            if (!future.isSuccess()) {
+                future.cause().printStackTrace();
+            }
+        }));
     }
 
     @Override
     public TaskId runSync(Runnable runnable, Long ticks) {
-        return new FutureTaskId(ViaRift.EVENT_LOOP.schedule(runnable, ticks * 50, TimeUnit.SECONDS));
+        return new FutureTaskId(ViaRift.EVENT_LOOP.schedule(runnable, ticks * 50, TimeUnit.SECONDS).addListener(future -> {
+            if (!future.isSuccess()) {
+                future.cause().printStackTrace();
+            }
+        }));
     }
 
     @Override
     public TaskId runRepeatingSync(Runnable runnable, Long ticks) {
-        return new FutureTaskId(ViaRift.EVENT_LOOP.scheduleAtFixedRate(runnable, 0, ticks * 50, TimeUnit.SECONDS));
+        return new FutureTaskId(ViaRift.EVENT_LOOP.scheduleAtFixedRate(runnable, 0, ticks * 50, TimeUnit.SECONDS).addListener(future -> {
+            if (!future.isSuccess()) {
+                future.cause().printStackTrace();
+            }
+        }));
     }
 
     @Override

@@ -30,6 +30,7 @@ import com.github.creeper123123321.viarift.platform.VRPlatform;
 import com.github.creeper123123321.viarift.util.JLoggerToLog4j;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
+import net.minecraft.util.NamedThreadFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dimdev.riftloader.listener.InitializationListener;
@@ -38,11 +39,16 @@ import org.spongepowered.asm.mixin.Mixins;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
+
 public class ViaRift implements InitializationListener {
     public static int fakeServerVersion = -1;
     public static final Logger LOGGER = LogManager.getLogger();
     public static final java.util.logging.Logger JLOGGER = new JLoggerToLog4j(LOGGER);
-    public static final EventLoop EVENT_LOOP = new DefaultEventLoop();
+    public static final ThreadFactory THREAD_FACTORY = new NamedThreadFactory("ViaRift");
+    public static final EventLoop EVENT_LOOP = new DefaultEventLoop(THREAD_FACTORY);
     @Override
     public void onInitialization() {
         MixinBootstrap.init();
