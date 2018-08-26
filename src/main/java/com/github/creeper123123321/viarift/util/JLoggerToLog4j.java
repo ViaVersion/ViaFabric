@@ -24,6 +24,7 @@
 
 package com.github.creeper123123321.viarift.util;
 
+import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -71,17 +72,7 @@ public class JLoggerToLog4j extends Logger {
     }
 
     public void log(Level level, String msg, Object[] params) {
-        if (level == Level.FINE) {
-            this.base.debug(msg, params);
-        } else if (level == Level.WARNING) {
-            this.base.warn(msg, params);
-        } else if (level == Level.SEVERE) {
-            this.base.error(msg, params);
-        } else if (level == Level.INFO) {
-            this.base.info(msg, params);
-        } else {
-            this.base.trace(msg, params);
-        }
+        log(level, MessageFormat.format(msg, params));
     }
 
     public void log(Level level, String msg, Throwable params) {

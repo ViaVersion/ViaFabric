@@ -24,9 +24,7 @@
 
 package com.github.creeper123123321.viarift;
 
-import com.github.creeper123123321.viarift.platform.VRInjector;
-import com.github.creeper123123321.viarift.platform.VRLoader;
-import com.github.creeper123123321.viarift.platform.VRPlatform;
+import com.github.creeper123123321.viarift.platform.*;
 import com.github.creeper123123321.viarift.util.JLoggerToLog4j;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
@@ -37,10 +35,16 @@ import org.dimdev.riftloader.listener.InitializationListener;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
 import us.myles.ViaVersion.ViaManager;
+import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
+import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
+import us.myles.ViaVersion.api.protocol.ProtocolVersion;
+import us.myles.ViaVersion.api.remapper.PacketHandler;
+import us.myles.ViaVersion.api.remapper.PacketRemapper;
+import us.myles.ViaVersion.api.type.Type;
+import us.myles.ViaVersion.packets.State;
+import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 
 public class ViaRift implements InitializationListener {
@@ -53,8 +57,33 @@ public class ViaRift implements InitializationListener {
     public void onInitialization() {
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.viarift.main.json");
-        Via.init(ViaManager.builder().injector(new VRInjector()).loader(new VRLoader()).platform(new VRPlatform()).build());
+        Via.init(ViaManager.builder()
+                .injector(new VRInjector())
+                .loader(new VRLoader())
+                .commandHandler(new VRCommandHandler())
+                .platform(new VRPlatform()).build());
         Via.getManager().init();
+        ProtocolRegistry.getProtocolPath(ProtocolVersion.v1_13.getId(), ProtocolVersion.v1_12_2.getId()) // XGH to intercept /viarift commands
+                .get(0).getValue().registerIncoming(State.PLAY, 0x02, 0x02, new PacketRemapper() {
+            @Override
+            public void registerMap() {
+                map(Type.STRING);
+                handler(new PacketHandler() {
+                    @Override
+                    public void handle(PacketWrapper packetWrapper) throws Exception {
+                        String msg = packetWrapper.get(Type.STRING, 0);
+                        ProtocolInfo info = packetWrapper.user().get(ProtocolInfo.class);
+                        if (msg.startsWith("/viarift")) {
+                            Via.getManager().getCommandHandler().onCommand(
+                                    new VRCommandSender(info.getUuid(), info.getUsername()),
+                                    (msg.length() == 8 ? "" : msg.substring(9)).split(" ", -1)
+                            );
+                            packetWrapper.cancel();
+                        }
+                    }
+                });
+            }
+        });
         //Via.getManager().setDebug(true);
     }
 }

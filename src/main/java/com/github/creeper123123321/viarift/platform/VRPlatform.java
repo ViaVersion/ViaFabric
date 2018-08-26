@@ -29,12 +29,14 @@ import com.github.creeper123123321.viarift.util.FutureTaskId;
 import com.github.creeper123123321.viarift.util.ThreadTaskId;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
+import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
 import us.myles.ViaVersion.api.ViaVersionConfig;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
 import us.myles.ViaVersion.api.configuration.ConfigurationProvider;
 import us.myles.ViaVersion.api.platform.TaskId;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
+import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.viaversion.libs.gson.JsonObject;
 
@@ -111,13 +113,18 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public ViaCommandSender[] getOnlinePlayers() {
-        throw new UnsupportedOperationException();
+        return Via.getManager().getPortedPlayers().values().stream().map(it -> {
+            ProtocolInfo info = it.get(ProtocolInfo.class);
+            return new VRCommandSender(info.getUuid(), info.getUsername());
+        }).toArray(ViaCommandSender[]::new);
     }
 
     @Override
     public void sendMessage(UUID uuid, String s) {
         if (uuid.equals(Minecraft.getMinecraft().player.getUniqueID())) {
-            Minecraft.getMinecraft().player.sendMessage(new TextComponentString(s));
+            Minecraft.getMinecraft().addScheduledTask(() ->
+                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(s))
+            );
         }
     }
 

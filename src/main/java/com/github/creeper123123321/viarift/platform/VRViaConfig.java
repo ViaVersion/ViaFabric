@@ -108,6 +108,7 @@ public class VRViaConfig extends Config implements ViaVersionConfig {
     }
 
     @Override
+    @Deprecated
     public boolean isUnknownEntitiesSuppressed() {
         return false;
     }
@@ -118,6 +119,7 @@ public class VRViaConfig extends Config implements ViaVersionConfig {
     }
 
     @Override
+    @Deprecated
     public boolean isBlockBreakPatch() {
         return false;
     }

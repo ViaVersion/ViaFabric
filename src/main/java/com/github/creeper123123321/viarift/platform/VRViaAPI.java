@@ -57,6 +57,7 @@ public class VRViaAPI implements ViaAPI<Void> {
     }
 
     @Override
+    @Deprecated
     public boolean isPorted(UUID uuid) {
         return Via.getManager().getPortedPlayers().containsKey(uuid);
     }
