@@ -25,18 +25,22 @@
 package com.github.creeper123123321.viarift.platform;
 
 import com.github.creeper123123321.viarift.ViaRift;
+import com.github.creeper123123321.viarift.protocol.Interceptor;
 import com.github.creeper123123321.viarift.util.FutureTaskId;
 import com.github.creeper123123321.viarift.util.ThreadTaskId;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.text.TextComponentString;
+import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
 import us.myles.ViaVersion.api.ViaVersionConfig;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
 import us.myles.ViaVersion.api.configuration.ConfigurationProvider;
+import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.platform.TaskId;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
+import us.myles.ViaVersion.api.type.Type;
+import us.myles.ViaVersion.exception.CancelException;
 import us.myles.ViaVersion.protocols.base.ProtocolInfo;
+import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
 import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.viaversion.libs.gson.JsonObject;
 
@@ -46,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class VRPlatform implements ViaPlatform {
-    private VRViaConfig config = new VRViaConfig(new File("config/ViaRift/config.yml"));
+    private VRViaConfig config = new VRViaConfig(new File("config/ViaRift"));
 
     @Override
     public Logger getLogger() {
@@ -121,16 +125,31 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public void sendMessage(UUID uuid, String s) {
-        if (uuid.equals(Minecraft.getMinecraft().player.getUniqueID())) {
-            Minecraft.getMinecraft().addScheduledTask(() ->
-                    Minecraft.getMinecraft().player.sendMessage(new TextComponentString(s))
-            );
+        UserConnection user = Via.getManager().getPortedPlayers().get(uuid);
+        PacketWrapper chat = new PacketWrapper(0x0E, null, user);
+        chat.write(Type.STRING, ChatRewriter.legacyTextToJson(s));
+        chat.write(Type.BYTE, (byte) 0); // Position chat box
+        try {
+            chat.send(Interceptor.class);
+        } catch (CancelException e) {
+            // Ignore
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public boolean kickPlayer(UUID uuid, String s) {
-        throw new UnsupportedOperationException();
+        UserConnection user = Via.getManager().getPortedPlayers().get(uuid);
+        PacketWrapper chat = new PacketWrapper(0x1B, null, user);
+        chat.write(Type.STRING, ChatRewriter.legacyTextToJson(s));
+        try {
+            chat.sendFuture(Interceptor.class).addListener(future -> user.getChannel().close());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

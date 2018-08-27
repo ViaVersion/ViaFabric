@@ -27,6 +27,7 @@ package com.github.creeper123123321.viarift.mixin;
 import com.github.creeper123123321.viarift.handler.VRInHandler;
 import com.github.creeper123123321.viarift.handler.VROutHandler;
 import com.github.creeper123123321.viarift.platform.VRUserConnection;
+import com.github.creeper123123321.viarift.protocol.VRProtocolPipeline;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -36,7 +37,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.protocol.ProtocolPipeline;
 
 @Mixin(targets = "net.minecraft.network.NetworkManager$1")
 public class MixinNetworkManagerClientChInit {
@@ -44,7 +44,7 @@ public class MixinNetworkManagerClientChInit {
     private void onInitChannel(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
             UserConnection user = new VRUserConnection((SocketChannel) channel);
-            new ProtocolPipeline(user);
+            new VRProtocolPipeline(user);
 
             MessageToByteEncoder oldEncoder = (MessageToByteEncoder) channel.pipeline().get("encoder");
             ByteToMessageDecoder oldDecoder = (ByteToMessageDecoder) channel.pipeline().get("decoder");
