@@ -71,7 +71,7 @@ public class VRInHandler extends ByteToMessageDecoder {
                     buf.clear();
                     buf.writeBytes(newPacket);
                 } catch (Exception e) {
-                    buf.clear();
+                    buf.release();
                     throw e;
                 } finally {
                     newPacket.release();

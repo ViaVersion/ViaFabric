@@ -88,7 +88,7 @@ public class VROutHandler extends MessageToByteEncoder {
                         pre.writeBytes(newPacket);
                     }
                 } catch (Exception e) {
-                    pre.clear();
+                    pre.release();
                     throw e;
                 } finally {
                     newPacket.release();

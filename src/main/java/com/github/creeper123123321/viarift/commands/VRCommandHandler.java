@@ -22,9 +22,17 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viarift.platform;
+package com.github.creeper123123321.viarift.commands;
 
+import com.github.creeper123123321.viarift.commands.subs.LeakDetectSubCommand;
 import us.myles.ViaVersion.commands.ViaCommandHandler;
 
 public class VRCommandHandler extends ViaCommandHandler {
+    {
+        try {
+            registerSubCommand(new LeakDetectSubCommand());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

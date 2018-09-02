@@ -24,7 +24,7 @@
 
 package com.github.creeper123123321.viarift;
 
-import com.github.creeper123123321.viarift.platform.VRCommandHandler;
+import com.github.creeper123123321.viarift.commands.VRCommandHandler;
 import com.github.creeper123123321.viarift.platform.VRInjector;
 import com.github.creeper123123321.viarift.platform.VRLoader;
 import com.github.creeper123123321.viarift.platform.VRPlatform;
