@@ -45,8 +45,7 @@ dependencies {
         changing = true
     }
     shade 'org.yaml:snakeyaml:1.18'
-    implementation 'org.dimdev:mixin:0.7.11-SNAPSHOT'
-    compile 'org.dimdev.rift:Rift:1.0.1:dev'
+    compile 'org.dimdev:rift:1.0.4-74'
 }
 
 jar {
@@ -72,7 +71,7 @@ mixin {
 
 minecraft {
     version = '1.13'
-    mappings = 'snapshot_5'
+    mappings = 'snapshot_20180904'
     runDir = 'run'
-    tweakClass = 'org.dimdev.riftloader.launch.RiftLoaderTweaker'
+    tweakClass = 'org.dimdev.riftloader.launch.RiftLoaderClientTweaker'
 }

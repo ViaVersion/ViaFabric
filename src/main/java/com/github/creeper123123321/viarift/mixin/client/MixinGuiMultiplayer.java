@@ -45,22 +45,21 @@ public abstract class MixinGuiMultiplayer extends GuiScreen {
         protocolVersion = new GuiTextField(1235, fontRenderer, this.width / 2 + 70, 8, 30, 20);
         protocolVersion.setText(Integer.toString(ViaRift.fakeServerVersion));
         protocolVersion.func_200675_a(new IntegerFormatFilter());
-        this.field_195124_j.add(protocolVersion);
+        this.eventListeners.add(protocolVersion);
         saveProtocol = new SaveProtocolButton(6356, width / 2 + 100, 8, 50, 20,
                 I18n.format("gui.save_protocol_version"), protocolVersion);
-        this.field_195124_j.add(saveProtocol);
         addButton(saveProtocol);
     }
 
     @Inject(method = "drawScreen", at = @At("TAIL"))
     private void onDrawScreen(int p_1, int p_2, float p_3, CallbackInfo ci) {
         drawCenteredString(fontRenderer, I18n.format("gui.protocol_version"),this.width / 2, 12, 0xFFFFFF);
-        protocolVersion.func_195608_a(p_1, p_2, p_3);
+        protocolVersion.drawTextField(p_1, p_2, p_3);
     }
 
-    @Inject(method = "updateScreen", at = @At("TAIL"))
+    @Inject(method = "tick", at = @At("TAIL"))
     private void onUpdateScreen(CallbackInfo ci) {
-        protocolVersion.updateCursorCounter();
+        protocolVersion.tick();
     }
 
     @Inject(method = "getFocused", at = @At("RETURN"), cancellable = true)

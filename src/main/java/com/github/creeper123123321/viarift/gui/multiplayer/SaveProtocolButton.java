@@ -37,7 +37,8 @@ public class SaveProtocolButton extends GuiButton {
     }
 
     @Override
-    public void mouseClicked(double p_mouseClicked_1_, double p_mouseClicked_3_) {
+    public void mousePressed(double p_mouseClicked_1_, double p_mouseClicked_3_) {
+        super.mousePressed(p_mouseClicked_1_, p_mouseClicked_3_);
         try {
             ViaRift.fakeServerVersion = Integer.parseInt(textField.getText());
         } catch (NumberFormatException e) {
