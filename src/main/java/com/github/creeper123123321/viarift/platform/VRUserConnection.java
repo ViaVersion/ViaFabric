@@ -24,18 +24,17 @@
 
 package com.github.creeper123123321.viarift.platform;
 
-import com.github.creeper123123321.viarift.util.PipelineUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.socket.SocketChannel;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.type.Type;
+import us.myles.ViaVersion.util.PipelineUtil;
 
 
 public class VRUserConnection extends UserConnection {
-    public VRUserConnection(SocketChannel socketChannel) {
+    public VRUserConnection(Channel socketChannel) {
         super(socketChannel);
     }
     // Based on https://github.com/Gerrygames/ClientViaVersion/blob/master/src/main/java/de/gerrygames/the5zig/clientviaversion/reflection/Injector.java
@@ -73,5 +72,16 @@ public class VRUserConnection extends UserConnection {
         final Channel channel = this.getChannel();
         PipelineUtil.getPreviousContext("decoder", channel.pipeline()).fireChannelRead(copy);
         return channel.newSucceededFuture();
+    }
+
+    @Override
+    public void sendRawPacketToServer(ByteBuf packet, boolean currentThread) {
+        if (currentThread) {
+            getChannel().pipeline().context("encoder").writeAndFlush(packet);
+        } else {
+            getChannel().eventLoop().submit(() -> {
+                getChannel().pipeline().context("encoder").writeAndFlush(packet);
+            });
+        }
     }
 }
