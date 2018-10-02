@@ -27,7 +27,7 @@ package com.github.creeper123123321.viarift.platform;
 import com.github.creeper123123321.viarift.ViaRift;
 import com.github.creeper123123321.viarift.protocol.Interceptor;
 import com.github.creeper123123321.viarift.util.FutureTaskId;
-import com.github.creeper123123321.viarift.util.ThreadTaskId;
+import com.github.creeper123123321.viarift.util.ManagedBlockerRunnable;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
@@ -46,6 +46,8 @@ import us.myles.viaversion.libs.gson.JsonObject;
 
 import java.io.File;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -74,43 +76,62 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public TaskId runAsync(Runnable runnable) {
-        Thread t = ViaRift.THREAD_FACTORY.newThread(runnable);
-        t.start();
-        return new ThreadTaskId(t);
+        return new FutureTaskId(
+                CompletableFuture
+                        .runAsync(() -> {
+                            try {
+                                ForkJoinPool.managedBlock(new ManagedBlockerRunnable(runnable));
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }).exceptionally(ex -> {
+                            if (ex != null) ex.printStackTrace();
+                            return null;
+                        })
+        );
     }
 
     @Override
     public TaskId runSync(Runnable runnable) {
-        return new FutureTaskId(ViaRift.EVENT_LOOP.submit(runnable).addListener(future -> {
-            if (!future.isSuccess()) {
-                future.cause().printStackTrace();
-            }
-        }));
+        return new FutureTaskId(
+                CompletableFuture
+                        .runAsync(runnable)
+                        .exceptionally(ex -> {
+                            if (ex != null) ex.printStackTrace();
+                            return null;
+                        })
+        );
     }
 
     @Override
     public TaskId runSync(Runnable runnable, Long ticks) {
-        return new FutureTaskId(ViaRift.EVENT_LOOP.schedule(runnable, ticks * 50, TimeUnit.SECONDS).addListener(future -> {
-            if (!future.isSuccess()) {
-                future.cause().printStackTrace();
-            }
-        }));
+        return new FutureTaskId(
+                ViaRift.EVENT_LOOP
+                        .schedule(runnable, ticks * 50, TimeUnit.SECONDS)
+                        .addListener(future -> {
+                            if (!future.isSuccess()) {
+                                future.cause().printStackTrace();
+                            }
+                        })
+        );
     }
 
     @Override
     public TaskId runRepeatingSync(Runnable runnable, Long ticks) {
-        return new FutureTaskId(ViaRift.EVENT_LOOP.scheduleAtFixedRate(runnable, 0, ticks * 50, TimeUnit.SECONDS).addListener(future -> {
-            if (!future.isSuccess()) {
-                future.cause().printStackTrace();
-            }
-        }));
+        return new FutureTaskId(
+                ViaRift.EVENT_LOOP
+                        .scheduleAtFixedRate(runnable, 0, ticks * 50, TimeUnit.SECONDS)
+                        .addListener(future -> {
+                            if (!future.isSuccess()) {
+                                future.cause().printStackTrace();
+                            }
+                        })
+        );
     }
 
     @Override
     public void cancelTask(TaskId taskId) {
-        if (taskId instanceof ThreadTaskId) {
-            ((ThreadTaskId) taskId).getObject().interrupt();
-        } else if (taskId instanceof FutureTaskId) {
+        if (taskId instanceof FutureTaskId) {
             ((FutureTaskId) taskId).getObject().cancel(false);
         }
     }
@@ -186,4 +207,5 @@ public class VRPlatform implements ViaPlatform {
     public boolean isOldClientsAllowed() {
         return true;
     }
+
 }

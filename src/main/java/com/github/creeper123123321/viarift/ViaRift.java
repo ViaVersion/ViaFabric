@@ -40,14 +40,11 @@ import org.spongepowered.asm.mixin.Mixins;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
 
-import java.util.concurrent.ThreadFactory;
-
 public class ViaRift implements InitializationListener {
     public static int fakeServerVersion = -1;
     public static final Logger LOGGER = LogManager.getLogger();
     public static final java.util.logging.Logger JLOGGER = new JLoggerToLog4j(LOGGER);
-    public static final ThreadFactory THREAD_FACTORY = new NamedThreadFactory("ViaRift");
-    public static final EventLoop EVENT_LOOP = new DefaultEventLoop(THREAD_FACTORY);
+    public static final EventLoop EVENT_LOOP = new DefaultEventLoop(new NamedThreadFactory("ViaRift"));
     @Override
     public void onInitialization() {
         MixinBootstrap.init();

@@ -40,7 +40,7 @@ configurations {
 }
 
 dependencies {
-    shade ('us.myles:viaversion:1.5.1') {
+    shade ('us.myles:viaversion:1.5.2') {
         transitive = false
         changing = true
     }
