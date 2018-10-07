@@ -12,6 +12,7 @@ buildscript {
 
 plugins {
     id 'net.minecrell.licenser' version '0.4.1'
+    id 'com.palantir.git-version' version '0.12.0-rc2'
 }
 
 apply plugin: 'net.minecraftforge.gradle.tweaker-client'
@@ -19,7 +20,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'java'
 
 group 'com.github.creeper123123321.viarift'
-version '1.0.1'
+version gitVersion()
 archivesBaseName = 'ViaRift'
 
 sourceCompatibility = 1.8

@@ -22,27 +22,19 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viarift.gui.multiplayer;
+package com.github.creeper123123321.viarift.mixin.client;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiTextField;
-import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
+import com.github.creeper123123321.viarift.interfaces.IPatchedCPacketHandshake;
+import net.minecraft.network.handshake.client.CPacketHandshake;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 
-public class SaveProtocolButton extends GuiButton {
-    private GuiTextField textField;
-
-    public SaveProtocolButton(int id, int x, int y, int width, int height, String text, GuiTextField tf) {
-        super(id, x, y, width, height, text);
-        textField = tf;
-    }
+@Mixin(CPacketHandshake.class)
+public class MixinCPacketHandshake implements IPatchedCPacketHandshake {
+    @Shadow private int protocolVersion;
 
     @Override
-    public void mousePressed(double p_mouseClicked_1_, double p_mouseClicked_3_) {
-        super.mousePressed(p_mouseClicked_1_, p_mouseClicked_3_);
-        try {
-            ProtocolRegistry.SERVER_PROTOCOL = Integer.parseInt(textField.getText());
-        } catch (NumberFormatException e) {
-            textField.setText(Integer.toString(ProtocolRegistry.SERVER_PROTOCOL));
-        }
+    public int getProtocolVersion() {
+        return protocolVersion;
     }
 }

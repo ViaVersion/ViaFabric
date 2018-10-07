@@ -9,6 +9,7 @@
     "MixinNetworkManagerClientChInit"
   ],
   "client": [
-    "client.MixinGuiMultiplayer"
+    "client.MixinGuiMultiplayer",
+    "client.MixinCPacketHandshake"
   ]
 }

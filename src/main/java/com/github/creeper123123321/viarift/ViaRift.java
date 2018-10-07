@@ -34,21 +34,25 @@ import io.netty.channel.EventLoop;
 import net.minecraft.util.NamedThreadFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dimdev.rift.listener.MinecraftStartListener;
 import org.dimdev.riftloader.listener.InitializationListener;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
 
-public class ViaRift implements InitializationListener {
-    public static int fakeServerVersion = -1;
-    public static final Logger LOGGER = LogManager.getLogger();
+public class ViaRift implements InitializationListener, MinecraftStartListener {
+    public static final Logger LOGGER = LogManager.getLogger("ViaRift");
     public static final java.util.logging.Logger JLOGGER = new JLoggerToLog4j(LOGGER);
     public static final EventLoop EVENT_LOOP = new DefaultEventLoop(new NamedThreadFactory("ViaRift"));
     @Override
     public void onInitialization() {
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.viarift.main.json");
+    }
+
+    @Override
+    public void onMinecraftStart() {
         Via.init(ViaManager.builder()
                 .injector(new VRInjector())
                 .loader(new VRLoader())

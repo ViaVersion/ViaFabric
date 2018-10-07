@@ -24,7 +24,6 @@
 
 package com.github.creeper123123321.viarift.mixin.client;
 
-import com.github.creeper123123321.viarift.ViaRift;
 import com.github.creeper123123321.viarift.gui.multiplayer.SaveProtocolButton;
 import com.github.creeper123123321.viarift.util.IntegerFormatFilter;
 import net.minecraft.client.gui.*;
@@ -34,6 +33,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 
 @Mixin(GuiMultiplayer.class)
 public abstract class MixinGuiMultiplayer extends GuiScreen {
@@ -43,7 +43,7 @@ public abstract class MixinGuiMultiplayer extends GuiScreen {
     @Inject(method = "initGui", at = @At("TAIL"))
     private void onInitGui(CallbackInfo ci) {
         protocolVersion = new GuiTextField(1235, fontRenderer, this.width / 2 + 70, 8, 30, 20);
-        protocolVersion.setText(Integer.toString(ViaRift.fakeServerVersion));
+        protocolVersion.setText(Integer.toString(ProtocolRegistry.SERVER_PROTOCOL));
         protocolVersion.func_200675_a(new IntegerFormatFilter());
         this.eventListeners.add(protocolVersion);
         saveProtocol = new SaveProtocolButton(6356, width / 2 + 100, 8, 50, 20,

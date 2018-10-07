@@ -24,23 +24,29 @@
 
 package com.github.creeper123123321.viarift.platform;
 
-import com.github.creeper123123321.viarift.ViaRift;
+import com.github.creeper123123321.viarift.interfaces.IPatchedCPacketHandshake;
+import net.minecraft.network.EnumConnectionState;
+import net.minecraft.network.handshake.client.CPacketHandshake;
 import us.myles.ViaVersion.api.platform.ViaInjector;
 
 public class VRInjector implements ViaInjector {
     @Override
-    public void inject() throws Exception {
+    public void inject() {
         // *looks at Mixins*
     }
 
     @Override
-    public void uninject() throws Exception {
+    public void uninject() {
         // not possible *plays sad violin*
     }
 
     @Override
-    public int getServerProtocolVersion() throws Exception {
-        return ViaRift.fakeServerVersion;
+    public int getServerProtocolVersion() {
+        return ((IPatchedCPacketHandshake) new CPacketHandshake(
+                "XGH to get protocol",
+                0,
+                EnumConnectionState.HANDSHAKING)
+        ).getProtocolVersion();
     }
 
     @Override
