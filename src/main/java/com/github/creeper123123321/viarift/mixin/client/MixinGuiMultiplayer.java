@@ -44,14 +44,14 @@ public abstract class MixinGuiMultiplayer extends GuiScreen {
     private void onInitGui(CallbackInfo ci) {
         protocolVersion = new GuiTextField(1235, fontRenderer, this.width / 2 + 70, 8, 30, 20);
         protocolVersion.setText(Integer.toString(ProtocolRegistry.SERVER_PROTOCOL));
-        protocolVersion.func_200675_a(new IntegerFormatFilter());
-        this.eventListeners.add(protocolVersion);
+        protocolVersion.setValidator(new IntegerFormatFilter());
+        this.children.add(protocolVersion);
         saveProtocol = new SaveProtocolButton(6356, width / 2 + 100, 8, 50, 20,
                 I18n.format("gui.save_protocol_version"), protocolVersion);
         addButton(saveProtocol);
     }
 
-    @Inject(method = "drawScreen", at = @At("TAIL"))
+    @Inject(method = "render", at = @At("TAIL"))
     private void onDrawScreen(int p_1, int p_2, float p_3, CallbackInfo ci) {
         drawCenteredString(fontRenderer, I18n.format("gui.protocol_version"),this.width / 2, 12, 0xFFFFFF);
         protocolVersion.drawTextField(p_1, p_2, p_3);

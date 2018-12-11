@@ -1,11 +1,14 @@
 buildscript {
     repositories {
+        mavenCentral()
+        maven { url 'https://www.jitpack.io' }
+        maven { url 'https://files.minecraftforge.net/maven' }
         jcenter()
         maven { url 'https://www.dimdev.org/maven/' }
         maven { url 'https://repo.spongepowered.org/maven/' }
     }
     dependencies {
-        classpath 'org.dimdev:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'com.github.Chocohead:ForgeGradle:moderniser-SNAPSHOT'
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
     }
 }
@@ -33,6 +36,7 @@ repositories {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     maven { url 'https://www.dimdev.org/maven/' }
     maven { url 'https://jitpack.io' }
+    maven { url 'http://repo.strezz.org/artifactory/list/Strezz-Central' }
 }
 
 configurations {
@@ -41,18 +45,17 @@ configurations {
 }
 
 dependencies {
-    shade ('us.myles:viaversion:1.5.2') {
+    shade ('us.myles:viaversion:2.0.0-SNAPSHOT') {
         transitive = false
         changing = true
     }
-    shade 'org.yaml:snakeyaml:1.18'
-    compile 'org.dimdev:rift:1.0.4-74'
+    implementation 'com.github.Chocohead:Rift:jitpack-SNAPSHOT:dev'
 }
 
 jar {
     configurations.shade.each { dep ->
         from(project.zipTree(dep)){
-            exclude 'META-INF', 'META-INF/**'
+            //exclude 'META-INF', 'META-INF/**'
             exclude 'us/myles/ViaVersion/SpongePlugin.class'
             exclude 'javassist/**'
         }
@@ -71,8 +74,8 @@ mixin {
 }
 
 minecraft {
-    version = '1.13'
-    mappings = 'snapshot_20180904'
+    version = '1.13.2'
+    mappings = 'snapshot_20181130'
     runDir = 'run'
     tweakClass = 'org.dimdev.riftloader.launch.RiftLoaderClientTweaker'
 }

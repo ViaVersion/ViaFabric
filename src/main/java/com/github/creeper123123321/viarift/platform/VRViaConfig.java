@@ -239,6 +239,21 @@ public class VRViaConfig extends Config implements ViaVersionConfig {
         return this.getBoolean("minimize-cooldown", true);
     }
 
+    @Override // TODO config file
+    public boolean isServersideBlockConnections() {
+        return true;
+    }
+
+    @Override
+    public String getBlockConnectionMethod() {
+        return "packet";
+    }
+
+    @Override
+    public boolean isReduceBlockStorageMemory() {
+        return false;
+    }
+
     public boolean isDisable1_13AutoComplete() {
         return this.getBoolean("disable-1_13-auto-complete", false);
     }

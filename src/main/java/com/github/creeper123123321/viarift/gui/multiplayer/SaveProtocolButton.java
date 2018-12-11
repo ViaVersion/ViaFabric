@@ -37,8 +37,8 @@ public class SaveProtocolButton extends GuiButton {
     }
 
     @Override
-    public void mousePressed(double p_mouseClicked_1_, double p_mouseClicked_3_) {
-        super.mousePressed(p_mouseClicked_1_, p_mouseClicked_3_);
+    public void onClick(double p_mouseClicked_1_, double p_mouseClicked_3_) {
+        super.onClick(p_mouseClicked_1_, p_mouseClicked_3_);
         try {
             ProtocolRegistry.SERVER_PROTOCOL = Integer.parseInt(textField.getText());
         } catch (NumberFormatException e) {
