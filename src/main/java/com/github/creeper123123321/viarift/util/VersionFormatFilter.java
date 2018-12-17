@@ -24,9 +24,13 @@
 
 package com.github.creeper123123321.viarift.util;
 
-import java.util.function.Predicate;
+import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
-public class IntegerFormatFilter implements Predicate<String> {
+import java.util.Arrays;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+public class VersionFormatFilter implements Predicate<String> {
     @Override
     public boolean test(String s) {
         try {
@@ -37,7 +41,13 @@ public class IntegerFormatFilter implements Predicate<String> {
                 Integer.parseInt(s + '0');
                 return true;
             } catch (NumberFormatException e2) {
-                return false;
+                return ProtocolVersion.getProtocols().stream()
+                        .map(ProtocolVersion::getName)
+                        .flatMap(str -> Stream.concat(
+                                Arrays.stream(str.split("-")),
+                                Arrays.stream(new String[]{str})
+                                ))
+                        .anyMatch(ver -> ver.startsWith(s));
             }
         }
     }

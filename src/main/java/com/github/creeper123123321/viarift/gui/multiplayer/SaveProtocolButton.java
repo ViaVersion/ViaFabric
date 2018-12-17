@@ -27,6 +27,7 @@ package com.github.creeper123123321.viarift.gui.multiplayer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
+import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
 public class SaveProtocolButton extends GuiButton {
     private GuiTextField textField;
@@ -42,7 +43,13 @@ public class SaveProtocolButton extends GuiButton {
         try {
             ProtocolRegistry.SERVER_PROTOCOL = Integer.parseInt(textField.getText());
         } catch (NumberFormatException e) {
-            textField.setText(Integer.toString(ProtocolRegistry.SERVER_PROTOCOL));
+            try {
+                ProtocolRegistry.SERVER_PROTOCOL = ProtocolVersion.getClosest(textField.getText()).getId();
+            } catch (NullPointerException ignored) {
+            }
         }
+        textField.setText(ProtocolVersion.isRegistered(ProtocolRegistry.SERVER_PROTOCOL)
+                ? ProtocolVersion.getProtocol(ProtocolRegistry.SERVER_PROTOCOL).getName()
+                : Integer.toString(ProtocolRegistry.SERVER_PROTOCOL));
     }
 }
