@@ -94,13 +94,14 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (PipelineUtil.containsCause(cause, CancelException.class)) return;
-        if (user.isActive()) {
-            Iterator<Runnable> iterator = user.getPostProcessingTasks().iterator();
-            while (iterator.hasNext()) {
-                iterator.next().run();
-                iterator.remove();
+        if (PipelineUtil.containsCause(cause, CancelException.class)) {
+            if (user.isActive()) {
+                Runnable runnable;
+                while ((runnable = user.getPostProcessingTasks().poll()) != null) {
+                    runnable.run();
+                }
             }
+            return;
         }
         super.exceptionCaught(ctx, cause);
     }
@@ -109,13 +110,11 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         super.channelRead(ctx, msg);
         if (user.isActive()) {
-            Iterator<Runnable> iterator = user.getPostProcessingTasks().iterator();
-            while (iterator.hasNext()) {
-                iterator.next().run();
-                iterator.remove();
+            Runnable runnable;
+            while ((runnable = user.getPostProcessingTasks().poll()) != null) {
+                runnable.run();
             }
         }
-        // todo implement to other platforms
     }
 
     @Override

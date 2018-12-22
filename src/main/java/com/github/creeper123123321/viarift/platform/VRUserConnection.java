@@ -88,7 +88,7 @@ public class VRUserConnection extends UserConnection {
 
     @Override
     public void sendRawPacketAfterProcessing(ByteBuf packet) {
-        ByteBuf copy = packet.alloc().buffer();
+        ByteBuf copy = Unpooled.buffer();
         try {
             Type.VAR_INT.write(copy, PacketWrapper.PASSTHROUGH_ID);
         } catch (Exception e) {
