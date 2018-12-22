@@ -24,8 +24,8 @@
 
 package com.github.creeper123123321.viarift.mixin;
 
-import com.github.creeper123123321.viarift.handler.VRInHandler;
-import com.github.creeper123123321.viarift.handler.VROutHandler;
+import com.github.creeper123123321.viarift.handler.VRDecodeHandler;
+import com.github.creeper123123321.viarift.handler.VREncodeHandler;
 import com.github.creeper123123321.viarift.platform.VRUserConnection;
 import com.github.creeper123123321.viarift.protocol.Interceptor;
 import io.netty.channel.Channel;
@@ -50,8 +50,8 @@ public class MixinNetworkManagerClientChInit {
             MessageToByteEncoder oldEncoder = (MessageToByteEncoder) channel.pipeline().get("encoder");
             ByteToMessageDecoder oldDecoder = (ByteToMessageDecoder) channel.pipeline().get("decoder");
 
-            channel.pipeline().replace("encoder", "encoder", new VROutHandler(user, oldEncoder));
-            channel.pipeline().replace("decoder", "decoder", new VRInHandler(user, oldDecoder));
+            channel.pipeline().replace("encoder", "encoder", new VREncodeHandler(user, oldEncoder));
+            channel.pipeline().replace("decoder", "decoder", new VRDecodeHandler(user, oldDecoder));
         }
     }
 }

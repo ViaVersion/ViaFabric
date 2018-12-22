@@ -26,6 +26,7 @@ package com.github.creeper123123321.viarift.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPromise;
 import io.netty.handler.codec.MessageToByteEncoder;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.data.UserConnection;
@@ -36,12 +37,13 @@ import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
 
-public class VROutHandler extends MessageToByteEncoder {
+public class VREncodeHandler extends MessageToByteEncoder {
     private UserConnection user;
     private MessageToByteEncoder minecraftEncoder;
 
-    public VROutHandler(UserConnection user, MessageToByteEncoder minecraftEncoder) {
+    public VREncodeHandler(UserConnection user, MessageToByteEncoder minecraftEncoder) {
         this.user = user;
         this.minecraftEncoder = minecraftEncoder;
     }
@@ -100,10 +102,28 @@ public class VROutHandler extends MessageToByteEncoder {
         pre.release();
     }
 
-
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (PipelineUtil.containsCause(cause, CancelException.class)) return;
+        if (user.isActive()) {
+            Iterator<Runnable> iterator = user.getPostProcessingTasks().iterator();
+            while (iterator.hasNext()) {
+                iterator.next().run();
+                iterator.remove();
+            }
+        }
         super.exceptionCaught(ctx, cause);
+    }
+
+    @Override
+    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+        super.write(ctx, msg, promise);
+        if (user.isActive()) {
+            Iterator<Runnable> iterator = user.getPostProcessingTasks().iterator();
+            while (iterator.hasNext()) {
+                iterator.next().run();
+                iterator.remove();
+            }
+        }
     }
 }

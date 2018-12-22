@@ -37,13 +37,14 @@ import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Iterator;
 import java.util.List;
 
-public class VRInHandler extends ByteToMessageDecoder {
+public class VRDecodeHandler extends ByteToMessageDecoder {
     private UserConnection user;
     private ByteToMessageDecoder minecraftDecoder;
 
-    public VRInHandler(UserConnection user, ByteToMessageDecoder minecraftDecoder) {
+    public VRDecodeHandler(UserConnection user, ByteToMessageDecoder minecraftDecoder) {
         this.user = user;
         this.minecraftDecoder = minecraftDecoder;
     }
@@ -94,7 +95,27 @@ public class VRInHandler extends ByteToMessageDecoder {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (PipelineUtil.containsCause(cause, CancelException.class)) return;
+        if (user.isActive()) {
+            Iterator<Runnable> iterator = user.getPostProcessingTasks().iterator();
+            while (iterator.hasNext()) {
+                iterator.next().run();
+                iterator.remove();
+            }
+        }
         super.exceptionCaught(ctx, cause);
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        super.channelRead(ctx, msg);
+        if (user.isActive()) {
+            Iterator<Runnable> iterator = user.getPostProcessingTasks().iterator();
+            while (iterator.hasNext()) {
+                iterator.next().run();
+                iterator.remove();
+            }
+        }
+        // todo implement to other platforms
     }
 
     @Override
