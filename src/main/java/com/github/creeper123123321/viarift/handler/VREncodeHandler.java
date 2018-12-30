@@ -37,7 +37,7 @@ import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
+import java.util.ArrayList;
 
 public class VREncodeHandler extends MessageToByteEncoder {
     private UserConnection user;
@@ -106,8 +106,7 @@ public class VREncodeHandler extends MessageToByteEncoder {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (PipelineUtil.containsCause(cause, CancelException.class)) {
             if (user.isActive()) {
-                Runnable runnable;
-                while ((runnable = user.getPostProcessingTasks().poll()) != null) {
+                for (Runnable runnable : user.getPostProcessingTasks().get().pollLast()) {
                     runnable.run();
                 }
             }
@@ -118,10 +117,10 @@ public class VREncodeHandler extends MessageToByteEncoder {
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+        user.getPostProcessingTasks().get().addLast(new ArrayList<>());
         super.write(ctx, msg, promise);
         if (user.isActive()) {
-            Runnable runnable;
-            while ((runnable = user.getPostProcessingTasks().poll()) != null) {
+            for (Runnable runnable : user.getPostProcessingTasks().get().pollLast()) {
                 runnable.run();
             }
         }

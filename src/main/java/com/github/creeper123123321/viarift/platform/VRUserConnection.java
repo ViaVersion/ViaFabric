@@ -25,7 +25,6 @@
 package com.github.creeper123123321.viarift.platform;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import us.myles.ViaVersion.api.PacketWrapper;
@@ -84,29 +83,5 @@ public class VRUserConnection extends UserConnection {
                 getChannel().pipeline().context("encoder").writeAndFlush(packet);
             });
         }
-    }
-
-    @Override
-    public void sendRawPacketAfterProcessing(ByteBuf packet) {
-        ByteBuf copy = Unpooled.buffer();
-        try {
-            Type.VAR_INT.write(copy, PacketWrapper.PASSTHROUGH_ID);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        copy.writeBytes(packet);
-        packet.release();
-        final Channel channel = this.getChannel();
-        getPostProcessingTasks().add(() ->
-                PipelineUtil.getPreviousContext("decoder", channel.pipeline()).fireChannelRead(copy));
-    }
-
-    @Override
-    public void sendRawPacketToServerAfterProcessing(ByteBuf packet) {
-        final ByteBuf buf = Unpooled.buffer();
-        buf.writeBytes(packet);
-        packet.release();
-        this.getPostProcessingTasks().add(() ->
-                getChannel().pipeline().context("encoder").writeAndFlush(buf));
     }
 }

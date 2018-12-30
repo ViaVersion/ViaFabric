@@ -37,7 +37,7 @@ import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VRDecodeHandler extends ByteToMessageDecoder {
@@ -96,8 +96,7 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (PipelineUtil.containsCause(cause, CancelException.class)) {
             if (user.isActive()) {
-                Runnable runnable;
-                while ((runnable = user.getPostProcessingTasks().poll()) != null) {
+                for (Runnable runnable : user.getPostProcessingTasks().get().pollLast()) {
                     runnable.run();
                 }
             }
@@ -108,10 +107,10 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        user.getPostProcessingTasks().get().addLast(new ArrayList<>());
         super.channelRead(ctx, msg);
         if (user.isActive()) {
-            Runnable runnable;
-            while ((runnable = user.getPostProcessingTasks().poll()) != null) {
+            for (Runnable runnable : user.getPostProcessingTasks().get().pollLast()) {
                 runnable.run();
             }
         }
