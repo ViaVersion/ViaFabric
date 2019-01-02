@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class VRViaConfig extends Config implements ViaVersionConfig {
     // Based on Sponge ViaVersion
-    private static List<String> UNSUPPORTED = Arrays.asList("anti-xray-patch", "bungee-ping-interval", "bungee-ping-save", "bungee-servers", "quick-move-action-fix", "nms-player-ticking", "item-cache");
+    private static List<String> UNSUPPORTED = Arrays.asList("anti-xray-patch", "bungee-ping-interval", "bungee-ping-save", "bungee-servers", "quick-move-action-fix", "nms-player-ticking", "item-cache", "velocity-ping-interval", "velocity-ping-save", "velocity-servers", "blockconnection-method");
 
     public VRViaConfig(File configFile) {
         super(new File(configFile, "config.yml"));
@@ -239,9 +239,14 @@ public class VRViaConfig extends Config implements ViaVersionConfig {
         return this.getBoolean("minimize-cooldown", true);
     }
 
-    @Override // TODO config file
+    @Override
+    public boolean isDisable1_13AutoComplete() {
+        return this.getBoolean("disable-1_13-auto-complete", false);
+    }
+
+    @Override
     public boolean isServersideBlockConnections() {
-        return true;
+        return this.getBoolean("serverside-blockconnections", false);
     }
 
     @Override
@@ -251,10 +256,6 @@ public class VRViaConfig extends Config implements ViaVersionConfig {
 
     @Override
     public boolean isReduceBlockStorageMemory() {
-        return false;
-    }
-
-    public boolean isDisable1_13AutoComplete() {
-        return this.getBoolean("disable-1_13-auto-complete", false);
+        return this.getBoolean("reduce-blockstorage-memory", false);
     }
 }
