@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "com.github.creeper123123321.viafabric.mixin",
+  "mixins": [
+  ],
+  "client": [
+    "client.ClientConnectionChInit",
+    "client.MixinMultiplayerGui"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

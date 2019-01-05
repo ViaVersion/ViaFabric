@@ -1,30 +1,13 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url 'https://www.jitpack.io' }
-        maven { url 'https://files.minecraftforge.net/maven' }
-        jcenter()
-        maven { url 'https://www.dimdev.org/maven/' }
-        maven { url 'https://repo.spongepowered.org/maven/' }
-    }
-    dependencies {
-        classpath 'com.github.Chocohead:ForgeGradle:moderniser-SNAPSHOT'
-        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-    }
-}
-
 plugins {
+    id 'java'
     id 'net.minecrell.licenser' version '0.4.1'
+    id 'fabric-loom' version '0.2.0-SNAPSHOT'
     id 'com.palantir.git-version' version '0.12.0-rc2'
 }
 
-apply plugin: 'net.minecraftforge.gradle.tweaker-client'
-apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'java'
-
-group 'com.github.creeper123123321.viarift'
+group 'com.github.creeper123123321.viafabric'
 version gitVersion()
-archivesBaseName = 'ViaRift'
+archivesBaseName = 'ViaFabric'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -32,12 +15,10 @@ targetCompatibility = 1.8
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url 'https://libraries.minecraft.net/' }
+    jcenter()
     maven { url 'https://repo.viaversion.com/' }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
-    maven { url 'https://www.dimdev.org/maven/' }
-    maven { url 'https://jitpack.io' }
-    maven { url 'http://repo.strezz.org/artifactory/list/Strezz-Central' }
+    maven { url 'https://maven.fabricmc.net/' }
 }
 
 configurations {
@@ -46,16 +27,22 @@ configurations {
 }
 
 dependencies {
-    shade ('us.myles:viaversion:2.0.0-SNAPSHOT') {
+    shade('us.myles:viaversion:2.0.0-18w50a') {
         transitive = false
         changing = true
     }
-    implementation 'com.github.Chocohead:Rift:jitpack-SNAPSHOT:dev'
+
+    minecraft "com.mojang:minecraft:18w50a"
+    mappings "net.fabricmc:yarn:18w50a.64"
+    modCompile "net.fabricmc:fabric-loader:0.3.0.74"
+
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modCompile "net.fabricmc:fabric:0.1.2.63"
 }
 
 jar {
     configurations.shade.each { dep ->
-        from(project.zipTree(dep)){
+        from(project.zipTree(dep)) {
             //exclude 'META-INF', 'META-INF/**'
             exclude 'us/myles/ViaVersion/SpongePlugin.class'
             exclude 'us/viaversion/libs/javassist/**'
@@ -64,20 +51,13 @@ jar {
     }
 }
 
-reobf {
-    jar {
-        extraLines += "PK: us/myles com/github/creeper123123321/viarift/shaded/us/myles"
-    }
-}
-
-mixin {
-    defaultObfuscationEnv notch
-    add sourceSets.main, 'mixins.viarift.refmap.json'
-}
-
 minecraft {
-    version = '1.13.2'
-    mappings = 'snapshot_20181130'
-    runDir = 'run'
-    tweakClass = 'org.dimdev.riftloader.launch.RiftLoaderClientTweaker'
+}
+
+// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+// if it is present.
+// If you remove this task, sources will not be generated.
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
 }
