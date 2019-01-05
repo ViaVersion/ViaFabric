@@ -32,18 +32,18 @@ import com.github.creeper123123321.viafabric.util.JLoggerToLog4j;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 import org.apache.logging.log4j.LogManager;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
 
-public class ViaFabric implements ModInitializer {
+public class ViaFabric implements ClientModInitializer {
     public static final java.util.logging.Logger JLOGGER = new JLoggerToLog4j(LogManager.getLogger("ViaFabric"));
     public static final EventLoop EVENT_LOOP = new DefaultEventLoop(new ThreadFactoryBuilder()
             .setNameFormat("ViaFabric").build());
 
     @Override
-    public void onInitialize() {
+    public void onInitializeClient() {
         Via.init(ViaManager.builder()
                 .injector(new VRInjector())
                 .loader(new VRLoader())

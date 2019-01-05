@@ -56,12 +56,12 @@ public abstract class MixinMultiplayerGui extends Gui {
         protocolVersion.method_1890(new VersionFormatFilter());
         this.listeners.add(protocolVersion);
         addButton(new SaveProtocolButton(6356, width / 2 + 100, 8, 50, 20,
-                I18n.translate("gui.save_protocol_version"), protocolVersion));
+                I18n.translate("selectWorld.edit.save"), protocolVersion));
     }
 
     @Inject(method = "draw", at = @At("TAIL"))
     private void onDraw(int p_1, int p_2, float p_3, CallbackInfo ci) {
-        drawStringCentered(fontRenderer, I18n.translate("gui.protocol_version"), this.width / 2, 12, 0xFFFFFF);
+        drawStringCentered(fontRenderer, "Protocol Version:", this.width / 2, 12, 0xFFFFFF);
         protocolVersion.render(p_1, p_2, p_3);
     }
 
