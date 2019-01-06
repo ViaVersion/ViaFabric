@@ -29,12 +29,9 @@ import com.github.creeper123123321.viafabric.util.VersionFormatFilter;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiEventListener;
 import net.minecraft.client.gui.menu.MultiplayerGui;
-import net.minecraft.client.gui.widget.ServerListWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -44,7 +41,6 @@ import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
 @Mixin(MultiplayerGui.class)
 public abstract class MixinMultiplayerGui extends Gui {
-    @Shadow private ServerListWidget field_3043;
     private TextFieldWidget protocolVersion;
 
     @Inject(method = "onInitialized", at = @At("TAIL"))

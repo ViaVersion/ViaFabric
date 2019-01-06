@@ -2,7 +2,7 @@
   "id": "viafabric",
   "name": "ViaFabric",
   "side": "client",
-  "version": "?",
+  "version": "@version@",
   "initializers": [
     "com.github.creeper123123321.viafabric.ViaFabric"
   ],

@@ -51,7 +51,7 @@ public class Interceptor extends Protocol {
                         if (msg.startsWith("/viafabric")) {
                             Via.getManager().getCommandHandler().onCommand(
                                     new VRCommandSender(info.getUuid(), info.getUsername()),
-                                    msg.length() == 10 ? new String[0] : msg.substring(9).split(" ", -1)
+                                    msg.length() == 10 ? new String[0] : msg.substring(11).split(" ", -1)
                             );
                             packetWrapper.cancel();
                         }

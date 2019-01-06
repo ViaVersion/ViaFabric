@@ -28,6 +28,7 @@ import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.protocol.Interceptor;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
 import com.github.creeper123123321.viafabric.util.ManagedBlockerRunnable;
+import net.fabricmc.loader.FabricLoader;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
@@ -66,7 +67,11 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public String getPlatformVersion() {
-        return "?"; // TODO
+        return FabricLoader.INSTANCE.getModContainers()
+                .stream()
+                .filter(container -> container.getInfo().getId().equals("viafabric"))
+                .findFirst()
+                .get().getInfo().getVersionString(); // TODO
     }
 
     @Override
