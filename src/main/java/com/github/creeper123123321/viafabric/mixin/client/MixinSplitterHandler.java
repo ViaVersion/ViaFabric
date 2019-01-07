@@ -38,7 +38,7 @@ import java.util.List;
 @Mixin(SplitterHandler.class)
 public abstract class MixinSplitterHandler extends ByteToMessageDecoder {
     @Inject(method = "<init>", at = @At("TAIL"))
-    public void onInit(CallbackInfo ci) {
+    private void onInit(CallbackInfo ci) {
         setSingleDecode(true);
     }
 
