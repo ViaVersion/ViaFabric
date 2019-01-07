@@ -94,26 +94,9 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (PipelineUtil.containsCause(cause, CancelException.class)) {
-            if (user.isActive()) {
-                for (Runnable runnable : user.getPostProcessingTasks().get().pollLast()) {
-                    runnable.run();
-                }
-            }
+        if (PipelineUtil.containsCause(cause, CancelException.class))
             return;
-        }
         super.exceptionCaught(ctx, cause);
-    }
-
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        user.getPostProcessingTasks().get().addLast(new ArrayList<>());
-        super.channelRead(ctx, msg);
-        if (user.isActive()) {
-            for (Runnable runnable : user.getPostProcessingTasks().get().pollLast()) {
-                runnable.run();
-            }
-        }
     }
 
     @Override

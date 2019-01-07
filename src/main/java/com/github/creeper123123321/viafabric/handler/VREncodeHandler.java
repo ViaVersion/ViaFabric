@@ -104,25 +104,8 @@ public class VREncodeHandler extends MessageToByteEncoder {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (PipelineUtil.containsCause(cause, CancelException.class)) {
-            if (user.isActive()) {
-                for (Runnable runnable : user.getPostProcessingTasks().get().pollLast()) {
-                    runnable.run();
-                }
-            }
+        if (PipelineUtil.containsCause(cause, CancelException.class))
             return;
-        }
         super.exceptionCaught(ctx, cause);
-    }
-
-    @Override
-    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        user.getPostProcessingTasks().get().addLast(new ArrayList<>());
-        super.write(ctx, msg, promise);
-        if (user.isActive()) {
-            for (Runnable runnable : user.getPostProcessingTasks().get().pollLast()) {
-                runnable.run();
-            }
-        }
     }
 }
