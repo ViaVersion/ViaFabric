@@ -55,6 +55,8 @@ jar {
             exclude 'us/myles/ViaVersion/SpongePlugin.class'
             exclude 'us/viaversion/libs/javassist/**'
             exclude 'mcmod.info'
+            exclude 'plugin.yml'
+            exclude 'bungee.yml'
         }
     }
 }

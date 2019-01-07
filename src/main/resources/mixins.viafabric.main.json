@@ -5,7 +5,7 @@
   "mixins": [
   ],
   "client": [
-    "client.ClientConnectionChInit",
+    "client.MixinClientConnectionChInit",
     "client.MixinMultiplayerGui"
   ],
   "injectors": {
