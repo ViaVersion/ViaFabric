@@ -94,9 +94,15 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (PipelineUtil.containsCause(cause, CancelException.class))
-            return;
+        if (PipelineUtil.containsCause(cause, CancelException.class)) return;
         super.exceptionCaught(ctx, cause);
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        try (AutoCloseable ignored = user.createTaskListAndRunOnClose()) {
+            super.channelRead(ctx, msg);
+        }
     }
 
     @Override

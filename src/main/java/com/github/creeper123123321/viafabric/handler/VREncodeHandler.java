@@ -104,8 +104,14 @@ public class VREncodeHandler extends MessageToByteEncoder {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (PipelineUtil.containsCause(cause, CancelException.class))
-            return;
+        if (PipelineUtil.containsCause(cause, CancelException.class)) return;
         super.exceptionCaught(ctx, cause);
+    }
+
+    @Override
+    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+        try (AutoCloseable ignored = user.createTaskListAndRunOnClose()) {
+            super.write(ctx, msg, promise);
+        }
     }
 }
