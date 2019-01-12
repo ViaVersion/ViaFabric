@@ -100,9 +100,9 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        try (AutoCloseable ignored = user.createTaskListAndRunOnClose()) {
+        //try (AutoCloseable ignored = user.createTaskListAndRunOnClose()) {
             super.channelRead(ctx, msg);
-        }
+        //}
     }
 
     @Override

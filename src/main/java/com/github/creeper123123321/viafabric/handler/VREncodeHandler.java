@@ -110,8 +110,8 @@ public class VREncodeHandler extends MessageToByteEncoder {
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        try (AutoCloseable ignored = user.createTaskListAndRunOnClose()) {
+        //try (AutoCloseable ignored = user.createTaskListAndRunOnClose()) {
             super.write(ctx, msg, promise);
-        }
+        //}
     }
 }

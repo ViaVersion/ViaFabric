@@ -24,7 +24,7 @@
 
 package com.github.creeper123123321.viafabric.platform;
 
-import net.minecraft.client.settings.ServerEntry;
+import net.minecraft.client.options.ServerEntry;
 import us.myles.ViaVersion.api.platform.ViaInjector;
 
 public class VRInjector implements ViaInjector {
