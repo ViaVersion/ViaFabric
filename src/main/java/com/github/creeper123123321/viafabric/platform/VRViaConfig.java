@@ -258,4 +258,14 @@ public class VRViaConfig extends Config implements ViaVersionConfig {
     public boolean isReduceBlockStorageMemory() {
         return this.getBoolean("reduce-blockstorage-memory", false);
     }
+
+    @Override
+    public boolean isStemWhenBlockAbove() {
+        return this.getBoolean("flowerstem-when-block-above", false);
+    }
+
+    @Override
+    public boolean isSnowCollisionFix() {
+        return this.getBoolean("fix-low-snow-collision", false);
+    }
 }
