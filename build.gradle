@@ -35,14 +35,14 @@ configurations {
 }
 
 dependencies {
-    shade('us.myles:viaversion:2.0.0-19w02a') {
+    shade('us.myles:viaversion:2.0.0-19w03a') {
         transitive = false
         changing = true
     }
 
-    minecraft "com.mojang:minecraft:19w02a"
-    mappings "net.fabricmc:yarn:19w02a.12"
-    modCompile "net.fabricmc:fabric-loader:0.3.2.92"
+    minecraft "com.mojang:minecraft:19w03a"
+    mappings "net.fabricmc:yarn:19w03a.3"
+    modCompile "net.fabricmc:fabric-loader:0.3.2.96"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modCompile "net.fabricmc:fabric:0.1.4.71"
