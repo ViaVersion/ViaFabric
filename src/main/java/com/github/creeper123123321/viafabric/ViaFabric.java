@@ -37,10 +37,20 @@ import org.apache.logging.log4j.LogManager;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+
 public class ViaFabric implements ClientModInitializer {
     public static final java.util.logging.Logger JLOGGER = new JLoggerToLog4j(LogManager.getLogger("ViaFabric"));
-    public static final EventLoop EVENT_LOOP = new DefaultEventLoop(new ThreadFactoryBuilder()
-            .setNameFormat("ViaFabric").build());
+    public static final ExecutorService ASYNC_EXECUTOR;
+    public static final EventLoop EVENT_LOOP;
+
+    static {
+        ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("ViaFabric").build();
+        ASYNC_EXECUTOR = Executors.newCachedThreadPool(factory);
+        EVENT_LOOP = new DefaultEventLoop(factory);
+    }
 
     @Override
     public void onInitializeClient() {

@@ -27,7 +27,6 @@ package com.github.creeper123123321.viafabric.platform;
 import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.protocol.Interceptor;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
-import com.github.creeper123123321.viafabric.util.ManagedBlockerRunnable;
 import net.fabricmc.loader.FabricLoader;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
@@ -48,7 +47,6 @@ import us.myles.viaversion.libs.gson.JsonObject;
 import java.io.File;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -81,30 +79,24 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public TaskId runAsync(Runnable runnable) {
-        return new FutureTaskId(
-                CompletableFuture
-                        .runAsync(() -> {
-                            try {
-                                ForkJoinPool.managedBlock(new ManagedBlockerRunnable(runnable));
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }).exceptionally(ex -> {
-                            if (ex != null) ex.printStackTrace();
-                            return null;
-                        })
+        return new FutureTaskId(CompletableFuture
+                .runAsync(runnable, ViaFabric.ASYNC_EXECUTOR)
+                .exceptionally(throwable -> {
+                    throwable.printStackTrace();
+                    return null;
+                })
         );
     }
 
     @Override
     public TaskId runSync(Runnable runnable) {
-        return new FutureTaskId(
-                CompletableFuture
-                        .runAsync(runnable)
-                        .exceptionally(ex -> {
-                            if (ex != null) ex.printStackTrace();
-                            return null;
-                        })
+        return new FutureTaskId(ViaFabric.EVENT_LOOP
+                .submit(runnable)
+                .addListener(future -> {
+                    if (!future.isSuccess()) {
+                        future.cause().printStackTrace();
+                    }
+                })
         );
     }
 
