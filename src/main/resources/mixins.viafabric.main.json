@@ -7,7 +7,6 @@
   "client": [
     "client.MixinClientConnectionChInit",
     "client.MixinMultiplayerGui",
-    "client.MixinSplitterHandler"
   ],
   "injectors": {
     "defaultRequire": 1
