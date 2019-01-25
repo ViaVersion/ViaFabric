@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class VRPlatform implements ViaPlatform {
-    private VRViaConfig config = new VRViaConfig(new File("config/ViaFabric"));
+    private VRViaConfig config = new VRViaConfig(new File(FabricLoader.INSTANCE.getConfigDirectory(), "ViaFabric"));
 
     @Override
     public Logger getLogger() {
@@ -65,16 +65,19 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public String getPlatformVersion() {
-        return FabricLoader.INSTANCE.getModContainers()
-                .stream()
-                .filter(container -> container.getInfo().getId().equals("viafabric"))
-                .findFirst()
-                .get().getInfo().getVersionString(); // TODO
+        return ViaFabric.getVersion();
     }
 
     @Override
     public String getPluginVersion() {
-        return VersionInfo.VERSION + "-ViaFabric";
+        try {
+            return VersionInfo.class.getField("VERSION").get(null) + "-ViaFabric";
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return "?";
     }
 
     @Override
