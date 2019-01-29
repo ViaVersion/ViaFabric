@@ -33,6 +33,7 @@ import io.netty.channel.EventLoop;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 
@@ -76,53 +77,61 @@ public class ViaFabric implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        int timeDivisor = 1000 * 60 * 60 * 24;
+        long cachedTime = System.currentTimeMillis() / timeDivisor;
         File viaVersionJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viaversion.jar").toFile();
-        String localMd5 = null;
-        try {
-            if (viaVersionJar.exists()) {
-                try (InputStream is = Files.newInputStream(viaVersionJar.toPath())) {
-                    localMd5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
+        if (!(viaVersionJar.exists() && viaVersionJar.lastModified() / timeDivisor == cachedTime)) {
+            String localMd5 = null;
+            try {
+                if (viaVersionJar.exists()) {
+                    try (InputStream is = Files.newInputStream(viaVersionJar.toPath())) {
+                        localMd5 = DigestUtils.md5Hex(is);
+                    }
                 }
+                HttpURLConnection con = (HttpURLConnection) new URL("https://repo.viaversion.com/us/myles/viaversion/?" + cachedTime).openConnection();
+                JLOGGER.info("Checking for ViaVersion updates " + con);
+                con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
+                String rawOutput = CharStreams.toString(new InputStreamReader(con.getInputStream()));
+                con.getInputStream().close();
+                Pattern urlPattern = Pattern.compile("<A href='([^']*)/'>");
+                Matcher matcher = urlPattern.matcher(rawOutput);
+                List<String> versions = new ArrayList<>();
+                while (matcher.find()) {
+                    versions.add(matcher.group(1));
+                }
+                String bestViaVersion = null;
+                String mcVersion = MinecraftClient.getInstance().getGame().getVersion().getName();
+                if (mcVersion.contains("w") || mcVersion.contains("-")) {
+                    bestViaVersion = versions.stream()
+                            .filter(it -> it.endsWith(mcVersion))
+                            .max(Comparator.comparing(Version::new))
+                            .orElse(null);
+                }
+                if (bestViaVersion == null) {
+                    bestViaVersion = versions.stream()
+                            .filter(it -> it.endsWith("-SNAPSHOT") || it.endsWith("-DEV") || !it.contains("-"))
+                            .max(Comparator.comparing(Version::new))
+                            .orElse(null);
+                }
+                HttpURLConnection md5Con = (HttpURLConnection) new URL(
+                        "https://repo.viaversion.com/us/myles/viaversion/" + bestViaVersion
+                                + "/viaversion-" + bestViaVersion + ".jar.md5").openConnection();
+                md5Con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
+                String remoteMd5 = CharStreams.toString(new InputStreamReader(md5Con.getInputStream()));
+                if (!remoteMd5.equals(localMd5)) {
+                    URL url = new URL("https://repo.viaversion.com/us/myles/viaversion/" + bestViaVersion
+                            + "/viaversion-" + bestViaVersion + ".jar");
+                    ViaFabric.JLOGGER.info("Downloading " + url);
+                    HttpURLConnection jarCon = (HttpURLConnection) url.openConnection();
+                    jarCon.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
+                    FileUtils.copyInputStreamToFile(jarCon.getInputStream(), viaVersionJar);
+                } else {
+                    JLOGGER.info("No updates found");
+                    viaVersionJar.setLastModified(System.currentTimeMillis());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            HttpURLConnection con = (HttpURLConnection) new URL("https://repo.viaversion.com/us/myles/viaversion/").openConnection();
-            con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
-            String rawOutput = CharStreams.toString(new InputStreamReader(con.getInputStream()));
-            con.getInputStream().close();
-            Pattern urlPattern = Pattern.compile("<A href='([^']*)/'>");
-            Matcher matcher = urlPattern.matcher(rawOutput);
-            List<String> versions = new ArrayList<>();
-            while (matcher.find()) {
-                versions.add(matcher.group(1));
-            }
-            String bestViaVersion = null;
-            String mcVersion = MinecraftClient.getInstance().getGame().getVersion().getName();
-            if (mcVersion.contains("w") || mcVersion.contains("-")) {
-                bestViaVersion = versions.stream()
-                        .filter(it -> it.endsWith(mcVersion))
-                        .max(Comparator.comparing(Version::new))
-                        .orElse(null);
-            }
-            if (bestViaVersion == null) {
-                bestViaVersion = versions.stream()
-                        .filter(it -> it.endsWith("-SNAPSHOT") || it.endsWith("-DEV") || !it.contains("-"))
-                        .max(Comparator.comparing(Version::new))
-                        .orElse(null);
-            }
-            HttpURLConnection md5Con = (HttpURLConnection) new URL(
-                    "https://repo.viaversion.com/us/myles/viaversion/" + bestViaVersion
-                            + "/viaversion-" + bestViaVersion + ".jar.md5").openConnection();
-            md5Con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
-            String remoteMd5 = CharStreams.toString(new InputStreamReader(md5Con.getInputStream()));
-            if (!remoteMd5.equals(localMd5)) {
-                URL url = new URL("https://repo.viaversion.com/us/myles/viaversion/" + bestViaVersion
-                        + "/viaversion-" + bestViaVersion + ".jar");
-                ViaFabric.JLOGGER.info("Downloading " + url);
-                HttpURLConnection jarCon = (HttpURLConnection) url.openConnection();
-                jarCon.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
-                FileUtils.copyInputStreamToFile(jarCon.getInputStream(), viaVersionJar);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         try {
             Method addUrl = ViaFabric.class.getClassLoader().getClass().getMethod("addURL", URL.class);
