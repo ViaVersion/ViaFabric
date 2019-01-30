@@ -88,11 +88,11 @@ public class ViaFabric implements ClientModInitializer {
                         localMd5 = DigestUtils.md5Hex(is);
                     }
                 }
-                HttpURLConnection con = (HttpURLConnection) new URL("https://repo.viaversion.com/us/myles/viaversion/?" + cachedTime).openConnection();
-                JLOGGER.info("Checking for ViaVersion updates " + con);
+                URL versionsUrl = new URL("https://repo.viaversion.com/us/myles/viaversion/?" + cachedTime);
+                JLOGGER.info("Checking for ViaVersion updates " + versionsUrl);
+                HttpURLConnection con = (HttpURLConnection) versionsUrl.openConnection();
                 con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
                 String rawOutput = CharStreams.toString(new InputStreamReader(con.getInputStream()));
-                con.getInputStream().close();
                 Pattern urlPattern = Pattern.compile("<A href='([^']*)/'>");
                 Matcher matcher = urlPattern.matcher(rawOutput);
                 List<String> versions = new ArrayList<>();
