@@ -32,6 +32,7 @@ processResources {
 
 dependencies {
     compile "us.myles:viaversion:2.0.0-19w04a"
+    compile "de.gerrygames:viarewind-all:1.4.0"
 
     minecraft "com.mojang:minecraft:19w04a"
     mappings "net.fabricmc:yarn:19w04a.1"

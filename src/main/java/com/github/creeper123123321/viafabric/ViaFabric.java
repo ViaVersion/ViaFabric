@@ -133,15 +133,58 @@ public class ViaFabric implements ClientModInitializer {
                 e.printStackTrace();
             }
         }
+
+        File viaRewindJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viarewind.jar").toFile();
+        if (!(viaRewindJar.exists() && viaRewindJar.lastModified() / timeDivisor == cachedTime)) {
+            String localMd5 = null;
+            try {
+                if (viaRewindJar.exists()) {
+                    try (InputStream is = Files.newInputStream(viaRewindJar.toPath())) {
+                        localMd5 = DigestUtils.md5Hex(is);
+                    }
+                }
+                URL versionsUrl = new URL("https://repo.viaversion.com/de/gerrygames/viarewind-all/?" + cachedTime);
+                JLOGGER.info("Checking for ViaRewind updates " + versionsUrl);
+                HttpURLConnection con = (HttpURLConnection) versionsUrl.openConnection();
+                con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
+                String rawOutput = CharStreams.toString(new InputStreamReader(con.getInputStream()));
+                Pattern urlPattern = Pattern.compile("<A href='([^']*)/'>");
+                Matcher matcher = urlPattern.matcher(rawOutput);
+                List<String> versions = new ArrayList<>();
+                while (matcher.find()) {
+                    versions.add(matcher.group(1));
+                }
+                String bestViaRewind = versions.stream().max(Comparator.comparing(Version::new)).orElse(null);
+                HttpURLConnection md5Con = (HttpURLConnection) new URL(
+                        "https://repo.viaversion.com/de/gerrygames/viarewind-all/" + bestViaRewind
+                                + "/viarewind-all-" + bestViaRewind + ".jar.md5").openConnection();
+                md5Con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
+                String remoteMd5 = CharStreams.toString(new InputStreamReader(md5Con.getInputStream()));
+                if (!remoteMd5.equals(localMd5)) {
+                    URL url = new URL("https://repo.viaversion.com/de/gerrygames/viarewind-all/" + bestViaRewind
+                            + "/viarewind-all-" + bestViaRewind + ".jar");
+                    ViaFabric.JLOGGER.info("Downloading " + url);
+                    HttpURLConnection jarCon = (HttpURLConnection) url.openConnection();
+                    jarCon.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
+                    FileUtils.copyInputStreamToFile(jarCon.getInputStream(), viaRewindJar);
+                } else {
+                    JLOGGER.info("No updates found");
+                    viaRewindJar.setLastModified(System.currentTimeMillis());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         try {
             Method addUrl = ViaFabric.class.getClassLoader().getClass().getMethod("addURL", URL.class);
             addUrl.setAccessible(true);
             addUrl.invoke(ViaFabric.class.getClassLoader(), viaVersionJar.toURI().toURL());
+            addUrl.invoke(ViaFabric.class.getClassLoader(), viaRewindJar.toURI().toURL());
             Class.forName("com.github.creeper123123321.viafabric.platform.VRViaVersionInitializer")
                     .getMethod("init")
                     .invoke(null);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | MalformedURLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }

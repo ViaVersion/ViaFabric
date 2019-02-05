@@ -25,8 +25,14 @@
 package com.github.creeper123123321.viafabric.platform;
 
 import com.github.creeper123123321.viafabric.commands.VRCommandHandler;
+import com.github.creeper123123321.viafabric.protocol.protocol1_7_6_10to1_7_1_5.Protocol1_7_6_10to1_7_1_5;
+import com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.Protocol1_8TO1_7_6_10;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
+import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
+import us.myles.ViaVersion.api.protocol.ProtocolVersion;
+
+import java.util.Collections;
 
 public class VRViaVersionInitializer {
     public static void init() {
@@ -36,5 +42,7 @@ public class VRViaVersionInitializer {
                 .commandHandler(new VRCommandHandler())
                 .platform(new VRPlatform()).build());
         Via.getManager().init();
+        ProtocolRegistry.registerProtocol(new Protocol1_7_6_10to1_7_1_5(), Collections.singletonList(ProtocolVersion.v1_7_6.getId()), ProtocolVersion.v1_7_1.getId());
+        ProtocolRegistry.registerProtocol(new Protocol1_8TO1_7_6_10(), Collections.singletonList(ProtocolVersion.v1_8.getId()), ProtocolVersion.v1_7_6.getId());
     }
 }
