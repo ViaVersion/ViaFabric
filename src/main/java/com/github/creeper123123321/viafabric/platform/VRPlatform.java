@@ -28,6 +28,7 @@ import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.protocol.Interceptor;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
 import net.fabricmc.loader.FabricLoader;
+import net.fabricmc.loader.ModContainer;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
@@ -38,17 +39,22 @@ import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.platform.TaskId;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
 import us.myles.ViaVersion.api.type.Type;
+import us.myles.ViaVersion.dump.PluginInfo;
 import us.myles.ViaVersion.exception.CancelException;
 import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
 import us.myles.ViaVersion.sponge.VersionInfo;
+import us.myles.ViaVersion.util.GsonUtil;
 import us.myles.viaversion.libs.gson.JsonObject;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class VRPlatform implements ViaPlatform {
     private VRViaConfig config = new VRViaConfig(new File(FabricLoader.INSTANCE.getConfigDirectory(), "ViaFabric"));
@@ -200,7 +206,21 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public JsonObject getDump() {
-        return new JsonObject();
+        JsonObject platformSpecific = new JsonObject();
+        List<PluginInfo> mods = new ArrayList<>();
+        for (ModContainer mod : FabricLoader.INSTANCE.getModContainers()) {
+            mods.add(new PluginInfo(true,
+                    mod.getInfo().getName(),
+                    mod.getInfo().getVersionString(),
+                    String.join(", ", mod.getInfo().getInitializers()),
+                    mod.getInfo().getAuthors().stream()
+                            .map(info -> info.getName() + " <" + info.getEmail() + "> " + "[" + info.getWebsite() + "]")
+                            .collect(Collectors.toList())
+            ));
+        }
+
+        platformSpecific.add("mods", GsonUtil.getGson().toJsonTree(mods));
+        return platformSpecific;
     }
 
     @Override

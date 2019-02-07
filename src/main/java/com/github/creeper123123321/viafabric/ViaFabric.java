@@ -38,7 +38,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
@@ -77,114 +76,82 @@ public class ViaFabric implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        int timeDivisor = 1000 * 60 * 60 * 24;
-        long cachedTime = System.currentTimeMillis() / timeDivisor;
         File viaVersionJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viaversion.jar").toFile();
-        if (!(viaVersionJar.exists() && viaVersionJar.lastModified() / timeDivisor == cachedTime)) {
-            String localMd5 = null;
-            try {
-                if (viaVersionJar.exists()) {
-                    try (InputStream is = Files.newInputStream(viaVersionJar.toPath())) {
-                        localMd5 = DigestUtils.md5Hex(is);
-                    }
-                }
-                URL versionsUrl = new URL("https://repo.viaversion.com/us/myles/viaversion/?" + cachedTime);
-                JLOGGER.info("Checking for ViaVersion updates " + versionsUrl);
-                HttpURLConnection con = (HttpURLConnection) versionsUrl.openConnection();
-                con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
-                String rawOutput = CharStreams.toString(new InputStreamReader(con.getInputStream()));
-                Pattern urlPattern = Pattern.compile("<A href='([^']*)/'>");
-                Matcher matcher = urlPattern.matcher(rawOutput);
-                List<String> versions = new ArrayList<>();
-                while (matcher.find()) {
-                    versions.add(matcher.group(1));
-                }
-                String bestViaVersion = null;
-                String mcVersion = MinecraftClient.getInstance().getGame().getVersion().getName();
-                if (mcVersion.contains("w") || mcVersion.contains("-")) {
-                    bestViaVersion = versions.stream()
-                            .filter(it -> it.endsWith(mcVersion))
-                            .max(Comparator.comparing(Version::new))
-                            .orElse(null);
-                }
-                if (bestViaVersion == null) {
-                    bestViaVersion = versions.stream()
-                            .filter(it -> it.endsWith("-SNAPSHOT") || it.endsWith("-DEV") || !it.contains("-"))
-                            .max(Comparator.comparing(Version::new))
-                            .orElse(null);
-                }
-                HttpURLConnection md5Con = (HttpURLConnection) new URL(
-                        "https://repo.viaversion.com/us/myles/viaversion/" + bestViaVersion
-                                + "/viaversion-" + bestViaVersion + ".jar.md5").openConnection();
-                md5Con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
-                String remoteMd5 = CharStreams.toString(new InputStreamReader(md5Con.getInputStream()));
-                if (!remoteMd5.equals(localMd5)) {
-                    URL url = new URL("https://repo.viaversion.com/us/myles/viaversion/" + bestViaVersion
-                            + "/viaversion-" + bestViaVersion + ".jar");
-                    ViaFabric.JLOGGER.info("Downloading " + url);
-                    HttpURLConnection jarCon = (HttpURLConnection) url.openConnection();
-                    jarCon.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
-                    FileUtils.copyInputStreamToFile(jarCon.getInputStream(), viaVersionJar);
-                } else {
-                    JLOGGER.info("No updates found");
-                    viaVersionJar.setLastModified(System.currentTimeMillis());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            checkForUpdates(viaVersionJar, "viaversion", "us/myles", "");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
         File viaRewindJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viarewind.jar").toFile();
-        if (!(viaRewindJar.exists() && viaRewindJar.lastModified() / timeDivisor == cachedTime)) {
-            String localMd5 = null;
-            try {
-                if (viaRewindJar.exists()) {
-                    try (InputStream is = Files.newInputStream(viaRewindJar.toPath())) {
-                        localMd5 = DigestUtils.md5Hex(is);
-                    }
-                }
-                URL versionsUrl = new URL("https://repo.viaversion.com/de/gerrygames/viarewind-all/?" + cachedTime);
-                JLOGGER.info("Checking for ViaRewind updates " + versionsUrl);
-                HttpURLConnection con = (HttpURLConnection) versionsUrl.openConnection();
-                con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
-                String rawOutput = CharStreams.toString(new InputStreamReader(con.getInputStream()));
-                Pattern urlPattern = Pattern.compile("<A href='([^']*)/'>");
-                Matcher matcher = urlPattern.matcher(rawOutput);
-                List<String> versions = new ArrayList<>();
-                while (matcher.find()) {
-                    versions.add(matcher.group(1));
-                }
-                String bestViaRewind = versions.stream().max(Comparator.comparing(Version::new)).orElse(null);
-                HttpURLConnection md5Con = (HttpURLConnection) new URL(
-                        "https://repo.viaversion.com/de/gerrygames/viarewind-all/" + bestViaRewind
-                                + "/viarewind-all-" + bestViaRewind + ".jar.md5").openConnection();
-                md5Con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
-                String remoteMd5 = CharStreams.toString(new InputStreamReader(md5Con.getInputStream()));
-                if (!remoteMd5.equals(localMd5)) {
-                    URL url = new URL("https://repo.viaversion.com/de/gerrygames/viarewind-all/" + bestViaRewind
-                            + "/viarewind-all-" + bestViaRewind + ".jar");
-                    ViaFabric.JLOGGER.info("Downloading " + url);
-                    HttpURLConnection jarCon = (HttpURLConnection) url.openConnection();
-                    jarCon.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
-                    FileUtils.copyInputStreamToFile(jarCon.getInputStream(), viaRewindJar);
-                } else {
-                    JLOGGER.info("No updates found");
-                    viaRewindJar.setLastModified(System.currentTimeMillis());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            checkForUpdates(viaRewindJar, "viarewind-all", "de/gerrygames", "ViaRewind");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         try {
             Method addUrl = ViaFabric.class.getClassLoader().getClass().getMethod("addURL", URL.class);
             addUrl.setAccessible(true);
             addUrl.invoke(ViaFabric.class.getClassLoader(), viaVersionJar.toURI().toURL());
             addUrl.invoke(ViaFabric.class.getClassLoader(), viaRewindJar.toURI().toURL());
-            Class.forName("com.github.creeper123123321.viafabric.platform.VRViaVersionInitializer")
+            Class.forName("com.github.creeper123123321.viafabric.VRViaVersionInitializer")
                     .getMethod("init")
                     .invoke(null);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | MalformedURLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void checkForUpdates(File jar, String artifactName, String groupIdPath, String depName) throws Exception {
+        int timeDivisor = 1000 * 60 * 60 * 24;
+        long cachedTime = System.currentTimeMillis() / timeDivisor;
+        if (!(jar.exists() && jar.lastModified() / timeDivisor == cachedTime)) {
+            String localMd5 = null;
+            if (jar.exists()) {
+                try (InputStream is = Files.newInputStream(jar.toPath())) {
+                    localMd5 = DigestUtils.md5Hex(is);
+                }
+            }
+            URL versionsUrl = new URL("https://repo.viaversion.com/" + groupIdPath + "/" + artifactName + "/?" + cachedTime);
+            JLOGGER.info("Checking for " + depName + " updates " + versionsUrl);
+            HttpURLConnection con = (HttpURLConnection) versionsUrl.openConnection();
+            con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
+            String rawOutput = CharStreams.toString(new InputStreamReader(con.getInputStream()));
+            Pattern urlPattern = Pattern.compile("<A href='([^']*)/'>");
+            Matcher matcher = urlPattern.matcher(rawOutput);
+            List<String> versions = new ArrayList<>();
+            while (matcher.find()) {
+                versions.add(matcher.group(1));
+            }
+            String mcVersion = MinecraftClient.getInstance().getGame().getVersion().getName();
+            String bestViaVersion = null;
+            if (mcVersion.contains("w") || mcVersion.contains("-")) {
+                bestViaVersion = versions.stream()
+                        .filter(it -> it.endsWith(mcVersion))
+                        .max(Comparator.comparing(Version::new))
+                        .orElse(null);
+            }
+            if (bestViaVersion == null) {
+                bestViaVersion = versions.stream()
+                        .filter(it -> it.endsWith("-SNAPSHOT") || it.endsWith("-DEV") || !it.contains("-"))
+                        .max(Comparator.comparing(Version::new))
+                        .orElse(null);
+            }
+            HttpURLConnection md5Con = (HttpURLConnection) new URL(
+                    "https://repo.viaversion.com/" + groupIdPath + "/" + artifactName + "/" + bestViaVersion
+                            + "/" + artifactName + "-" + bestViaVersion + ".jar.md5").openConnection();
+            md5Con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
+            String remoteMd5 = CharStreams.toString(new InputStreamReader(md5Con.getInputStream()));
+            if (!remoteMd5.equals(localMd5)) {
+                URL url = new URL("https://repo.viaversion.com/" + groupIdPath + "/" + artifactName + "/" + bestViaVersion
+                        + "/" + artifactName + "-" + bestViaVersion + ".jar");
+                ViaFabric.JLOGGER.info("Downloading " + url);
+                HttpURLConnection jarCon = (HttpURLConnection) url.openConnection();
+                jarCon.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
+                FileUtils.copyInputStreamToFile(jarCon.getInputStream(), jar);
+            } else {
+                JLOGGER.info("No updates found");
+                jar.setLastModified(System.currentTimeMillis());
+            }
         }
     }
 }
