@@ -28,7 +28,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.FabricLoader;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.TextComponent;
@@ -54,6 +53,9 @@ public class NMSCommandSender implements ViaCommandSender {
     public void sendMessage(String s) {
         if (source instanceof ServerCommandSource) {
             ((ServerCommandSource) source).sendFeedback(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)), false);
+        } else if (FabricLoader.INSTANCE.getEnvironmentType() == EnvType.CLIENT && source instanceof ClientCommandSource) {
+            FabricLoader.INSTANCE.getEnvironmentHandler().getClientPlayer()
+                    .appendCommandFeedback(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)));
         }
     }
 

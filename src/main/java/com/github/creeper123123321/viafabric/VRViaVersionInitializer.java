@@ -74,19 +74,6 @@ public class VRViaVersionInitializer {
                                                                 );
                                                         return 1;
                                                     })
-                                                    .suggests((ctx, builder) -> {
-                                                        String args = StringArgumentType.getString(ctx, "args");
-                                                        Via.getManager()
-                                                                .getCommandHandler()
-                                                                .onTabComplete(
-                                                                        new NMSCommandSender(
-                                                                                ctx.getSource()
-                                                                        ),
-                                                                        args.split(" ", -1)
-                                                                )
-                                                                .forEach(builder::suggest);
-                                                        return builder.buildFuture();
-                                                    })
                                     )
                     )
             );
