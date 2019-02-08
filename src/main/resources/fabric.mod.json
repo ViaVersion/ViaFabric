@@ -1,12 +1,16 @@
 {
   "id": "viafabric",
   "name": "ViaFabric",
-  "side": "client",
+  "side": "universal",
   "version": "@version@",
   "initializers": [
     "com.github.creeper123123321.viafabric.ViaFabric"
   ],
+  "requires": {
+    "fabric": "*"
+  },
   "mixins": {
-    "client": "mixins.viafabric.main.json"
+    "common": "mixins.viafabric.common.json",
+    "client": "mixins.viafabric.client.json"
   }
 }

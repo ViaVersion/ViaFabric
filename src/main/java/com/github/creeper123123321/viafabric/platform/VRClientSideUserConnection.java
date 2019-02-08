@@ -33,8 +33,8 @@ import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.util.PipelineUtil;
 
 
-public class VRUserConnection extends UserConnection {
-    public VRUserConnection(Channel socketChannel) {
+public class VRClientSideUserConnection extends UserConnection {
+    public VRClientSideUserConnection(Channel socketChannel) {
         super(socketChannel);
     }
     // Based on https://github.com/Gerrygames/ClientViaVersion/blob/master/src/main/java/de/gerrygames/the5zig/clientviaversion/reflection/Injector.java

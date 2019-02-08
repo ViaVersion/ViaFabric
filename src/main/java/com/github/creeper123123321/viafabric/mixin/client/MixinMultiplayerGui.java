@@ -26,9 +26,9 @@ package com.github.creeper123123321.viafabric.mixin.client;
 
 import com.github.creeper123123321.viafabric.gui.multiplayer.SaveProtocolButton;
 import com.github.creeper123123321.viafabric.util.VersionFormatFilter;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiEventListener;
-import net.minecraft.client.gui.menu.MultiplayerGui;
+import net.minecraft.client.gui.Screen;
+import net.minecraft.client.gui.menu.MultiplayerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,8 +39,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
-@Mixin(MultiplayerGui.class)
-public abstract class MixinMultiplayerGui extends Gui {
+@Mixin(MultiplayerScreen.class)
+public abstract class MixinMultiplayerGui extends Screen {
     private TextFieldWidget protocolVersion;
 
     @Inject(method = "onInitialized", at = @At("TAIL"))

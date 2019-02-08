@@ -22,13 +22,13 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.handler;
+package com.github.creeper123123321.viafabric.handler.clientside;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.channel.ChannelPromise;
+import io.netty.handler.codec.MessageToByteEncoder;
 import us.myles.ViaVersion.api.PacketWrapper;
-import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.exception.CancelException;
@@ -38,41 +38,59 @@ import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.List;
 
-public class VRDecodeHandler extends ByteToMessageDecoder {
+public class VREncodeHandler extends MessageToByteEncoder {
     private UserConnection user;
-    private ByteToMessageDecoder minecraftDecoder;
+    private MessageToByteEncoder minecraftEncoder;
 
-    public VRDecodeHandler(UserConnection user, ByteToMessageDecoder minecraftDecoder) {
+    public VREncodeHandler(UserConnection user, MessageToByteEncoder minecraftEncoder) {
         this.user = user;
-        this.minecraftDecoder = minecraftDecoder;
+        this.minecraftEncoder = minecraftEncoder;
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        // Based on ViaVersion Sponge encoder code
+    protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
+        // Based on Sponge ViaVersion decoder code
 
-        ByteBuf buf = msg.alloc().buffer().writeBytes(msg);
+        ByteBuf pre = out.alloc().buffer();
 
-        // Increment sent
-        user.incrementSent();
-        if (user.isActive()) {
-            // Handle ID
-            int id = Type.VAR_INT.read(buf);
+        // call minecraft encoder
+        try {
+            PipelineUtil.callEncode(this.minecraftEncoder, ctx, msg, pre);
+        } catch (InvocationTargetException e) {
+            if (e.getCause() instanceof Exception) {
+                throw (Exception) e.getCause();
+            }
+        }
 
-            if (id != PacketWrapper.PASSTHROUGH_ID) {
+        // use transformers
+        if (pre.readableBytes() > 0) {
+            // Ignore if pending disconnect
+            if (user.isPendingDisconnect()) {
+                return;
+            }
+            // Increment received
+            boolean second = user.incrementReceived();
+            // Check PPS
+            if (second && user.handlePPS())
+                return;
+
+            if (user.isActive()) {
+                // Handle ID
+                int id = Type.VAR_INT.read(pre);
                 // Transform
-                ByteBuf newPacket = buf.alloc().buffer();
+                ByteBuf newPacket = pre.alloc().buffer();
                 try {
-                    PacketWrapper wrapper = new PacketWrapper(id, buf, user);
-                    ProtocolInfo protInfo = user.get(ProtocolInfo.class);
-                    protInfo.getPipeline().transform(Direction.OUTGOING, protInfo.getState(), wrapper);
-                    wrapper.writeToBuffer(newPacket);
-                    buf.clear();
-                    buf.writeBytes(newPacket);
+                    if (id != PacketWrapper.PASSTHROUGH_ID) {
+                        PacketWrapper wrapper = new PacketWrapper(id, pre, user);
+                        ProtocolInfo protInfo = user.get(ProtocolInfo.class);
+                        protInfo.getPipeline().transform(Direction.INCOMING, protInfo.getState(), wrapper);
+                        wrapper.writeToBuffer(newPacket);
+                        pre.clear();
+                        pre.writeBytes(newPacket);
+                    }
                 } catch (Exception e) {
-                    buf.release();
+                    pre.release();
                     throw e;
                 } finally {
                     newPacket.release();
@@ -80,16 +98,8 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
             }
         }
 
-        // call minecraft encoder
-        try {
-            out.addAll(PipelineUtil.callDecode(this.minecraftDecoder, ctx, buf));
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            if (e.getCause() instanceof Exception) {
-                throw (Exception) e.getCause();
-            }
-        }
-        buf.release();
+        out.writeBytes(pre);
+        pre.release();
     }
 
     @Override
@@ -99,17 +109,9 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         //try (AutoCloseable ignored = user.createTaskListAndRunOnClose()) {
-            super.channelRead(ctx, msg);
+            super.write(ctx, msg, promise);
         //}
-    }
-
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        ProtocolInfo info = user.get(ProtocolInfo.class);
-        if (info.getUuid() != null) {
-            Via.getManager().removePortedClient(info.getUuid());
-        }
     }
 }

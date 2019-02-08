@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.mixin.client;
+package com.github.creeper123123321.viafabric.mixin;
 
-import com.github.creeper123123321.viafabric.handler.clientside.VRDecodeHandler;
-import com.github.creeper123123321.viafabric.handler.clientside.VREncodeHandler;
+import com.github.creeper123123321.viafabric.handler.serverside.FabricDecodeHandler;
+import com.github.creeper123123321.viafabric.handler.serverside.FabricEncodeHandler;
 import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
 import com.github.creeper123123321.viafabric.protocol.ClientSideInterceptor;
 import io.netty.channel.Channel;
@@ -39,8 +39,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.protocol.ProtocolPipeline;
 
-@Mixin(targets = "net.minecraft.network.ClientConnection$1")
-public class MixinClientConnectionChInit {
+@Mixin(targets = "net.minecraft.server.ServerNetworkIO$1")
+public class MixinClientConnectionServerChInit {
     @Inject(method = "initChannel(Lio/netty/channel/Channel;)V", at = @At(value = "TAIL"), remap = false)
     private void onInitChannel(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
@@ -50,8 +50,8 @@ public class MixinClientConnectionChInit {
             MessageToByteEncoder oldEncoder = (MessageToByteEncoder) channel.pipeline().get("encoder");
             ByteToMessageDecoder oldDecoder = (ByteToMessageDecoder) channel.pipeline().get("decoder");
 
-            channel.pipeline().replace("encoder", "encoder", new VREncodeHandler(user, oldEncoder));
-            channel.pipeline().replace("decoder", "decoder", new VRDecodeHandler(user, oldDecoder));
+            channel.pipeline().replace("encoder", "encoder", new FabricEncodeHandler(user, oldEncoder));
+            channel.pipeline().replace("decoder", "decoder", new FabricDecodeHandler(user, oldDecoder));
         }
     }
 }

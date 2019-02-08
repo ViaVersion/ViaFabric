@@ -30,7 +30,7 @@ import com.google.common.io.CharStreams;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
-import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -55,7 +55,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ViaFabric implements ClientModInitializer {
+public class ViaFabric implements ModInitializer {
     public static final java.util.logging.Logger JLOGGER = new JLoggerToLog4j(LogManager.getLogger("ViaFabric"));
     public static final ExecutorService ASYNC_EXECUTOR;
     public static final EventLoop EVENT_LOOP;
@@ -72,33 +72,6 @@ public class ViaFabric implements ClientModInitializer {
                 .filter(container -> container.getInfo().getId().equals("viafabric"))
                 .findFirst()
                 .get().getInfo().getVersionString();
-    }
-
-    @Override
-    public void onInitializeClient() {
-        File viaVersionJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viaversion.jar").toFile();
-        try {
-            checkForUpdates(viaVersionJar, "viaversion", "us/myles", "");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        File viaRewindJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viarewind.jar").toFile();
-        try {
-            checkForUpdates(viaRewindJar, "viarewind-all", "de/gerrygames", "ViaRewind");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            Method addUrl = ViaFabric.class.getClassLoader().getClass().getMethod("addURL", URL.class);
-            addUrl.setAccessible(true);
-            addUrl.invoke(ViaFabric.class.getClassLoader(), viaVersionJar.toURI().toURL());
-            addUrl.invoke(ViaFabric.class.getClassLoader(), viaRewindJar.toURI().toURL());
-            Class.forName("com.github.creeper123123321.viafabric.VRViaVersionInitializer")
-                    .getMethod("init")
-                    .invoke(null);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | MalformedURLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void checkForUpdates(File jar, String artifactName, String groupIdPath, String depName) throws Exception {
@@ -152,6 +125,33 @@ public class ViaFabric implements ClientModInitializer {
                 JLOGGER.info("No updates found");
                 jar.setLastModified(System.currentTimeMillis());
             }
+        }
+    }
+
+    @Override
+    public void onInitialize() {
+        File viaVersionJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viaversion.jar").toFile();
+        try {
+            checkForUpdates(viaVersionJar, "viaversion", "us/myles", "");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        File viaRewindJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viarewind.jar").toFile();
+        try {
+            checkForUpdates(viaRewindJar, "viarewind-all", "de/gerrygames", "ViaRewind");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            Method addUrl = ViaFabric.class.getClassLoader().getClass().getMethod("addURL", URL.class);
+            addUrl.setAccessible(true);
+            addUrl.invoke(ViaFabric.class.getClassLoader(), viaVersionJar.toURI().toURL());
+            addUrl.invoke(ViaFabric.class.getClassLoader(), viaRewindJar.toURI().toURL());
+            Class.forName("com.github.creeper123123321.viafabric.VRViaVersionInitializer")
+                    .getMethod("init")
+                    .invoke(null);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | MalformedURLException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -24,12 +24,18 @@
 
 package com.github.creeper123123321.viafabric;
 
+import com.github.creeper123123321.viafabric.commands.NMSCommandSender;
 import com.github.creeper123123321.viafabric.commands.VRCommandHandler;
 import com.github.creeper123123321.viafabric.platform.VRInjector;
 import com.github.creeper123123321.viafabric.platform.VRLoader;
 import com.github.creeper123123321.viafabric.platform.VRPlatform;
 import com.github.creeper123123321.viafabric.protocol.protocol1_7_6_10to1_7_1_5.Protocol1_7_6_10to1_7_1_5;
 import com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.Protocol1_8TO1_7_6_10;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import io.github.cottonmc.clientcommands.ArgumentBuilders;
+import io.github.cottonmc.clientcommands.ClientCommands;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.FabricLoader;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
@@ -49,5 +55,41 @@ public class VRViaVersionInitializer {
             ProtocolRegistry.registerProtocol(new Protocol1_7_6_10to1_7_1_5(), Collections.singletonList(ProtocolVersion.v1_7_6.getId()), ProtocolVersion.v1_7_1.getId());
             ProtocolRegistry.registerProtocol(new Protocol1_8TO1_7_6_10(), Collections.singletonList(ProtocolVersion.v1_8.getId()), ProtocolVersion.v1_7_6.getId());
         });
+
+
+        if (FabricLoader.INSTANCE.getEnvironmentType() == EnvType.CLIENT) {
+            ClientCommands.registerCommand(command -> command
+                    .register(
+                            ArgumentBuilders.literal("viafabric")
+                                    .then(
+                                            ArgumentBuilders
+                                                    .argument("args", StringArgumentType.greedyString())
+                                                    .executes(ctx -> {
+                                                        String args = StringArgumentType.getString(ctx, "args");
+                                                        Via.getManager()
+                                                                .getCommandHandler()
+                                                                .onCommand(
+                                                                        new NMSCommandSender(ctx.getSource()),
+                                                                        args.split(" ", -1)
+                                                                );
+                                                        return 1;
+                                                    })
+                                                    .suggests((ctx, builder) -> {
+                                                        String args = StringArgumentType.getString(ctx, "args");
+                                                        Via.getManager()
+                                                                .getCommandHandler()
+                                                                .onTabComplete(
+                                                                        new NMSCommandSender(
+                                                                                ctx.getSource()
+                                                                        ),
+                                                                        args.split(" ", -1)
+                                                                )
+                                                                .forEach(builder::suggest);
+                                                        return builder.buildFuture();
+                                                    })
+                                    )
+                    )
+            );
+        }
     }
 }

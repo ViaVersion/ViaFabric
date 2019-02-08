@@ -22,39 +22,18 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.platform;
+package com.github.creeper123123321.viafabric.protocol;
 
-import us.myles.ViaVersion.api.Via;
-import us.myles.ViaVersion.api.command.ViaCommandSender;
+import us.myles.ViaVersion.api.data.UserConnection;
+import us.myles.ViaVersion.api.protocol.Protocol;
 
-import java.util.UUID;
-
-public class VRCommandSender implements ViaCommandSender {
-    private UUID uuid;
-    private String name;
-
-    public VRCommandSender(UUID uuid, String name) {
-        this.uuid = uuid;
-        this.name = name;
+public class ClientSideInterceptor extends Protocol {
+    @Override
+    protected void registerPackets() {
     }
 
     @Override
-    public boolean hasPermission(String s) {
-        return true;
-    }
+    public void init(UserConnection userConnection) {
 
-    @Override
-    public void sendMessage(String s) {
-        Via.getPlatform().sendMessage(uuid, s);
-    }
-
-    @Override
-    public UUID getUUID() {
-        return uuid;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 }

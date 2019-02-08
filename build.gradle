@@ -21,6 +21,7 @@ repositories {
     maven { url 'https://repo.viaversion.com/' }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     maven { url 'https://maven.fabricmc.net/' }
+    maven { url "http://server.bbkr.space:8081/artifactory/libs-snapshot" }
 }
 
 processResources {
@@ -34,9 +35,15 @@ dependencies {
     compile "us.myles:viaversion:2.0.0-19w04a"
     compile "de.gerrygames:viarewind-all:1.4.0"
 
-    minecraft "com.mojang:minecraft:19w04a"
-    mappings "net.fabricmc:yarn:19w04a.1"
-    modCompile "net.fabricmc:fabric-loader:0.3.3.101"
+    minecraft "com.mojang:minecraft:19w05a"
+    mappings "net.fabricmc:yarn:19w05a.6"
+
+    modCompile "net.fabricmc:fabric-loader:0.3.5.106"
+
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modCompile "net.fabricmc:fabric:0.1.5.88"
+
+    modCompile "io.github.cottonmc:client-commands:0.1.0+19w05a-SNAPSHOT"
 }
 
 

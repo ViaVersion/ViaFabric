@@ -25,10 +25,15 @@
 package com.github.creeper123123321.viafabric.platform;
 
 import com.github.creeper123123321.viafabric.ViaFabric;
-import com.github.creeper123123321.viafabric.protocol.Interceptor;
+import com.github.creeper123123321.viafabric.commands.UserCommandSender;
+import com.github.creeper123123321.viafabric.protocol.ClientSideInterceptor;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
 import net.fabricmc.loader.FabricLoader;
 import net.fabricmc.loader.ModContainer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sortme.ChatMessageType;
+import net.minecraft.text.TextComponent;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
@@ -144,39 +149,54 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public ViaCommandSender[] getOnlinePlayers() {
-        return Via.getManager().getPortedPlayers().values().stream().map(it -> {
-            ProtocolInfo info = it.get(ProtocolInfo.class);
-            return new VRCommandSender(info.getUuid(), info.getUsername());
-        }).toArray(ViaCommandSender[]::new);
+        return Via.getManager().getPortedPlayers().values().stream()
+                .map(UserCommandSender::new)
+                .toArray(ViaCommandSender[]::new);
     }
 
     @Override
     public void sendMessage(UUID uuid, String s) {
         UserConnection user = Via.getManager().getPortedPlayers().get(uuid);
-        PacketWrapper chat = new PacketWrapper(0x0E, null, user);
-        chat.write(Type.STRING, ChatRewriter.legacyTextToJson(s));
-        chat.write(Type.BYTE, (byte) 0); // Position chat box
-        try {
-            chat.send(Interceptor.class);
-        } catch (CancelException e) {
-            // Ignore
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (user instanceof VRClientSideUserConnection) {
+            PacketWrapper chat = new PacketWrapper(0x0E, null, user);
+            chat.write(Type.STRING, ChatRewriter.legacyTextToJson(s));
+            chat.write(Type.BYTE, (byte) 0); // Position chat box
+            try {
+                chat.send(ClientSideInterceptor.class);
+            } catch (CancelException e) {
+                // Ignore
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
+            if (server == null) return ;
+            ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
+            if (player == null) return;
+            player.sendChatMessage(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)), ChatMessageType.SYSTEM);
         }
     }
 
     @Override
     public boolean kickPlayer(UUID uuid, String s) {
         UserConnection user = Via.getManager().getPortedPlayers().get(uuid);
-        PacketWrapper chat = new PacketWrapper(0x1B, null, user);
-        chat.write(Type.STRING, ChatRewriter.legacyTextToJson(s));
-        try {
-            chat.sendFuture(Interceptor.class).addListener(future -> user.getChannel().close());
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        if (user instanceof VRClientSideUserConnection) {
+            PacketWrapper chat = new PacketWrapper(0x1B, null, user);
+            chat.write(Type.STRING, ChatRewriter.legacyTextToJson(s));
+            try {
+                chat.sendFuture(ClientSideInterceptor.class).addListener(future -> user.getChannel().close());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
+            if (server == null) return false;
+            ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
+            if (player == null) return false;
+            player.networkHandler.disconnect(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)));
         }
+        return true;
     }
 
     @Override
