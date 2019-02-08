@@ -24,7 +24,7 @@
 
 package com.github.creeper123123321.viafabric.platform;
 
-import net.minecraft.client.options.ServerEntry;
+import net.minecraft.SharedConstants;
 import us.myles.ViaVersion.api.platform.ViaInjector;
 
 public class VRInjector implements ViaInjector {
@@ -40,7 +40,7 @@ public class VRInjector implements ViaInjector {
 
     @Override
     public int getServerProtocolVersion() {
-        return new ServerEntry("", "", false).protocolVersion;
+        return SharedConstants.getGameVersion().getProtocolVersion();
     }
 
     @Override

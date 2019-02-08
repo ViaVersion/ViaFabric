@@ -32,7 +32,7 @@ import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.FabricLoader;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.SharedConstants;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
@@ -95,7 +95,7 @@ public class ViaFabric implements ModInitializer {
             while (matcher.find()) {
                 versions.add(matcher.group(1));
             }
-            String mcVersion = MinecraftClient.getInstance().getGame().getVersion().getName();
+            String mcVersion = SharedConstants.getGameVersion().getName();
             String bestViaVersion = null;
             if (mcVersion.contains("w") || mcVersion.contains("-")) {
                 bestViaVersion = versions.stream()

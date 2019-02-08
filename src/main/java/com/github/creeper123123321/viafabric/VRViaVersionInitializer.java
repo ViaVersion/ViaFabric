@@ -35,6 +35,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import io.github.cottonmc.clientcommands.ArgumentBuilders;
 import io.github.cottonmc.clientcommands.ClientCommands;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.fabric.events.ServerEvent;
 import net.fabricmc.loader.FabricLoader;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
@@ -78,5 +79,13 @@ public class VRViaVersionInitializer {
                     )
             );
         }
+
+        ServerEvent.START.register(server -> {
+            try {
+                ProtocolRegistry.SERVER_PROTOCOL = Via.getManager().getInjector().getServerProtocolVersion();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
