@@ -29,6 +29,8 @@ import us.myles.ViaVersion.api.command.ViaCommandSender;
 import us.myles.ViaVersion.api.command.ViaSubCommand;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class LeakDetectSubCommand extends ViaSubCommand {
     @Override
@@ -55,5 +57,16 @@ public class LeakDetectSubCommand extends ViaSubCommand {
             viaCommandSender.sendMessage("Current leak detection level is " + ResourceLeakDetector.getLevel());
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(ViaCommandSender sender, String[] args) {
+        if (args.length == 1) {
+            return Arrays.stream(ResourceLeakDetector.Level.values())
+                    .map(Enum::name)
+                    .filter(it -> it.startsWith(args[0]))
+                    .collect(Collectors.toList());
+        }
+        return super.onTabComplete(sender, args);
     }
 }

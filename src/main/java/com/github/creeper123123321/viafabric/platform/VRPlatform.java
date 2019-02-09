@@ -25,11 +25,13 @@
 package com.github.creeper123123321.viafabric.platform;
 
 import com.github.creeper123123321.viafabric.ViaFabric;
+import com.github.creeper123123321.viafabric.commands.NMSCommandSender;
 import com.github.creeper123123321.viafabric.commands.UserCommandSender;
 import com.github.creeper123123321.viafabric.protocol.ClientSideInterceptor;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
 import net.fabricmc.loader.FabricLoader;
 import net.fabricmc.loader.ModContainer;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sortme.ChatMessageType;
@@ -46,7 +48,6 @@ import us.myles.ViaVersion.api.platform.ViaPlatform;
 import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.dump.PluginInfo;
 import us.myles.ViaVersion.exception.CancelException;
-import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
 import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.ViaVersion.util.GsonUtil;
@@ -149,6 +150,13 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public ViaCommandSender[] getOnlinePlayers() {
+        MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
+        if (server != null) {
+            return server.getPlayerManager().getPlayerList().stream()
+                    .map(Entity::getCommandSource)
+                    .map(NMSCommandSender::new)
+                    .toArray(ViaCommandSender[]::new);
+        }
         return Via.getManager().getPortedPlayers().values().stream()
                 .map(UserCommandSender::new)
                 .toArray(ViaCommandSender[]::new);
@@ -170,7 +178,7 @@ public class VRPlatform implements ViaPlatform {
             }
         } else {
             MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
-            if (server == null) return ;
+            if (server == null) return;
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
             if (player == null) return;
             player.sendChatMessage(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)), ChatMessageType.SYSTEM);
