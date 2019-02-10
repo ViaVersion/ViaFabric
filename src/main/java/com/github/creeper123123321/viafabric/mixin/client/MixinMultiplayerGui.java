@@ -25,6 +25,7 @@
 package com.github.creeper123123321.viafabric.mixin.client;
 
 import com.github.creeper123123321.viafabric.gui.multiplayer.SaveProtocolButton;
+import com.github.creeper123123321.viafabric.providers.VRVersionProvider;
 import com.github.creeper123123321.viafabric.util.VersionFormatFilter;
 import net.minecraft.client.gui.GuiEventListener;
 import net.minecraft.client.gui.Screen;
@@ -36,8 +37,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
+import us.myles.ViaVersion.protocols.base.VersionProvider;
 
 @Mixin(MultiplayerScreen.class)
 public abstract class MixinMultiplayerGui extends Screen {
@@ -46,9 +49,10 @@ public abstract class MixinMultiplayerGui extends Screen {
     @Inject(method = "onInitialized", at = @At("TAIL"))
     private void onOnInitialized(CallbackInfo ci) {
         protocolVersion = new TextFieldWidget(1235, fontRenderer, this.width / 2 + 55, 8, 45, 20);
-        protocolVersion.setText(ProtocolVersion.isRegistered(ProtocolRegistry.SERVER_PROTOCOL)
-                ? ProtocolVersion.getProtocol(ProtocolRegistry.SERVER_PROTOCOL).getName()
-                : Integer.toString(ProtocolRegistry.SERVER_PROTOCOL));
+        int clientSideVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
+        protocolVersion.setText(ProtocolVersion.isRegistered(clientSideVersion)
+                ? ProtocolVersion.getProtocol(clientSideVersion).getName()
+                : Integer.toString(clientSideVersion));
         protocolVersion.method_1890(new VersionFormatFilter());
         this.listeners.add(protocolVersion);
         addButton(new SaveProtocolButton(6356, width / 2 + 100, 8, 50, 20,

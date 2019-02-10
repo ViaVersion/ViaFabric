@@ -36,14 +36,11 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import io.github.cottonmc.clientcommands.ArgumentBuilders;
 import io.github.cottonmc.clientcommands.ClientCommands;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.commands.CommandRegistry;
-import net.fabricmc.fabric.events.ServerEvent;
+import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.fabricmc.loader.FabricLoader;
 import net.minecraft.server.command.ServerCommandSource;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
-import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.protocol.Protocol;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
@@ -51,28 +48,14 @@ import java.util.Collections;
 
 public class VRViaVersionInitializer {
     public static void init() {
-        ViaFabric.EVENT_LOOP.submit(() -> {
-            Via.init(ViaManager.builder()
-                    .injector(new VRInjector())
-                    .loader(new VRLoader())
-                    .commandHandler(new VRCommandHandler())
-                    .platform(new VRPlatform()).build());
-            Via.getManager().init();
-            ProtocolRegistry.registerProtocol(new Protocol1_7_6_10to1_7_1_5(), Collections.singletonList(ProtocolVersion.v1_7_6.getId()), ProtocolVersion.v1_7_1.getId());
-            ProtocolRegistry.registerProtocol(new Protocol1_8TO1_7_6_10(), Collections.singletonList(ProtocolVersion.v1_8.getId()), ProtocolVersion.v1_7_6.getId());
-            ProtocolRegistry.registerProtocol(new Protocol() {
-                @Override
-                protected void registerPackets() {
-
-                }
-
-                @Override
-                public void init(UserConnection userConnection) {
-
-                }
-            }, Collections.singletonList(459), 458); // todo remove test
-        });
-
+        Via.init(ViaManager.builder()
+                .injector(new VRInjector())
+                .loader(new VRLoader())
+                .commandHandler(new VRCommandHandler())
+                .platform(new VRPlatform()).build());
+        Via.getManager().init();
+        ProtocolRegistry.registerProtocol(new Protocol1_7_6_10to1_7_1_5(), Collections.singletonList(ProtocolVersion.v1_7_6.getId()), ProtocolVersion.v1_7_1.getId());
+        ProtocolRegistry.registerProtocol(new Protocol1_8TO1_7_6_10(), Collections.singletonList(ProtocolVersion.v1_8.getId()), ProtocolVersion.v1_7_6.getId());
 
         if (FabricLoader.INSTANCE.getEnvironmentType() == EnvType.CLIENT) {
             ClientCommands.registerCommand(command -> command
@@ -101,13 +84,5 @@ public class VRViaVersionInitializer {
                                 .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
                 )
         );
-
-        ServerEvent.START.register(server -> {
-            try {
-                ProtocolRegistry.SERVER_PROTOCOL = Via.getManager().getInjector().getServerProtocolVersion();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
     }
 }

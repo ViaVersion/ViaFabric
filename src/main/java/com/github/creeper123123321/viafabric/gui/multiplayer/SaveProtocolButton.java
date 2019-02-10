@@ -24,10 +24,13 @@
 
 package com.github.creeper123123321.viafabric.gui.multiplayer;
 
+import com.github.creeper123123321.viafabric.providers.VRVersionProvider;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
+import us.myles.ViaVersion.protocols.base.VersionProvider;
 
 public class SaveProtocolButton extends ButtonWidget {
     private TextFieldWidget textField;
@@ -40,16 +43,18 @@ public class SaveProtocolButton extends ButtonWidget {
     @Override
     public void onPressed(double p_mouseClicked_1_, double p_mouseClicked_3_) {
         super.onPressed(p_mouseClicked_1_, p_mouseClicked_3_);
+        int newVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
         try {
-            ProtocolRegistry.SERVER_PROTOCOL = Integer.parseInt(textField.getText());
+            newVersion = Integer.parseInt(textField.getText());
         } catch (NumberFormatException e) {
             try {
-                ProtocolRegistry.SERVER_PROTOCOL = ProtocolVersion.getClosest(textField.getText()).getId();
+                newVersion = ProtocolVersion.getClosest(textField.getText()).getId();
             } catch (NullPointerException ignored) {
             }
         }
-        textField.setText(ProtocolVersion.isRegistered(ProtocolRegistry.SERVER_PROTOCOL)
-                ? ProtocolVersion.getProtocol(ProtocolRegistry.SERVER_PROTOCOL).getName()
-                : Integer.toString(ProtocolRegistry.SERVER_PROTOCOL));
+        ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion = newVersion;
+        textField.setText(ProtocolVersion.isRegistered(newVersion)
+                ? ProtocolVersion.getProtocol(newVersion).getName()
+                : Integer.toString(newVersion));
     }
 }

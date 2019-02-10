@@ -132,7 +132,7 @@ public class ViaFabric implements ModInitializer {
     public void onInitialize() {
         File viaVersionJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viaversion.jar").toFile();
         try {
-            checkForUpdates(viaVersionJar, "viaversion", "us/myles", "");
+            checkForUpdates(viaVersionJar, "viaversion", "us/myles", "ViaVersion");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -27,7 +27,7 @@ package com.github.creeper123123321.viafabric.platform;
 import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.commands.NMSCommandSender;
 import com.github.creeper123123321.viafabric.commands.UserCommandSender;
-import com.github.creeper123123321.viafabric.protocol.ClientSideInterceptor;
+import com.github.creeper123123321.viafabric.protocol.ClientSideReference;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
 import net.fabricmc.loader.FabricLoader;
 import net.fabricmc.loader.ModContainer;
@@ -170,7 +170,7 @@ public class VRPlatform implements ViaPlatform {
             chat.write(Type.STRING, ChatRewriter.legacyTextToJson(s));
             chat.write(Type.BYTE, (byte) 0); // Position chat box
             try {
-                chat.send(ClientSideInterceptor.class);
+                chat.send(ClientSideReference.class);
             } catch (CancelException e) {
                 // Ignore
             } catch (Exception e) {
@@ -192,7 +192,7 @@ public class VRPlatform implements ViaPlatform {
             PacketWrapper chat = new PacketWrapper(0x1B, null, user);
             chat.write(Type.STRING, ChatRewriter.legacyTextToJson(s));
             try {
-                chat.sendFuture(ClientSideInterceptor.class).addListener(future -> user.getChannel().close());
+                chat.sendFuture(ClientSideReference.class).addListener(future -> user.getChannel().close());
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;

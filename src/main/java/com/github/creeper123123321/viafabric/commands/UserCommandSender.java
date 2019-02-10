@@ -40,7 +40,7 @@ public class UserCommandSender implements ViaCommandSender {
 
     @Override
     public boolean hasPermission(String s) {
-        return true;
+        return false;
     }
 
     @Override

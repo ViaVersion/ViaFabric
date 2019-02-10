@@ -22,18 +22,19 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.protocol;
+package com.github.creeper123123321.viafabric.providers;
 
+import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
+import net.minecraft.SharedConstants;
 import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.protocol.Protocol;
+import us.myles.ViaVersion.protocols.base.VersionProvider;
 
-public class ClientSideInterceptor extends Protocol {
-    @Override
-    protected void registerPackets() {
-    }
+public class VRVersionProvider extends VersionProvider {
+    public int clientSideModeVersion = SharedConstants.getGameVersion().getProtocolVersion();
 
     @Override
-    public void init(UserConnection userConnection) {
-
+    public int getServerProtocol(UserConnection connection) throws Exception {
+        if (connection instanceof VRClientSideUserConnection) return clientSideModeVersion;
+        return super.getServerProtocol(connection);
     }
 }

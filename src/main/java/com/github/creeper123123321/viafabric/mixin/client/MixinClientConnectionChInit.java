@@ -27,7 +27,7 @@ package com.github.creeper123123321.viafabric.mixin.client;
 import com.github.creeper123123321.viafabric.handler.clientside.VRDecodeHandler;
 import com.github.creeper123123321.viafabric.handler.clientside.VREncodeHandler;
 import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
-import com.github.creeper123123321.viafabric.protocol.ClientSideInterceptor;
+import com.github.creeper123123321.viafabric.protocol.ClientSideReference;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -45,7 +45,7 @@ public class MixinClientConnectionChInit {
     private void onInitChannel(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
             UserConnection user = new VRClientSideUserConnection(channel);
-            new ProtocolPipeline(user).add(new ClientSideInterceptor());
+            new ProtocolPipeline(user).add(new ClientSideReference());
 
             MessageToByteEncoder oldEncoder = (MessageToByteEncoder) channel.pipeline().get("encoder");
             ByteToMessageDecoder oldDecoder = (ByteToMessageDecoder) channel.pipeline().get("decoder");
