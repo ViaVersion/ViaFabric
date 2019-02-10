@@ -33,11 +33,11 @@ import com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.Prot
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import io.github.cottonmc.clientcommands.ArgumentBuilders;
 import io.github.cottonmc.clientcommands.ClientCommands;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.fabricmc.loader.FabricLoader;
+import net.minecraft.server.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
@@ -58,31 +58,41 @@ public class VRViaVersionInitializer {
         ProtocolRegistry.registerProtocol(new Protocol1_8TO1_7_6_10(), Collections.singletonList(ProtocolVersion.v1_8.getId()), ProtocolVersion.v1_7_6.getId());
 
         if (FabricLoader.INSTANCE.getEnvironmentType() == EnvType.CLIENT) {
-            ClientCommands.registerCommand(command -> command
+            try {
+                Class.forName("io.github.cottonmc.clientcommands.ClientCommands");
+                ClientCommands.registerCommand(command -> command
+                        .register(
+                                LiteralArgumentBuilder.<CommandSource>literal("viafabricclient")
+                                        .then(
+                                                RequiredArgumentBuilder
+                                                        .<CommandSource, String>argument("args", StringArgumentType.greedyString())
+                                                        .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
+                                                        .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
+                                        )
+                                        .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
+                        )
+                );
+            } catch (ClassNotFoundException e) {
+                Via.getPlatform().getLogger().warning("ClientCommands isn't installed");
+            }
+        }
+
+        try {
+            Class.forName("net.fabricmc.fabric.api.registry.CommandRegistry");
+            CommandRegistry.INSTANCE.register(false, command -> command
                     .register(
-                            ArgumentBuilders.literal("viafabricclient")
+                            LiteralArgumentBuilder.<ServerCommandSource>literal("viafabric")
                                     .then(
-                                            ArgumentBuilders
-                                                    .argument("args", StringArgumentType.greedyString())
+                                            RequiredArgumentBuilder
+                                                    .<ServerCommandSource, String>argument("args", StringArgumentType.greedyString())
                                                     .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
                                                     .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
                                     )
                                     .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
                     )
             );
+        } catch (ClassNotFoundException e) {
+            Via.getPlatform().getLogger().warning("Fabric API isn't installed");
         }
-
-        CommandRegistry.INSTANCE.register(false, command -> command
-                .register(
-                        LiteralArgumentBuilder.<ServerCommandSource>literal("viafabric")
-                                .then(
-                                        RequiredArgumentBuilder
-                                                .<ServerCommandSource, String>argument("args", StringArgumentType.greedyString())
-                                                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
-                                                .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
-                                )
-                                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
-                )
-        );
     }
 }

@@ -7,7 +7,6 @@
     "com.github.creeper123123321.viafabric.ViaFabric"
   ],
   "requires": {
-    "fabric": "*"
   },
   "mixins": {
     "common": "mixins.viafabric.common.json",
