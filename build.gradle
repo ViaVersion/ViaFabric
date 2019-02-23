@@ -32,15 +32,15 @@ processResources {
 
 
 dependencies {
-    compile "us.myles:viaversion:2.0.0-19w06a"
+    compile "us.myles:viaversion:2.0.0-19w08b"
     compile "de.gerrygames:viarewind-all:1.4.0"
 
-    minecraft "com.mojang:minecraft:19w06a"
-    mappings "net.fabricmc:yarn:19w06a.3"
+    minecraft "com.mojang:minecraft:19w08b"
+    mappings "net.fabricmc:yarn:19w08b.6"
 
-    modCompile "net.fabricmc:fabric-loader:0.3.5.106"
+    modCompile "net.fabricmc:fabric-loader:0.3.7.109"
 
-    modCompile "net.fabricmc:fabric:0.2.0.89"
+    modCompile "net.fabricmc:fabric:0.2.3.104"
 
     modCompile "io.github.cottonmc:client-commands:0.1.0+19w05a-SNAPSHOT"
 }

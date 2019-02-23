@@ -35,8 +35,8 @@ import us.myles.ViaVersion.protocols.base.VersionProvider;
 public class SaveProtocolButton extends ButtonWidget {
     private TextFieldWidget textField;
 
-    public SaveProtocolButton(int id, int x, int y, int width, int height, String text, TextFieldWidget tf) {
-        super(id, x, y, width, height, text);
+    public SaveProtocolButton(int x, int y, int width, int height, String text, TextFieldWidget tf) {
+        super(x, y, width, height, text);
         textField = tf;
     }
 
