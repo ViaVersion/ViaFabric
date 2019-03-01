@@ -25,15 +25,13 @@
 package com.github.creeper123123321.viafabric;
 
 import com.github.creeper123123321.viafabric.commands.VRCommandHandler;
-import com.github.creeper123123321.viafabric.platform.VRInjector;
-import com.github.creeper123123321.viafabric.platform.VRLoader;
-import com.github.creeper123123321.viafabric.platform.VRPlatform;
+import com.github.creeper123123321.viafabric.platform.*;
 import com.github.creeper123123321.viafabric.protocol.protocol1_7_6_10to1_7_1_5.Protocol1_7_6_10to1_7_1_5;
 import com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.Protocol1_8TO1_7_6_10;
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import io.github.cottonmc.clientcommands.ClientCommands;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.fabricmc.loader.FabricLoader;
@@ -44,7 +42,9 @@ import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
+import java.util.function.Consumer;
 
 public class VRViaVersionInitializer {
     public static void init() {
@@ -56,23 +56,27 @@ public class VRViaVersionInitializer {
         Via.getManager().init();
         ProtocolRegistry.registerProtocol(new Protocol1_7_6_10to1_7_1_5(), Collections.singletonList(ProtocolVersion.v1_7_6.getId()), ProtocolVersion.v1_7_1.getId());
         ProtocolRegistry.registerProtocol(new Protocol1_8TO1_7_6_10(), Collections.singletonList(ProtocolVersion.v1_8.getId()), ProtocolVersion.v1_7_6.getId());
+        new VRRewindPlatform().init();
+        new VRBackwardsPlatform().init();
 
         if (FabricLoader.INSTANCE.getEnvironmentType() == EnvType.CLIENT) {
             try {
-                Class.forName("io.github.cottonmc.clientcommands.ClientCommands");
-                ClientCommands.registerCommand(command -> command
-                        .register(
-                                LiteralArgumentBuilder.<CommandSource>literal("viafabricclient")
-                                        .then(
-                                                RequiredArgumentBuilder
-                                                        .<CommandSource, String>argument("args", StringArgumentType.greedyString())
+                Class.forName("io.github.cottonmc.clientcommands.ClientCommands")
+                        .getMethod("registerCommand", Consumer.class)
+                        .invoke(null,
+                                (Consumer<CommandDispatcher<CommandSource>>) command -> command
+                                        .register(
+                                                LiteralArgumentBuilder.<CommandSource>literal("viafabricclient")
+                                                        .then(
+                                                                RequiredArgumentBuilder
+                                                                        .<CommandSource, String>argument("args", StringArgumentType.greedyString())
+                                                                        .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
+                                                                        .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
+                                                        )
                                                         .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
-                                                        .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
                                         )
-                                        .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
-                        )
-                );
-            } catch (ClassNotFoundException e) {
+                        );
+            } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 Via.getPlatform().getLogger().warning("ClientCommands isn't installed");
             }
         }

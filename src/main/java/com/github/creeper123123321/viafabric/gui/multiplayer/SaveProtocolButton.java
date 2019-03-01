@@ -47,10 +47,8 @@ public class SaveProtocolButton extends ButtonWidget {
         try {
             newVersion = Integer.parseInt(textField.getText());
         } catch (NumberFormatException e) {
-            try {
-                newVersion = ProtocolVersion.getClosest(textField.getText()).getId();
-            } catch (NullPointerException ignored) {
-            }
+            ProtocolVersion closest = ProtocolVersion.getClosest(textField.getText());
+            if (closest != null) newVersion = closest.getId();
         }
         ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion = newVersion;
         textField.setText(ProtocolVersion.isRegistered(newVersion)

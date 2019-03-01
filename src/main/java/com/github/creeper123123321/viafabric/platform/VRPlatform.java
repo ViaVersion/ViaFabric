@@ -53,7 +53,6 @@ import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.ViaVersion.util.GsonUtil;
 import us.myles.viaversion.libs.gson.JsonObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -63,7 +62,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class VRPlatform implements ViaPlatform {
-    private VRViaConfig config = new VRViaConfig(new File(FabricLoader.INSTANCE.getConfigDirectory(), "ViaFabric"));
+    private VRViaConfig config = new VRViaConfig(FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viaversion.yml").toFile());
 
     @Override
     public Logger getLogger() {
@@ -84,9 +83,7 @@ public class VRPlatform implements ViaPlatform {
     public String getPluginVersion() {
         try {
             return VersionInfo.class.getField("VERSION").get(null) + "-ViaFabric";
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
         }
         return "?";

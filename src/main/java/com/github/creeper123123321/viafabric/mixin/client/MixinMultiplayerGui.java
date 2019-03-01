@@ -47,20 +47,20 @@ public abstract class MixinMultiplayerGui extends Screen {
 
     @Inject(method = "onInitialized", at = @At("TAIL"))
     private void onOnInitialized(CallbackInfo ci) {
-        protocolVersion = new TextFieldWidget(fontRenderer, this.width / 2 + 55, 8, 45, 20);
+        protocolVersion = new TextFieldWidget(fontRenderer, this.screenWidth / 2 + 55, 8, 45, 20);
         int clientSideVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
         protocolVersion.setText(ProtocolVersion.isRegistered(clientSideVersion)
                 ? ProtocolVersion.getProtocol(clientSideVersion).getName()
                 : Integer.toString(clientSideVersion));
         protocolVersion.method_1890(new VersionFormatFilter());
         this.listeners.add(protocolVersion);
-        addButton(new SaveProtocolButton(width / 2 + 100, 8, 50, 20,
+        addButton(new SaveProtocolButton(screenWidth / 2 + 100, 8, 50, 20,
                 I18n.translate("selectWorld.edit.save"), protocolVersion));
     }
 
     @Inject(method = "draw", at = @At("TAIL"))
     private void onDraw(int p_1, int p_2, float p_3, CallbackInfo ci) {
-        drawStringCentered(fontRenderer, "Protocol Version:", this.width / 2, 12, 0xFFFFFF);
+        drawStringCentered(fontRenderer, "Protocol Version:", this.screenWidth / 2, 12, 0xFFFFFF);
         protocolVersion.draw(p_1, p_2, p_3);
     }
 

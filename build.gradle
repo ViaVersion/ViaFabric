@@ -1,4 +1,4 @@
-import org.apache.tools.ant.filters.*
+import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     id 'java'
@@ -21,7 +21,6 @@ repositories {
     maven { url 'https://repo.viaversion.com/' }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     maven { url 'https://maven.fabricmc.net/' }
-    maven { url "http://server.bbkr.space:8081/artifactory/libs-snapshot" }
 }
 
 processResources {
@@ -32,17 +31,16 @@ processResources {
 
 
 dependencies {
-    compile "us.myles:viaversion:2.0.0-19w08b"
-    compile "de.gerrygames:viarewind-all:1.4.0"
+    // transitive = false, viabackwards-core because Guava is conflicting on runClient
+    compile("us.myles:viaversion:2.0.0-19w09a") { transitive = false }
+    compile("de.gerrygames:viarewind-core:1.4.0") { transitive = false }
+    compile("nl.matsv:viabackwards-core:2.4.0-SNAPSHOT") { transitive = false }
 
-    minecraft "com.mojang:minecraft:19w08b"
-    mappings "net.fabricmc:yarn:19w08b.6"
-
+    minecraft "com.mojang:minecraft:19w09a"
+    mappings "net.fabricmc:yarn:19w09a.2"
     modCompile "net.fabricmc:fabric-loader:0.3.7.109"
 
-    modCompile "net.fabricmc:fabric:0.2.3.104"
-
-    modCompile "io.github.cottonmc:client-commands:0.1.0+19w05a-SNAPSHOT"
+    modCompile "net.fabricmc:fabric:0.2.3.108"
 }
 
 

@@ -38,7 +38,7 @@ public class VRViaConfig extends Config implements ViaVersionConfig {
     private static List<String> UNSUPPORTED = Arrays.asList("anti-xray-patch", "bungee-ping-interval", "bungee-ping-save", "bungee-servers", "quick-move-action-fix", "nms-player-ticking", "item-cache", "velocity-ping-interval", "velocity-ping-save", "velocity-servers", "blockconnection-method");
 
     public VRViaConfig(File configFile) {
-        super(new File(configFile, "config.yml"));
+        super(configFile);
         // Load config
         reloadConfig();
     }

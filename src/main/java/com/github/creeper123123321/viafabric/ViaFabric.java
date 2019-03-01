@@ -71,7 +71,7 @@ public class ViaFabric implements ModInitializer {
                 .stream()
                 .filter(container -> container.getInfo().getId().equals("viafabric"))
                 .findFirst()
-                .get().getInfo().getVersionString();
+                .get().getInfo().getVersion().getFriendlyString();
     }
 
     private void checkForUpdates(File jar, String artifactName, String groupIdPath, String depName) throws Exception {
@@ -138,7 +138,13 @@ public class ViaFabric implements ModInitializer {
         }
         File viaRewindJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viarewind.jar").toFile();
         try {
-            checkForUpdates(viaRewindJar, "viarewind-all", "de/gerrygames", "ViaRewind");
+            checkForUpdates(viaRewindJar, "viarewind-core", "de/gerrygames", "ViaRewind");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        File viaBackwardsJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viabackwards.jar").toFile();
+        try {
+            checkForUpdates(viaBackwardsJar, "viabackwards-core", "nl/matsv", "ViaBackwards");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -147,6 +153,8 @@ public class ViaFabric implements ModInitializer {
             addUrl.setAccessible(true);
             addUrl.invoke(ViaFabric.class.getClassLoader(), viaVersionJar.toURI().toURL());
             addUrl.invoke(ViaFabric.class.getClassLoader(), viaRewindJar.toURI().toURL());
+            addUrl.invoke(ViaFabric.class.getClassLoader(), viaBackwardsJar.toURI().toURL());
+            // Need reflection because Fabric was loading the class before the jars were added to classpath
             Class.forName("com.github.creeper123123321.viafabric.VRViaVersionInitializer")
                     .getMethod("init")
                     .invoke(null);
