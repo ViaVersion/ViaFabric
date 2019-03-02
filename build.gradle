@@ -8,7 +8,7 @@ plugins {
 }
 
 group 'com.github.creeper123123321.viafabric'
-version gitVersion()
+version '0.1.0-SNAPSHOT+' + gitVersion()
 archivesBaseName = 'ViaFabric'
 
 sourceCompatibility = 1.8
@@ -29,7 +29,6 @@ processResources {
     ]
 }
 
-
 dependencies {
     // transitive = false, viabackwards-core because Guava is conflicting on runClient
     compile("us.myles:viaversion:2.0.0-19w09a") { transitive = false }
@@ -42,7 +41,6 @@ dependencies {
 
     modCompile "net.fabricmc:fabric:0.2.3.108"
 }
-
 
 minecraft {
 }
