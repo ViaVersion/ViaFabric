@@ -3,10 +3,24 @@
   "name": "ViaFabric",
   "side": "universal",
   "version": "@version@",
+  "description": "@description@",
+  "license": "MIT",
+  "links": {
+    "homepage": "https://github.com/ViaVersion/ViaFabric",
+    "issues": "https://github.com/ViaVersion/ViaFabric/issues",
+    "sources": "https://github.com/ViaVersion/ViaFabric"
+  },
+  "authors": [
+    "creeper123123321"
+  ],
   "initializers": [
     "com.github.creeper123123321.viafabric.ViaFabric"
   ],
   "requires": {
+  },
+  "recommended": {
+    "fabric": "*",
+    "clientcommands": "*"
   },
   "mixins": {
     "common": "mixins.viafabric.common.json",

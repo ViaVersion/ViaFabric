@@ -10,6 +10,7 @@ plugins {
 group 'com.github.creeper123123321.viafabric'
 version '0.1.0-SNAPSHOT+' + gitVersion()
 archivesBaseName = 'ViaFabric'
+description = 'Clientside and serverside ViaVersion for Fabric'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -25,7 +26,8 @@ repositories {
 
 processResources {
     filter ReplaceTokens, tokens: [
-            "version": project.property("version")
+            "version": project.property('version'),
+            "description": project.property('description')
     ]
 }
 
