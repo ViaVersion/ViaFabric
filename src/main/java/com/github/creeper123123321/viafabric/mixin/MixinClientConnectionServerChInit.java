@@ -26,7 +26,6 @@ package com.github.creeper123123321.viafabric.mixin;
 
 import com.github.creeper123123321.viafabric.handler.serverside.FabricDecodeHandler;
 import com.github.creeper123123321.viafabric.handler.serverside.FabricEncodeHandler;
-import com.github.creeper123123321.viafabric.protocol.ClientSideReference;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -44,7 +43,7 @@ public class MixinClientConnectionServerChInit {
     private void onInitChannel(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
             UserConnection user = new UserConnection(channel);
-            new ProtocolPipeline(user).add(new ClientSideReference());
+            new ProtocolPipeline(user);
 
             MessageToByteEncoder oldEncoder = (MessageToByteEncoder) channel.pipeline().get("encoder");
             ByteToMessageDecoder oldDecoder = (ByteToMessageDecoder) channel.pipeline().get("decoder");

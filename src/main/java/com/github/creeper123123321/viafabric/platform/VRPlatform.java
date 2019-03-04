@@ -57,6 +57,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -82,7 +83,7 @@ public class VRPlatform implements ViaPlatform {
     @Override
     public String getPluginVersion() {
         try {
-            return VersionInfo.class.getField("VERSION").get(null) + "-ViaFabric";
+            return VersionInfo.class.getField("VERSION").get(null).toString();
         } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
         }
@@ -102,21 +103,33 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public TaskId runSync(Runnable runnable) {
-        return new FutureTaskId(ViaFabric.EVENT_LOOP
-                .submit(runnable)
-                .addListener(future -> {
-                    if (!future.isSuccess()) {
-                        future.cause().printStackTrace();
-                    }
-                })
+        // Kick task needs to be on main thread
+        Executor executor = ViaFabric.EVENT_LOOP;
+        boolean alreadyLogged;
+        MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
+        if (server != null) {
+            alreadyLogged = true;
+            executor = server;
+        } else {
+            alreadyLogged = false;
+        }
+        return new FutureTaskId(
+                CompletableFuture.runAsync(runnable, executor)
+                        .exceptionally(throwable -> {
+                            if (!alreadyLogged) {
+                                throwable.printStackTrace();
+                            }
+                            return null;
+                        })
         );
     }
 
     @Override
     public TaskId runSync(Runnable runnable, Long ticks) {
+        // ViaVersion seems to not need to run delayed tasks on main thread
         return new FutureTaskId(
                 ViaFabric.EVENT_LOOP
-                        .schedule(runnable, ticks * 50, TimeUnit.SECONDS)
+                        .schedule(runnable, ticks * 50, TimeUnit.MILLISECONDS)
                         .addListener(future -> {
                             if (!future.isSuccess()) {
                                 future.cause().printStackTrace();
@@ -127,9 +140,10 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public TaskId runRepeatingSync(Runnable runnable, Long ticks) {
+        // ViaVersion seems to not need to run repeating tasks on main thread
         return new FutureTaskId(
                 ViaFabric.EVENT_LOOP
-                        .scheduleAtFixedRate(runnable, 0, ticks * 50, TimeUnit.SECONDS)
+                        .scheduleAtFixedRate(runnable, 0, ticks * 50, TimeUnit.MILLISECONDS)
                         .addListener(future -> {
                             if (!future.isSuccess()) {
                                 future.cause().printStackTrace();
@@ -148,7 +162,8 @@ public class VRPlatform implements ViaPlatform {
     @Override
     public ViaCommandSender[] getOnlinePlayers() {
         MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
-        if (server != null) {
+        if (server != null && server.isMainThread()) {
+            // Not thread safe
             return server.getPlayerManager().getPlayerList().stream()
                     .map(Entity::getCommandSource)
                     .map(NMSCommandSender::new)
@@ -174,11 +189,13 @@ public class VRPlatform implements ViaPlatform {
                 e.printStackTrace();
             }
         } else {
-            MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
-            if (server == null) return;
-            ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
-            if (player == null) return;
-            player.sendChatMessage(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)), ChatMessageType.SYSTEM);
+            runSync(() -> {
+                MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
+                if (server == null) return;
+                ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
+                if (player == null) return;
+                player.sendChatMessage(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)), ChatMessageType.SYSTEM);
+            });
         }
     }
 
@@ -190,18 +207,19 @@ public class VRPlatform implements ViaPlatform {
             chat.write(Type.STRING, ChatRewriter.legacyTextToJson(s));
             try {
                 chat.sendFuture(ClientSideReference.class).addListener(future -> user.getChannel().close());
+                return true;
             } catch (Exception e) {
                 e.printStackTrace();
-                return false;
             }
         } else {
             MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
-            if (server == null) return false;
-            ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
-            if (player == null) return false;
-            player.networkHandler.disconnect(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)));
+            if (server != null && server.isMainThread()) {
+                ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
+                if (player == null) return false;
+                player.networkHandler.disconnect(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)));
+            }
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -235,11 +253,11 @@ public class VRPlatform implements ViaPlatform {
         List<PluginInfo> mods = new ArrayList<>();
         for (ModContainer mod : FabricLoader.INSTANCE.getModContainers()) {
             mods.add(new PluginInfo(true,
-                    mod.getInfo().getName(),
-                    mod.getInfo().getVersionString(),
+                    mod.getMetadata().getName(),
+                    mod.getMetadata().getVersion().getFriendlyString(),
                     String.join(", ", mod.getInfo().getInitializers()),
                     mod.getInfo().getAuthors().stream()
-                            .map(info -> info.getName() + " <" + info.getEmail() + "> " + "[" + info.getWebsite() + "]")
+                            .map(info -> info.getName() + " <" + info.getEmail() + "> (" + info.getWebsite() + ")")
                             .collect(Collectors.toList())
             ));
         }

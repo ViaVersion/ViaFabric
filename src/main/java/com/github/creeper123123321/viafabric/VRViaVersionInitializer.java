@@ -36,7 +36,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.fabricmc.loader.FabricLoader;
 import net.minecraft.server.command.CommandSource;
-import net.minecraft.server.command.ServerCommandSource;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
@@ -64,17 +63,8 @@ public class VRViaVersionInitializer {
                 Class.forName("io.github.cottonmc.clientcommands.ClientCommands")
                         .getMethod("registerCommand", Consumer.class)
                         .invoke(null,
-                                (Consumer<CommandDispatcher<CommandSource>>) command -> command
-                                        .register(
-                                                LiteralArgumentBuilder.<CommandSource>literal("viafabricclient")
-                                                        .then(
-                                                                RequiredArgumentBuilder
-                                                                        .<CommandSource, String>argument("args", StringArgumentType.greedyString())
-                                                                        .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
-                                                                        .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
-                                                        )
-                                                        .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
-                                        )
+                                (Consumer<CommandDispatcher<CommandSource>>) c ->
+                                        c.register(command("viafabricclient"))
                         );
             } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                 Via.getPlatform().getLogger().warning("ClientCommands isn't installed");
@@ -83,20 +73,22 @@ public class VRViaVersionInitializer {
 
         try {
             Class.forName("net.fabricmc.fabric.api.registry.CommandRegistry");
-            CommandRegistry.INSTANCE.register(false, command -> command
-                    .register(
-                            LiteralArgumentBuilder.<ServerCommandSource>literal("viafabric")
-                                    .then(
-                                            RequiredArgumentBuilder
-                                                    .<ServerCommandSource, String>argument("args", StringArgumentType.greedyString())
-                                                    .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
-                                                    .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
-                                    )
-                                    .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
-                    )
-            );
+            CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaversion")));
+            CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaver")));
+            CommandRegistry.INSTANCE.register(false, c -> c.register(command("vvfabric")));
         } catch (ClassNotFoundException e) {
             Via.getPlatform().getLogger().warning("Fabric API isn't installed");
         }
+    }
+
+    private static <S extends CommandSource> LiteralArgumentBuilder<S> command(String commandName) {
+        return LiteralArgumentBuilder.<S>literal(commandName)
+                .then(
+                        RequiredArgumentBuilder
+                                .<S, String>argument("args", StringArgumentType.greedyString())
+                                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
+                                .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
+                )
+                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute);
     }
 }

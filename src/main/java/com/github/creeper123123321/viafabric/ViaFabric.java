@@ -67,17 +67,14 @@ public class ViaFabric implements ModInitializer {
     }
 
     public static String getVersion() {
-        return FabricLoader.INSTANCE.getModContainers()
-                .stream()
-                .filter(container -> container.getInfo().getId().equals("viafabric"))
-                .findFirst()
-                .get().getInfo().getVersion().getFriendlyString();
+        return FabricLoader.INSTANCE.getModContainer("viafabric")
+                .get().getMetadata().getVersion().getFriendlyString();
     }
 
     private void checkForUpdates(File jar, String artifactName, String groupIdPath, String depName) throws Exception {
         int timeDivisor = 1000 * 60 * 60 * 24;
         long cachedTime = System.currentTimeMillis() / timeDivisor;
-        if (!(jar.exists() && jar.lastModified() / timeDivisor == cachedTime)) {
+        if (!(jar.exists() && jar.lastModified() / timeDivisor >= cachedTime)) {
             String localMd5 = null;
             if (jar.exists()) {
                 try (InputStream is = Files.newInputStream(jar.toPath())) {
@@ -131,19 +128,11 @@ public class ViaFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         File viaVersionJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viaversion.jar").toFile();
-        try {
-            checkForUpdates(viaVersionJar, "viaversion", "us/myles", "ViaVersion");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         File viaRewindJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viarewind.jar").toFile();
-        try {
-            checkForUpdates(viaRewindJar, "viarewind-core", "de/gerrygames", "ViaRewind");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         File viaBackwardsJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viabackwards.jar").toFile();
         try {
+            checkForUpdates(viaVersionJar, "viaversion", "us/myles", "ViaVersion");
+            checkForUpdates(viaRewindJar, "viarewind-core", "de/gerrygames", "ViaRewind");
             checkForUpdates(viaBackwardsJar, "viabackwards-core", "nl/matsv", "ViaBackwards");
         } catch (Exception e) {
             e.printStackTrace();

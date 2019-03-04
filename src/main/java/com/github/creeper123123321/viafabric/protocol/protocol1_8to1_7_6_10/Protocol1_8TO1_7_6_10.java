@@ -49,6 +49,7 @@ import us.myles.ViaVersion.api.type.types.VoidType;
 import us.myles.ViaVersion.api.type.types.version.Types1_8;
 import us.myles.ViaVersion.packets.State;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -278,14 +279,11 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                             delayedPacket.write(Type.SHORT, item);
                             delayedPacket.write(Types1_8.METADATA_LIST, metadata);
 
-                            Via.getPlatform().runSync(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        delayedPacket.send(Protocol1_8TO1_7_6_10.class);
-                                    } catch (Exception ex) {
-                                        ex.printStackTrace();
-                                    }
+                            Via.getPlatform().runSync(() -> {
+                                try {
+                                    delayedPacket.send(Protocol1_8TO1_7_6_10.class);
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
                                 }
                             }, 1L);
                         } else {
@@ -925,14 +923,11 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
         this.registerOutgoing(State.PLAY, 0x33, 0x33, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(new ValueReader<Position>() {
-                    @Override
-                    public Position read(PacketWrapper packetWrapper) throws Exception {
-                        long x = packetWrapper.read(Type.INT);
-                        long y = packetWrapper.read(Type.SHORT);
-                        long z = packetWrapper.read(Type.INT);
-                        return new Position(x, y, z);
-                    }
+                map(packetWrapper -> {
+                    long x = packetWrapper.read(Type.INT);
+                    long y = packetWrapper.read(Type.SHORT);
+                    long z = packetWrapper.read(Type.INT);
+                    return new Position(x, y, z);
                 }, new TypeRemapper<>(Type.POSITION));  //Position
                 handler(new PacketHandler() {
                     @Override
@@ -1008,14 +1003,11 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
         this.registerOutgoing(State.PLAY, 0x35, 0x35, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(new ValueReader<Position>() {
-                    @Override
-                    public Position read(PacketWrapper packetWrapper) throws Exception {
-                        long x = packetWrapper.read(Type.INT);
-                        long y = packetWrapper.read(Type.SHORT);
-                        long z = packetWrapper.read(Type.INT);
-                        return new Position(x, y, z);
-                    }
+                map(packetWrapper -> {
+                    long x = packetWrapper.read(Type.INT);
+                    long y = packetWrapper.read(Type.SHORT);
+                    long z = packetWrapper.read(Type.INT);
+                    return new Position(x, y, z);
                 }, new TypeRemapper<>(Type.POSITION));  //Position
                 map(Type.UNSIGNED_BYTE);  //Action
                 map(Types1_7_6_10.COMPRESSED_NBT, Type.NBT);
@@ -1180,7 +1172,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                         short length = packetWrapper.read(Type.SHORT);
                         if (channel.equals("MC|Brand")) {
                             byte[] data = packetWrapper.read(new CustomByteType((int) length));
-                            String brand = new String(data, "UTF-8");
+                            String brand = new String(data, StandardCharsets.UTF_8);
                             packetWrapper.write(Type.STRING, brand);
                         } else if (channel.equals("MC|AdvCdm")) {
                             byte type = packetWrapper.passthrough(Type.BYTE);
@@ -1690,7 +1682,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
 
         public final String name;
         public final int extra;
-        private static final HashMap<String, Particle> particleMap = new HashMap();
+        private static final HashMap<String, Particle> particleMap = new HashMap<>();
 
         Particle(String name) {
             this(name, 0);
