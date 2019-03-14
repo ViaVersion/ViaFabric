@@ -10,7 +10,7 @@ plugins {
 group 'com.github.creeper123123321.viafabric'
 version '0.1.0-SNAPSHOT+' + gitVersion()
 archivesBaseName = 'ViaFabric'
-description = 'Clientside and serverside ViaVersion for Fabric'
+description = 'Client-side and server-side ViaVersion for Fabric'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -36,12 +36,12 @@ dependencies {
     compile("us.myles:viaversion:2.0.0-19w09a") { transitive = false }
     compile("de.gerrygames:viarewind-core:1.4.0") { transitive = false }
     compile("nl.matsv:viabackwards-core:2.4.0-SNAPSHOT") { transitive = false }
-
-    minecraft "com.mojang:minecraft:19w09a"
-    mappings "net.fabricmc:yarn:19w09a.2"
+    
+    minecraft "com.mojang:minecraft:19w11b"
+    mappings "net.fabricmc:yarn:19w11b.2"
     modCompile "net.fabricmc:fabric-loader:0.3.7.109"
 
-    modCompile "net.fabricmc:fabric:0.2.3.108"
+    modCompile "net.fabricmc:fabric:0.2.3.110"
 }
 
 minecraft {

@@ -162,7 +162,7 @@ public class VRPlatform implements ViaPlatform {
     @Override
     public ViaCommandSender[] getOnlinePlayers() {
         MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
-        if (server != null && server.isMainThread()) {
+        if (server != null && server.method_18854()) {
             // Not thread safe
             return server.getPlayerManager().getPlayerList().stream()
                     .map(Entity::getCommandSource)
@@ -213,7 +213,7 @@ public class VRPlatform implements ViaPlatform {
             }
         } else {
             MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
-            if (server != null && server.isMainThread()) {
+            if (server != null && server.method_18854()) {
                 ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
                 if (player == null) return false;
                 player.networkHandler.disconnect(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)));

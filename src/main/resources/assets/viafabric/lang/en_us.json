@@ -1,0 +1,5 @@
+{
+  "viafabric.gui.protocol_version": "Protocol Version:",
+  "viafabric.gui.invalid_protocol": "INVALID",
+  "viafabric.gui.unsupported_protocol": "UNSUPPORTED"
+}

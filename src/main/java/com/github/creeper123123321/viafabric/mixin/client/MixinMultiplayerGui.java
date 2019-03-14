@@ -24,10 +24,8 @@
 
 package com.github.creeper123123321.viafabric.mixin.client;
 
-import com.github.creeper123123321.viafabric.gui.multiplayer.SaveProtocolButton;
 import com.github.creeper123123321.viafabric.providers.VRVersionProvider;
 import com.github.creeper123123321.viafabric.util.VersionFormatFilter;
-import net.minecraft.client.gui.InputListener;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.menu.MultiplayerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -36,32 +34,51 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import us.myles.ViaVersion.api.Via;
+import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 import us.myles.ViaVersion.protocols.base.VersionProvider;
 
 @Mixin(MultiplayerScreen.class)
 public abstract class MixinMultiplayerGui extends Screen {
     private TextFieldWidget protocolVersion;
+    private boolean validProtocol = true;
+    private boolean supportedProtocol;
 
-    @Inject(method = "onInitialized", at = @At("TAIL"))
-    private void onOnInitialized(CallbackInfo ci) {
-        protocolVersion = new TextFieldWidget(fontRenderer, this.screenWidth / 2 + 55, 8, 45, 20);
+    @Inject(method = "method_2540", at = @At("TAIL"))
+    private void onInitWidgets(CallbackInfo ci) {
+        protocolVersion = new TextFieldWidget(fontRenderer, this.screenWidth / 2 + 70, 8, 45, 20);
         int clientSideVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
+        supportedProtocol = isSupported(clientSideVersion);
         protocolVersion.setText(ProtocolVersion.isRegistered(clientSideVersion)
                 ? ProtocolVersion.getProtocol(clientSideVersion).getName()
                 : Integer.toString(clientSideVersion));
         protocolVersion.method_1890(new VersionFormatFilter());
+        protocolVersion.setChangedListener((text) -> {
+            int newVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
+            validProtocol = true;
+            try {
+                newVersion = Integer.parseInt(text);
+            } catch (NumberFormatException e) {
+                ProtocolVersion closest = ProtocolVersion.getClosest(text);
+                if (closest != null) newVersion = closest.getId();
+                else validProtocol = false;
+            }
+            supportedProtocol = isSupported(newVersion);
+            ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion = newVersion;
+        });
         this.listeners.add(protocolVersion);
-        addButton(new SaveProtocolButton(screenWidth / 2 + 100, 8, 50, 20,
-                I18n.translate("selectWorld.edit.save"), protocolVersion));
     }
 
-    @Inject(method = "draw", at = @At("TAIL"))
-    private void onDraw(int p_1, int p_2, float p_3, CallbackInfo ci) {
-        drawStringCentered(fontRenderer, "Protocol Version:", this.screenWidth / 2, 12, 0xFFFFFF);
-        protocolVersion.draw(p_1, p_2, p_3);
+    @Inject(method = "draw", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;draw(IIF)V"))
+    private void onDraw(int int_1, int int_2, float float_1, CallbackInfo ci) {
+        drawStringCentered(fontRenderer, I18n.translate("viafabric.gui.protocol_version"), this.screenWidth / 2, 11, 0xFFFFFF);
+        if (!validProtocol) {
+            drawString(fontRenderer, I18n.translate("viafabric.gui.invalid_protocol"), screenWidth / 2 + 120, 15, 0xff0000);
+        } else if (!supportedProtocol) {
+            drawString(fontRenderer, I18n.translate("viafabric.gui.unsupported_protocol"), screenWidth / 2 + 120, 15, 0xff0000);
+        }
+        protocolVersion.draw(int_1, int_2, float_1);
     }
 
     @Inject(method = "update", at = @At("TAIL"))
@@ -69,10 +86,8 @@ public abstract class MixinMultiplayerGui extends Screen {
         protocolVersion.tick();
     }
 
-    @Inject(method = "getFocused", at = @At("HEAD"), cancellable = true, remap = false)
-    private void onGetFocused(CallbackInfoReturnable<InputListener> cir) {
-        if (protocolVersion.isFocused()) {
-            cir.setReturnValue(protocolVersion);
-        }
+    private boolean isSupported(int protocol) {
+        return ProtocolRegistry.getProtocolPath(ProtocolRegistry.SERVER_PROTOCOL, protocol) != null
+                || ProtocolRegistry.SERVER_PROTOCOL == protocol;
     }
 }
