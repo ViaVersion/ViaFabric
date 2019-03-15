@@ -39,6 +39,11 @@ import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 import us.myles.ViaVersion.protocols.base.VersionProvider;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Mixin(MultiplayerScreen.class)
 public abstract class MixinMultiplayerGui extends Screen {
     private TextFieldWidget protocolVersion;
@@ -47,24 +52,42 @@ public abstract class MixinMultiplayerGui extends Screen {
 
     @Inject(method = "method_2540", at = @At("TAIL"))
     private void onInitWidgets(CallbackInfo ci) {
-        protocolVersion = new TextFieldWidget(fontRenderer, this.screenWidth / 2 + 70, 8, 45, 20);
+        protocolVersion = new TextFieldWidget(fontRenderer, this.screenWidth / 2 + 88, 13, 65, 15);
+        protocolVersion.method_1890(new VersionFormatFilter());
         int clientSideVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
         supportedProtocol = isSupported(clientSideVersion);
         protocolVersion.setText(ProtocolVersion.isRegistered(clientSideVersion)
                 ? ProtocolVersion.getProtocol(clientSideVersion).getName()
                 : Integer.toString(clientSideVersion));
-        protocolVersion.method_1890(new VersionFormatFilter());
+        protocolVersion.method_1868(getTextColor()); // Set editable color
         protocolVersion.setChangedListener((text) -> {
+            protocolVersion.setSuggestion(null);
             int newVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
             validProtocol = true;
             try {
                 newVersion = Integer.parseInt(text);
             } catch (NumberFormatException e) {
                 ProtocolVersion closest = ProtocolVersion.getClosest(text);
-                if (closest != null) newVersion = closest.getId();
-                else validProtocol = false;
+                if (closest != null) {
+                    newVersion = closest.getId();
+                } else {
+                    validProtocol = false;
+                    List<String> completions = ProtocolVersion.getProtocols().stream()
+                            .map(ProtocolVersion::getName)
+                            .flatMap(str -> Stream.concat(
+                                    Arrays.stream(str.split("-")),
+                                    Arrays.stream(new String[]{str})
+                            ))
+                            .distinct()
+                            .filter(ver -> ver.startsWith(text))
+                            .collect(Collectors.toList());
+                    if (completions.size() == 1) {
+                        protocolVersion.setSuggestion(completions.get(0).substring(text.length()));
+                    }
+                }
             }
             supportedProtocol = isSupported(newVersion);
+            protocolVersion.method_1868(getTextColor()); // Set editable color
             ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion = newVersion;
         });
         this.listeners.add(protocolVersion);
@@ -72,18 +95,21 @@ public abstract class MixinMultiplayerGui extends Screen {
 
     @Inject(method = "draw", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;draw(IIF)V"))
     private void onDraw(int int_1, int int_2, float float_1, CallbackInfo ci) {
-        drawStringCentered(fontRenderer, I18n.translate("viafabric.gui.protocol_version"), this.screenWidth / 2, 11, 0xFFFFFF);
-        if (!validProtocol) {
-            drawString(fontRenderer, I18n.translate("viafabric.gui.invalid_protocol"), screenWidth / 2 + 120, 15, 0xff0000);
-        } else if (!supportedProtocol) {
-            drawString(fontRenderer, I18n.translate("viafabric.gui.unsupported_protocol"), screenWidth / 2 + 120, 15, 0xff0000);
-        }
         protocolVersion.draw(int_1, int_2, float_1);
     }
 
     @Inject(method = "update", at = @At("TAIL"))
     private void onUpdate(CallbackInfo ci) {
         protocolVersion.tick();
+    }
+
+    private int getTextColor() {
+        if (!validProtocol) {
+            return 0xff0000; // Red
+        } else if (!supportedProtocol) {
+            return 0xFFA500; // Orange
+        }
+        return 0xE0E0E0; // Default
     }
 
     private boolean isSupported(int protocol) {
