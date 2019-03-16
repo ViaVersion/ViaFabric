@@ -81,7 +81,7 @@ public class ViaFabric implements ModInitializer {
                     localMd5 = DigestUtils.md5Hex(is);
                 }
             }
-            URL versionsUrl = new URL("https://repo.viaversion.com/" + groupIdPath + "/" + artifactName + "/?" + cachedTime);
+            URL versionsUrl = new URL("https://repo.viaversion.com/" + groupIdPath + "/" + artifactName + "/");
             JLOGGER.info("Checking for " + depName + " updates " + versionsUrl);
             HttpURLConnection con = (HttpURLConnection) versionsUrl.openConnection();
             con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
