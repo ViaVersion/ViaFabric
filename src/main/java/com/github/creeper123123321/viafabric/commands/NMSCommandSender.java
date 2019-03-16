@@ -25,7 +25,8 @@
 package com.github.creeper123123321.viafabric.commands;
 
 import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.FabricLoader;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.command.CommandSource;
@@ -53,8 +54,8 @@ public class NMSCommandSender implements ViaCommandSender {
     public void sendMessage(String s) {
         if (source instanceof ServerCommandSource) {
             ((ServerCommandSource) source).sendFeedback(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)), false);
-        } else if (FabricLoader.INSTANCE.getEnvironmentType() == EnvType.CLIENT && source instanceof ClientCommandSource) {
-            FabricLoader.INSTANCE.getEnvironmentHandler().getClientPlayer()
+        } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && source instanceof ClientCommandSource) {
+            MinecraftClient.getInstance().player
                     .appendCommandFeedback(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)));
         }
     }
@@ -64,8 +65,8 @@ public class NMSCommandSender implements ViaCommandSender {
         if (source instanceof ServerCommandSource) {
             Entity entity = ((ServerCommandSource) source).getEntity();
             if (entity != null) return entity.getUuid();
-        } else if (FabricLoader.INSTANCE.getEnvironmentType() == EnvType.CLIENT && source instanceof ClientCommandSource) {
-            return FabricLoader.INSTANCE.getEnvironmentHandler().getClientPlayer().getUuid();
+        } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && source instanceof ClientCommandSource) {
+            return MinecraftClient.getInstance().player.getUuid();
         }
         return UUID.fromString(getName());
     }
@@ -74,8 +75,8 @@ public class NMSCommandSender implements ViaCommandSender {
     public String getName() {
         if (source instanceof ServerCommandSource) {
             return ((ServerCommandSource) source).getName();
-        } else if (FabricLoader.INSTANCE.getEnvironmentType() == EnvType.CLIENT && source instanceof ClientCommandSource) {
-            return FabricLoader.INSTANCE.getEnvironmentHandler().getClientPlayer().getEntityName();
+        } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && source instanceof ClientCommandSource) {
+            return MinecraftClient.getInstance().player.getEntityName();
         }
         return "?";
     }

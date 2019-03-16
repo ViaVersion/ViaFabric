@@ -39,7 +39,7 @@ import io.netty.channel.EventLoop;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.registry.CommandRegistry;
-import net.fabricmc.loader.FabricLoader;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.CommandSource;
 import org.apache.logging.log4j.LogManager;
 import us.myles.ViaVersion.ViaManager;
@@ -66,8 +66,19 @@ public class ViaFabric implements ModInitializer {
     }
 
     public static String getVersion() {
-        return FabricLoader.INSTANCE.getModContainer("viafabric")
+        return FabricLoader.getInstance().getModContainer("viafabric")
                 .get().getMetadata().getVersion().getFriendlyString();
+    }
+
+    private static <S extends CommandSource> LiteralArgumentBuilder<S> command(String commandName) {
+        return LiteralArgumentBuilder.<S>literal(commandName)
+                .then(
+                        RequiredArgumentBuilder
+                                .<S, String>argument("args", StringArgumentType.greedyString())
+                                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
+                                .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
+                )
+                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute);
     }
 
     @Override
@@ -83,7 +94,7 @@ public class ViaFabric implements ModInitializer {
         new VRRewindPlatform().init();
         new VRBackwardsPlatform().init();
 
-        if (FabricLoader.INSTANCE.getEnvironmentType() == EnvType.CLIENT) {
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             try {
                 Class.forName("io.github.cottonmc.clientcommands.ClientCommands")
                         .getMethod("registerCommand", Consumer.class)
@@ -104,16 +115,5 @@ public class ViaFabric implements ModInitializer {
         } catch (ClassNotFoundException e) {
             Via.getPlatform().getLogger().warning("Fabric API isn't installed");
         }
-    }
-
-    private static <S extends CommandSource> LiteralArgumentBuilder<S> command(String commandName) {
-        return LiteralArgumentBuilder.<S>literal(commandName)
-                .then(
-                        RequiredArgumentBuilder
-                                .<S, String>argument("args", StringArgumentType.greedyString())
-                                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
-                                .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
-                )
-                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute);
     }
 }

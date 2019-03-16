@@ -31,17 +31,17 @@ import java.util.HashMap;
 
 public class Scoreboard extends StoredObject {
 
-	private HashMap<String, String> objectives = new HashMap<>();
+    private HashMap<String, String> objectives = new HashMap<>();
 
-	public Scoreboard(UserConnection user) {
-		super(user);
-	}
+    public Scoreboard(UserConnection user) {
+        super(user);
+    }
 
-	public void put(String name, String objective) {
-		objectives.put(name, objective);
-	}
+    public void put(String name, String objective) {
+        objectives.put(name, objective);
+    }
 
-	public String get(String name) {
-		return objectives.getOrDefault(name, "null");
-	}
+    public String get(String name) {
+        return objectives.getOrDefault(name, "null");
+    }
 }

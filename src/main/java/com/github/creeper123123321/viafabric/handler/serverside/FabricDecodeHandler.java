@@ -113,7 +113,7 @@ public class FabricDecodeHandler extends ByteToMessageDecoder {
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         ProtocolInfo pi = info.get(ProtocolInfo.class);
         if (pi.getUuid() != null) {
             Via.getManager().removePortedClient(pi.getUuid());

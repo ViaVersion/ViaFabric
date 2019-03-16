@@ -46,7 +46,7 @@ public class VersionFormatFilter implements Predicate<String> {
                         .flatMap(str -> Stream.concat(
                                 Arrays.stream(str.split("-")),
                                 Arrays.stream(new String[]{str})
-                                ))
+                        ))
                         .anyMatch(ver -> ver.startsWith(s));
             }
         }

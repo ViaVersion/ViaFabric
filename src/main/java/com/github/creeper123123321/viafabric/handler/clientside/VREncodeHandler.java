@@ -37,7 +37,6 @@ import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 public class VREncodeHandler extends MessageToByteEncoder {
     private UserConnection user;
@@ -110,8 +109,6 @@ public class VREncodeHandler extends MessageToByteEncoder {
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
-        //try (AutoCloseable ignored = user.createTaskListAndRunOnClose()) {
-            super.write(ctx, msg, promise);
-        //}
+        super.write(ctx, msg, promise);
     }
 }

@@ -46,14 +46,15 @@ public class VRViaAPI implements ViaAPI<Void> {
 
     @Override
     public int getPlayerVersion(UUID uuid) {
-        if (!isPorted(uuid)) {
-            try {
-                return Via.getManager().getInjector().getServerProtocolVersion();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        UserConnection con = Via.getManager().getPortedPlayers().get(uuid);
+        if (con != null) {
+            return con.get(ProtocolInfo.class).getProtocolVersion();
         }
-        return Via.getManager().getPortedPlayers().get(uuid).get(ProtocolInfo.class).getProtocolVersion();
+        try {
+            return Via.getManager().getInjector().getServerProtocolVersion();
+        } catch (Exception e) {
+            throw new AssertionError(e);
+        }
     }
 
     @Override

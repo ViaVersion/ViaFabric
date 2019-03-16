@@ -29,8 +29,11 @@ import com.github.creeper123123321.viafabric.commands.NMSCommandSender;
 import com.github.creeper123123321.viafabric.commands.UserCommandSender;
 import com.github.creeper123123321.viafabric.protocol.ClientSideReference;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
-import net.fabricmc.loader.FabricLoader;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.ModContainer;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -53,6 +56,7 @@ import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.ViaVersion.util.GsonUtil;
 import us.myles.viaversion.libs.gson.JsonObject;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -63,7 +67,21 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class VRPlatform implements ViaPlatform {
-    private VRViaConfig config = new VRViaConfig(FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viaversion.yml").toFile());
+    private VRViaConfig config = new VRViaConfig(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric").resolve("viaversion.yml").toFile());
+
+    @Nullable
+    public static MinecraftServer getServer() {
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            return getIntegratedServer();
+        }
+        return (MinecraftServer) FabricLoader.getInstance().getGameInstance();
+    }
+
+    @Environment(EnvType.CLIENT)
+    @Nullable
+    private static MinecraftServer getIntegratedServer() {
+        return MinecraftClient.getInstance().getServer();
+    }
 
     @Override
     public Logger getLogger() {
@@ -106,7 +124,7 @@ public class VRPlatform implements ViaPlatform {
         // Kick task needs to be on main thread
         Executor executor = ViaFabric.EVENT_LOOP;
         boolean alreadyLogged;
-        MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
+        MinecraftServer server = getServer();
         if (server != null) {
             alreadyLogged = true;
             executor = server;
@@ -161,7 +179,7 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public ViaCommandSender[] getOnlinePlayers() {
-        MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
+        MinecraftServer server = getServer();
         if (server != null && server.method_18854()) {
             // Not thread safe
             return server.getPlayerManager().getPlayerList().stream()
@@ -190,7 +208,7 @@ public class VRPlatform implements ViaPlatform {
             }
         } else {
             runSync(() -> {
-                MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
+                MinecraftServer server = getServer();
                 if (server == null) return;
                 ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
                 if (player == null) return;
@@ -212,7 +230,7 @@ public class VRPlatform implements ViaPlatform {
                 e.printStackTrace();
             }
         } else {
-            MinecraftServer server = FabricLoader.INSTANCE.getEnvironmentHandler().getServerInstance();
+            MinecraftServer server = getServer();
             if (server != null && server.method_18854()) {
                 ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
                 if (player == null) return false;
@@ -251,7 +269,7 @@ public class VRPlatform implements ViaPlatform {
     public JsonObject getDump() {
         JsonObject platformSpecific = new JsonObject();
         List<PluginInfo> mods = new ArrayList<>();
-        for (ModContainer mod : FabricLoader.INSTANCE.getModContainers()) {
+        for (ModContainer mod : net.fabricmc.loader.FabricLoader.INSTANCE.getModContainers()) {
             mods.add(new PluginInfo(true,
                     mod.getMetadata().getName(),
                     mod.getMetadata().getVersion().getFriendlyString(),
@@ -270,5 +288,4 @@ public class VRPlatform implements ViaPlatform {
     public boolean isOldClientsAllowed() {
         return true;
     }
-
 }

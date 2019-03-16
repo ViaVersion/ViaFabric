@@ -30,7 +30,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.server.command.CommandSource;
-import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.commands.ViaCommandHandler;
 
 import java.util.concurrent.CompletableFuture;
@@ -50,12 +49,10 @@ public class VRCommandHandler extends ViaCommandHandler {
             args = StringArgumentType.getString(ctx, "args").split(" ");
         } catch (IllegalArgumentException ignored) {
         }
-        Via.getManager()
-                .getCommandHandler()
-                .onCommand(
-                        new NMSCommandSender(ctx.getSource()),
-                        args
-                );
+        onCommand(
+                new NMSCommandSender(ctx.getSource()),
+                args
+        );
         return 1;
     }
 

@@ -57,12 +57,48 @@ import java.util.UUID;
 
 // Based on https://github.com/Gerrygames/ClientViaVersion
 public class Protocol1_8TO1_7_6_10 extends Protocol {
-    private static ValueReader xyzToPosition = (ValueReader<Position>) packetWrapper -> {
+    private static ValueReader<Position> xyzToPosition = packetWrapper -> {
         long x = packetWrapper.read(Type.INT);
         long y = packetWrapper.read(Type.INT);
         long z = packetWrapper.read(Type.INT);
         return new Position(x, y, z);
     };
+    private static ArrayList<Integer> placeable = new ArrayList<>();
+
+    static {
+        placeable.add(6);
+        placeable.add(27);
+        placeable.add(28);
+        placeable.add(30);
+        placeable.add(31);
+        placeable.add(32);
+        placeable.add(37);
+        placeable.add(38);
+        placeable.add(39);
+        placeable.add(40);
+        placeable.add(50);
+        placeable.add(65);
+        placeable.add(66);
+        placeable.add(69);
+        placeable.add(70);
+        placeable.add(72);
+        placeable.add(76);
+        placeable.add(77);
+        placeable.add(96);
+        placeable.add(106);
+        placeable.add(111);
+        placeable.add(131);
+        placeable.add(143);
+        placeable.add(147);
+        placeable.add(148);
+        placeable.add(157);
+        placeable.add(167);
+        placeable.add(175);
+        for (int i = 256; i <= 378; i++) placeable.add(i);
+        for (int i = 381; i <= 396; i++) placeable.add(i);
+        for (int i = 398; i <= 452; i++) placeable.add(i);
+        for (int i = 2256; i <= 2267; i++) placeable.add(i);
+    }
 
     @Override
     protected void registerPackets() {
@@ -86,7 +122,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                 map(Type.STRING);  //Level Type
                 create(new ValueCreator() {
                     @Override
-                    public void write(PacketWrapper packetWrapper) throws Exception {
+                    public void write(PacketWrapper packetWrapper) {
                         packetWrapper.write(Type.BOOLEAN, false);  //Reduced Debug Info
                     }
                 });
@@ -100,7 +136,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                 map(Type.STRING);  //Chat Message
                 create(new ValueCreator() {
                     @Override
-                    public void write(PacketWrapper packetWrapper) throws Exception {
+                    public void write(PacketWrapper packetWrapper) {
                         packetWrapper.write(Type.BYTE, (byte) 0);  //Position (chat box)
                     }
                 });
@@ -519,7 +555,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                 map(Type.BYTE);  //z
                 create(new ValueCreator() {
                     @Override
-                    public void write(PacketWrapper packetWrapper) throws Exception {
+                    public void write(PacketWrapper packetWrapper) {
                         packetWrapper.write(Type.BOOLEAN, true);  //OnGround
                     }
                 });
@@ -535,7 +571,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                 map(Type.BYTE);  //pitch
                 create(new ValueCreator() {
                     @Override
-                    public void write(PacketWrapper packetWrapper) throws Exception {
+                    public void write(PacketWrapper packetWrapper) {
                         packetWrapper.write(Type.BOOLEAN, true);  //OnGround
                     }
                 });
@@ -554,7 +590,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                 map(Type.BYTE);  //pitch
                 create(new ValueCreator() {
                     @Override
-                    public void write(PacketWrapper packetWrapper) throws Exception {
+                    public void write(PacketWrapper packetWrapper) {
                         packetWrapper.write(Type.BOOLEAN, true);  //OnGround
                     }
                 });
@@ -573,7 +609,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                 map(Type.BYTE);  //pitch
                 create(new ValueCreator() {
                     @Override
-                    public void write(PacketWrapper packetWrapper) throws Exception {
+                    public void write(PacketWrapper packetWrapper) {
                         packetWrapper.write(Type.BOOLEAN, true);  //OnGround
                     }
                 });
@@ -622,7 +658,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                 map(Type.SHORT, Type.VAR_INT);  //Duration
                 create(new ValueCreator() {
                     @Override
-                    public void write(PacketWrapper packetWrapper) throws Exception {
+                    public void write(PacketWrapper packetWrapper) {
                         packetWrapper.write(Type.BOOLEAN, false);
                     }
                 });  //Hide Particles
@@ -911,7 +947,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                             items = new Item[old.length + 1];
                             items[0] = old[0];
                             System.arraycopy(old, 1, items, 2, old.length - 1);
-                            items[1] = new Item((short) 351, (byte) 3, (short) 4, null);
+                            items[1] = new Item(351, (byte) 3, (short) 4, null);
                         }
                         packetWrapper.write(Type.ITEM_ARRAY, items);  //Items
                     }
@@ -1309,7 +1345,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                         Item item = packetWrapper.read(Type.ITEM);
                         packetWrapper.write(Types1_7_6_10.COMPRESSED_NBT_ITEM, item);
 
-                        if (isPlayerInsideBlock(x, y, z, direction) && !isPlaceable(item.getId()))
+                        if (isPlayerInsideBlock(x, y, z, direction) && !isPlaceable(item.getIdentifier()))
                             packetWrapper.cancel();
 
                         for (int i = 0; i < 3; i++) {
@@ -1331,7 +1367,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
             public void registerMap() {
                 create(new ValueCreator() {
                     @Override
-                    public void write(PacketWrapper packetWrapper) throws Exception {
+                    public void write(PacketWrapper packetWrapper) {
                         packetWrapper.write(Type.INT, 0);  //Entity Id, hopefully 0 is ok
                         packetWrapper.write(Type.BYTE, (byte) 1);  //Animation
                     }
@@ -1452,7 +1488,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                 map(Type.BOOLEAN);
                 create(new ValueCreator() {
                     @Override
-                    public void write(PacketWrapper packetWrapper) throws Exception {
+                    public void write(PacketWrapper packetWrapper) {
                         packetWrapper.write(Type.BYTE, (byte) 0);
                     }
                 });
@@ -1564,43 +1600,6 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
         return false;
     }
 
-    private static ArrayList<Integer> placeable = new ArrayList<>();
-
-    static {
-        placeable.add(6);
-        placeable.add(27);
-        placeable.add(28);
-        placeable.add(30);
-        placeable.add(31);
-        placeable.add(32);
-        placeable.add(37);
-        placeable.add(38);
-        placeable.add(39);
-        placeable.add(40);
-        placeable.add(50);
-        placeable.add(65);
-        placeable.add(66);
-        placeable.add(69);
-        placeable.add(70);
-        placeable.add(72);
-        placeable.add(76);
-        placeable.add(77);
-        placeable.add(96);
-        placeable.add(106);
-        placeable.add(111);
-        placeable.add(131);
-        placeable.add(143);
-        placeable.add(147);
-        placeable.add(148);
-        placeable.add(157);
-        placeable.add(167);
-        placeable.add(175);
-        for (int i = 256; i <= 378; i++) placeable.add(i);
-        for (int i = 381; i <= 396; i++) placeable.add(i);
-        for (int i = 398; i <= 452; i++) placeable.add(i);
-        for (int i = 2256; i <= 2267; i++) placeable.add(i);
-    }
-
     private boolean isPlaceable(int id) {
         return placeable.contains(id);
     }
@@ -1680,9 +1679,20 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
         ITEM_TAKE("take"),
         MOB_APPEARANCE("mobappearance");
 
+        private static final HashMap<String, Particle> particleMap = new HashMap<>();
+
+        static {
+            Particle[] particles = values();
+            int var1 = particles.length;
+
+            for (Particle particle : particles) {
+                particleMap.put(particle.name, particle);
+            }
+
+        }
+
         public final String name;
         public final int extra;
-        private static final HashMap<String, Particle> particleMap = new HashMap<>();
 
         Particle(String name) {
             this(name, 0);
@@ -1695,16 +1705,6 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
 
         public static Particle find(String part) {
             return particleMap.get(part);
-        }
-
-        static {
-            Particle[] particles = values();
-            int var1 = particles.length;
-
-            for (Particle particle : particles) {
-                particleMap.put(particle.name, particle);
-            }
-
         }
     }
 }

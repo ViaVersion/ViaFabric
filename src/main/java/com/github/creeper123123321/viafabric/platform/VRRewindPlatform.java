@@ -28,12 +28,12 @@ import com.github.creeper123123321.viafabric.ViaFabric;
 import de.gerrygames.viarewind.api.ViaRewindConfig;
 import de.gerrygames.viarewind.api.ViaRewindConfigImpl;
 import de.gerrygames.viarewind.api.ViaRewindPlatform;
-import net.fabricmc.loader.FabricLoader;
+import net.fabricmc.loader.api.FabricLoader;
 
 import java.util.logging.Logger;
 
 public class VRRewindPlatform implements ViaRewindPlatform {
-    private static ViaRewindConfig config = new ViaRewindConfigImpl(FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viarewind.yml").toFile());
+    private static ViaRewindConfig config = new ViaRewindConfigImpl(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric").resolve("viarewind.yml").toFile());
 
     public void init() {
         init(config);

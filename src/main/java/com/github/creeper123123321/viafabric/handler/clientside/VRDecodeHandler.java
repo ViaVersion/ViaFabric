@@ -37,7 +37,6 @@ import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class VRDecodeHandler extends ByteToMessageDecoder {
@@ -100,13 +99,11 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        //try (AutoCloseable ignored = user.createTaskListAndRunOnClose()) {
-            super.channelRead(ctx, msg);
-        //}
+        super.channelRead(ctx, msg);
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+    public void channelInactive(ChannelHandlerContext ctx) {
         ProtocolInfo info = user.get(ProtocolInfo.class);
         if (info.getUuid() != null) {
             Via.getManager().removePortedClient(info.getUuid());

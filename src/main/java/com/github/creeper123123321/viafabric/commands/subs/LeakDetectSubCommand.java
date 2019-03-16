@@ -51,7 +51,7 @@ public class LeakDetectSubCommand extends ViaSubCommand {
                 ResourceLeakDetector.setLevel(level);
                 viaCommandSender.sendMessage("Set leak detector level to " + level);
             } catch (IllegalArgumentException e) {
-                viaCommandSender.sendMessage("Invalid level (" + Arrays.toString(ResourceLeakDetector.Level.values()) +")");
+                viaCommandSender.sendMessage("Invalid level (" + Arrays.toString(ResourceLeakDetector.Level.values()) + ")");
             }
         } else {
             viaCommandSender.sendMessage("Current leak detection level is " + ResourceLeakDetector.getLevel());

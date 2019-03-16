@@ -45,11 +45,11 @@ public class VRInjector implements ViaInjector {
 
     @Override
     public String getEncoderName() {
-        throw new UnsupportedOperationException();
+        return "encoder";
     }
 
     @Override
     public String getDecoderName() {
-        throw new UnsupportedOperationException();
+        return "decoder";
     }
 }
