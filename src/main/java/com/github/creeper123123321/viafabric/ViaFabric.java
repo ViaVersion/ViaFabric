@@ -24,36 +24,35 @@
 
 package com.github.creeper123123321.viafabric;
 
+import com.github.creeper123123321.viafabric.commands.VRCommandHandler;
+import com.github.creeper123123321.viafabric.platform.*;
+import com.github.creeper123123321.viafabric.protocol.protocol1_7_6_10to1_7_1_5.Protocol1_7_6_10to1_7_1_5;
+import com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.Protocol1_8TO1_7_6_10;
 import com.github.creeper123123321.viafabric.util.JLoggerToLog4j;
-import com.github.creeper123123321.viafabric.util.Version;
-import com.google.common.io.CharStreams;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.fabricmc.loader.FabricLoader;
-import net.minecraft.SharedConstants;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FileUtils;
+import net.minecraft.server.command.CommandSource;
 import org.apache.logging.log4j.LogManager;
+import us.myles.ViaVersion.ViaManager;
+import us.myles.ViaVersion.api.Via;
+import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
+import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.function.Consumer;
 
 public class ViaFabric implements ModInitializer {
     public static final java.util.logging.Logger JLOGGER = new JLoggerToLog4j(LogManager.getLogger("ViaFabric"));
@@ -71,84 +70,50 @@ public class ViaFabric implements ModInitializer {
                 .get().getMetadata().getVersion().getFriendlyString();
     }
 
-    private void checkForUpdates(File jar, String artifactName, String groupIdPath, String depName) throws Exception {
-        int timeDivisor = 1000 * 60 * 60 * 24;
-        long cachedTime = System.currentTimeMillis() / timeDivisor;
-        if (!(jar.exists() && jar.lastModified() / timeDivisor >= cachedTime)) {
-            String localMd5 = null;
-            if (jar.exists()) {
-                try (InputStream is = Files.newInputStream(jar.toPath())) {
-                    localMd5 = DigestUtils.md5Hex(is);
-                }
+    @Override
+    public void onInitialize() {
+        Via.init(ViaManager.builder()
+                .injector(new VRInjector())
+                .loader(new VRLoader())
+                .commandHandler(new VRCommandHandler())
+                .platform(new VRPlatform()).build());
+        Via.getManager().init();
+        ProtocolRegistry.registerProtocol(new Protocol1_7_6_10to1_7_1_5(), Collections.singletonList(ProtocolVersion.v1_7_6.getId()), ProtocolVersion.v1_7_1.getId());
+        ProtocolRegistry.registerProtocol(new Protocol1_8TO1_7_6_10(), Collections.singletonList(ProtocolVersion.v1_8.getId()), ProtocolVersion.v1_7_6.getId());
+        new VRRewindPlatform().init();
+        new VRBackwardsPlatform().init();
+
+        if (FabricLoader.INSTANCE.getEnvironmentType() == EnvType.CLIENT) {
+            try {
+                Class.forName("io.github.cottonmc.clientcommands.ClientCommands")
+                        .getMethod("registerCommand", Consumer.class)
+                        .invoke(null,
+                                (Consumer<CommandDispatcher<CommandSource>>) c ->
+                                        c.register(command("viafabricclient"))
+                        );
+            } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                Via.getPlatform().getLogger().warning("ClientCommands isn't installed");
             }
-            URL versionsUrl = new URL("https://repo.viaversion.com/" + groupIdPath + "/" + artifactName + "/");
-            JLOGGER.info("Checking for " + depName + " updates " + versionsUrl);
-            HttpURLConnection con = (HttpURLConnection) versionsUrl.openConnection();
-            con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
-            String rawOutput = CharStreams.toString(new InputStreamReader(con.getInputStream()));
-            Pattern urlPattern = Pattern.compile("<A href='([^']*)/'>");
-            Matcher matcher = urlPattern.matcher(rawOutput);
-            List<String> versions = new ArrayList<>();
-            while (matcher.find()) {
-                versions.add(matcher.group(1));
-            }
-            String mcVersion = SharedConstants.getGameVersion().getName();
-            String bestViaVersion = null;
-            if (mcVersion.contains("w") || mcVersion.contains("-")) {
-                bestViaVersion = versions.stream()
-                        .filter(it -> it.endsWith(mcVersion))
-                        .max(Comparator.comparing(Version::new))
-                        .orElse(null);
-            }
-            if (bestViaVersion == null) {
-                bestViaVersion = versions.stream()
-                        .filter(it -> it.endsWith("-SNAPSHOT") || it.endsWith("-DEV") || !it.contains("-"))
-                        .max(Comparator.comparing(Version::new))
-                        .orElse(null);
-            }
-            HttpURLConnection md5Con = (HttpURLConnection) new URL(
-                    "https://repo.viaversion.com/" + groupIdPath + "/" + artifactName + "/" + bestViaVersion
-                            + "/" + artifactName + "-" + bestViaVersion + ".jar.md5").openConnection();
-            md5Con.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
-            String remoteMd5 = CharStreams.toString(new InputStreamReader(md5Con.getInputStream()));
-            if (!remoteMd5.equals(localMd5)) {
-                URL url = new URL("https://repo.viaversion.com/" + groupIdPath + "/" + artifactName + "/" + bestViaVersion
-                        + "/" + artifactName + "-" + bestViaVersion + ".jar");
-                ViaFabric.JLOGGER.info("Downloading " + url);
-                HttpURLConnection jarCon = (HttpURLConnection) url.openConnection();
-                jarCon.setRequestProperty("User-Agent", "ViaFabric/" + ViaFabric.getVersion());
-                FileUtils.copyInputStreamToFile(jarCon.getInputStream(), jar);
-            } else {
-                JLOGGER.info("No updates found");
-                jar.setLastModified(System.currentTimeMillis());
-            }
+        }
+
+        try {
+            Class.forName("net.fabricmc.fabric.api.registry.CommandRegistry");
+            CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaversion")));
+            CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaver")));
+            CommandRegistry.INSTANCE.register(false, c -> c.register(command("vvfabric")));
+        } catch (ClassNotFoundException e) {
+            Via.getPlatform().getLogger().warning("Fabric API isn't installed");
         }
     }
 
-    @Override
-    public void onInitialize() {
-        File viaVersionJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viaversion.jar").toFile();
-        File viaRewindJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viarewind.jar").toFile();
-        File viaBackwardsJar = FabricLoader.INSTANCE.getConfigDirectory().toPath().resolve("ViaFabric").resolve("viabackwards.jar").toFile();
-        try {
-            checkForUpdates(viaVersionJar, "viaversion", "us/myles", "ViaVersion");
-            checkForUpdates(viaRewindJar, "viarewind-core", "de/gerrygames", "ViaRewind");
-            checkForUpdates(viaBackwardsJar, "viabackwards-core", "nl/matsv", "ViaBackwards");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            Method addUrl = ViaFabric.class.getClassLoader().getClass().getMethod("addURL", URL.class);
-            addUrl.setAccessible(true);
-            addUrl.invoke(ViaFabric.class.getClassLoader(), viaVersionJar.toURI().toURL());
-            addUrl.invoke(ViaFabric.class.getClassLoader(), viaRewindJar.toURI().toURL());
-            addUrl.invoke(ViaFabric.class.getClassLoader(), viaBackwardsJar.toURI().toURL());
-            // Need reflection because Fabric was loading the class before the jars were added to classpath
-            Class.forName("com.github.creeper123123321.viafabric.VRViaVersionInitializer")
-                    .getMethod("init")
-                    .invoke(null);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | MalformedURLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    private static <S extends CommandSource> LiteralArgumentBuilder<S> command(String commandName) {
+        return LiteralArgumentBuilder.<S>literal(commandName)
+                .then(
+                        RequiredArgumentBuilder
+                                .<S, String>argument("args", StringArgumentType.greedyString())
+                                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
+                                .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
+                )
+                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute);
     }
 }

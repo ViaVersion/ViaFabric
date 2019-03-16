@@ -31,17 +31,40 @@ processResources {
     ]
 }
 
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
 dependencies {
     // transitive = false, viabackwards-core because Guava is conflicting on runClient
-    compile("us.myles:viaversion:2.0.0-19w09a") { transitive = false }
-    compile("de.gerrygames:viarewind-core:1.4.0") { transitive = false }
-    compile("nl.matsv:viabackwards-core:2.4.0-SNAPSHOT") { transitive = false }
+    shade("us.myles:viaversion:2.0.0-19w11b") { transitive = false }
+    shade("de.gerrygames:viarewind-core:1.4.0") { transitive = false }
+    shade("nl.matsv:viabackwards-core:3.0.0-19w11b") { transitive = false }
     
     minecraft "com.mojang:minecraft:19w11b"
     mappings "net.fabricmc:yarn:19w11b.2"
     modCompile "net.fabricmc:fabric-loader:0.3.7.109"
 
     modCompile "net.fabricmc:fabric:0.2.3.110"
+}
+
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)) {
+            //exclude 'META-INF', 'META-INF/**'
+            exclude 'us/myles/ViaVersion/BungeePlugin.class'
+            exclude 'us/myles/ViaVersion/SpongePlugin.class'
+            exclude 'us/myles/ViaVersion/VelocityPlugin.class'
+            exclude 'us/myles/ViaVersion/ViaVersionPlugin.class'
+            exclude 'us/myles/ViaVersion/bukkit/**'
+            exclude 'us/myles/ViaVersion/velocity/**'
+            exclude 'us/viaversion/libs/javassist/**'
+            exclude 'mcmod.info'
+            exclude 'plugin.yml'
+            exclude 'bungee.yml'
+        }
+    }
 }
 
 minecraft {
