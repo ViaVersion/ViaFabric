@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Mixin(MultiplayerScreen.class)
-public abstract class MixinMultiplayerGui extends Screen {
+public abstract class MixinMultiplayerScreen extends Screen {
     private TextFieldWidget protocolVersion;
     private boolean validProtocol = true;
     private boolean supportedProtocol;

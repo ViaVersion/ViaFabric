@@ -275,7 +275,12 @@ public class VRViaConfig extends Config implements ViaVersionConfig {
     }
 
     @Override
-    public boolean truncate1_14Books() {
+    public boolean isTruncate1_14Books() {
         return this.getBoolean("truncate-1_14-books", false);
+    }
+
+    @Override
+    public boolean isLeftHandedHandling() {
+        return this.getBoolean("left-handed-handling", true);
     }
 }

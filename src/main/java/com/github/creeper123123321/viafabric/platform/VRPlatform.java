@@ -180,7 +180,7 @@ public class VRPlatform implements ViaPlatform {
     @Override
     public ViaCommandSender[] getOnlinePlayers() {
         MinecraftServer server = getServer();
-        if (server != null && server.method_18854()) {
+        if (server != null && server.isOnThread()) {
             // Not thread safe
             return server.getPlayerManager().getPlayerList().stream()
                     .map(Entity::getCommandSource)
@@ -231,7 +231,7 @@ public class VRPlatform implements ViaPlatform {
             }
         } else {
             MinecraftServer server = getServer();
-            if (server != null && server.method_18854()) {
+            if (server != null && server.isOnThread()) {
                 ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
                 if (player == null) return false;
                 player.networkHandler.disconnect(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)));

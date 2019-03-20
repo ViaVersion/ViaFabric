@@ -3,7 +3,7 @@
   "compatibilityLevel": "JAVA_8",
   "package": "com.github.creeper123123321.viafabric.mixin",
   "mixins": [
-    "MixinClientConnectionServerChInit"
+    "MixinServerNetworkIOChInit"
   ],
   "injectors": {
     "defaultRequire": 1

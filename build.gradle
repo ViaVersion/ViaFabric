@@ -38,14 +38,14 @@ configurations {
 
 dependencies {
     // transitive = false, viabackwards-core because Guava is conflicting on runClient
-    shade("us.myles:viaversion:2.0.0-19w11b") { transitive = false }
+    shade("us.myles:viaversion:2.0.0-19w12a") { transitive = false }
     shade("de.gerrygames:viarewind-core:1.4.0") { transitive = false }
     shade("nl.matsv:viabackwards-core:3.0.0-19w11b") { transitive = false }
     
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
-    minecraft "com.mojang:minecraft:19w11b"
-    mappings "net.fabricmc:yarn:19w11b.4"
+    minecraft "com.mojang:minecraft:19w12a"
+    mappings "net.fabricmc:yarn:19w12a.1"
     modCompile "net.fabricmc:fabric-loader:0.3.7.109"
 
     modCompile "net.fabricmc:fabric:0.2.3.111"
@@ -65,6 +65,7 @@ jar {
             exclude 'mcmod.info'
             exclude 'plugin.yml'
             exclude 'bungee.yml'
+            exclude 'velocity-plugin.json'
         }
     }
 }

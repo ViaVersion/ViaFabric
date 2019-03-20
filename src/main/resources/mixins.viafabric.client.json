@@ -6,7 +6,7 @@
   ],
   "client": [
     "client.MixinClientConnectionChInit",
-    "client.MixinMultiplayerGui"
+    "client.MixinMultiplayerScreen"
   ],
   "injectors": {
     "defaultRequire": 1
