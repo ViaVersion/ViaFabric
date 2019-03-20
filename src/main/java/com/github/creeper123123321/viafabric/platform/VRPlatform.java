@@ -52,8 +52,8 @@ import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.dump.PluginInfo;
 import us.myles.ViaVersion.exception.CancelException;
 import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
-import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.ViaVersion.util.GsonUtil;
+import us.myles.ViaVersion.velocity.VersionInfo;
 import us.myles.viaversion.libs.gson.JsonObject;
 
 import javax.annotation.Nullable;

@@ -92,9 +92,9 @@ public abstract class MixinMultiplayerScreen extends Screen {
         this.listeners.add(protocolVersion);
     }
 
-    @Inject(method = "draw", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;draw(IIF)V"))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;draw(IIF)V"), remap = false)
     private void onDraw(int int_1, int int_2, float float_1, CallbackInfo ci) {
-        protocolVersion.draw(int_1, int_2, float_1);
+        protocolVersion.render(int_1, int_2, float_1);
     }
 
     @Inject(method = "update", at = @At("TAIL"))
