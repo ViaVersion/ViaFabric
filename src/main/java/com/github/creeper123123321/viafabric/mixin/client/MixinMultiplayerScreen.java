@@ -29,6 +29,7 @@ import com.github.creeper123123321.viafabric.util.VersionFormatFilter;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.menu.MultiplayerScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.text.TextComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -49,16 +50,15 @@ public abstract class MixinMultiplayerScreen extends Screen {
     private boolean validProtocol = true;
     private boolean supportedProtocol;
 
+    protected MixinMultiplayerScreen(TextComponent textComponent_1, UnsupportedOperationException e) {
+        super(textComponent_1);
+        throw e;
+    }
+
     @Inject(method = "method_2540", at = @At("TAIL"))
     private void onInitWidgets(CallbackInfo ci) {
         protocolVersion = new TextFieldWidget(fontRenderer, this.screenWidth / 2 + 88, 13, 65, 15);
         protocolVersion.method_1890(new VersionFormatFilter());
-        int clientSideVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
-        supportedProtocol = isSupported(clientSideVersion);
-        protocolVersion.setText(ProtocolVersion.isRegistered(clientSideVersion)
-                ? ProtocolVersion.getProtocol(clientSideVersion).getName()
-                : Integer.toString(clientSideVersion));
-        protocolVersion.method_1868(getTextColor()); // Set editable color
         protocolVersion.setChangedListener((text) -> {
             protocolVersion.setSuggestion(null);
             int newVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
@@ -89,11 +89,15 @@ public abstract class MixinMultiplayerScreen extends Screen {
             protocolVersion.method_1868(getTextColor()); // Set editable color
             ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion = newVersion;
         });
+        int clientSideVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
+        protocolVersion.setText(ProtocolVersion.isRegistered(clientSideVersion)
+                ? ProtocolVersion.getProtocol(clientSideVersion).getName()
+                : Integer.toString(clientSideVersion));
         this.listeners.add(protocolVersion);
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;draw(IIF)V"), remap = false)
-    private void onDraw(int int_1, int int_2, float float_1, CallbackInfo ci) {
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;render(IIF)V"), remap = false)
+    private void onRender(int int_1, int int_2, float float_1, CallbackInfo ci) {
         protocolVersion.render(int_1, int_2, float_1);
     }
 
