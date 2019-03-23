@@ -28,7 +28,6 @@ repositories {
     maven { url = URI.create("https://repo.viaversion.com/") }
     maven { url = URI.create("https://oss.sonatype.org/content/repositories/snapshots") }
     maven { url = URI.create("https://maven.fabricmc.net/") }
-    maven { url = URI.create("https://jitpack.io/")}
 }
 
 
@@ -46,7 +45,7 @@ dependencies {
     // transitive = false, viabackwards-core because Guava is conflicting on runClient
     shade("us.myles:viaversion:2.0.0-19w12b") { isTransitive = false }
     shade("de.gerrygames:viarewind-core:1.4.0") { isTransitive = false }
-    shade("com.github.ViaVersion.ViaBackwards:viabackwards-core:1.14-SNAPSHOT") { isTransitive = false }
+    shade("nl.matsv:viabackwards-core:3.0.0-19w11b") { isTransitive = false }
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
