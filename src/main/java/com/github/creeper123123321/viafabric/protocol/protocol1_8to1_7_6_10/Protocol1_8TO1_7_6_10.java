@@ -31,8 +31,12 @@ import com.google.common.base.Charsets;
 import de.gerrygames.viarewind.protocol.protocol1_7_6_10to1_8.types.CustomIntType;
 import de.gerrygames.viarewind.protocol.protocol1_7_6_10to1_8.types.CustomStringType;
 import de.gerrygames.viarewind.protocol.protocol1_7_6_10to1_8.types.Types1_7_6_10;
+import de.gerrygames.viarewind.utils.ChatUtil;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.TranslatableComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
@@ -48,6 +52,10 @@ import us.myles.ViaVersion.api.type.types.CustomByteType;
 import us.myles.ViaVersion.api.type.types.VoidType;
 import us.myles.ViaVersion.api.type.types.version.Types1_8;
 import us.myles.ViaVersion.packets.State;
+import us.myles.ViaVersion.protocols.protocol1_9to1_8.Protocol1_9TO1_8;
+import us.myles.viaversion.libs.opennbt.tag.builtin.CompoundTag;
+import us.myles.viaversion.libs.opennbt.tag.builtin.ListTag;
+import us.myles.viaversion.libs.opennbt.tag.builtin.StringTag;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -201,7 +209,15 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
             @Override
             public void registerMap() {
                 map(Type.INT, Type.VAR_INT);  //Entity Id
-                map(xyzToPosition, new TypeRemapper<>(Type.POSITION));  //Position
+                handler(new PacketHandler() {
+                @Override
+                public void handle(PacketWrapper packetWrapper) throws Exception {
+                    long x = packetWrapper.read(Type.INT);
+                    long y = packetWrapper.read(Type.UNSIGNED_BYTE);
+                    long z = packetWrapper.read(Type.INT);
+                    packetWrapper.write(Type.POSITION, new Position(x, y, z));
+                }
+            });
             }
         });
 
@@ -900,9 +916,9 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                         short slots = packetWrapper.read(Type.UNSIGNED_BYTE);
                         boolean useProvidedWindowTitle = packetWrapper.read(Type.BOOLEAN);  //Use provided window title
                         if (useProvidedWindowTitle) {
-                            title = "{\"text\": \"" + title + "\"}";
+                            title = Protocol1_9TO1_8.fixJson(title);
                         } else {
-                            title = "{\"translate\": \"" + title + "\"}";
+                            title = ComponentSerializer.toString(new TranslatableComponent(title));
                         }
                         packetWrapper.write(Type.STRING, title);  //Window title
                         packetWrapper.write(Type.UNSIGNED_BYTE, slots);
@@ -969,7 +985,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                     @Override
                     public void handle(PacketWrapper packetWrapper) throws Exception {
                         for (int i = 0; i < 4; i++)
-                            packetWrapper.write(Type.STRING, "{\"text\": \"" + packetWrapper.read(Type.STRING) + "\"}");
+                            packetWrapper.write(Type.STRING, Protocol1_9TO1_8.fixJson(packetWrapper.read(Type.STRING)));
                     }
                 });
             }
@@ -1224,6 +1240,29 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                                 packetWrapper.passthrough(Type.BOOLEAN);
                             }
                             packetWrapper.write(Type.BYTE, (byte) 1);
+                        } if (channel.equalsIgnoreCase("MC|TrList")) {
+                            packetWrapper.passthrough(Type.INT);  //Window Id
+
+                            int size = packetWrapper.passthrough(Type.UNSIGNED_BYTE);  //Size
+
+                            for (int i = 0; i < size; i++) {
+                                Item item = packetWrapper.read(Types1_7_6_10.COMPRESSED_NBT_ITEM);
+                                packetWrapper.write(Type.ITEM, item); //Buy Item 1
+
+                                item = packetWrapper.read(Types1_7_6_10.COMPRESSED_NBT_ITEM);
+                                packetWrapper.write(Type.ITEM, item); //Buy Item 3
+
+                                boolean has3Items = packetWrapper.passthrough(Type.BOOLEAN);
+                                if (has3Items) {
+                                    item = packetWrapper.read(Types1_7_6_10.COMPRESSED_NBT_ITEM);
+                                    packetWrapper.write(Type.ITEM, item); //Buy Item 2
+                                }
+
+                                packetWrapper.passthrough(Type.BOOLEAN); //Unavailable
+                                packetWrapper.write(Type.INT, 0); //Uses
+                                packetWrapper.write(Type.INT, 0); //Max Uses
+                            }
+
                         }
                     }
                 });
@@ -1300,7 +1339,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
         this.registerIncoming(State.PLAY, 0x07, 0x07, new PacketRemapper() {
             @Override
             public void registerMap() {
-                map(Type.BYTE);  //Status
+                map(Type.UNSIGNED_BYTE, Type.BYTE);  //Status
                 handler(new PacketHandler() {
                     @Override
                     public void handle(PacketWrapper packetWrapper) throws Exception {
@@ -1510,11 +1549,46 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                 handler(new PacketHandler() {
                     @Override
                     public void handle(PacketWrapper packetWrapper) throws Exception {
-                        byte[] data = packetWrapper.read(Type.REMAINING_BYTES);
-                        packetWrapper.write(Type.SHORT, (short) data.length);
-                        for (byte b : data) {
-                            packetWrapper.write(Type.BYTE, b);
+                        String channel = packetWrapper.get(Type.STRING, 0);
+                        if (channel.equalsIgnoreCase("MC|ItemName")) {
+                            byte[] name = packetWrapper.read(Type.STRING).getBytes(Charsets.UTF_8);
+                            packetWrapper.write(Type.REMAINING_BYTES, name);
+                        } else if (channel.equalsIgnoreCase("MC|BEdit") || channel.equalsIgnoreCase("MC|BSign")) {
+                            packetWrapper.read(Type.SHORT); //length
+                            Item book = packetWrapper.read(Types1_7_6_10.COMPRESSED_NBT_ITEM);
+                            CompoundTag tag = book.getTag();
+                            if (tag != null && tag.contains("pages")) {
+                                ListTag pages = tag.get("pages");
+                                for (int i = 0; i < pages.size(); i++) {
+                                    StringTag page = pages.get(i);
+                                    String value = page.getValue();
+                                    value = ChatUtil.jsonToLegacy(value);
+                                    page.setValue(value);
+                                }
+                            }
+                            packetWrapper.write(Type.ITEM, book);
                         }
+
+                        packetWrapper.cancel();
+                        packetWrapper.setId(-1);
+                        ByteBuf newPacketBuf = Unpooled.buffer();
+                        packetWrapper.writeToBuffer(newPacketBuf);
+                        PacketWrapper newWrapper = new PacketWrapper(0x17, newPacketBuf, packetWrapper.user());
+                        newWrapper.passthrough(Type.STRING);
+                        final int[] length = new int[1];
+                        newWrapper.read(new Type<Void>(Void.class) {
+                            @Override
+                            public Void read(ByteBuf byteBuf) {
+                                length[0] = byteBuf.readableBytes();
+                                return null;
+                            }
+
+                            @Override
+                            public void write(ByteBuf byteBuf, Void aVoid) {
+                            }
+                        });
+                        newWrapper.write(Type.SHORT, (short) length[0]);
+                        newWrapper.sendToServer(Protocol1_8TO1_7_6_10.class, true, true);
                     }
                 });
             }

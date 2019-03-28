@@ -26,6 +26,7 @@ package com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.chu
 
 import io.netty.buffer.ByteBuf;
 import us.myles.ViaVersion.api.PacketWrapper;
+import us.myles.ViaVersion.api.minecraft.BlockChangeRecord;
 import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.api.type.types.CustomByteType;
 
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.IntStream;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -182,11 +184,11 @@ public class ChunkPacketTransformer {
 
         packetWrapper.write(Type.INT, chunkX);
         packetWrapper.write(Type.INT, chunkZ);
-        packetWrapper.write(Type.VAR_INT, size);
-
-        for (int i = 0; i < size; i++) {
-            packetWrapper.write(Type.SHORT, positions[i]);
-            packetWrapper.write(Type.VAR_INT, (int) blocks[i]);
-        }
+        packetWrapper.write(Type.BLOCK_CHANGE_RECORD_ARRAY, IntStream.range(0, size)
+                .mapToObj(it -> new BlockChangeRecord(
+                        (short) (positions[it] >>> 8),
+                        (short) (positions[it] & 0xFFFF),
+                        blocks[it]))
+                .toArray(BlockChangeRecord[]::new));
     }
 }

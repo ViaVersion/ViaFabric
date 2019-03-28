@@ -26,10 +26,16 @@ package com.github.creeper123123321.viafabric.mixin.client;
 
 import com.github.creeper123123321.viafabric.providers.VRVersionProvider;
 import com.github.creeper123123321.viafabric.util.VersionFormatFilter;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.menu.MultiplayerScreen;
+import net.minecraft.client.gui.menu.YesNoScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.TextComponent;
+import net.minecraft.text.TranslatableTextComponent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -39,6 +45,7 @@ import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 import us.myles.ViaVersion.protocols.base.VersionProvider;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,7 +54,8 @@ import java.util.stream.Stream;
 @Mixin(MultiplayerScreen.class)
 public abstract class MixinMultiplayerScreen extends Screen {
     private TextFieldWidget protocolVersion;
-    private boolean validProtocol = true;
+    private ButtonWidget enableClientSideViaVersion;
+    private boolean validProtocol;
     private boolean supportedProtocol;
 
     protected MixinMultiplayerScreen(TextComponent textComponent_1, UnsupportedOperationException e) {
@@ -94,12 +102,37 @@ public abstract class MixinMultiplayerScreen extends Screen {
                 ? ProtocolVersion.getProtocol(clientSideVersion).getName()
                 : Integer.toString(clientSideVersion));
         this.listeners.add(protocolVersion);
+
+        enableClientSideViaVersion = new ButtonWidget(this.screenWidth / 2 + 48, 13, 105, 15,
+                I18n.translate("gui.enable_client_side_button"), button ->
+                MinecraftClient.getInstance().openScreen(new YesNoScreen(
+                        (answer, id) -> {
+                            MinecraftClient.getInstance().openScreen(this);
+                            if (answer) {
+                                try {
+                                    FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric").resolve("enable_client_side").toFile().createNewFile();
+                                    protocolVersion.setVisible(true);
+                                    enableClientSideViaVersion.visible = false;
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new TranslatableTextComponent("gui.enable_client_side.question"),
+                        new TranslatableTextComponent("gui.enable_client_side.warning"),
+                        I18n.translate("gui.enable_client_side.enable"),
+                        I18n.translate("gui.cancel"),
+                        0
+                )));
+        protocolVersion.setVisible(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric").resolve("enable_client_side").toFile().exists());
+        enableClientSideViaVersion.visible = !protocolVersion.isVisible();
+        addButton(enableClientSideViaVersion);
     }
 
     @Inject(method = "render",
             at = {
-                @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;render(IIF)V"),
-                @At(value = "INVOKE", target = "Lnet/minecraft/class_437;render(IIF)V") // Generated refmap doesn't have it
+                    @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;render(IIF)V"),
+                    @At(value = "INVOKE", target = "Lnet/minecraft/class_437;render(IIF)V") // Generated refmap doesn't have it
             },
             remap = false)
     private void onRender(int int_1, int int_2, float float_1, CallbackInfo ci) {
