@@ -63,9 +63,9 @@ public abstract class MixinMultiplayerScreen extends Screen {
         throw e;
     }
 
-    @Inject(method = "method_2540", at = @At("TAIL"))
-    private void onInitWidgets(CallbackInfo ci) {
-        protocolVersion = new TextFieldWidget(fontRenderer, this.screenWidth / 2 + 88, 13, 65, 15);
+    @Inject(method = "init", at = @At("TAIL"))
+    private void onInit(CallbackInfo ci) {
+        protocolVersion = new TextFieldWidget(font, this.width / 2 + 88, 13, 65, 15);
         protocolVersion.method_1890(new VersionFormatFilter());
         protocolVersion.setChangedListener((text) -> {
             protocolVersion.setSuggestion(null);
@@ -101,9 +101,9 @@ public abstract class MixinMultiplayerScreen extends Screen {
         protocolVersion.setText(ProtocolVersion.isRegistered(clientSideVersion)
                 ? ProtocolVersion.getProtocol(clientSideVersion).getName()
                 : Integer.toString(clientSideVersion));
-        this.listeners.add(protocolVersion);
+        this.children.add(protocolVersion);
 
-        enableClientSideViaVersion = new ButtonWidget(this.screenWidth / 2 + 48, 13, 105, 15,
+        enableClientSideViaVersion = new ButtonWidget(this.width / 2 + 48, 13, 105, 15,
                 I18n.translate("gui.enable_client_side_button"), button ->
                 MinecraftClient.getInstance().openScreen(new YesNoScreen(
                         (answer, id) -> {
@@ -129,18 +129,13 @@ public abstract class MixinMultiplayerScreen extends Screen {
         addButton(enableClientSideViaVersion);
     }
 
-    @Inject(method = "render",
-            at = {
-                    @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;render(IIF)V"),
-                    @At(value = "INVOKE", target = "Lnet/minecraft/class_437;render(IIF)V") // Generated refmap doesn't have it
-            },
-            remap = false)
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;render(IIF)V"))
     private void onRender(int int_1, int int_2, float float_1, CallbackInfo ci) {
         protocolVersion.render(int_1, int_2, float_1);
     }
 
-    @Inject(method = "update", at = @At("TAIL"))
-    private void onUpdate(CallbackInfo ci) {
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void onTick(CallbackInfo ci) {
         protocolVersion.tick();
     }
 

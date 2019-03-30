@@ -1575,19 +1575,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                         packetWrapper.writeToBuffer(newPacketBuf);
                         PacketWrapper newWrapper = new PacketWrapper(0x17, newPacketBuf, packetWrapper.user());
                         newWrapper.passthrough(Type.STRING);
-                        final int[] length = new int[1];
-                        newWrapper.read(new Type<Void>(Void.class) {
-                            @Override
-                            public Void read(ByteBuf byteBuf) {
-                                length[0] = byteBuf.readableBytes();
-                                return null;
-                            }
-
-                            @Override
-                            public void write(ByteBuf byteBuf, Void aVoid) {
-                            }
-                        });
-                        newWrapper.write(Type.SHORT, (short) length[0]);
+                        newWrapper.write(Type.SHORT, (short) newPacketBuf.readableBytes());
                         newWrapper.sendToServer(Protocol1_8TO1_7_6_10.class, true, true);
                     }
                 });
