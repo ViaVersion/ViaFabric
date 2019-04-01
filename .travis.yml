@@ -15,5 +15,6 @@ deploy:
   skip_cleanup: true
   on:
     repo: ViaVersion/ViaFabric
-
-
+install: true
+script:
+  - ./gradlew clean build
