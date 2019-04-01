@@ -26,6 +26,7 @@ package com.github.creeper123123321.viafabric;
 
 import com.github.creeper123123321.viafabric.commands.VRCommandHandler;
 import com.github.creeper123123321.viafabric.platform.*;
+import com.github.creeper123123321.viafabric.protocol.Protocol3DSharewareV1_34to1_14;
 import com.github.creeper123123321.viafabric.protocol.protocol1_7_6_10to1_7_1_5.Protocol1_7_6_10to1_7_1_5;
 import com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.Protocol1_8TO1_7_6_10;
 import com.github.creeper123123321.viafabric.util.JLoggerToLog4j;
@@ -91,8 +92,9 @@ public class ViaFabric implements ModInitializer {
         Via.getManager().init();
         ProtocolRegistry.registerProtocol(new Protocol1_7_6_10to1_7_1_5(), Collections.singletonList(ProtocolVersion.v1_7_6.getId()), ProtocolVersion.v1_7_1.getId());
         ProtocolRegistry.registerProtocol(new Protocol1_8TO1_7_6_10(), Collections.singletonList(ProtocolVersion.v1_8.getId()), ProtocolVersion.v1_7_6.getId());
+        ProtocolRegistry.registerProtocol(new Protocol3DSharewareV1_34to1_14(), Collections.singletonList(1), ProtocolVersion.v1_14.getId());
         new VRRewindPlatform().init();
-        new VRBackwardsPlatform().init();
+        // new VRBackwardsPlatform().init(); todo reenable when viabackwards is updated
 
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             try {
