@@ -43,14 +43,14 @@ configurations.getByName("compile").extendsFrom(shade)
 
 dependencies {
     // transitive = false, viabackwards-core because Guava is conflicting on runClient
-    shade("us.myles:viaversion:2.0.0-19w13b") { isTransitive = false }
+    shade("us.myles:viaversion:2.0.0-19w14a") { isTransitive = false }
     shade("de.gerrygames:viarewind-core:1.4.0") { isTransitive = false }
     shade("nl.matsv:viabackwards-core:3.0.0-19w11b") { isTransitive = false } // todo update
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
-    minecraft("com.mojang:minecraft:3D Shareware v1.34")
-    mappings("net.fabricmc:yarn:3D Shareware v1.34.2")
+    minecraft("com.mojang:minecraft:19w14a")
+    mappings("net.fabricmc:yarn:19w14a.1")
     modCompile("net.fabricmc:fabric-loader:0.3.7.109")
 
     modCompile("net.fabricmc:fabric:0.2.6.117")
@@ -63,14 +63,19 @@ tasks.named<Jar>("jar") {
             exclude("us/myles/ViaVersion/SpongePlugin.class")
             exclude("us/myles/ViaVersion/VelocityPlugin.class")
             exclude("us/myles/ViaVersion/ViaVersionPlugin.class")
-            // exclude("us/myles/ViaVersion/sponge/**") needed for viabackwards version check
             exclude("us/myles/ViaVersion/bukkit/**")
             exclude("us/myles/ViaVersion/bungee/**")
-            exclude("us/viaversion/libs/javassist/**")
+            exclude("us/myles/ViaVersion/sponge/**")
+            exclude("us/myles/ViaVersion/velocity/**")
+            exclude("us/viaversion/libs/javassist/**") // Only used for bukkit
             exclude("mcmod.info")
             exclude("plugin.yml")
             exclude("bungee.yml")
             exclude("velocity-plugin.json")
+        }
+        from(project.zipTree(dep)) {
+            include("us/myles/ViaVersion/sponge/VersionInfo.class") // Used in ViaBackwards
+            include("us/myles/ViaVersion/bungee/providers/BungeeMovementTransmitter.class")
         }
     }
 }
