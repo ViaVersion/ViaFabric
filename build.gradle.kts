@@ -38,7 +38,7 @@ tasks.named<ProcessResources>("processResources") {
     ))
 }
 
-val shade by configurations.creating
+val shade: Configuration by configurations.creating
 configurations.getByName("compile").extendsFrom(shade)
 
 dependencies {
@@ -88,6 +88,6 @@ minecraft {
 // If you remove this task, sources will not be generated.
 tasks.register<Jar>("sourcesJar") {
     dependsOn(tasks.getByName("classes"))
-    classifier = "sources"
+    archiveClassifier.set("sources")
     from(sourceSets.getByName("main").allSource)
 }
