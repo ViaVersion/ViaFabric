@@ -43,17 +43,17 @@ configurations.getByName("compile").extendsFrom(shade)
 
 dependencies {
     // transitive = false, viabackwards-core because Guava is conflicting on runClient
-    shade("us.myles:viaversion:2.0.0-19w14a") { isTransitive = false }
+    shade("us.myles:viaversion:2.0.0-19w14b") { isTransitive = false }
     shade("de.gerrygames:viarewind-core:1.4.0") { isTransitive = false }
     shade("nl.matsv:viabackwards-core:3.0.0-19w11b") { isTransitive = false } // todo update
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
-    minecraft("com.mojang:minecraft:19w14a")
-    mappings("net.fabricmc:yarn:19w14a.1")
+    minecraft("com.mojang:minecraft:19w14b")
+    mappings("net.fabricmc:yarn:19w14b.1")
     modCompile("net.fabricmc:fabric-loader:0.3.7.109")
 
-    modCompile("net.fabricmc:fabric:0.2.6.117")
+    modCompile("net.fabricmc:fabric:0.2.6.119")
 }
 
 tasks.named<Jar>("jar") {
