@@ -23,3 +23,6 @@ script:
   - export TRAVIS_TAG=${TRAVIS_TAG:-build-$TRAVIS_JOB_NUMBER}
   - git tag $TRAVIS_TAG
   - ./gradlew clean build
+branches:
+  only:
+  - master
