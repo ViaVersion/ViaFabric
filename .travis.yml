@@ -6,6 +6,12 @@ cache:
   directories:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
+before_deploy:
+  # Set up git user name and tag this commit
+  - git config --local user.name "creeper12313321"
+  - git config --local user.email "creeper123123321@gmail.com"
+  - export TRAVIS_TAG=${TRAVIS_TAG:-build-$TRAVIS_JOB_NUMBER}
+  - git tag $TRAVIS_TAG
 deploy:
   provider: releases
   api_key:
