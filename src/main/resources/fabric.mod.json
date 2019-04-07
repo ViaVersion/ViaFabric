@@ -1,29 +1,33 @@
 {
+  "schemaVersion": 1,
   "id": "viafabric",
   "name": "ViaFabric",
-  "side": "universal",
   "version": "@version@",
   "description": "@description@",
   "license": "MIT",
-  "links": {
+  "contact": {
     "homepage": "https://github.com/ViaVersion/ViaFabric",
     "issues": "https://github.com/ViaVersion/ViaFabric/issues",
     "sources": "https://github.com/ViaVersion/ViaFabric"
   },
+  "icon": "assets/viaversion/textures/logo.png",
+  "environment": "*",
   "authors": [
     "creeper123123321"
   ],
-  "initializers": [
-    "com.github.creeper123123321.viafabric.ViaFabric"
-  ],
+  "entrypoints": {
+    "main": [
+      "com.github.creeper123123321.viafabric.ViaFabric"
+    ]
+  },
   "requires": {
+    "fabricloader": ">=0.4.0"
   },
   "recommended": {
     "fabric": "*",
     "clientcommands": "*"
   },
-  "mixins": {
-    "common": "mixins.viafabric.common.json",
-    "client": "mixins.viafabric.client.json"
-  }
+  "mixins": [
+    "mixins.viafabric.json"
+  ]
 }

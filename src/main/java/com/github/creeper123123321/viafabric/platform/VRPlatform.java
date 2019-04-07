@@ -32,8 +32,8 @@ import com.github.creeper123123321.viafabric.providers.VRVersionProvider;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.loader.ModContainer;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
@@ -271,13 +271,13 @@ public class VRPlatform implements ViaPlatform {
     public JsonObject getDump() {
         JsonObject platformSpecific = new JsonObject();
         List<PluginInfo> mods = new ArrayList<>();
-        for (ModContainer mod : net.fabricmc.loader.FabricLoader.INSTANCE.getModContainers()) {
+        for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
             mods.add(new PluginInfo(true,
                     mod.getMetadata().getName(),
                     mod.getMetadata().getVersion().getFriendlyString(),
-                    String.join(", ", mod.getInfo().getInitializers()),
-                    mod.getInfo().getAuthors().stream()
-                            .map(info -> info.getName() + " <" + info.getEmail() + "> (" + info.getWebsite() + ")")
+                    null,
+                    mod.getMetadata().getAuthors().stream()
+                            .map(info -> info.getName() + "(" + info.getContact().asMap() + ")")
                             .collect(Collectors.toList())
             ));
         }

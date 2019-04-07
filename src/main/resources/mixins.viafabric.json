@@ -6,6 +6,10 @@
     "MixinServerNetworkIOChInit",
     "MixinClientConnection"
   ],
+  "client": [
+    "client.MixinClientConnectionChInit",
+    "client.MixinMultiplayerScreen"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

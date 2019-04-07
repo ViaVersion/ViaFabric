@@ -51,9 +51,9 @@ dependencies {
 
     minecraft("com.mojang:minecraft:19w14b")
     mappings("net.fabricmc:yarn:19w14b.1")
-    modCompile("net.fabricmc:fabric-loader:0.3.7.109")
+    modCompile("net.fabricmc:fabric-loader:0.4.0+build.113")
 
-    modCompile("net.fabricmc:fabric:0.2.6.119")
+    modCompile("net.fabricmc:fabric:0.2.6.121")
 }
 
 tasks.named<Jar>("jar") {
