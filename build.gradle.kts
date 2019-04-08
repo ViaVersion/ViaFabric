@@ -1,5 +1,4 @@
 import org.apache.tools.ant.filters.ReplaceTokens
-import java.net.URI
 
 plugins {
     id("java")
@@ -39,14 +38,14 @@ tasks.named<ProcessResources>("processResources") {
     ))
 }
 
-val shade: Configuration by configurations.creating
-configurations.getByName("compile").extendsFrom(shade)
-
 dependencies {
     // transitive = false, viabackwards-core because Guava is conflicting on runClient
-    shade("us.myles:viaversion:2.0.0-19w14b") { isTransitive = false }
-    shade("de.gerrygames:viarewind-core:1.4.0") { isTransitive = false }
-    shade("nl.matsv:viabackwards-core:3.0.0-19w11b") { isTransitive = false } // todo update
+    compile("us.myles:viaversion:2.0.0-19w14b") { isTransitive = false }
+    include("us.myles:viaversion:2.0.0-19w14b")
+    compile("de.gerrygames:viarewind-core:1.4.0") { isTransitive = false }
+    include("de.gerrygames:viarewind-core:1.4.0")
+    compile("nl.matsv:viabackwards-core:3.0.0-19w11b") { isTransitive = false } // todo update
+    include("nl.matsv:viabackwards-core:3.0.0-19w11b")
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
@@ -56,30 +55,6 @@ dependencies {
 
     modCompile("net.fabricmc:fabric:0.2.6.121")
     include("net.fabricmc:fabric:0.2.6.121")
-}
-
-tasks.named<Jar>("jar") {
-    shade.forEach { dep ->
-        from(project.zipTree(dep)) {
-            exclude("us/myles/ViaVersion/BungeePlugin.class")
-            exclude("us/myles/ViaVersion/SpongePlugin.class")
-            exclude("us/myles/ViaVersion/VelocityPlugin.class")
-            exclude("us/myles/ViaVersion/ViaVersionPlugin.class")
-            exclude("us/myles/ViaVersion/bukkit/**")
-            exclude("us/myles/ViaVersion/bungee/**")
-            exclude("us/myles/ViaVersion/sponge/**")
-            exclude("us/myles/ViaVersion/velocity/**")
-            exclude("us/viaversion/libs/javassist/**") // Only used for bukkit
-            exclude("mcmod.info")
-            exclude("plugin.yml")
-            exclude("bungee.yml")
-            exclude("velocity-plugin.json")
-        }
-        from(project.zipTree(dep)) {
-            include("us/myles/ViaVersion/sponge/VersionInfo.class") // Used in ViaBackwards
-            include("us/myles/ViaVersion/bungee/providers/BungeeMovementTransmitter.class")
-        }
-    }
 }
 
 minecraft {
