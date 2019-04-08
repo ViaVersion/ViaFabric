@@ -4,7 +4,7 @@ import java.net.URI
 plugins {
     id("java")
     id("net.minecrell.licenser") version "0.4.1"
-    id("fabric-loom") version "0.2.0-SNAPSHOT"
+    id("fabric-loom") version "0.2.1-SNAPSHOT"
     id("com.palantir.git-version") version "0.12.0-rc2"
 }
 
@@ -25,9 +25,10 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
-    maven { url = URI.create("https://repo.viaversion.com/") }
-    maven { url = URI.create("https://oss.sonatype.org/content/repositories/snapshots") }
-    maven { url = URI.create("https://maven.fabricmc.net/") }
+    maven(url = "https://repo.viaversion.com/")
+    maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
+    maven(url = "https://maven.fabricmc.net/")
+    maven(url = "http://server.bbkr.space:8081/artifactory/libs-snapshot")
 }
 
 
@@ -50,10 +51,11 @@ dependencies {
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
     minecraft("com.mojang:minecraft:19w14b")
-    mappings("net.fabricmc:yarn:19w14b.1")
-    modCompile("net.fabricmc:fabric-loader:0.4.0+build.113")
+    mappings("net.fabricmc:yarn:19w14b.4")
+    modCompile("net.fabricmc:fabric-loader:0.4.0+build.115")
 
     modCompile("net.fabricmc:fabric:0.2.6.121")
+    include("net.fabricmc:fabric:0.2.6.121")
 }
 
 tasks.named<Jar>("jar") {
