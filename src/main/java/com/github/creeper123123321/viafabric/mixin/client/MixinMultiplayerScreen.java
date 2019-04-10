@@ -106,7 +106,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
         enableClientSideViaVersion = new ButtonWidget(this.width / 2 + 48, 13, 105, 15,
                 I18n.translate("gui.enable_client_side_button"), button ->
                 MinecraftClient.getInstance().openScreen(new YesNoScreen(
-                        (answer, id) -> {
+                        answer -> {
                             MinecraftClient.getInstance().openScreen(this);
                             if (answer) {
                                 try {
@@ -121,8 +121,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
                         new TranslatableTextComponent("gui.enable_client_side.question"),
                         new TranslatableTextComponent("gui.enable_client_side.warning"),
                         I18n.translate("gui.enable_client_side.enable"),
-                        I18n.translate("gui.cancel"),
-                        0
+                        I18n.translate("gui.cancel")
                 )));
         protocolVersion.setVisible(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric").resolve("enable_client_side").toFile().exists());
         enableClientSideViaVersion.visible = !protocolVersion.isVisible();
