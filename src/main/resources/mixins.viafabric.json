@@ -8,8 +8,7 @@
   ],
   "client": [
     "client.MixinClientConnectionChInit",
-    "client.MixinMultiplayerScreen",
-    "client.MixinCustomPayloadPacket"
+    "client.MixinMultiplayerScreen"
   ],
   "injectors": {
     "defaultRequire": 1
