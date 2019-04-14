@@ -40,8 +40,8 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false, viabackwards-core because Guava is conflicting on runClient
-    compile("us.myles:viaversion:2.0.0-1.14-pre1") { isTransitive = false }
-    include("us.myles:viaversion:2.0.0-1.14-pre1")
+    compile("us.myles:viaversion:2.0.0-1.14-pre2") { isTransitive = false }
+    include("us.myles:viaversion:2.0.0-1.14-pre2")
     compile("de.gerrygames:viarewind-core:1.4.0") { isTransitive = false }
     include("de.gerrygames:viarewind-core:1.4.0")
     compile("nl.matsv:viabackwards-core:3.0.0-19w11b") { isTransitive = false } // todo update
@@ -49,9 +49,9 @@ dependencies {
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
-    minecraft("com.mojang:minecraft:1.14 Pre-Release 1")
-    mappings("net.fabricmc:yarn:1.14 Pre-Release 1+build.3")
-    modCompile("net.fabricmc:fabric-loader:0.4.0+build.116")
+    minecraft("com.mojang:minecraft:1.14 Pre-Release 2")
+    mappings("net.fabricmc:yarn:1.14 Pre-Release 2+build.1")
+    modCompile("net.fabricmc:fabric-loader:0.4.1+build.123")
 
     modCompile("net.fabricmc:fabric:0.2.7+build.122")
     include("net.fabricmc:fabric:0.2.7+build.122")
