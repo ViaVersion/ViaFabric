@@ -51,7 +51,7 @@ dependencies {
 
     minecraft("com.mojang:minecraft:1.14 Pre-Release 2")
     mappings("net.fabricmc:yarn:1.14 Pre-Release 2+build.1")
-    modCompile("net.fabricmc:fabric-loader:0.4.1+build.123")
+    modCompile("net.fabricmc:fabric-loader:0.4.1+build.125")
 
     modCompile("net.fabricmc:fabric:0.2.7+build.122")
     include("net.fabricmc:fabric:0.2.7+build.122")
