@@ -63,9 +63,9 @@ public abstract class MixinMultiplayerScreen extends Screen {
         throw e;
     }
 
-    @Inject(method = "init", at = @At("TAIL"))
+    @Inject(method = "init", at = @At("TAIL"), remap = false)
     private void onInit(CallbackInfo ci) {
-        protocolVersion = new TextFieldWidget(font, this.width / 2 + 88, 13, 65, 15);
+        protocolVersion = new TextFieldWidget(font, this.width / 2 + 88, 13, 65, 15, I18n.translate("gui.protocol_version_field.name"));
         protocolVersion.method_1890(new VersionFormatFilter());
         protocolVersion.setChangedListener((text) -> {
             protocolVersion.setSuggestion(null);
@@ -128,12 +128,15 @@ public abstract class MixinMultiplayerScreen extends Screen {
         addButton(enableClientSideViaVersion);
     }
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;render(IIF)V"))
+    @Inject(method = "render", at = {
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;render(IIF)V"),
+            @At(value = "INVOKE", target = "Lnet/minecraft/class_437;render(IIF)V") // todo check if refmap was fixed
+    }, remap = false)
     private void onRender(int int_1, int int_2, float float_1, CallbackInfo ci) {
         protocolVersion.render(int_1, int_2, float_1);
     }
 
-    @Inject(method = "tick", at = @At("TAIL"))
+    @Inject(method = "tick", at = @At("TAIL"), remap = false)
     private void onTick(CallbackInfo ci) {
         protocolVersion.tick();
     }
