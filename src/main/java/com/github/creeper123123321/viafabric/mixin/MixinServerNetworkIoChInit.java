@@ -37,10 +37,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.protocol.ProtocolPipeline;
 
-@Mixin(targets = {
-        "net.minecraft.server.ServerNetworkIo$1",
-        "net/minecraft/class_3242$1" // Workaround
-})
+@Mixin(targets = "net.minecraft.server.ServerNetworkIo$1")
 public class MixinServerNetworkIoChInit {
     @Inject(method = "initChannel(Lio/netty/channel/Channel;)V", at = @At(value = "TAIL"), remap = false)
     private void onInitChannel(Channel channel, CallbackInfo ci) {

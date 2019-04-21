@@ -50,11 +50,11 @@ dependencies {
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
     minecraft("com.mojang:minecraft:1.14 Pre-Release 5")
-    mappings("net.fabricmc:yarn:1.14 Pre-Release 5+build.2")
-    modCompile("net.fabricmc:fabric-loader:0.4.1+build.126")
+    mappings("net.fabricmc:yarn:1.14 Pre-Release 5+build.4")
+    modCompile("net.fabricmc:fabric-loader:0.4.2+build.131")
 
-    modCompile("net.fabricmc:fabric:0.2.7+build.123")
-    include("net.fabricmc:fabric:0.2.7+build.123")
+    modCompile("net.fabricmc:fabric:0.2.7+build.126")
+    include("net.fabricmc:fabric:0.2.7+build.126")
 }
 
 minecraft {
