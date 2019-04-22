@@ -35,7 +35,10 @@ import java.util.Map;
 
 public class VRViaConfig extends Config implements ViaVersionConfig {
     // Based on Sponge ViaVersion
-    private static List<String> UNSUPPORTED = Arrays.asList("anti-xray-patch", "bungee-ping-interval", "bungee-ping-save", "bungee-servers", "quick-move-action-fix", "nms-player-ticking", "item-cache", "velocity-ping-interval", "velocity-ping-save", "velocity-servers", "blockconnection-method");
+    private static List<String> UNSUPPORTED = Arrays.asList("anti-xray-patch", "bungee-ping-interval",
+            "bungee-ping-save", "bungee-servers", "quick-move-action-fix", "nms-player-ticking",
+            "item-cache", "velocity-ping-interval", "velocity-ping-save", "velocity-servers",
+            "blockconnection-method", "change-1_9-hitbox", "change-1_14-hitbox");
 
     public VRViaConfig(File configFile) {
         super(configFile);
@@ -282,5 +285,15 @@ public class VRViaConfig extends Config implements ViaVersionConfig {
     @Override
     public boolean isLeftHandedHandling() {
         return this.getBoolean("left-handed-handling", true);
+    }
+
+    @Override
+    public boolean is1_9HitboxFix() {
+        return false;
+    }
+
+    @Override
+    public boolean is1_14HitboxFix() {
+        return false;
     }
 }
