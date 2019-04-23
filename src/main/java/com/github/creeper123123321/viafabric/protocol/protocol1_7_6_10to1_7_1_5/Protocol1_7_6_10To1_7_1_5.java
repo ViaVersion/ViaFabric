@@ -34,7 +34,7 @@ import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.packets.State;
 
 // Based on https://github.com/Gerrygames/ClientViaVersion
-public class Protocol1_7_6_10to1_7_1_5 extends Protocol {
+public class Protocol1_7_6_10To1_7_1_5 extends Protocol {
     public static final ValueTransformer<String, String> INSERT_DASHES = new ValueTransformer<String, String>(Type.STRING) {
         @Override
         public String transform(PacketWrapper packetWrapper, String s) {

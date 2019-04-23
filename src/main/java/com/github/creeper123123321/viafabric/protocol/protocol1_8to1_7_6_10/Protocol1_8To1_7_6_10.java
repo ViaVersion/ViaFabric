@@ -34,10 +34,6 @@ import de.gerrygames.viarewind.protocol.protocol1_7_6_10to1_8.types.Types1_7_6_1
 import de.gerrygames.viarewind.utils.ChatUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.TranslatableComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.data.UserConnection;
@@ -52,7 +48,11 @@ import us.myles.ViaVersion.api.type.types.CustomByteType;
 import us.myles.ViaVersion.api.type.types.VoidType;
 import us.myles.ViaVersion.api.type.types.version.Types1_8;
 import us.myles.ViaVersion.packets.State;
-import us.myles.ViaVersion.protocols.protocol1_9to1_8.Protocol1_9TO1_8;
+import us.myles.ViaVersion.protocols.protocol1_9to1_8.Protocol1_9To1_8;
+import us.myles.viaversion.libs.bungeecordchat.api.ChatColor;
+import us.myles.viaversion.libs.bungeecordchat.api.chat.TextComponent;
+import us.myles.viaversion.libs.bungeecordchat.api.chat.TranslatableComponent;
+import us.myles.viaversion.libs.bungeecordchat.chat.ComponentSerializer;
 import us.myles.viaversion.libs.opennbt.tag.builtin.CompoundTag;
 import us.myles.viaversion.libs.opennbt.tag.builtin.ListTag;
 import us.myles.viaversion.libs.opennbt.tag.builtin.StringTag;
@@ -64,7 +64,7 @@ import java.util.List;
 import java.util.UUID;
 
 // Based on https://github.com/Gerrygames/ClientViaVersion
-public class Protocol1_8TO1_7_6_10 extends Protocol {
+public class Protocol1_8To1_7_6_10 extends Protocol {
     private static ValueReader<Position> xyzToPosition = packetWrapper -> {
         long x = packetWrapper.read(Type.INT);
         long y = packetWrapper.read(Type.INT);
@@ -289,7 +289,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                                 remove.write(Type.VAR_INT, 1);
                                 remove.write(Type.UUID, entryByName == null ? entryByUUID.uuid : entryByName.uuid);
                                 tablist.remove(entryByName == null ? entryByUUID : entryByName);
-                                remove.send(Protocol1_8TO1_7_6_10.class);
+                                remove.send(Protocol1_8To1_7_6_10.class);
                             }
                             PacketWrapper packetPlayerListItem = new PacketWrapper(0x38, null, packetWrapper.user());
                             Tablist.TabListEntry newentry = new Tablist.TabListEntry(name, uuid);
@@ -316,7 +316,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                             if (newentry.displayName != null) {
                                 packetPlayerListItem.write(Type.STRING, newentry.displayName);
                             }
-                            packetPlayerListItem.send(Protocol1_8TO1_7_6_10.class);
+                            packetPlayerListItem.send(Protocol1_8To1_7_6_10.class);
 
                             packetWrapper.cancel();
 
@@ -333,7 +333,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
 
                             Via.getPlatform().runSync(() -> {
                                 try {
-                                    delayedPacket.send(Protocol1_8TO1_7_6_10.class);
+                                    delayedPacket.send(Protocol1_8To1_7_6_10.class);
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
                                 }
@@ -916,7 +916,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                         short slots = packetWrapper.read(Type.UNSIGNED_BYTE);
                         boolean useProvidedWindowTitle = packetWrapper.read(Type.BOOLEAN);  //Use provided window title
                         if (useProvidedWindowTitle) {
-                            title = Protocol1_9TO1_8.fixJson(title);
+                            title = Protocol1_9To1_8.fixJson(title);
                         } else {
                             title = ComponentSerializer.toString(new TranslatableComponent(title));
                         }
@@ -985,7 +985,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                     @Override
                     public void handle(PacketWrapper packetWrapper) throws Exception {
                         for (int i = 0; i < 4; i++)
-                            packetWrapper.write(Type.STRING, Protocol1_9TO1_8.fixJson(packetWrapper.read(Type.STRING)));
+                            packetWrapper.write(Type.STRING, Protocol1_9To1_8.fixJson(packetWrapper.read(Type.STRING)));
                     }
                 });
             }
@@ -1576,7 +1576,7 @@ public class Protocol1_8TO1_7_6_10 extends Protocol {
                         PacketWrapper newWrapper = new PacketWrapper(0x17, newPacketBuf, packetWrapper.user());
                         newWrapper.passthrough(Type.STRING);
                         newWrapper.write(Type.SHORT, (short) newPacketBuf.readableBytes());
-                        newWrapper.sendToServer(Protocol1_8TO1_7_6_10.class, true, true);
+                        newWrapper.sendToServer(Protocol1_8To1_7_6_10.class, true, true);
                     }
                 });
             }

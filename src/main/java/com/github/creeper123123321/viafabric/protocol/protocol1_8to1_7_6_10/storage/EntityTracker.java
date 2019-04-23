@@ -24,7 +24,7 @@
 
 package com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.storage;
 
-import com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.Protocol1_8TO1_7_6_10;
+import com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.Protocol1_8To1_7_6_10;
 import com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.metadata.MetadataRewriter;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.data.StoredObject;
@@ -74,7 +74,7 @@ public class EntityTracker extends StoredObject {
         MetadataRewriter.transform(this.getClientEntityTypes().get(entityId), this.metadataBuffer.get(entityId));
         if (!this.metadataBuffer.get(entityId).isEmpty()) {
             try {
-                wrapper.send(Protocol1_8TO1_7_6_10.class);
+                wrapper.send(Protocol1_8To1_7_6_10.class);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
