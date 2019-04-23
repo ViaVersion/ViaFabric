@@ -21,10 +21,10 @@
     ]
   },
   "requires": {
-    "fabricloader": ">=0.4.0"
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
   },
   "recommended": {
-    "fabric": "*",
     "clientcommands": "*"
   },
   "mixins": [
