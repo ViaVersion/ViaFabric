@@ -3,7 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 plugins {
     id("java")
     id("net.minecrell.licenser") version "0.4.1"
-    id("fabric-loom") version "0.2.1-SNAPSHOT"
+    id("fabric-loom") version "0.2.2-SNAPSHOT"
     id("com.palantir.git-version") version "0.12.0-rc2"
 }
 
