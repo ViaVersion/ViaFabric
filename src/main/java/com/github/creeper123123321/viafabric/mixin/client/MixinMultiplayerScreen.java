@@ -103,7 +103,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
                 : Integer.toString(clientSideVersion));
         this.children.add(protocolVersion);
 
-        enableClientSideViaVersion = new ButtonWidget(this.width / 2 + 48, 13, 105, 15,
+        enableClientSideViaVersion = new ButtonWidget(this.width / 2 + 48, 13, 105, 15, // TODO replace it with a button with icon
                 I18n.translate("gui.enable_client_side_button"), button ->
                 MinecraftClient.getInstance().openScreen(new YesNoScreen(
                         answer -> {
