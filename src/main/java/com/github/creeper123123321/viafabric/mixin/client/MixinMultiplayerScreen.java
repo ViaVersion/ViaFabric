@@ -37,6 +37,7 @@ import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.TextComponent;
 import net.minecraft.text.TranslatableTextComponent;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -53,9 +54,13 @@ import java.util.stream.Stream;
 
 @Mixin(MultiplayerScreen.class)
 public abstract class MixinMultiplayerScreen extends Screen {
+    @Unique
     private TextFieldWidget protocolVersion;
+    @Unique
     private ButtonWidget enableClientSideViaVersion;
+    @Unique
     private boolean validProtocol;
+    @Unique
     private boolean supportedProtocol;
 
     protected MixinMultiplayerScreen(TextComponent textComponent_1, UnsupportedOperationException e) {
@@ -141,6 +146,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
         protocolVersion.tick();
     }
 
+    @Unique
     private int getTextColor() {
         if (!validProtocol) {
             return 0xff0000; // Red
@@ -150,6 +156,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
         return 0xE0E0E0; // Default
     }
 
+    @Unique
     private boolean isSupported(int protocol) {
         return ProtocolRegistry.getProtocolPath(ProtocolRegistry.SERVER_PROTOCOL, protocol) != null
                 || ProtocolRegistry.SERVER_PROTOCOL == protocol;
