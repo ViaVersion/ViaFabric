@@ -32,10 +32,12 @@ import net.minecraft.client.gui.Screen;
 import net.minecraft.client.gui.menu.MultiplayerScreen;
 import net.minecraft.client.gui.menu.YesNoScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.RecipeBookButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.TextComponent;
 import net.minecraft.text.TranslatableTextComponent;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -108,9 +110,13 @@ public abstract class MixinMultiplayerScreen extends Screen {
                 : Integer.toString(clientSideVersion));
         this.children.add(protocolVersion);
 
-        enableClientSideViaVersion = new ButtonWidget(this.width / 2 + 48, 13, 105, 15, // TODO replace it with a button with icon
-                I18n.translate("gui.enable_client_side_button"), button ->
-                MinecraftClient.getInstance().openScreen(new YesNoScreen(
+        enableClientSideViaVersion = new RecipeBookButtonWidget(this.width / 2 + 113, 10,
+                40, 20, // Size
+                0, 0, // Start pos of texture
+                20, // v Hover offset
+                new Identifier("viafabric:textures/gui/via_button.png"),
+                64, 64, // Texture size
+                button -> MinecraftClient.getInstance().openScreen(new YesNoScreen(
                         answer -> {
                             MinecraftClient.getInstance().openScreen(this);
                             if (answer) {
@@ -127,7 +133,8 @@ public abstract class MixinMultiplayerScreen extends Screen {
                         new TranslatableTextComponent("gui.enable_client_side.warning"),
                         I18n.translate("gui.enable_client_side.enable"),
                         I18n.translate("gui.cancel")
-                )));
+                )),
+                I18n.translate("gui.enable_client_side_button"));
         protocolVersion.setVisible(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric").resolve("enable_client_side").toFile().exists());
         enableClientSideViaVersion.visible = !protocolVersion.isVisible();
         addButton(enableClientSideViaVersion);

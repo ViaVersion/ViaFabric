@@ -9,7 +9,11 @@ plugins {
 
 group = "com.github.creeper123123321.viafabric"
 val gitVersion: groovy.lang.Closure<Any> by extra
-version = "0.1.0-SNAPSHOT+" + gitVersion()
+version = "0.1.0-SNAPSHOT+" + try {
+    gitVersion()
+} catch (e: Exception) {
+    "unknown"
+}
 extra.set("archivesBaseName", "ViaFabric")
 description = "Client-side and server-side ViaVersion for Fabric"
 
@@ -32,10 +36,12 @@ repositories {
 
 
 tasks.named<ProcessResources>("processResources") {
-    filter<ReplaceTokens>("tokens" to mapOf(
-            "version" to project.property("version"),
-            "description" to project.property("description")
-    ))
+    filesMatching("fabric.mod.json") {
+        filter<ReplaceTokens>("tokens" to mapOf(
+                "version" to project.property("version"),
+                "description" to project.property("description")
+        ))
+    }
 }
 
 dependencies {
@@ -51,7 +57,7 @@ dependencies {
 
     minecraft("com.mojang:minecraft:1.14")
     mappings("net.fabricmc:yarn:1.14+build.3")
-    modCompile("net.fabricmc:fabric-loader:0.4.4+build.139")
+    modCompile("net.fabricmc:fabric-loader:0.4.4+build.140")
 
     modCompile("net.fabricmc:fabric:0.2.7+build.127")
 
