@@ -25,7 +25,10 @@
 package com.github.creeper123123321.viafabric;
 
 import com.github.creeper123123321.viafabric.commands.VRCommandHandler;
-import com.github.creeper123123321.viafabric.platform.*;
+import com.github.creeper123123321.viafabric.platform.VRInjector;
+import com.github.creeper123123321.viafabric.platform.VRLoader;
+import com.github.creeper123123321.viafabric.platform.VRPlatform;
+import com.github.creeper123123321.viafabric.platform.VRRewindPlatform;
 import com.github.creeper123123321.viafabric.protocol.protocol1_7_6_10to1_7_1_5.Protocol1_7_6_10To1_7_1_5;
 import com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.Protocol1_8To1_7_6_10;
 import com.github.creeper123123321.viafabric.util.JLoggerToLog4j;
@@ -71,7 +74,7 @@ public class ViaFabric implements ModInitializer {
                 .get().getMetadata().getVersion().getFriendlyString();
     }
 
-    private static <S extends CommandSource> LiteralArgumentBuilder<S> command(String commandName) {
+    public static <S extends CommandSource> LiteralArgumentBuilder<S> command(String commandName) {
         return LiteralArgumentBuilder.<S>literal(commandName)
                 .then(
                         RequiredArgumentBuilder
@@ -95,26 +98,8 @@ public class ViaFabric implements ModInitializer {
         new VRRewindPlatform().init();
         // new VRBackwardsPlatform().init(); todo reenable when viabackwards is updated
 
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            try {
-                Class.forName("io.github.cottonmc.clientcommands.ClientCommands")
-                        .getMethod("registerCommand", Consumer.class)
-                        .invoke(null,
-                                (Consumer<CommandDispatcher<CommandSource>>) c ->
-                                        c.register(command("viafabricclient"))
-                        );
-            } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                Via.getPlatform().getLogger().warning("ClientCommands isn't installed");
-            }
-        }
-
-        try {
-            Class.forName("net.fabricmc.fabric.api.registry.CommandRegistry");
-            CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaversion")));
-            CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaver")));
-            CommandRegistry.INSTANCE.register(false, c -> c.register(command("vvfabric")));
-        } catch (ClassNotFoundException e) {
-            Via.getPlatform().getLogger().warning("Fabric API isn't installed");
-        }
+        CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaversion")));
+        CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaver")));
+        CommandRegistry.INSTANCE.register(false, c -> c.register(command("vvfabric")));
     }
 }

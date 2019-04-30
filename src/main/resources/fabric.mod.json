@@ -18,6 +18,9 @@
   "entrypoints": {
     "main": [
       "com.github.creeper123123321.viafabric.ViaFabric"
+    ],
+    "cotton-client-commands": [
+      "com.github.creeper123123321.viafabric.commands.VRClientCommands"
     ]
   },
   "requires": {
@@ -25,7 +28,7 @@
     "fabric": "*"
   },
   "recommended": {
-    "clientcommands": "*"
+    "cotton-client-commands": "*"
   },
   "mixins": [
     "mixins.viafabric.json"

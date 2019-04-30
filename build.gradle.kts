@@ -61,8 +61,8 @@ dependencies {
 
     modCompile("net.fabricmc:fabric:0.2.7+build.127")
 
-    modCompile("io.github.cottonmc:client-commands:0.2.1+1.14-pre5-SNAPSHOT")
-    include("io.github.cottonmc:client-commands:0.2.1+1.14-pre5-SNAPSHOT")
+    modCompile("io.github.cottonmc:cotton-client-commands:0.3.0+1.14-SNAPSHOT")
+    include("io.github.cottonmc:cotton-client-commands:0.3.0+1.14-SNAPSHOT")
 }
 
 minecraft {
