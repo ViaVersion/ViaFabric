@@ -56,7 +56,7 @@ dependencies {
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
     minecraft("com.mojang:minecraft:1.14")
-    mappings("net.fabricmc:yarn:1.14+build.7")
+    mappings("net.fabricmc:yarn:1.14+build.8")
     modCompile("net.fabricmc:fabric-loader:0.4.6+build.141")
 
     modCompile("net.fabricmc:fabric:0.2.7+build.127")
