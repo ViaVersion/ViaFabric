@@ -3,7 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 plugins {
     id("java")
     id("net.minecrell.licenser") version "0.4.1"
-    id("fabric-loom") version "0.2.2-SNAPSHOT"
+    id("fabric-loom") version "0.2.3-SNAPSHOT"
     id("com.palantir.git-version") version "0.12.0-rc2"
 }
 
@@ -45,13 +45,13 @@ tasks.named<ProcessResources>("processResources") {
 }
 
 dependencies {
-    // transitive = false, viabackwards-core because Guava is conflicting on runClient
+    // transitive = false because Guava is conflicting on runClient
     compile("us.myles:viaversion:2.1.0-1.14.1-pre2") { isTransitive = false }
     include("us.myles:viaversion:2.1.0-1.14.1-pre2")
-    compile("de.gerrygames:viarewind-core:1.4.0") { isTransitive = false }
-    include("de.gerrygames:viarewind-core:1.4.0")
-    compile("nl.matsv:viabackwards-core:3.0.0-19w11b") { isTransitive = false } // todo update
-    include("nl.matsv:viabackwards-core:3.0.0-19w11b")
+    compile("de.gerrygames:viarewind-all:1.4.0") { isTransitive = false }
+    include("de.gerrygames:viarewind-all:1.4.0")
+    compile("nl.matsv:viabackwards-all:3.0.0-SNAPSHOT") { isTransitive = false } // todo wait viabackwards stop shading guava
+    include("nl.matsv:viabackwards-all:3.0.0-SNAPSHOT")
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 

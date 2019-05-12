@@ -25,21 +25,16 @@
 package com.github.creeper123123321.viafabric;
 
 import com.github.creeper123123321.viafabric.commands.VRCommandHandler;
-import com.github.creeper123123321.viafabric.platform.VRInjector;
-import com.github.creeper123123321.viafabric.platform.VRLoader;
-import com.github.creeper123123321.viafabric.platform.VRPlatform;
-import com.github.creeper123123321.viafabric.platform.VRRewindPlatform;
+import com.github.creeper123123321.viafabric.platform.*;
 import com.github.creeper123123321.viafabric.protocol.protocol1_7_6_10to1_7_1_5.Protocol1_7_6_10To1_7_1_5;
 import com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.Protocol1_8To1_7_6_10;
 import com.github.creeper123123321.viafabric.util.JLoggerToLog4j;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
-import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.fabricmc.loader.api.FabricLoader;
@@ -50,12 +45,10 @@ import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 public class ViaFabric implements ModInitializer {
@@ -64,8 +57,8 @@ public class ViaFabric implements ModInitializer {
     public static final EventLoop EVENT_LOOP;
 
     static {
-        ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("ViaFabric").build();
-        ASYNC_EXECUTOR = Executors.newCachedThreadPool(factory);
+        ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("ViaFabric-%d").build();
+        ASYNC_EXECUTOR = Executors.newFixedThreadPool(8, factory);
         EVENT_LOOP = new DefaultEventLoop(factory);
     }
 
@@ -96,7 +89,7 @@ public class ViaFabric implements ModInitializer {
         ProtocolRegistry.registerProtocol(new Protocol1_7_6_10To1_7_1_5(), Collections.singletonList(ProtocolVersion.v1_7_6.getId()), ProtocolVersion.v1_7_1.getId());
         ProtocolRegistry.registerProtocol(new Protocol1_8To1_7_6_10(), Collections.singletonList(ProtocolVersion.v1_8.getId()), ProtocolVersion.v1_7_6.getId());
         new VRRewindPlatform().init();
-        // new VRBackwardsPlatform().init(); todo reenable when viabackwards is updated
+        new VRBackwardsPlatform().init();
 
         CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaversion")));
         CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaver")));
