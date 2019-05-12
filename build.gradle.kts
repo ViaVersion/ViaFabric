@@ -50,7 +50,7 @@ dependencies {
     include("us.myles:viaversion:2.1.0-1.14.1-pre2")
     compile("de.gerrygames:viarewind-all:1.4.0") { isTransitive = false }
     include("de.gerrygames:viarewind-all:1.4.0")
-    compile("nl.matsv:viabackwards-all:3.0.0-SNAPSHOT") { isTransitive = false } // todo wait viabackwards stop shading guava
+    compile("nl.matsv:viabackwards-all:3.0.0-SNAPSHOT") { isTransitive = false }
     include("nl.matsv:viabackwards-all:3.0.0-SNAPSHOT")
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
