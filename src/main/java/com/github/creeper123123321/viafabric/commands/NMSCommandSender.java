@@ -29,9 +29,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.TextComponent;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
 import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
 
