@@ -35,8 +35,8 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.RecipeBookButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.text.TextComponent;
-import net.minecraft.text.TranslatableTextComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -101,7 +101,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
                 }
             }
             supportedProtocol = isSupported(newVersion);
-            protocolVersion.method_1868(getTextColor()); // Set editable color
+            protocolVersion.setEditableColor(getTextColor());
             ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion = newVersion;
         });
         int clientSideVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
@@ -129,8 +129,8 @@ public abstract class MixinMultiplayerScreen extends Screen {
                                 }
                             }
                         },
-                        new TranslatableTextComponent("gui.enable_client_side.question"),
-                        new TranslatableTextComponent("gui.enable_client_side.warning"),
+                        new TranslatableComponent("gui.enable_client_side.question"),
+                        new TranslatableComponent("gui.enable_client_side.warning"),
                         I18n.translate("gui.enable_client_side.enable"),
                         I18n.translate("gui.cancel")
                 )),
