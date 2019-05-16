@@ -28,9 +28,9 @@ import com.github.creeper123123321.viafabric.providers.VRVersionProvider;
 import com.github.creeper123123321.viafabric.util.VersionFormatFilter;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Screen;
-import net.minecraft.client.gui.menu.MultiplayerScreen;
-import net.minecraft.client.gui.menu.YesNoScreen;
+import net.minecraft.client.gui.screen.ConfirmScreen;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.RecipeBookButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -116,7 +116,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
                 20, // v Hover offset
                 new Identifier("viafabric:textures/gui/via_button.png"),
                 64, 64, // Texture size
-                button -> MinecraftClient.getInstance().openScreen(new YesNoScreen(
+                button -> MinecraftClient.getInstance().openScreen(new ConfirmScreen(
                         answer -> {
                             MinecraftClient.getInstance().openScreen(this);
                             if (answer) {
