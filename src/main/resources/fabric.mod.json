@@ -25,7 +25,9 @@
   },
   "requires": {
     "fabricloader": ">=0.4.0",
-    "fabric": "*"
+    "fabric-textures-v0": "*",
+    "fabric-resource-loader-v0": "*",
+    "fabric-commands-v0": "*"
   },
   "recommended": {
     "cotton-client-commands": "*"
