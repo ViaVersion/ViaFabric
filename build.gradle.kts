@@ -46,8 +46,8 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    compile("us.myles:viaversion:2.1.1-1.14.2-pre3") { isTransitive = false }
-    include("us.myles:viaversion:2.1.1-1.14.2-pre3")
+    compile("us.myles:viaversion:2.1.1-1.14.2-pre4") { isTransitive = false }
+    include("us.myles:viaversion:2.1.1-1.14.2-pre4")
     compile("de.gerrygames:viarewind-all:1.4.0") { isTransitive = false }
     include("de.gerrygames:viarewind-all:1.4.0")
     compile("nl.matsv:viabackwards-all:3.0.0-SNAPSHOT") { isTransitive = false }
@@ -55,24 +55,15 @@ dependencies {
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
-    minecraft("com.mojang:minecraft:1.14.2 Pre-Release 3")
-    mappings("net.fabricmc:yarn:1.14.2 Pre-Release 3+build.3")
-    modCompile("net.fabricmc:fabric-loader:0.4.7+build.147")
+    minecraft("com.mojang:minecraft:1.14.2 Pre-Release 4")
+    mappings("net.fabricmc:yarn:1.14.2 Pre-Release 4+build.1")
+    modCompile("net.fabricmc:fabric-loader:0.4.8+build.154")
 
-    modCompile("net.fabricmc.fabric-api:fabric-api:0.3.0-pre+build.161")
+    modCompile("net.fabricmc.fabric-api:fabric-api:0.3.0-pre+build.166")
 
     modCompile("io.github.cottonmc:cotton-client-commands:0.3.1+1.14-SNAPSHOT")
     include("io.github.cottonmc:cotton-client-commands:0.3.1+1.14-SNAPSHOT")
 }
 
 minecraft {
-}
-
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
-tasks.register<Jar>("sourcesJar") {
-    dependsOn(tasks.getByName("classes"))
-    archiveClassifier.set("sources")
-    from(sourceSets.getByName("main").allSource)
 }
