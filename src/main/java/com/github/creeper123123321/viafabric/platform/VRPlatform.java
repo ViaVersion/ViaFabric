@@ -27,7 +27,6 @@ package com.github.creeper123123321.viafabric.platform;
 import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.commands.NMSCommandSender;
 import com.github.creeper123123321.viafabric.commands.UserCommandSender;
-import com.github.creeper123123321.viafabric.protocol.ClientSideReference;
 import com.github.creeper123123321.viafabric.providers.VRVersionProvider;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
 import net.fabricmc.api.EnvType;
@@ -35,12 +34,15 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.network.packet.ChatMessageS2CPacket;
+import net.minecraft.client.network.packet.DisconnectS2CPacket;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.OffThreadException;
 import net.minecraft.network.chat.ChatMessageType;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
 import us.myles.ViaVersion.api.ViaVersionConfig;
@@ -49,9 +51,7 @@ import us.myles.ViaVersion.api.configuration.ConfigurationProvider;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.platform.TaskId;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
-import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.dump.PluginInfo;
-import us.myles.ViaVersion.exception.CancelException;
 import us.myles.ViaVersion.protocols.base.VersionProvider;
 import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
 import us.myles.ViaVersion.sponge.VersionInfo;
@@ -198,16 +198,7 @@ public class VRPlatform implements ViaPlatform {
     public void sendMessage(UUID uuid, String s) {
         UserConnection user = Via.getManager().getPortedPlayers().get(uuid);
         if (user instanceof VRClientSideUserConnection) {
-            PacketWrapper chat = new PacketWrapper(0x0E, null, user);
-            chat.write(Type.STRING, ChatRewriter.legacyTextToJson(s));
-            chat.write(Type.BYTE, (byte) 0); // Position chat box
-            try {
-                chat.send(ClientSideReference.class);
-            } catch (CancelException e) {
-                // Ignore
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            sendMessageClient(s);
         } else {
             runSync(() -> {
                 MinecraftServer server = getServer();
@@ -219,18 +210,24 @@ public class VRPlatform implements ViaPlatform {
         }
     }
 
+    @Environment(EnvType.CLIENT)
+    private void sendMessageClient(String s) {
+        ClientPlayNetworkHandler handler = MinecraftClient.getInstance().getNetworkHandler();
+        if (handler != null) {
+            try {
+                handler.onChatMessage(new ChatMessageS2CPacket(
+                        TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s))
+                ));
+            } catch (OffThreadException ignored) {
+            }
+        }
+    }
+
     @Override
     public boolean kickPlayer(UUID uuid, String s) {
         UserConnection user = Via.getManager().getPortedPlayers().get(uuid);
         if (user instanceof VRClientSideUserConnection) {
-            PacketWrapper chat = new PacketWrapper(0x1B, null, user);
-            chat.write(Type.STRING, ChatRewriter.legacyTextToJson(s));
-            try {
-                chat.sendFuture(ClientSideReference.class).addListener(future -> user.getChannel().close());
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            return kickClient(s);
         } else {
             MinecraftServer server = getServer();
             if (server != null && server.isOnThread()) {
@@ -238,6 +235,21 @@ public class VRPlatform implements ViaPlatform {
                 if (player == null) return false;
                 player.networkHandler.disconnect(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)));
             }
+        }
+        return false;
+    }
+
+    @Environment(EnvType.CLIENT)
+    private boolean kickClient(String msg) {
+        ClientPlayNetworkHandler handler = MinecraftClient.getInstance().getNetworkHandler();
+        if (handler != null) {
+            try {
+                handler.onDisconnect(new DisconnectS2CPacket(
+                        TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(msg))
+                ));
+            } catch (OffThreadException ignored) {
+            }
+            return true;
         }
         return false;
     }

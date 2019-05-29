@@ -91,6 +91,8 @@ public class ViaFabric implements ModInitializer {
         new VRRewindPlatform().init();
         new VRBackwardsPlatform().init();
 
+        FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
+
         CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaversion")));
         CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaver")));
         CommandRegistry.INSTANCE.register(false, c -> c.register(command("vvfabric")));

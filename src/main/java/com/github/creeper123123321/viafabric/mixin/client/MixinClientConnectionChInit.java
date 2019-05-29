@@ -27,7 +27,6 @@ package com.github.creeper123123321.viafabric.mixin.client;
 import com.github.creeper123123321.viafabric.handler.clientside.VRDecodeHandler;
 import com.github.creeper123123321.viafabric.handler.clientside.VREncodeHandler;
 import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
-import com.github.creeper123123321.viafabric.protocol.ClientSideReference;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.ByteToMessageDecoder;
@@ -37,7 +36,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.protocol.ProtocolPipeline;
 
 @Mixin(targets = "net.minecraft.network.ClientConnection$1")
 public class MixinClientConnectionChInit {
@@ -45,7 +43,6 @@ public class MixinClientConnectionChInit {
     private void onInitChannel(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
             UserConnection user = new VRClientSideUserConnection(channel);
-            new ProtocolPipeline(user).add(new ClientSideReference());
 
             MessageToByteEncoder oldEncoder = (MessageToByteEncoder) channel.pipeline().get("encoder");
             ByteToMessageDecoder oldDecoder = (ByteToMessageDecoder) channel.pipeline().get("decoder");
