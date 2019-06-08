@@ -25,9 +25,9 @@
 package com.github.creeper123123321.viafabric;
 
 import com.github.creeper123123321.viafabric.commands.VRCommandHandler;
-import com.github.creeper123123321.viafabric.platform.*;
-import com.github.creeper123123321.viafabric.protocol.protocol1_7_6_10to1_7_1_5.Protocol1_7_6_10To1_7_1_5;
-import com.github.creeper123123321.viafabric.protocol.protocol1_8to1_7_6_10.Protocol1_8To1_7_6_10;
+import com.github.creeper123123321.viafabric.platform.VRInjector;
+import com.github.creeper123123321.viafabric.platform.VRLoader;
+import com.github.creeper123123321.viafabric.platform.VRPlatform;
 import com.github.creeper123123321.viafabric.util.JLoggerToLog4j;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -42,10 +42,7 @@ import net.minecraft.server.command.CommandSource;
 import org.apache.logging.log4j.LogManager;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
-import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
-import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
-import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -86,10 +83,6 @@ public class ViaFabric implements ModInitializer {
                 .commandHandler(new VRCommandHandler())
                 .platform(new VRPlatform()).build());
         Via.getManager().init();
-        ProtocolRegistry.registerProtocol(new Protocol1_7_6_10To1_7_1_5(), Collections.singletonList(ProtocolVersion.v1_7_6.getId()), ProtocolVersion.v1_7_1.getId());
-        ProtocolRegistry.registerProtocol(new Protocol1_8To1_7_6_10(), Collections.singletonList(ProtocolVersion.v1_8.getId()), ProtocolVersion.v1_7_6.getId());
-        new VRRewindPlatform().init();
-        new VRBackwardsPlatform().init();
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
 
