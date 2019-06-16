@@ -29,7 +29,7 @@
     "fabric-resource-loader-v0": "*",
     "fabric-commands-v0": "*"
   },
-  "recommended": {
+  "recommends": {
     "cotton-client-commands": "*"
   },
   "mixins": [
