@@ -46,8 +46,8 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    compile("us.myles:viaversion:2.1.4-1.14.4-pre1") { isTransitive = false }
-    include("us.myles:viaversion:2.1.4-1.14.4-pre1")
+    compile("us.myles:viaversion:2.1.3") { isTransitive = false }
+    include("us.myles:viaversion:2.1.3")
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
