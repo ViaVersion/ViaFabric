@@ -46,8 +46,8 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    compile("us.myles:viaversion:2.1.3") { isTransitive = false }
-    include("us.myles:viaversion:2.1.3")
+    compile("us.myles:viaversion:2.1.4-SNAPSHOT") { isTransitive = false }
+    include("us.myles:viaversion:2.1.4-SNAPSHOT")
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 
@@ -57,8 +57,8 @@ dependencies {
 
     modCompile("net.fabricmc.fabric-api:fabric-api:0.3.0+build.170")
 
-    modCompile("io.github.cottonmc:cotton-client-commands:0.3.1+1.14-SNAPSHOT")
-    include("io.github.cottonmc:cotton-client-commands:0.3.1+1.14-SNAPSHOT")
+    modCompile("io.github.cottonmc:cotton-client-commands:0.4.2+1.14.3-SNAPSHOT")
+    include("io.github.cottonmc:cotton-client-commands:0.4.2+1.14.3-SNAPSHOT")
 }
 
 minecraft {
