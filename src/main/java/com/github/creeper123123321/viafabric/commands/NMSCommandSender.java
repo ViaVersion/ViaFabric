@@ -29,9 +29,9 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.entity.Entity;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
 import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
 
@@ -53,10 +53,10 @@ public class NMSCommandSender implements ViaCommandSender {
     @Override
     public void sendMessage(String s) {
         if (source instanceof ServerCommandSource) {
-            ((ServerCommandSource) source).sendFeedback(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)), false);
+            ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)), false);
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && source instanceof ClientCommandSource) {
             MinecraftClient.getInstance().player
-                    .sendMessage(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)));
+                    .sendMessage(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)));
         }
     }
 

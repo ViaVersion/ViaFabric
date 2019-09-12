@@ -32,11 +32,11 @@ import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.RecipeBookButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.resource.language.I18n;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -65,15 +65,15 @@ public abstract class MixinMultiplayerScreen extends Screen {
     @Unique
     private boolean supportedProtocol;
 
-    protected MixinMultiplayerScreen(TextComponent textComponent_1, UnsupportedOperationException e) {
-        super(textComponent_1);
+    protected MixinMultiplayerScreen(Text title, UnsupportedOperationException e) {
+        super(title);
         throw e;
     }
 
     @Inject(method = "init", at = @At("TAIL"), remap = false)
     private void onInit(CallbackInfo ci) {
         protocolVersion = new TextFieldWidget(font, this.width / 2 + 88, 13, 65, 15, I18n.translate("gui.protocol_version_field.name"));
-        protocolVersion.method_1890(new VersionFormatFilter());
+        protocolVersion.setTextPredicate(new VersionFormatFilter());
         protocolVersion.setChangedListener((text) -> {
             protocolVersion.setSuggestion(null);
             int newVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
@@ -110,7 +110,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
                 : Integer.toString(clientSideVersion));
         this.children.add(protocolVersion);
 
-        enableClientSideViaVersion = new RecipeBookButtonWidget(this.width / 2 + 113, 10,
+        enableClientSideViaVersion = new TexturedButtonWidget(this.width / 2 + 113, 10,
                 40, 20, // Size
                 0, 0, // Start pos of texture
                 20, // v Hover offset
@@ -129,8 +129,8 @@ public abstract class MixinMultiplayerScreen extends Screen {
                                 }
                             }
                         },
-                        new TranslatableComponent("gui.enable_client_side.question"),
-                        new TranslatableComponent("gui.enable_client_side.warning"),
+                        new TranslatableText("gui.enable_client_side.question"),
+                        new TranslatableText("gui.enable_client_side.warning"),
                         I18n.translate("gui.enable_client_side.enable"),
                         I18n.translate("gui.cancel")
                 )),

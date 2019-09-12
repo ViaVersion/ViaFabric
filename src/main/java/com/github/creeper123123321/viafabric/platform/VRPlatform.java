@@ -38,11 +38,11 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.packet.ChatMessageS2CPacket;
 import net.minecraft.client.network.packet.DisconnectS2CPacket;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.MessageType;
 import net.minecraft.network.OffThreadException;
-import net.minecraft.network.chat.ChatMessageType;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
 import us.myles.ViaVersion.api.ViaVersionConfig;
@@ -205,7 +205,7 @@ public class VRPlatform implements ViaPlatform {
                 if (server == null) return;
                 ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
                 if (player == null) return;
-                player.sendChatMessage(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)), ChatMessageType.SYSTEM);
+                player.sendChatMessage(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)), MessageType.SYSTEM);
             });
         }
     }
@@ -216,7 +216,7 @@ public class VRPlatform implements ViaPlatform {
         if (handler != null) {
             try {
                 handler.onChatMessage(new ChatMessageS2CPacket(
-                        TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s))
+                        Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s))
                 ));
             } catch (OffThreadException ignored) {
             }
@@ -233,7 +233,7 @@ public class VRPlatform implements ViaPlatform {
             if (server != null && server.isOnThread()) {
                 ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
                 if (player == null) return false;
-                player.networkHandler.disconnect(TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(s)));
+                player.networkHandler.disconnect(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)));
             }
         }
         return false;
@@ -245,7 +245,7 @@ public class VRPlatform implements ViaPlatform {
         if (handler != null) {
             try {
                 handler.onDisconnect(new DisconnectS2CPacket(
-                        TextComponent.Serializer.fromJsonString(ChatRewriter.legacyTextToJson(msg))
+                        Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(msg))
                 ));
             } catch (OffThreadException ignored) {
             }
