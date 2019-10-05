@@ -298,6 +298,16 @@ public class VRViaConfig extends Config implements ViaVersionConfig {
     }
 
     @Override
+    public boolean isNonFullBlockLightFix() {
+        return this.getBoolean("fix-non-full-blocklight", true);
+    }
+
+    @Override
+    public boolean is1_14HealthNaNFix() {
+        return this.getBoolean("fix-1_14-health-nan", true);
+    }
+
+    @Override
     public boolean is1_15InstantRespawn() {
         return this.getBoolean("use-1_15-instant-respawn", false);
     }
