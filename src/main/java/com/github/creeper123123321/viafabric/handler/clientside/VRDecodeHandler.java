@@ -36,70 +36,56 @@ import us.myles.ViaVersion.packets.Direction;
 import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class VRDecodeHandler extends ByteToMessageDecoder {
     private UserConnection user;
-    private ByteToMessageDecoder minecraftDecoder;
+    public static final String NAME = "viafabric_decoder_handler";
 
-    public VRDecodeHandler(UserConnection user, ByteToMessageDecoder minecraftDecoder) {
+    public VRDecodeHandler(UserConnection user) {
         this.user = user;
-        this.minecraftDecoder = minecraftDecoder;
     }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
         // Based on ViaVersion Sponge encoder code
 
-        ByteBuf buf = msg.alloc().buffer().writeBytes(msg);
+        ByteBuf outBuf = msg.alloc().buffer().writeBytes(msg);
+        try {
+            // Increment sent
+            user.incrementSent();
+            if (user.isActive()) {
+                // Handle ID
+                int id = Type.VAR_INT.read(outBuf);
 
-        // Increment sent
-        user.incrementSent();
-        if (user.isActive()) {
-            // Handle ID
-            int id = Type.VAR_INT.read(buf);
-
-            if (id != PacketWrapper.PASSTHROUGH_ID) {
-                // Transform
-                ByteBuf newPacket = buf.alloc().buffer();
-                try {
-                    PacketWrapper wrapper = new PacketWrapper(id, buf, user);
+                if (id != PacketWrapper.PASSTHROUGH_ID) {
+                    // Transform
+                    PacketWrapper wrapper = new PacketWrapper(id, outBuf, user);
                     ProtocolInfo protInfo = user.get(ProtocolInfo.class);
                     protInfo.getPipeline().transform(Direction.OUTGOING, protInfo.getState(), wrapper);
-                    wrapper.writeToBuffer(newPacket);
-                    buf.clear();
-                    buf.writeBytes(newPacket);
-                } catch (Exception e) {
-                    buf.release();
-                    throw e;
-                } finally {
-                    newPacket.release();
+
+                    ByteBuf newPacket = msg.alloc().buffer();
+                    try {
+                        wrapper.writeToBuffer(newPacket);
+                        outBuf.clear();
+                        outBuf.writeBytes(newPacket);
+                    } finally {
+                        newPacket.release();
+                    }
                 }
             }
-        }
 
-        // call minecraft encoder
-        try {
-            out.addAll(PipelineUtil.callDecode(this.minecraftDecoder, ctx, buf));
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-            if (e.getCause() instanceof Exception) {
-                throw (Exception) e.getCause();
-            }
+            // pass to minecraft encoder
+            out.add(outBuf.retain());
+        } finally {
+            outBuf.release();
         }
-        buf.release();
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (PipelineUtil.containsCause(cause, CancelException.class)) return;
         super.exceptionCaught(ctx, cause);
-    }
-
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        super.channelRead(ctx, msg);
     }
 
     @Override

@@ -26,26 +26,32 @@ package com.github.creeper123123321.viafabric.mixin.client;
 
 import com.github.creeper123123321.viafabric.handler.clientside.VRDecodeHandler;
 import com.github.creeper123123321.viafabric.handler.clientside.VREncodeHandler;
-import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
-import io.netty.channel.Channel;
-import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelPipeline;
+import net.minecraft.network.ClientConnection;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.protocol.ProtocolPipeline;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(targets = "net.minecraft.network.ClientConnection$1")
-public class MixinClientConnectionChInit {
-    @Inject(method = "initChannel(Lio/netty/channel/Channel;)V", at = @At(value = "TAIL"), remap = false)
-    private void onInitChannel(Channel channel, CallbackInfo ci) {
-        if (channel instanceof SocketChannel) {
-            UserConnection user = new VRClientSideUserConnection(channel);
-            new ProtocolPipeline(user);
-
-            channel.pipeline().addBefore("encoder", VREncodeHandler.NAME, new VREncodeHandler(user));
-            channel.pipeline().addBefore("decoder", VRDecodeHandler.NAME, new VRDecodeHandler(user));
+@Mixin(ClientConnection.class)
+public class MixinClientConnection {
+    @Redirect(method = "setMinCompressedSize", at = @At(
+            value = "INVOKE",
+            remap = false,
+            target = "Lio/netty/channel/ChannelPipeline;addBefore(Ljava/lang/String;Ljava/lang/String;Lio/netty/channel/ChannelHandler;)Lio/netty/channel/ChannelPipeline;"
+    ))
+    private ChannelPipeline decodeEncodePlacement(ChannelPipeline instance, String base, String newHandler, ChannelHandler handler) {
+        // Fixes the handler order
+        switch (base) {
+            case "decoder": {
+                if (instance.get(VRDecodeHandler.class) != null) base = VRDecodeHandler.NAME;
+                break;
+            }
+            case "encoder": {
+                if (instance.get(VREncodeHandler.class) != null) base = VREncodeHandler.NAME;
+                break;
+            }
         }
+        return instance.addBefore(base, newHandler, handler);
     }
 }

@@ -24,6 +24,8 @@
 
 package com.github.creeper123123321.viafabric.platform;
 
+import com.github.creeper123123321.viafabric.handler.clientside.VRDecodeHandler;
+import com.github.creeper123123321.viafabric.handler.clientside.VREncodeHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -51,10 +53,10 @@ public class VRClientSideUserConnection extends UserConnection {
         packet.release();
         final Channel channel = this.getChannel();
         if (currentThread) {
-            PipelineUtil.getPreviousContext("decoder", channel.pipeline()).fireChannelRead(copy);
+            PipelineUtil.getPreviousContext(VRDecodeHandler.NAME, channel.pipeline()).fireChannelRead(copy);
         } else {
             channel.eventLoop().submit(() -> {
-                PipelineUtil.getPreviousContext("decoder", channel.pipeline()).fireChannelRead(copy);
+                PipelineUtil.getPreviousContext(VRDecodeHandler.NAME, channel.pipeline()).fireChannelRead(copy);
             });
         }
     }
@@ -70,17 +72,17 @@ public class VRClientSideUserConnection extends UserConnection {
         copy.writeBytes(packet);
         packet.release();
         final Channel channel = this.getChannel();
-        PipelineUtil.getPreviousContext("decoder", channel.pipeline()).fireChannelRead(copy);
+        PipelineUtil.getPreviousContext(VRDecodeHandler.NAME, channel.pipeline()).fireChannelRead(copy);
         return channel.newSucceededFuture();
     }
 
     @Override
     public void sendRawPacketToServer(ByteBuf packet, boolean currentThread) {
         if (currentThread) {
-            getChannel().pipeline().context("encoder").writeAndFlush(packet);
+            getChannel().pipeline().context(VREncodeHandler.NAME).writeAndFlush(packet);
         } else {
             getChannel().eventLoop().submit(() -> {
-                getChannel().pipeline().context("encoder").writeAndFlush(packet);
+                getChannel().pipeline().context(VREncodeHandler.NAME).writeAndFlush(packet);
             });
         }
     }
