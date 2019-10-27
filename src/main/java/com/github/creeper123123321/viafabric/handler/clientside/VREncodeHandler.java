@@ -24,21 +24,17 @@
 
 package com.github.creeper123123321.viafabric.handler.clientside;
 
+import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.EncoderException;
 import io.netty.handler.codec.MessageToByteEncoder;
-import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.exception.CancelException;
-import us.myles.ViaVersion.packets.Direction;
-import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
 public class VREncodeHandler extends MessageToByteEncoder {
     private UserConnection user;
-    public static String NAME = "viafabric_encoder_handler";
 
     public VREncodeHandler(UserConnection user) {
         this.user = user;
@@ -49,44 +45,12 @@ public class VREncodeHandler extends MessageToByteEncoder {
         // Based on Sponge ViaVersion decoder code
         if (!(msg instanceof ByteBuf)) throw new EncoderException("Received msg isn't ByteBuf");
 
-        ByteBuf outBuffer = ctx.alloc().buffer().writeBytes((ByteBuf) msg);
-
+        ByteBuf draft = ctx.alloc().buffer().writeBytes((ByteBuf) msg);
         try {
-            // use transformers
-            if (outBuffer.readableBytes() > 0) {
-                // Ignore if pending disconnect
-                if (user.isPendingDisconnect()) {
-                    return;
-                }
-                // Increment received
-                boolean second = user.incrementReceived();
-                // Check PPS
-                if (second && user.handlePPS())
-                    return;
-
-                if (user.isActive()) {
-                    // Handle ID
-                    int id = Type.VAR_INT.read(outBuffer);
-                    // Transform
-                    if (id != PacketWrapper.PASSTHROUGH_ID) {
-                        PacketWrapper wrapper = new PacketWrapper(id, outBuffer, user);
-                        ProtocolInfo protInfo = user.get(ProtocolInfo.class);
-                        protInfo.getPipeline().transform(Direction.INCOMING, protInfo.getState(), wrapper);
-
-                        ByteBuf newPacket = outBuffer.alloc().buffer();
-                        try {
-                            wrapper.writeToBuffer(newPacket);
-                            outBuffer.clear();
-                            outBuffer.writeBytes(newPacket);
-                        } finally {
-                            newPacket.release();
-                        }
-                    }
-                }
-                out.writeBytes(outBuffer);
-            }
+            CommonTransformer.transformServerbound(draft, user);
+            out.writeBytes(draft);
         } finally {
-            outBuffer.release();
+            draft.release();
         }
     }
 

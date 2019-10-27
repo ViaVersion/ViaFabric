@@ -24,85 +24,33 @@
 
 package com.github.creeper123123321.viafabric.handler.serverside;
 
+import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.exception.CancelException;
-import us.myles.ViaVersion.packets.Direction;
 import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class FabricDecodeHandler extends ByteToMessageDecoder {
-    // https://github.com/MylesIsCool/ViaVersion/blob/1abc3ebea66878192b08b577353dff7d619ed51e/sponge/src/main/java/us/myles/ViaVersion/sponge/handlers/SpongeDecodeHandler.java
-    private final ByteToMessageDecoder minecraftDecoder;
-    private final UserConnection info;
+    private final UserConnection user;
 
-    public FabricDecodeHandler(UserConnection info, ByteToMessageDecoder minecraftDecoder) {
-        this.info = info;
-        this.minecraftDecoder = minecraftDecoder;
+    public FabricDecodeHandler(UserConnection user) {
+        this.user = user;
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf bytebuf, List<Object> list) throws Exception {
-        // use transformers
-        if (bytebuf.readableBytes() > 0) {
-            // Ignore if pending disconnect
-            if (info.isPendingDisconnect()) {
-                return;
-            }
-            // Increment received
-            boolean second = info.incrementReceived();
-            // Check PPS
-            if (second) {
-                if (info.handlePPS())
-                    return;
-            }
-
-            if (info.isActive()) {
-                // Handle ID
-                int id = Type.VAR_INT.read(bytebuf);
-                // Transform
-                ByteBuf newPacket = ctx.alloc().buffer();
-                try {
-                    if (id == PacketWrapper.PASSTHROUGH_ID) {
-                        newPacket.writeBytes(bytebuf);
-                    } else {
-                        PacketWrapper wrapper = new PacketWrapper(id, bytebuf, info);
-                        ProtocolInfo protInfo = info.get(ProtocolInfo.class);
-                        protInfo.getPipeline().transform(Direction.INCOMING, protInfo.getState(), wrapper);
-                        wrapper.writeToBuffer(newPacket);
-                    }
-
-                    bytebuf.clear();
-                    bytebuf = newPacket;
-                } catch (Exception e) {
-                    // Clear Buffer
-                    bytebuf.clear();
-                    // Release Packet, be free!
-                    newPacket.release();
-                    throw e;
-                }
-            }
-
-            // call minecraft decoder
-            try {
-                list.addAll(PipelineUtil.callDecode(this.minecraftDecoder, ctx, bytebuf));
-            } catch (InvocationTargetException e) {
-                if (e.getCause() instanceof Exception) {
-                    throw (Exception) e.getCause();
-                }
-            } finally {
-                if (info.isActive()) {
-                    bytebuf.release();
-                }
-            }
+    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+        ByteBuf draft = ctx.alloc().buffer().writeBytes(in);
+        try {
+            CommonTransformer.transformServerbound(draft, user);
+            out.add(draft.retain());
+        } finally {
+            draft.release();
         }
     }
 
@@ -113,8 +61,9 @@ public class FabricDecodeHandler extends ByteToMessageDecoder {
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) {
-        ProtocolInfo pi = info.get(ProtocolInfo.class);
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx); // May call decode
+        ProtocolInfo pi = user.get(ProtocolInfo.class);
         if (pi.getUuid() != null) {
             Via.getManager().removePortedClient(pi.getUuid());
         }

@@ -7,7 +7,6 @@
     "MixinServerNetworkIoChInit"
   ],
   "client": [
-    "client.MixinClientConnection",
     "client.MixinClientConnectionChInit",
     "client.MixinMultiplayerScreen"
   ],

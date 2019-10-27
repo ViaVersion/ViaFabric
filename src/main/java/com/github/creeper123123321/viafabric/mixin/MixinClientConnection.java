@@ -24,6 +24,9 @@
 
 package com.github.creeper123123321.viafabric.mixin;
 
+import com.github.creeper123123321.viafabric.handler.CommonTransformer;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelPipeline;
 import net.minecraft.network.ClientConnection;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,11 +43,33 @@ public class MixinClientConnection {
                     value = "INVOKE",
                     target = "Lorg/apache/logging/log4j/Logger;debug(Ljava/lang/String;Ljava/lang/Throwable;)V"
             ))
-    public void redirectDebug(Logger logger, String message, Throwable t) {
+    private void redirectDebug(Logger logger, String message, Throwable t) {
         if ("Failed to sent packet".equals(message)) {
             logger.info(message, t);
         } else {
             logger.debug(message, t);
         }
+    }
+
+    @Redirect(method = "setMinCompressedSize", at = @At(
+            value = "INVOKE",
+            remap = false,
+            target = "Lio/netty/channel/ChannelPipeline;addBefore(Ljava/lang/String;Ljava/lang/String;Lio/netty/channel/ChannelHandler;)Lio/netty/channel/ChannelPipeline;"
+    ))
+    private ChannelPipeline decodeEncodePlacement(ChannelPipeline instance, String base, String newHandler, ChannelHandler handler) {
+        // Fixes the handler order
+        switch (base) {
+            case "decoder": {
+                if (instance.get(CommonTransformer.HANDLER_DECODER_NAME) != null)
+                    base = CommonTransformer.HANDLER_DECODER_NAME;
+                break;
+            }
+            case "encoder": {
+                if (instance.get(CommonTransformer.HANDLER_ENCODER_NAME) != null)
+                    base = CommonTransformer.HANDLER_ENCODER_NAME;
+                break;
+            }
+        }
+        return instance.addBefore(base, newHandler, handler);
     }
 }

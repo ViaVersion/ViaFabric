@@ -24,15 +24,13 @@
 
 package com.github.creeper123123321.viafabric.handler.clientside;
 
+import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.exception.CancelException;
-import us.myles.ViaVersion.packets.Direction;
 import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
@@ -40,7 +38,6 @@ import java.util.List;
 
 public class VRDecodeHandler extends ByteToMessageDecoder {
     private UserConnection user;
-    public static final String NAME = "viafabric_decoder_handler";
 
     public VRDecodeHandler(UserConnection user) {
         this.user = user;
@@ -48,37 +45,12 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        // Based on ViaVersion Sponge encoder code
-
-        ByteBuf outBuf = msg.alloc().buffer().writeBytes(msg);
+        ByteBuf draft = msg.alloc().buffer().writeBytes(msg);
         try {
-            // Increment sent
-            user.incrementSent();
-            if (user.isActive()) {
-                // Handle ID
-                int id = Type.VAR_INT.read(outBuf);
-
-                if (id != PacketWrapper.PASSTHROUGH_ID) {
-                    // Transform
-                    PacketWrapper wrapper = new PacketWrapper(id, outBuf, user);
-                    ProtocolInfo protInfo = user.get(ProtocolInfo.class);
-                    protInfo.getPipeline().transform(Direction.OUTGOING, protInfo.getState(), wrapper);
-
-                    ByteBuf newPacket = msg.alloc().buffer();
-                    try {
-                        wrapper.writeToBuffer(newPacket);
-                        outBuf.clear();
-                        outBuf.writeBytes(newPacket);
-                    } finally {
-                        newPacket.release();
-                    }
-                }
-            }
-
-            // pass to minecraft encoder
-            out.add(outBuf.retain());
+            CommonTransformer.transformClientbound(draft, user);
+            out.add(draft.retain());
         } finally {
-            outBuf.release();
+            draft.release();
         }
     }
 
@@ -89,7 +61,8 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) {
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
         ProtocolInfo info = user.get(ProtocolInfo.class);
         if (info.getUuid() != null) {
             Via.getManager().removePortedClient(info.getUuid());

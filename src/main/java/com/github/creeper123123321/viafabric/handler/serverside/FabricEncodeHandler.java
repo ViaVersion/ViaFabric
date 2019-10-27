@@ -24,66 +24,32 @@
 
 package com.github.creeper123123321.viafabric.handler.serverside;
 
+import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.EncoderException;
 import io.netty.handler.codec.MessageToByteEncoder;
-import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.exception.CancelException;
-import us.myles.ViaVersion.packets.Direction;
-import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
-import java.lang.reflect.InvocationTargetException;
-
 public class FabricEncodeHandler extends MessageToByteEncoder {
-    // https://github.com/MylesIsCool/ViaVersion/blob/master/sponge/src/main/java/us/myles/ViaVersion/sponge/handlers/SpongeEncodeHandler.java
-    private final UserConnection info;
-    private final MessageToByteEncoder minecraftEncoder;
+    private final UserConnection user;
 
-    public FabricEncodeHandler(UserConnection info, MessageToByteEncoder minecraftEncoder) {
-        this.info = info;
-        this.minecraftEncoder = minecraftEncoder;
+    public FabricEncodeHandler(UserConnection user) {
+        this.user = user;
     }
 
-
     @Override
-    protected void encode(final ChannelHandlerContext ctx, Object o, final ByteBuf bytebuf) throws Exception {
-        // handle the packet type
-        if (!(o instanceof ByteBuf)) {
-            // call minecraft encoder
-            try {
-                PipelineUtil.callEncode(this.minecraftEncoder, ctx, o, bytebuf);
-            } catch (InvocationTargetException e) {
-                if (e.getCause() instanceof Exception) {
-                    throw (Exception) e.getCause();
-                }
-            }
-        }
-        if (bytebuf.readableBytes() == 0) {
-            throw new CancelException();
-        }
-        // Increment sent
-        info.incrementSent();
-        if (info.isActive()) {
-            // Handle ID
-            int id = Type.VAR_INT.read(bytebuf);
-            // Transform
-            ByteBuf oldPacket = bytebuf.copy();
-            bytebuf.clear();
+    protected void encode(final ChannelHandlerContext ctx, Object in, final ByteBuf out) throws Exception {
+        if (!(in instanceof ByteBuf)) throw new EncoderException("Received object isn't ByteBuf");
 
-            try {
-                PacketWrapper wrapper = new PacketWrapper(id, oldPacket, info);
-                ProtocolInfo protInfo = info.get(ProtocolInfo.class);
-                protInfo.getPipeline().transform(Direction.OUTGOING, protInfo.getState(), wrapper);
-                wrapper.writeToBuffer(bytebuf);
-            } catch (Exception e) {
-                bytebuf.clear();
-                throw e;
-            } finally {
-                oldPacket.release();
-            }
+        ByteBuf draft = ctx.alloc().buffer().writeBytes((ByteBuf) in);
+        try {
+            CommonTransformer.transformClientbound(draft, user);
+            out.writeBytes(draft);
+        } finally {
+            draft.release();
         }
     }
 

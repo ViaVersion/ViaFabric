@@ -24,6 +24,7 @@
 
 package com.github.creeper123123321.viafabric.platform;
 
+import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
@@ -52,12 +53,12 @@ public class VRInjector implements ViaInjector {
 
     @Override
     public String getEncoderName() {
-        return "encoder";
+        return CommonTransformer.HANDLER_ENCODER_NAME;
     }
 
     @Override
     public String getDecoderName() {
-        return "decoder";
+        return CommonTransformer.HANDLER_DECODER_NAME;
     }
 
     @Override
