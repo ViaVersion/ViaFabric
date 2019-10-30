@@ -42,15 +42,8 @@ public class FabricEncodeHandler extends MessageToByteEncoder {
 
     @Override
     protected void encode(final ChannelHandlerContext ctx, Object in, final ByteBuf out) throws Exception {
-        if (!(in instanceof ByteBuf)) throw new EncoderException("Received object isn't ByteBuf");
-
-        ByteBuf draft = ctx.alloc().buffer().writeBytes((ByteBuf) in);
-        try {
-            CommonTransformer.transformClientbound(draft, user);
-            out.writeBytes(draft);
-        } finally {
-            draft.release();
-        }
+        out.writeBytes((ByteBuf) in);
+        CommonTransformer.transformClientbound(out, user);
     }
 
     @Override

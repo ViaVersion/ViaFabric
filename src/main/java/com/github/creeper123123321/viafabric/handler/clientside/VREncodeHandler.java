@@ -42,16 +42,8 @@ public class VREncodeHandler extends MessageToByteEncoder {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
-        // Based on Sponge ViaVersion decoder code
-        if (!(msg instanceof ByteBuf)) throw new EncoderException("Received msg isn't ByteBuf");
-
-        ByteBuf draft = ctx.alloc().buffer().writeBytes((ByteBuf) msg);
-        try {
-            CommonTransformer.transformServerbound(draft, user);
-            out.writeBytes(draft);
-        } finally {
-            draft.release();
-        }
+        out.writeBytes((ByteBuf) msg);
+        CommonTransformer.transformServerbound(out, user);
     }
 
     @Override
