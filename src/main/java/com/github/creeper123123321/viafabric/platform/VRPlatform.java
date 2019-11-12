@@ -27,7 +27,6 @@ package com.github.creeper123123321.viafabric.platform;
 import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.commands.NMSCommandSender;
 import com.github.creeper123123321.viafabric.commands.UserCommandSender;
-import com.github.creeper123123321.viafabric.providers.VRVersionProvider;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -52,7 +51,6 @@ import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.platform.TaskId;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
 import us.myles.ViaVersion.dump.PluginInfo;
-import us.myles.ViaVersion.protocols.base.VersionProvider;
 import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
 import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.ViaVersion.util.GsonUtil;
@@ -295,7 +293,6 @@ public class VRPlatform implements ViaPlatform {
         }
 
         platformSpecific.add("mods", GsonUtil.getGson().toJsonTree(mods));
-        platformSpecific.addProperty("client-sided-version", ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion);
         return platformSpecific;
     }
 

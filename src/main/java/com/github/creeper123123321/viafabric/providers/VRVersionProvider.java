@@ -24,17 +24,16 @@
 
 package com.github.creeper123123321.viafabric.providers;
 
+import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
-import net.minecraft.SharedConstants;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.protocols.base.VersionProvider;
 
 public class VRVersionProvider extends VersionProvider {
-    public int clientSideModeVersion = SharedConstants.getGameVersion().getProtocolVersion();
-
     @Override
     public int getServerProtocol(UserConnection connection) throws Exception {
-        if (connection instanceof VRClientSideUserConnection) return clientSideModeVersion;
+        if (connection instanceof VRClientSideUserConnection)
+            return ViaFabric.config.getClientSideVersion();
         return super.getServerProtocol(connection);
     }
 }

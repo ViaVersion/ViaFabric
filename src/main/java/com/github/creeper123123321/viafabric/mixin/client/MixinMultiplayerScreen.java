@@ -24,9 +24,8 @@
 
 package com.github.creeper123123321.viafabric.mixin.client;
 
-import com.github.creeper123123321.viafabric.providers.VRVersionProvider;
+import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.util.VersionFormatFilter;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -43,14 +42,12 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
-import us.myles.ViaVersion.protocols.base.VersionProvider;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,6 +61,8 @@ public abstract class MixinMultiplayerScreen extends Screen {
     private boolean validProtocol;
     @Unique
     private boolean supportedProtocol;
+    @Unique
+    private CompletableFuture<Void> latestProtocolSave;
 
     protected MixinMultiplayerScreen(Text title, UnsupportedOperationException e) {
         super(title);
@@ -76,7 +75,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
         protocolVersion.setTextPredicate(new VersionFormatFilter());
         protocolVersion.setChangedListener((text) -> {
             protocolVersion.setSuggestion(null);
-            int newVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
+            int newVersion = ViaFabric.config.getClientSideVersion();
             validProtocol = true;
             try {
                 newVersion = Integer.parseInt(text);
@@ -102,9 +101,17 @@ public abstract class MixinMultiplayerScreen extends Screen {
             }
             supportedProtocol = isSupported(newVersion);
             protocolVersion.setEditableColor(getTextColor());
-            ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion = newVersion;
+            int finalNewVersion = newVersion;
+            if (latestProtocolSave == null) latestProtocolSave = CompletableFuture.completedFuture(null);
+            latestProtocolSave = latestProtocolSave.thenRunAsync(() -> {
+                ViaFabric.config.setClientSideVersion(finalNewVersion);
+                ViaFabric.config.saveConfig();
+            }, ViaFabric.ASYNC_EXECUTOR);
         });
-        int clientSideVersion = ((VRVersionProvider) Via.getManager().getProviders().get(VersionProvider.class)).clientSideModeVersion;
+        int clientSideVersion = ViaFabric.config.getClientSideVersion();
+
+        protocolVersion.setVisible(ViaFabric.config.isClientSideEnabled());
+
         protocolVersion.setText(ProtocolVersion.isRegistered(clientSideVersion)
                 ? ProtocolVersion.getProtocol(clientSideVersion).getName()
                 : Integer.toString(clientSideVersion));
@@ -120,13 +127,10 @@ public abstract class MixinMultiplayerScreen extends Screen {
                         answer -> {
                             MinecraftClient.getInstance().openScreen(this);
                             if (answer) {
-                                try {
-                                    FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric").resolve("enable_client_side").toFile().createNewFile();
-                                    protocolVersion.setVisible(true);
-                                    enableClientSideViaVersion.visible = false;
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
+                                ViaFabric.config.setClientSideEnabled(true);
+                                ViaFabric.config.saveConfig();
+                                protocolVersion.setVisible(true);
+                                enableClientSideViaVersion.visible = false;
                             }
                         },
                         new TranslatableText("gui.enable_client_side.question"),
@@ -135,7 +139,6 @@ public abstract class MixinMultiplayerScreen extends Screen {
                         I18n.translate("gui.cancel")
                 )),
                 I18n.translate("gui.enable_client_side_button"));
-        protocolVersion.setVisible(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric").resolve("enable_client_side").toFile().exists());
         enableClientSideViaVersion.visible = !protocolVersion.isVisible();
         addButton(enableClientSideViaVersion);
     }

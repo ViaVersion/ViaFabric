@@ -25,6 +25,7 @@
 package com.github.creeper123123321.viafabric;
 
 import com.github.creeper123123321.viafabric.commands.VRCommandHandler;
+import com.github.creeper123123321.viafabric.config.VRConfig;
 import com.github.creeper123123321.viafabric.platform.VRInjector;
 import com.github.creeper123123321.viafabric.platform.VRLoader;
 import com.github.creeper123123321.viafabric.platform.VRPlatform;
@@ -52,6 +53,7 @@ public class ViaFabric implements ModInitializer {
     public static final Logger JLOGGER = new JLoggerToLog4j(LogManager.getLogger("ViaFabric"));
     public static final ExecutorService ASYNC_EXECUTOR;
     public static final EventLoop EVENT_LOOP;
+    public static VRConfig config;
 
     static {
         ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("ViaFabric-%d").build();
@@ -89,5 +91,8 @@ public class ViaFabric implements ModInitializer {
         CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaversion")));
         CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaver")));
         CommandRegistry.INSTANCE.register(false, c -> c.register(command("vvfabric")));
+
+        config = new VRConfig(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric")
+                .resolve("viafabric.yml").toFile());
     }
 }

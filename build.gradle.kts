@@ -63,3 +63,7 @@ dependencies {
 
 minecraft {
 }
+
+license {
+    include("**/*.java")
+}

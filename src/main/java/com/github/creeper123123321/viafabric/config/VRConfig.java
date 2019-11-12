@@ -22,76 +22,54 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.platform;
+package com.github.creeper123123321.viafabric.config;
 
-import us.myles.ViaVersion.AbstractViaConfig;
+import net.minecraft.SharedConstants;
+import us.myles.ViaVersion.util.Config;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class VRViaConfig extends AbstractViaConfig {
-    // Based on Sponge ViaVersion
-    private static List<String> UNSUPPORTED = Arrays.asList("anti-xray-patch", "bungee-ping-interval",
-            "bungee-ping-save", "bungee-servers", "quick-move-action-fix", "nms-player-ticking",
-            "item-cache", "velocity-ping-interval", "velocity-ping-save", "velocity-servers",
-            "blockconnection-method", "change-1_9-hitbox", "change-1_14-hitbox");
+public class VRConfig extends Config {
+    public static final String ENABLE_CLIENT_SIDE = "enable-client-side";
+    public static final String CLIENT_SIDE_VERSION = "client-side-version";
 
-    public VRViaConfig(File configFile) {
+    public VRConfig(File configFile) {
         super(configFile);
-        // Load config
         reloadConfig();
     }
 
     @Override
     public URL getDefaultConfigURL() {
-        return getClass().getClassLoader().getResource("assets/viaversion/config.yml");
+        return getClass().getClassLoader().getResource("assets/viafabric/config.yml");
     }
 
     @Override
-    protected void handleConfig(Map<String, Object> config) {
-        // Nothing Currently
+    protected void handleConfig(Map<String, Object> map) {
     }
 
     @Override
     public List<String> getUnsupportedOptions() {
-        return UNSUPPORTED;
+        return Collections.emptyList();
     }
 
-    @Override
-    public boolean isAntiXRay() {
-        return false;
+    public boolean isClientSideEnabled() {
+        return getBoolean(ENABLE_CLIENT_SIDE, false);
     }
 
-    @Override
-    public boolean isItemCache() {
-        return false;
+    public int getClientSideVersion() {
+        int nat = SharedConstants.getGameVersion().getProtocolVersion();
+        return !isClientSideEnabled() ? nat : getInt(CLIENT_SIDE_VERSION, -1);
     }
 
-    @Override
-    public boolean isNMSPlayerTicking() {
-        return false;
+    public void setClientSideEnabled(boolean val) {
+        set(ENABLE_CLIENT_SIDE, val);
     }
 
-    @Override
-    public boolean is1_12QuickMoveActionFix() {
-        return false;
-    }
-
-    @Override
-    public String getBlockConnectionMethod() {
-        return "packet";
-    }
-
-    @Override
-    public boolean is1_9HitboxFix() {
-        return false;
-    }
-
-    @Override
-    public boolean is1_14HitboxFix() {
-        return false;
+    public void setClientSideVersion(int val) {
+        set(CLIENT_SIDE_VERSION, val);
     }
 }

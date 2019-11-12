@@ -1,0 +1,6 @@
+# WARNING
+# I can not guarantee that this mod is allowed on every (or even any) server. This mod may cause problems with anti cheat plugins. USE AT OWN RISK
+# This option enables client-side transforming (can also be enabled in-game)
+enable-client-side: false
+# This option sets the protocol version to be used when connection to the server (can also be changed in-game)
+client-side-version: -1
