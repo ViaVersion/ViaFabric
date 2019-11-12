@@ -24,66 +24,36 @@
 
 package com.github.creeper123123321.viafabric.handler.serverside;
 
+import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToByteEncoder;
-import us.myles.ViaVersion.api.PacketWrapper;
+import io.netty.handler.codec.MessageToMessageEncoder;
 import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.exception.CancelException;
-import us.myles.ViaVersion.packets.Direction;
-import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
-public class FabricEncodeHandler extends MessageToByteEncoder {
-    // https://github.com/MylesIsCool/ViaVersion/blob/master/sponge/src/main/java/us/myles/ViaVersion/sponge/handlers/SpongeEncodeHandler.java
-    private final UserConnection info;
-    private final MessageToByteEncoder minecraftEncoder;
+public class FabricEncodeHandler extends MessageToMessageEncoder<ByteBuf> {
+    private final UserConnection user;
 
-    public FabricEncodeHandler(UserConnection info, MessageToByteEncoder minecraftEncoder) {
-        this.info = info;
-        this.minecraftEncoder = minecraftEncoder;
+    public FabricEncodeHandler(UserConnection user) {
+        this.user = user;
     }
 
-
     @Override
-    protected void encode(final ChannelHandlerContext ctx, Object o, final ByteBuf bytebuf) throws Exception {
-        // handle the packet type
-        if (!(o instanceof ByteBuf)) {
-            // call minecraft encoder
-            try {
-                PipelineUtil.callEncode(this.minecraftEncoder, ctx, o, bytebuf);
-            } catch (InvocationTargetException e) {
-                if (e.getCause() instanceof Exception) {
-                    throw (Exception) e.getCause();
-                }
-            }
+    protected void encode(final ChannelHandlerContext ctx, ByteBuf in, final List<Object> out) throws Exception {
+        CommonTransformer.preClientbound(user);
+        if (!CommonTransformer.willTransformPacket(user)) {
+            out.add(in.readRetainedSlice(in.readableBytes()));
+            return;
         }
-        if (bytebuf.readableBytes() == 0) {
-            throw new CancelException();
-        }
-        // Increment sent
-        info.incrementSent();
-        if (info.isActive()) {
-            // Handle ID
-            int id = Type.VAR_INT.read(bytebuf);
-            // Transform
-            ByteBuf oldPacket = bytebuf.copy();
-            bytebuf.clear();
-
-            try {
-                PacketWrapper wrapper = new PacketWrapper(id, oldPacket, info);
-                ProtocolInfo protInfo = info.get(ProtocolInfo.class);
-                protInfo.getPipeline().transform(Direction.OUTGOING, protInfo.getState(), wrapper);
-                wrapper.writeToBuffer(bytebuf);
-            } catch (Exception e) {
-                bytebuf.clear();
-                throw e;
-            } finally {
-                oldPacket.release();
-            }
+        ByteBuf draft = ctx.alloc().buffer().writeBytes(in);
+        try {
+            CommonTransformer.transformClientbound(draft, user, ignored -> CancelException.CACHED);
+            out.add(draft.retain());
+        } finally {
+            draft.release();
         }
     }
 

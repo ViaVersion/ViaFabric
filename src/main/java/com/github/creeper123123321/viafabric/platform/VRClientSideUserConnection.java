@@ -24,14 +24,11 @@
 
 package com.github.creeper123123321.viafabric.platform;
 
+import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.type.Type;
-import us.myles.ViaVersion.util.PipelineUtil;
-
 
 public class VRClientSideUserConnection extends UserConnection {
     public VRClientSideUserConnection(Channel socketChannel) {
@@ -41,46 +38,28 @@ public class VRClientSideUserConnection extends UserConnection {
 
     @Override
     public void sendRawPacket(final ByteBuf packet, boolean currentThread) {
-        ByteBuf copy = packet.alloc().buffer();
-        try {
-            Type.VAR_INT.write(copy, PacketWrapper.PASSTHROUGH_ID);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        copy.writeBytes(packet);
-        packet.release();
-        final Channel channel = this.getChannel();
+        Runnable act = () -> getChannel().pipeline().context(CommonTransformer.HANDLER_DECODER_NAME)
+                .fireChannelRead(packet);
         if (currentThread) {
-            PipelineUtil.getPreviousContext("decoder", channel.pipeline()).fireChannelRead(copy);
+            act.run();
         } else {
-            channel.eventLoop().submit(() -> {
-                PipelineUtil.getPreviousContext("decoder", channel.pipeline()).fireChannelRead(copy);
-            });
+            getChannel().eventLoop().execute(act);
         }
     }
 
     @Override
     public ChannelFuture sendRawPacketFuture(ByteBuf packet) {
-        ByteBuf copy = packet.alloc().buffer();
-        try {
-            Type.VAR_INT.write(copy, PacketWrapper.PASSTHROUGH_ID);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        copy.writeBytes(packet);
-        packet.release();
-        final Channel channel = this.getChannel();
-        PipelineUtil.getPreviousContext("decoder", channel.pipeline()).fireChannelRead(copy);
-        return channel.newSucceededFuture();
+        getChannel().pipeline().context(CommonTransformer.HANDLER_DECODER_NAME).fireChannelRead(packet);
+        return getChannel().newSucceededFuture();
     }
 
     @Override
     public void sendRawPacketToServer(ByteBuf packet, boolean currentThread) {
         if (currentThread) {
-            getChannel().pipeline().context("encoder").writeAndFlush(packet);
+            getChannel().pipeline().context(CommonTransformer.HANDLER_ENCODER_NAME).writeAndFlush(packet);
         } else {
             getChannel().eventLoop().submit(() -> {
-                getChannel().pipeline().context("encoder").writeAndFlush(packet);
+                getChannel().pipeline().context(CommonTransformer.HANDLER_ENCODER_NAME).writeAndFlush(packet);
             });
         }
     }

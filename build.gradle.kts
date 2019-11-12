@@ -9,13 +9,13 @@ plugins {
 
 group = "com.github.creeper123123321.viafabric"
 val gitVersion: groovy.lang.Closure<Any> by extra
-version = "0.1.0-SNAPSHOT+" + try {
+version = "0.2.0-SNAPSHOT+" + try {
     gitVersion()
 } catch (e: Exception) {
     "unknown"
 }
 extra.set("archivesBaseName", "ViaFabric")
-description = "Client-side and server-side ViaVersion for Fabric"
+description = "Client-side and server-side ViaVersion implementation for Fabric"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -46,8 +46,8 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    compile("us.myles:viaversion:2.1.4-19w42a") { isTransitive = false }
-    include("us.myles:viaversion:2.1.4-19w42a")
+    compile("us.myles:viaversion:3.0.0-SNAPSHOT") { isTransitive = false }
+    //include("us.myles:viaversion:3.0.0-SNAPSHOT")
 
     compileOnly("com.google.code.findbugs:jsr305:3.0.2")
 

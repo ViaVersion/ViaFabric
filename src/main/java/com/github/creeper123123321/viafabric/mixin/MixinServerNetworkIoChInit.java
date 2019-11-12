@@ -24,12 +24,11 @@
 
 package com.github.creeper123123321.viafabric.mixin;
 
+import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import com.github.creeper123123321.viafabric.handler.serverside.FabricDecodeHandler;
 import com.github.creeper123123321.viafabric.handler.serverside.FabricEncodeHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.handler.codec.MessageToByteEncoder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -45,11 +44,8 @@ public class MixinServerNetworkIoChInit {
             UserConnection user = new UserConnection(channel);
             new ProtocolPipeline(user);
 
-            MessageToByteEncoder oldEncoder = (MessageToByteEncoder) channel.pipeline().get("encoder");
-            ByteToMessageDecoder oldDecoder = (ByteToMessageDecoder) channel.pipeline().get("decoder");
-
-            channel.pipeline().replace("encoder", "encoder", new FabricEncodeHandler(user, oldEncoder));
-            channel.pipeline().replace("decoder", "decoder", new FabricDecodeHandler(user, oldDecoder));
+            channel.pipeline().addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new FabricEncodeHandler(user));
+            channel.pipeline().addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new FabricDecodeHandler(user));
         }
     }
 }
