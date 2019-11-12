@@ -27,13 +27,14 @@ package com.github.creeper123123321.viafabric.handler.serverside;
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.EncoderException;
-import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.handler.codec.MessageToMessageEncoder;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.exception.CancelException;
 import us.myles.ViaVersion.util.PipelineUtil;
 
-public class FabricEncodeHandler extends MessageToByteEncoder {
+import java.util.List;
+
+public class FabricEncodeHandler extends MessageToMessageEncoder<ByteBuf> {
     private final UserConnection user;
 
     public FabricEncodeHandler(UserConnection user) {
@@ -41,9 +42,19 @@ public class FabricEncodeHandler extends MessageToByteEncoder {
     }
 
     @Override
-    protected void encode(final ChannelHandlerContext ctx, Object in, final ByteBuf out) throws Exception {
-        out.writeBytes((ByteBuf) in);
-        CommonTransformer.transformClientbound(out, user);
+    protected void encode(final ChannelHandlerContext ctx, ByteBuf in, final List<Object> out) throws Exception {
+        CommonTransformer.preClientbound(user);
+        if (!CommonTransformer.willTransformPacket(user)) {
+            out.add(in.readRetainedSlice(in.readableBytes()));
+            return;
+        }
+        ByteBuf draft = ctx.alloc().buffer().writeBytes(in);
+        try {
+            CommonTransformer.transformClientbound(draft, user, ignored -> CancelException.CACHED);
+            out.add(draft.retain());
+        } finally {
+            draft.release();
+        }
     }
 
     @Override

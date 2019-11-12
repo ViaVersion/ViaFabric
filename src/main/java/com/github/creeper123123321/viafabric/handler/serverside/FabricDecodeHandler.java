@@ -45,9 +45,14 @@ public class FabricDecodeHandler extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+        if (CommonTransformer.preServerboundCheck(user)) return;
+        if (!CommonTransformer.willTransformPacket(user)) {
+            out.add(in.readRetainedSlice(in.readableBytes()));
+            return;
+        }
         ByteBuf draft = ctx.alloc().buffer().writeBytes(in);
         try {
-            CommonTransformer.transformServerbound(draft, user);
+            CommonTransformer.transformServerbound(draft, user, ignored -> CancelException.CACHED);
             out.add(draft.retain());
         } finally {
             draft.release();

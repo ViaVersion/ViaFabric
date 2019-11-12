@@ -27,13 +27,14 @@ package com.github.creeper123123321.viafabric.handler.clientside;
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.EncoderException;
-import io.netty.handler.codec.MessageToByteEncoder;
+import io.netty.handler.codec.MessageToMessageEncoder;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.exception.CancelException;
 import us.myles.ViaVersion.util.PipelineUtil;
 
-public class VREncodeHandler extends MessageToByteEncoder {
+import java.util.List;
+
+public class VREncodeHandler extends MessageToMessageEncoder<ByteBuf> {
     private UserConnection user;
 
     public VREncodeHandler(UserConnection user) {
@@ -41,9 +42,21 @@ public class VREncodeHandler extends MessageToByteEncoder {
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
-        out.writeBytes((ByteBuf) msg);
-        CommonTransformer.transformServerbound(out, user);
+    protected void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
+        if (CommonTransformer.preServerboundCheck(user)) {
+            throw CancelException.CACHED; // Theoretically a server with m2m decoder would hold this packet, but we'll just cancel for now and this is used for kicking packet spamming
+        }
+        if (!CommonTransformer.willTransformPacket(user)) {
+            out.add(msg.readRetainedSlice(msg.readableBytes()));
+            return;
+        }
+        ByteBuf draft = ctx.alloc().buffer().writeBytes(msg);
+        try {
+            CommonTransformer.transformServerbound(draft, user, ignored -> CancelException.CACHED);
+            out.add(draft.retain());
+        } finally {
+            draft.release();
+        }
     }
 
     @Override

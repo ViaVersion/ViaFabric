@@ -45,9 +45,14 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
+        CommonTransformer.preClientbound(user);
+        if (!CommonTransformer.willTransformPacket(user)) {
+            out.add(msg.readRetainedSlice(msg.readableBytes()));
+            return;
+        }
         ByteBuf draft = msg.alloc().buffer().writeBytes(msg);
         try {
-            CommonTransformer.transformClientbound(draft, user);
+            CommonTransformer.transformClientbound(draft, user, ignored -> CancelException.CACHED);
             out.add(draft.retain());
         } finally {
             draft.release();
