@@ -27,7 +27,7 @@ package com.github.creeper123123321.viafabric.handler.clientside;
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.codec.MessageToMessageDecoder;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.exception.CancelException;
@@ -36,7 +36,7 @@ import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.util.List;
 
-public class VRDecodeHandler extends ByteToMessageDecoder {
+public class VRDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
     private UserConnection user;
 
     public VRDecodeHandler(UserConnection user) {
@@ -47,7 +47,7 @@ public class VRDecodeHandler extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
         CommonTransformer.preClientbound(user);
         if (!CommonTransformer.willTransformPacket(user)) {
-            out.add(msg.readRetainedSlice(msg.readableBytes()));
+            out.add(msg.retain());
             return;
         }
         ByteBuf draft = msg.alloc().buffer().writeBytes(msg);

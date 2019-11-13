@@ -42,13 +42,13 @@ public class FabricEncodeHandler extends MessageToMessageEncoder<ByteBuf> {
     }
 
     @Override
-    protected void encode(final ChannelHandlerContext ctx, ByteBuf in, final List<Object> out) throws Exception {
+    protected void encode(final ChannelHandlerContext ctx, ByteBuf msg, final List<Object> out) throws Exception {
         CommonTransformer.preClientbound(user);
         if (!CommonTransformer.willTransformPacket(user)) {
-            out.add(in.readRetainedSlice(in.readableBytes()));
+            out.add(msg.readRetainedSlice(msg.readableBytes()));
             return;
         }
-        ByteBuf draft = ctx.alloc().buffer().writeBytes(in);
+        ByteBuf draft = ctx.alloc().buffer().writeBytes(msg);
         try {
             CommonTransformer.transformClientbound(draft, user, ignored -> CancelException.CACHED);
             out.add(draft.retain());

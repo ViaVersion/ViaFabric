@@ -44,10 +44,10 @@ public class VREncodeHandler extends MessageToMessageEncoder<ByteBuf> {
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
         if (CommonTransformer.preServerboundCheck(user)) {
-            throw CancelException.CACHED; // Theoretically a server with m2m decoder would hold this packet, but we'll just cancel for now and this is used for kicking packet spamming
+            throw CancelException.CACHED; // M2ME expects at least one message
         }
         if (!CommonTransformer.willTransformPacket(user)) {
-            out.add(msg.readRetainedSlice(msg.readableBytes()));
+            out.add(msg.retain());
             return;
         }
         ByteBuf draft = ctx.alloc().buffer().writeBytes(msg);

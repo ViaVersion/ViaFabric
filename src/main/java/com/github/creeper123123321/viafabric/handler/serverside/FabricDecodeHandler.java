@@ -27,7 +27,7 @@ package com.github.creeper123123321.viafabric.handler.serverside;
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.handler.codec.MessageToMessageDecoder;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.exception.CancelException;
@@ -36,7 +36,7 @@ import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.util.List;
 
-public class FabricDecodeHandler extends ByteToMessageDecoder {
+public class FabricDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
     private final UserConnection user;
 
     public FabricDecodeHandler(UserConnection user) {
@@ -44,13 +44,15 @@ public class FabricDecodeHandler extends ByteToMessageDecoder {
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        if (CommonTransformer.preServerboundCheck(user)) return;
+    protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
+        if (CommonTransformer.preServerboundCheck(user)) {
+            throw CancelException.CACHED;
+        }
         if (!CommonTransformer.willTransformPacket(user)) {
-            out.add(in.readRetainedSlice(in.readableBytes()));
+            out.add(msg.retain());
             return;
         }
-        ByteBuf draft = ctx.alloc().buffer().writeBytes(in);
+        ByteBuf draft = ctx.alloc().buffer().writeBytes(msg);
         try {
             CommonTransformer.transformServerbound(draft, user, ignored -> CancelException.CACHED);
             out.add(draft.retain());
