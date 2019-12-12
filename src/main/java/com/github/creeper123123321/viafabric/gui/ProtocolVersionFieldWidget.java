@@ -48,6 +48,7 @@ public class ProtocolVersionFieldWidget extends TextFieldWidget {
 	private Consumer<Integer> changedListener;
 	private boolean droppedDown;
 	private List<String> elements;
+	private int selected = -1;
 	private int elementHeight;
 
 	public ProtocolVersionFieldWidget(TextRenderer textRenderer, int x, int y, int width, int height) {
@@ -120,14 +121,47 @@ public class ProtocolVersionFieldWidget extends TextFieldWidget {
 		GL11.glPopMatrix();
 
 		if (droppedDown) {
-			for (int k = 0; k < elements.size(); k++) {
+			for (int k = 0; k < this.elements.size(); k++) {
 				int top = this.y + this.height + this.elementHeight * k + 1;
+
+				boolean selected;
+				if (mouseX >= this.x && mouseX < this.x + this.width && mouseY > this.y + this.height && mouseY <= this.y + this.height + this.elementHeight * this.elements.size()) {
+					selected = mouseY > top && mouseY <= top + this.elementHeight;
+					if (selected) this.selected = k;
+				} else {
+					selected = this.selected == k;
+				}
+
 				fill(this.x - 1, top - 1, this.x + this.width + 1, top + elementHeight + 1, 0xFFA0A0A0);
-				fill(this.x, top, this.x + this.width, top + elementHeight, (mouseX >= this.x && mouseX < this.x + this.width && mouseY > top && mouseY <= top + elementHeight) ? 0xCC333333 : 0xAA000000);
-				String text = elements.get(k);
+				fill(this.x, top, this.x + this.width, top + elementHeight, selected ? 0xCC333333 : 0xAA000000);
+				String text = this.elements.get(k);
 				this.textRenderer.draw(text, this.x + this.width / 2 - textRenderer.getStringWidth(text) / 2, top + elementHeight / 2 - textRenderer.fontHeight / 2, 0xE0E0E0);
 			}
 		}
+	}
+
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (this.isFocused()) {
+			if (keyCode == 264) {
+				if (!this.droppedDown) {
+					this.droppedDown = true;
+					this.selected = -1;
+				}
+				this.selected += 1;
+				if (this.selected >= this.elements.size()) this.selected = this.elements.size() - 1;
+				return true;
+			} else if (this.droppedDown && this.selected >= 0 && keyCode == 265) {
+				this.selected -= 1;
+				if (this.selected < 0) this.selected = 0;
+				return true;
+			} else if (this.droppedDown && this.selected >= 0 && keyCode == 257) {
+				setText(this.elements.get(this.selected));
+				this.droppedDown = false;
+				return true;
+			}
+		}
+		return super.keyPressed(keyCode, scanCode, modifiers);
 	}
 
 	@Override
@@ -136,10 +170,11 @@ public class ProtocolVersionFieldWidget extends TextFieldWidget {
 
 		if (mouseY >= this.y && mouseY < this.y + this.height && mouseX >= this.x + this.width - this.height && mouseX < this.x + this.width) {
 			droppedDown = !droppedDown;
+			this.selected = -1;
 			return true;
-		} else if (droppedDown && mouseY >= this.y + this.height && mouseY < this.y + this.height + this.elementHeight * elements.size() && mouseX >= this.x && mouseX < this.x + this.width) {
+		} else if (droppedDown && mouseY >= this.y + this.height && mouseY < this.y + this.height + this.elementHeight * this.elements.size() && mouseX >= this.x && mouseX < this.x + this.width) {
 			int clicked = (int) ((mouseY - this.y - this.height) / this.elementHeight);
-			setText(elements.get(clicked));
+			setText(this.elements.get(clicked));
 			droppedDown = false;
 			return true;
 		} else {
@@ -150,7 +185,7 @@ public class ProtocolVersionFieldWidget extends TextFieldWidget {
 	@Override
 	public boolean isMouseOver(double mouseX, double mouseY) {
 		if (this.visible && droppedDown) {
-			return mouseY >= this.y && mouseY < this.y + this.height + this.elementHeight * elements.size() && mouseX >= this.x && mouseX < this.x + this.width;
+			return mouseY >= this.y && mouseY < this.y + this.height + this.elementHeight * this.elements.size() && mouseX >= this.x && mouseX < this.x + this.width;
 		} else {
 			return super.isMouseOver(mouseX, mouseY);
 		}
