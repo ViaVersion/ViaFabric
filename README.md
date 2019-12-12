@@ -2,6 +2,7 @@
 [![Travis Build Status](https://travis-ci.com/ViaVersion/ViaFabric.svg?branch=master)](https://travis-ci.com/ViaVersion/ViaFabric)
 [![Discord](https://img.shields.io/badge/chat-on%20discord-blue.svg)](https://viaversion.com/discord)
 [![GitHub Releases](https://img.shields.io/github/downloads/ViaVersion/ViaFabric/total)](https://github.com/ViaVersion/ViaFabric/releases)
+
 **Clientside and serverside ViaVersion for Fabric**
 
 ## WARNING
