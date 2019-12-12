@@ -25,13 +25,12 @@
 package com.github.creeper123123321.viafabric.mixin.client;
 
 import com.github.creeper123123321.viafabric.ViaFabric;
-import com.github.creeper123123321.viafabric.util.VersionFormatFilter;
+import com.github.creeper123123321.viafabric.gui.ProtocolVersionFieldWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.text.Text;
@@ -42,25 +41,16 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Mixin(MultiplayerScreen.class)
 public abstract class MixinMultiplayerScreen extends Screen {
     @Unique
-    private TextFieldWidget protocolVersion;
+    private ProtocolVersionFieldWidget protocolVersion;
     @Unique
     private ButtonWidget enableClientSideViaVersion;
-    @Unique
-    private boolean validProtocol;
-    @Unique
-    private boolean supportedProtocol;
     @Unique
     private CompletableFuture<Void> latestProtocolSave;
 
@@ -71,47 +61,18 @@ public abstract class MixinMultiplayerScreen extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"), remap = false)
     private void onInit(CallbackInfo ci) {
-        protocolVersion = new TextFieldWidget(font, this.width / 2 + 88, 13, 65, 15, I18n.translate("gui.protocol_version_field.name"));
-        protocolVersion.setTextPredicate(new VersionFormatFilter());
-        protocolVersion.setChangedListener((text) -> {
-            protocolVersion.setSuggestion(null);
-            int newVersion = ViaFabric.config.getClientSideVersion();
-            validProtocol = true;
-            try {
-                newVersion = Integer.parseInt(text);
-            } catch (NumberFormatException e) {
-                ProtocolVersion closest = ProtocolVersion.getClosest(text);
-                if (closest != null) {
-                    newVersion = closest.getId();
-                } else {
-                    validProtocol = false;
-                    List<String> completions = ProtocolVersion.getProtocols().stream()
-                            .map(ProtocolVersion::getName)
-                            .flatMap(str -> Stream.concat(
-                                    Arrays.stream(str.split("-")),
-                                    Arrays.stream(new String[]{str})
-                            ))
-                            .distinct()
-                            .filter(ver -> ver.startsWith(text))
-                            .collect(Collectors.toList());
-                    if (completions.size() == 1) {
-                        protocolVersion.setSuggestion(completions.get(0).substring(text.length()));
-                    }
-                }
-            }
-            supportedProtocol = isSupported(newVersion);
-            protocolVersion.setEditableColor(getTextColor());
-            int finalNewVersion = newVersion;
+        protocolVersion = new ProtocolVersionFieldWidget(font, this.width / 2 + 88, 13, 65, 15);
+        protocolVersion.setProtocolChangedListener(protocol -> {
+            if (protocol == null) return;
+
             if (latestProtocolSave == null) latestProtocolSave = CompletableFuture.completedFuture(null);
             latestProtocolSave = latestProtocolSave.thenRunAsync(() -> {
-                ViaFabric.config.setClientSideVersion(finalNewVersion);
+                ViaFabric.config.setClientSideVersion(protocol);
                 ViaFabric.config.saveConfig();
             }, ViaFabric.ASYNC_EXECUTOR);
         });
-        int clientSideVersion = ViaFabric.config.getClientSideVersion();
-
         protocolVersion.setVisible(ViaFabric.config.isClientSideEnabled());
-
+        int clientSideVersion = ViaFabric.config.getClientSideVersion();
         protocolVersion.setText(ProtocolVersion.isRegistered(clientSideVersion)
                 ? ProtocolVersion.getProtocol(clientSideVersion).getName()
                 : Integer.toString(clientSideVersion));
@@ -154,21 +115,5 @@ public abstract class MixinMultiplayerScreen extends Screen {
     @Inject(method = "tick", at = @At("TAIL"), remap = false)
     private void onTick(CallbackInfo ci) {
         protocolVersion.tick();
-    }
-
-    @Unique
-    private int getTextColor() {
-        if (!validProtocol) {
-            return 0xff0000; // Red
-        } else if (!supportedProtocol) {
-            return 0xFFA500; // Orange
-        }
-        return 0xE0E0E0; // Default
-    }
-
-    @Unique
-    private boolean isSupported(int protocol) {
-        return ProtocolRegistry.getProtocolPath(ProtocolRegistry.SERVER_PROTOCOL, protocol) != null
-                || ProtocolRegistry.SERVER_PROTOCOL == protocol;
     }
 }
