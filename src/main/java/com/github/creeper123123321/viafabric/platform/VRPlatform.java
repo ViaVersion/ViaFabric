@@ -57,6 +57,8 @@ import us.myles.ViaVersion.util.GsonUtil;
 import us.myles.viaversion.libs.gson.JsonObject;
 
 import javax.annotation.Nullable;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -67,7 +69,14 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class VRPlatform implements ViaPlatform {
-    private VRViaConfig config = new VRViaConfig(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric").resolve("viaversion.yml").toFile());
+    private VRViaConfig config;
+    private File dataFolder;
+
+    public VRPlatform() {
+        Path configDir = FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric");
+        config = new VRViaConfig(configDir.resolve("viaversion.yml").toFile());
+        dataFolder = configDir.toFile();
+    }
 
     @Nullable
     public static MinecraftServer getServer() {
@@ -270,6 +279,11 @@ public class VRPlatform implements ViaPlatform {
     @Override
     public ConfigurationProvider getConfigurationProvider() {
         return config;
+    }
+
+    @Override
+    public File getDataFolder() {
+        return dataFolder;
     }
 
     @Override
