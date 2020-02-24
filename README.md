@@ -4,6 +4,7 @@
 [![GitHub Releases](https://img.shields.io/github/downloads/ViaVersion/ViaFabric/total)](https://github.com/ViaVersion/ViaFabric/releases)
 
 **Client-side and server-side ViaVersion implementation for Fabric**
+
 Allows the connection to/from different Minecraft versions on your Minecraft client/server
 
 ## WARNING
@@ -14,6 +15,8 @@ This mod supports 1.14.4/1.15.x with Fabric modding API
 With ViaVersion only:
 - your server can accept newer versions
 - your client can connect to older versions
+
+
 Adding ViaBackwards (and optionally ViaRewind):
 - your server can accept older versions
 - your client can connect to newer versions
