@@ -5,10 +5,7 @@
 
 **Client-side and server-side ViaVersion implementation for Fabric**
 
-Allows the connection to/from different Minecraft versions on your Minecraft client/server
-
-## WARNING
-**I can not guarantee that this mod is allowed on every (or even any) server. This mod may cause problems with anti cheat plugins. USE AT OWN RISK**
+Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
 This mod supports 1.14.4/1.15.x with Fabric modding API
 
@@ -20,3 +17,6 @@ With ViaVersion only:
 Adding ViaBackwards (and optionally ViaRewind):
 - your server can accept older versions
 - your client can connect to newer versions
+
+## WARNING
+**I can not guarantee that this mod is allowed on every (or even any) server. This mod may cause problems with anti cheat plugins. USE AT OWN RISK**
