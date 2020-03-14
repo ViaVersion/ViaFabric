@@ -8,6 +8,12 @@
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
 This mod supports 1.14.4/1.15.x with Fabric modding API
+Note: ViaVersion is not designed for modded Minecraft with modified registries
+
+Dependencies:
+ViaVersion 3.0.0+ - dev builds at https://ci.viaversion.com/job/ViaVersion-Abstraction/
+Fabric Textures v0, Fabric Resource Loader v0, Fabric Commands v0 - https://www.curseforge.com/minecraft/mc-mods/fabric-api
+(Optional) Cotton Client Commands - https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands
 
 With ViaVersion only:
 - your server can accept newer versions
