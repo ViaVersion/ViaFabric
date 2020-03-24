@@ -31,7 +31,7 @@ repositories {
     maven(url = "https://repo.viaversion.com/")
     maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
     maven(url = "https://maven.fabricmc.net/")
-    maven(url = "http://server.bbkr.space:8081/artifactory/libs-snapshot")
+    maven(url = "https://server.bbkr.space/artifactory/libs-snapshot")
 }
 
 
