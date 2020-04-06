@@ -43,6 +43,7 @@ import net.minecraft.server.command.CommandSource;
 import org.apache.logging.log4j.LogManager;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
+import us.myles.ViaVersion.api.data.MappingDataLoader;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -84,6 +85,9 @@ public class ViaFabric implements ModInitializer {
                 .loader(new VRLoader())
                 .commandHandler(new VRCommandHandler())
                 .platform(new VRPlatform()).build());
+
+        FabricLoader.getInstance().getModContainer("viabackwards").ifPresent(mod -> MappingDataLoader.enableMappingsCache());
+
         Via.getManager().init();
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
