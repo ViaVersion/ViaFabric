@@ -51,7 +51,7 @@ public class MixinClientConnection {
         }
     }
 
-    @Redirect(method = "setMinCompressedSize", at = @At(
+    @Redirect(method = "setCompressionThreshold", at = @At(
             value = "INVOKE",
             remap = false,
             target = "Lio/netty/channel/ChannelPipeline;addBefore(Ljava/lang/String;Ljava/lang/String;Lio/netty/channel/ChannelHandler;)Lio/netty/channel/ChannelPipeline;"

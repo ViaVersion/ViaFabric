@@ -3,7 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 plugins {
     id("java")
     id("net.minecrell.licenser") version "0.4.1"
-    id("fabric-loom") version "0.2.6-SNAPSHOT"
+    id("fabric-loom") version "0.2.7-SNAPSHOT"
     id("com.palantir.git-version") version "0.12.0-rc2"
 }
 
@@ -32,6 +32,7 @@ repositories {
     maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
     maven(url = "https://maven.fabricmc.net/")
     maven(url = "https://server.bbkr.space/artifactory/libs-snapshot")
+    maven(url = "https://server.bbkr.space/artifactory/libs-release")
 }
 
 
@@ -46,20 +47,18 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    compile("us.myles:viaversion:3.0.0-SNAPSHOT") { isTransitive = false }
-    //include("us.myles:viaversion:3.0.0-SNAPSHOT")
+    implementation("us.myles:viaversion:3.0.0-SNAPSHOT") { isTransitive = false }
 
-    compileOnly("com.google.code.findbugs:jsr305:3.0.2")
-
-    // Use release, probably intermediary will make it work on snapshots
+    // Use 1.14.4 release, probably intermediary will make it work on snapshots
+    // https://modmuss50.me/fabric.html?&version=1.14.4
     minecraft("com.mojang:minecraft:1.14.4")
-    mappings("net.fabricmc:yarn:1.14.4+build.15")
-    modCompile("net.fabricmc:fabric-loader:0.6.4+build.169")
+    mappings("net.fabricmc:yarn:1.14.4+build.16:v2")
+    modImplementation("net.fabricmc:fabric-loader:0.8.2+build.194")
 
-    modCompile("net.fabricmc.fabric-api:fabric-api:0.4.1+build.245-1.14")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.4.3+build.247-1.14")
 
-    modCompile("io.github.cottonmc:cotton-client-commands:0.4.2+1.14.3-SNAPSHOT")
-    include("io.github.cottonmc:cotton-client-commands:0.4.2+1.14.3-SNAPSHOT")
+    modImplementation("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
+    include("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
 }
 
 minecraft {

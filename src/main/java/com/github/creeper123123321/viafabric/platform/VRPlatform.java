@@ -34,11 +34,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.network.packet.ChatMessageS2CPacket;
-import net.minecraft.client.network.packet.DisconnectS2CPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.MessageType;
 import net.minecraft.network.OffThreadException;
+import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
+import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -56,7 +56,6 @@ import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.ViaVersion.util.GsonUtil;
 import us.myles.viaversion.libs.gson.JsonObject;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -78,7 +77,6 @@ public class VRPlatform implements ViaPlatform {
         dataFolder = configDir.toFile();
     }
 
-    @Nullable
     public static MinecraftServer getServer() {
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             return getIntegratedServer();
@@ -87,7 +85,6 @@ public class VRPlatform implements ViaPlatform {
     }
 
     @Environment(EnvType.CLIENT)
-    @Nullable
     private static MinecraftServer getIntegratedServer() {
         return MinecraftClient.getInstance().getServer();
     }
