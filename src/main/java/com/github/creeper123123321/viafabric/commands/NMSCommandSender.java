@@ -56,7 +56,7 @@ public class NMSCommandSender implements ViaCommandSender {
             ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)), false);
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && source instanceof ClientCommandSource) {
             MinecraftClient.getInstance().player
-                    .sendMessage(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)));
+                    .sendSystemMessage(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)));
         }
     }
 

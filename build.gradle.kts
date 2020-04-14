@@ -13,7 +13,7 @@ version = "0.2.1-SNAPSHOT+" + try {
     gitVersion()
 } catch (e: Exception) {
     "unknown"
-} + "+1.14-1.15"
+} + "+1.16"
 extra.set("archivesBaseName", "ViaFabric")
 description = "Client-side and server-side ViaVersion implementation for Fabric"
 
@@ -49,13 +49,13 @@ dependencies {
     // transitive = false because Guava is conflicting on runClient
     implementation("us.myles:viaversion:3.0.0-SNAPSHOT") { isTransitive = false }
 
-    // Use 1.14.4 release, probably intermediary will make it work on snapshots
-    // https://modmuss50.me/fabric.html?&version=1.14.4
-    minecraft("com.mojang:minecraft:1.14.4")
-    mappings("net.fabricmc:yarn:1.14.4+build.16:v2")
+    // Use 1.16 snapshot, probably intermediary will make it work on further versions
+    // https://modmuss50.me/fabric.html?&version=20w15a
+    minecraft("com.mojang:minecraft:20w15a")
+    mappings("net.fabricmc:yarn:20w15a+build.7:v2")
     modImplementation("net.fabricmc:fabric-loader:0.8.2+build.194")
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.4.3+build.247-1.14")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.5.10+build.320-1.16")
 
     modImplementation("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
     include("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")

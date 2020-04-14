@@ -37,8 +37,8 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.MessageType;
 import net.minecraft.network.OffThreadException;
-import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
+import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -209,7 +209,7 @@ public class VRPlatform implements ViaPlatform {
                 if (server == null) return;
                 ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
                 if (player == null) return;
-                player.sendChatMessage(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)), MessageType.SYSTEM);
+                player.sendMessage(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)), MessageType.SYSTEM);
             });
         }
     }
@@ -219,7 +219,7 @@ public class VRPlatform implements ViaPlatform {
         ClientPlayNetworkHandler handler = MinecraftClient.getInstance().getNetworkHandler();
         if (handler != null) {
             try {
-                handler.onChatMessage(new ChatMessageS2CPacket(
+                handler.onGameMessage(new GameMessageS2CPacket(
                         Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s))
                 ));
             } catch (OffThreadException ignored) {
