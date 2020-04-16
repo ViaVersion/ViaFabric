@@ -24,12 +24,25 @@
 
 package com.github.creeper123123321.viafabric.platform;
 
-import us.myles.ViaVersion.api.boss.BossColor;
-import us.myles.ViaVersion.api.boss.BossStyle;
-import us.myles.ViaVersion.boss.CommonBoss;
+import us.myles.ViaVersion.api.data.UserConnection;
+import us.myles.ViaVersion.api.platform.ViaConnectionManager;
 
-public class VRBossBar extends CommonBoss<Void> {
-    public VRBossBar(String title, float health, BossColor color, BossStyle style) {
-        super(title, health, color, style);
+public class VRConnectionManager extends ViaConnectionManager {
+    @Override
+    public void onLoginSuccess(UserConnection connection) {
+        if (connection instanceof VRClientSideUserConnection) {
+            this.connections.add(connection);
+        } else {
+            super.onLoginSuccess(connection);
+        }
+    }
+
+    @Override
+    public void onDisconnect(UserConnection connection) {
+        if (connection instanceof VRClientSideUserConnection) {
+            this.connections.remove(connection);
+        } else {
+            super.onDisconnect(connection);
+        }
     }
 }

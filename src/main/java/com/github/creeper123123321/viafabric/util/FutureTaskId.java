@@ -29,7 +29,7 @@ import us.myles.ViaVersion.api.platform.TaskId;
 import java.util.concurrent.Future;
 
 public class FutureTaskId implements TaskId {
-    private Future<?> object;
+    private final Future<?> object;
 
     public FutureTaskId(Future<?> object) {
         this.object = object;

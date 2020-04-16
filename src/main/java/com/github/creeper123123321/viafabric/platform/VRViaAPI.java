@@ -38,15 +38,10 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 
-public class VRViaAPI implements ViaAPI<Void> {
-    @Override
-    public int getPlayerVersion(Void o) {
-        throw new UnsupportedOperationException();
-    }
-
+public class VRViaAPI implements ViaAPI<UUID> {
     @Override
     public int getPlayerVersion(UUID uuid) {
-        UserConnection con = Via.getManager().getPortedPlayers().get(uuid);
+        UserConnection con = Via.getManager().getConnection(uuid);
         if (con != null) {
             return con.get(ProtocolInfo.class).getProtocolVersion();
         }
@@ -58,9 +53,8 @@ public class VRViaAPI implements ViaAPI<Void> {
     }
 
     @Override
-    @Deprecated
-    public boolean isPorted(UUID uuid) {
-        return Via.getManager().getPortedPlayers().containsKey(uuid);
+    public boolean isInjected(UUID uuid) {
+        return Via.getManager().isClientConnected(uuid);
     }
 
     @Override
@@ -69,23 +63,18 @@ public class VRViaAPI implements ViaAPI<Void> {
     }
 
     @Override
-    public void sendRawPacket(Void o, ByteBuf byteBuf) throws IllegalArgumentException {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public void sendRawPacket(UUID uuid, ByteBuf byteBuf) throws IllegalArgumentException {
-        UserConnection ci = Via.getManager().getPortedPlayers().get(uuid);
+        UserConnection ci = Via.getManager().getConnection(uuid);
         ci.sendRawPacket(byteBuf);
     }
 
     @Override
-    public BossBar createBossBar(String s, BossColor bossColor, BossStyle bossStyle) {
+    public BossBar<Void> createBossBar(String s, BossColor bossColor, BossStyle bossStyle) {
         return new VRBossBar(s, 1f, bossColor, bossStyle);
     }
 
     @Override
-    public BossBar createBossBar(String s, float v, BossColor bossColor, BossStyle bossStyle) {
+    public BossBar<Void> createBossBar(String s, float v, BossColor bossColor, BossStyle bossStyle) {
         return new VRBossBar(s, v, bossColor, bossStyle);
     }
 
