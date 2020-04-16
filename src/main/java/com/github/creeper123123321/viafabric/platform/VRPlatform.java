@@ -49,6 +49,7 @@ import us.myles.ViaVersion.api.command.ViaCommandSender;
 import us.myles.ViaVersion.api.configuration.ConfigurationProvider;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.platform.TaskId;
+import us.myles.ViaVersion.api.platform.ViaConnectionManager;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
 import us.myles.ViaVersion.dump.PluginInfo;
 import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
@@ -62,19 +63,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public class VRPlatform implements ViaPlatform {
-    private VRViaConfig config;
-    private File dataFolder;
+public class VRPlatform implements ViaPlatform<UUID> {
+    private final VRViaConfig config;
+    private final File dataFolder;
+    private final ViaConnectionManager connectionManager;
+    private final ViaAPI<UUID> api;
 
     public VRPlatform() {
         Path configDir = FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric");
         config = new VRViaConfig(configDir.resolve("viaversion.yml").toFile());
         dataFolder = configDir.toFile();
+        connectionManager = new VRConnectionManager();
+        api = new VRViaAPI();
     }
 
     public static MinecraftServer getServer() {
@@ -127,22 +133,23 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public TaskId runSync(Runnable runnable) {
-        // Kick task needs to be on main thread
-        Executor executor = ViaFabric.EVENT_LOOP;
-        boolean alreadyLogged;
-        MinecraftServer server = getServer();
-        if (server != null) {
-            alreadyLogged = true;
-            executor = server;
+        if (getServer() != null) {
+            return runServerSync(runnable);
         } else {
-            alreadyLogged = false;
+            return runEventLoop(runnable);
         }
+    }
+
+    private TaskId runServerSync(Runnable runnable) {
+        // Kick task needs to be on main thread
+        return new FutureTaskId(CompletableFuture.runAsync(runnable, getServer()));
+    }
+
+    private TaskId runEventLoop(Runnable runnable) {
         return new FutureTaskId(
-                CompletableFuture.runAsync(runnable, executor)
+                CompletableFuture.runAsync(runnable, ViaFabric.EVENT_LOOP)
                         .exceptionally(throwable -> {
-                            if (!alreadyLogged) {
-                                throwable.printStackTrace();
-                            }
+                            throwable.printStackTrace();
                             return null;
                         })
         );
@@ -187,31 +194,38 @@ public class VRPlatform implements ViaPlatform {
     public ViaCommandSender[] getOnlinePlayers() {
         MinecraftServer server = getServer();
         if (server != null && server.isOnThread()) {
-            // Not thread safe
-            return server.getPlayerManager().getPlayerList().stream()
-                    .map(Entity::getCommandSource)
-                    .map(NMSCommandSender::new)
-                    .toArray(ViaCommandSender[]::new);
+            return getServerPlayers();
         }
-        return Via.getManager().getPortedPlayers().values().stream()
+        return Via.getManager().getConnectedClients().values().stream()
                 .map(UserCommandSender::new)
+                .toArray(ViaCommandSender[]::new);
+    }
+
+    private ViaCommandSender[] getServerPlayers() {
+        return getServer().getPlayerManager().getPlayerList().stream()
+                .map(Entity::getCommandSource)
+                .map(NMSCommandSender::new)
                 .toArray(ViaCommandSender[]::new);
     }
 
     @Override
     public void sendMessage(UUID uuid, String s) {
-        UserConnection user = Via.getManager().getPortedPlayers().get(uuid);
+        UserConnection user = Via.getManager().getConnection(uuid);
         if (user instanceof VRClientSideUserConnection) {
             sendMessageClient(s);
         } else {
-            runSync(() -> {
-                MinecraftServer server = getServer();
-                if (server == null) return;
-                ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
-                if (player == null) return;
-                player.sendChatMessage(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)), MessageType.SYSTEM);
-            });
+            sendMessageServer(uuid, s);
         }
+    }
+
+    private void sendMessageServer(UUID uuid, String s) {
+        MinecraftServer server = getServer();
+        if (server == null) return;
+        runServerSync(() -> {
+            ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
+            if (player == null) return;
+            player.sendChatMessage(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)), MessageType.SYSTEM);
+        });
     }
 
     @Environment(EnvType.CLIENT)
@@ -229,18 +243,12 @@ public class VRPlatform implements ViaPlatform {
 
     @Override
     public boolean kickPlayer(UUID uuid, String s) {
-        UserConnection user = Via.getManager().getPortedPlayers().get(uuid);
+        UserConnection user = Via.getManager().getConnection(uuid);
         if (user instanceof VRClientSideUserConnection) {
             return kickClient(s);
         } else {
-            MinecraftServer server = getServer();
-            if (server != null && server.isOnThread()) {
-                ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
-                if (player == null) return false;
-                player.networkHandler.disconnect(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)));
-            }
+            return kickServer(uuid, s);
         }
-        return false;
     }
 
     @Environment(EnvType.CLIENT)
@@ -258,14 +266,32 @@ public class VRPlatform implements ViaPlatform {
         return false;
     }
 
+    private boolean kickServer(UUID uuid, String s) {
+        MinecraftServer server = getServer();
+        if (server == null) return false;
+        Supplier<Boolean> kickTask = () -> {
+            ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
+            if (player == null) return false;
+            player.networkHandler.disconnect(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)));
+            return true;
+        };
+        if (server.isOnThread()) {
+            return kickTask.get();
+        } else {
+            ViaFabric.JLOGGER.log(Level.WARNING, "Weird!? Player kicking was called off-thread", new Throwable());
+            runServerSync(kickTask::get);
+        }
+        return false;  // Can't know if it worked
+    }
+
     @Override
     public boolean isPluginEnabled() {
         return true;
     }
 
     @Override
-    public ViaAPI getApi() {
-        return new VRViaAPI();
+    public ViaAPI<UUID> getApi() {
+        return api;
     }
 
     @Override
@@ -294,11 +320,12 @@ public class VRPlatform implements ViaPlatform {
         List<PluginInfo> mods = new ArrayList<>();
         for (ModContainer mod : FabricLoader.getInstance().getAllMods()) {
             mods.add(new PluginInfo(true,
-                    mod.getMetadata().getName(),
+                    mod.getMetadata().getId() + " (" + mod.getMetadata().getName() + ")",
                     mod.getMetadata().getVersion().getFriendlyString(),
                     null,
                     mod.getMetadata().getAuthors().stream()
-                            .map(info -> info.getName() + "(" + info.getContact().asMap() + ")")
+                            .map(info -> info.getName()
+                                    + (info.getContact().asMap().isEmpty() ? "" : " " + info.getContact().asMap()))
                             .collect(Collectors.toList())
             ));
         }
@@ -310,5 +337,10 @@ public class VRPlatform implements ViaPlatform {
     @Override
     public boolean isOldClientsAllowed() {
         return true;
+    }
+
+    @Override
+    public ViaConnectionManager getConnectionManager() {
+        return connectionManager;
     }
 }

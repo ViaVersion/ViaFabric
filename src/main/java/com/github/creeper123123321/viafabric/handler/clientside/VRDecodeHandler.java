@@ -31,13 +31,12 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.exception.CancelException;
-import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.util.List;
 
 public class VRDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
-    private UserConnection user;
+    private final UserConnection user;
 
     public VRDecodeHandler(UserConnection user) {
         this.user = user;
@@ -68,9 +67,6 @@ public class VRDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
-        ProtocolInfo info = user.get(ProtocolInfo.class);
-        if (info.getUuid() != null) {
-            Via.getManager().removePortedClient(info.getUuid());
-        }
+        Via.getManager().handleDisconnect(user);
     }
 }

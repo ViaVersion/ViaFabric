@@ -70,9 +70,6 @@ public class FabricDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx); // May call decode
-        ProtocolInfo pi = user.get(ProtocolInfo.class);
-        if (pi.getUuid() != null) {
-            Via.getManager().removePortedClient(pi.getUuid());
-        }
+        Via.getManager().handleDisconnect(user);
     }
 }

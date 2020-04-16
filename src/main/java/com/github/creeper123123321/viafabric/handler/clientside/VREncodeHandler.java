@@ -35,7 +35,7 @@ import us.myles.ViaVersion.util.PipelineUtil;
 import java.util.List;
 
 public class VREncodeHandler extends MessageToMessageEncoder<ByteBuf> {
-    private UserConnection user;
+    private final UserConnection user;
 
     public VREncodeHandler(UserConnection user) {
         this.user = user;

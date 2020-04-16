@@ -144,7 +144,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
     }
 
     @Inject(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Screen;render(IIF)V"),
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;render(IIF)V"),
             @At(value = "INVOKE", target = "Lnet/minecraft/class_437;render(IIF)V") // todo check if refmap was fixed
     }, remap = false)
     private void onRender(int int_1, int int_2, float float_1, CallbackInfo ci) {
