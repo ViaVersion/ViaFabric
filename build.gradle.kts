@@ -9,7 +9,7 @@ plugins {
 
 group = "com.github.creeper123123321.viafabric"
 val gitVersion: groovy.lang.Closure<Any> by extra
-version = "0.2.2-SNAPSHOT+" + try {
+version = "0.2.3-SNAPSHOT+" + try {
     gitVersion()
 } catch (e: Exception) {
     "unknown"

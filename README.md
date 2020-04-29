@@ -13,13 +13,13 @@ Note: ViaVersion is not designed for modded Minecraft with modified registries
 
 
 **Dependencies:**
-| Dependency | Download |
-| --- | --- |
-| ViaVersion 3.0.0+ | dev builds at https://ci.viaversion.com/job/ViaVersion-Abstraction/ |
-| Fabric Textures v0 | https://www.curseforge.com/minecraft/mc-mods/fabric-api |
-| Fabric Resource Loader v0 | https://www.curseforge.com/minecraft/mc-mods/fabric-api |
-| Fabric Commands v0 | https://www.curseforge.com/minecraft/mc-mods/fabric-api |
-| (Optional) Cotton Client Commands | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands |
+| Dependency                        | Download                                                              |
+| --------------------------------- | --------------------------------------------------------------------- |
+| ViaVersion 3.0.0+                 | dev builds at https://ci.viaversion.com/job/ViaVersion-Abstraction/   |
+| Fabric Textures v0                | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
+| Fabric Resource Loader v0         | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
+| Fabric Commands v0                | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
+| (Included) Cotton Client Commands | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands   |
 
 
 With ViaVersion:

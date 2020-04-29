@@ -66,10 +66,4 @@ public class FabricDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
         if (PipelineUtil.containsCause(cause, CancelException.class)) return;
         super.exceptionCaught(ctx, cause);
     }
-
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        super.channelInactive(ctx); // May call decode
-        Via.getManager().handleDisconnect(user);
-    }
 }
