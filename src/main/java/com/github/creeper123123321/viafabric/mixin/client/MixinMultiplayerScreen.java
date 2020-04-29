@@ -33,7 +33,7 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
-import net.minecraft.client.resource.language.I18n;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
@@ -71,7 +71,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo ci) {
-        protocolVersion = new TextFieldWidget(this.textRenderer, this.width / 2 + 88, 13, 65, 15, I18n.translate("gui.protocol_version_field.name"));
+        protocolVersion = new TextFieldWidget(this.textRenderer, this.width / 2 + 88, 13, 65, 15, new TranslatableText("gui.protocol_version_field.name"));
         protocolVersion.setTextPredicate(new VersionFormatFilter());
         protocolVersion.setChangedListener((text) -> {
             protocolVersion.setSuggestion(null);
@@ -135,19 +135,20 @@ public abstract class MixinMultiplayerScreen extends Screen {
                         },
                         new TranslatableText("gui.enable_client_side.question"),
                         new TranslatableText("gui.enable_client_side.warning"),
-                        I18n.translate("gui.enable_client_side.enable"),
-                        I18n.translate("gui.cancel")
+                        new TranslatableText("gui.enable_client_side.enable"),
+                        new TranslatableText("gui.cancel")
                 )),
-                I18n.translate("gui.enable_client_side_button"));
+                new TranslatableText("gui.enable_client_side_button"));
         enableClientSideViaVersion.visible = !protocolVersion.isVisible();
         addButton(enableClientSideViaVersion);
     }
 
     @Inject(method = "render", at = {
-            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;render(IIF)V"),
+            @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/Screen;render" +
+                            "(Lnet/minecraft/client/util/math/MatrixStack;IIF)V"),
     })
-    private void onRender(int int_1, int int_2, float float_1, CallbackInfo ci) {
-        protocolVersion.render(int_1, int_2, float_1);
+    private void onRender(MatrixStack matrices, int int_1, int int_2, float float_1, CallbackInfo ci) {
+        protocolVersion.render(matrices, int_1, int_2, float_1);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
