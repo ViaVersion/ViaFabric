@@ -28,6 +28,8 @@ import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.commands.NMSCommandSender;
 import com.github.creeper123123321.viafabric.commands.UserCommandSender;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -62,6 +64,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -125,7 +128,9 @@ public class VRPlatform implements ViaPlatform<UUID> {
         return new FutureTaskId(CompletableFuture
                 .runAsync(runnable, ViaFabric.ASYNC_EXECUTOR)
                 .exceptionally(throwable -> {
-                    throwable.printStackTrace();
+                    if (!(throwable instanceof CancellationException)) {
+                        throwable.printStackTrace();
+                    }
                     return null;
                 })
         );
@@ -141,17 +146,15 @@ public class VRPlatform implements ViaPlatform<UUID> {
     }
 
     private TaskId runServerSync(Runnable runnable) {
-        // Kick task needs to be on main thread
+        // Kick task needs to be on main thread, it does already have error logger
         return new FutureTaskId(CompletableFuture.runAsync(runnable, getServer()));
     }
 
     private TaskId runEventLoop(Runnable runnable) {
         return new FutureTaskId(
-                CompletableFuture.runAsync(runnable, ViaFabric.EVENT_LOOP)
-                        .exceptionally(throwable -> {
-                            throwable.printStackTrace();
-                            return null;
-                        })
+                ViaFabric.EVENT_LOOP
+                        .submit(runnable)
+                        .addListener(errorLogger())
         );
     }
 
@@ -161,11 +164,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
         return new FutureTaskId(
                 ViaFabric.EVENT_LOOP
                         .schedule(runnable, ticks * 50, TimeUnit.MILLISECONDS)
-                        .addListener(future -> {
-                            if (!future.isSuccess()) {
-                                future.cause().printStackTrace();
-                            }
-                        })
+                        .addListener(errorLogger())
         );
     }
 
@@ -175,12 +174,16 @@ public class VRPlatform implements ViaPlatform<UUID> {
         return new FutureTaskId(
                 ViaFabric.EVENT_LOOP
                         .scheduleAtFixedRate(runnable, 0, ticks * 50, TimeUnit.MILLISECONDS)
-                        .addListener(future -> {
-                            if (!future.isSuccess()) {
-                                future.cause().printStackTrace();
-                            }
-                        })
+                        .addListener(errorLogger())
         );
+    }
+
+    private <T extends Future<?>> GenericFutureListener<T> errorLogger() {
+        return future -> {
+            if (!future.isCancelled() && future.cause() != null) {
+                future.cause().printStackTrace();
+            }
+        };
     }
 
     @Override
