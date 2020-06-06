@@ -44,6 +44,7 @@ import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Util;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
 import us.myles.ViaVersion.api.ViaVersionConfig;
@@ -227,7 +228,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
         runServerSync(() -> {
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
             if (player == null) return;
-            player.sendMessage(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)), MessageType.SYSTEM);
+            player.sendMessage(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)), false);
         });
     }
 
@@ -237,7 +238,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
         if (handler != null) {
             try {
                 handler.onGameMessage(new GameMessageS2CPacket(
-                        Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s))
+                        Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)), MessageType.SYSTEM, Util.NIL_UUID
                 ));
             } catch (OffThreadException ignored) {
             }
