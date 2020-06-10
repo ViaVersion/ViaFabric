@@ -24,44 +24,42 @@
 
 package com.github.creeper123123321.viafabric.handler.clientside;
 
-import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.exception.CancelException;
-import us.myles.ViaVersion.util.PipelineUtil;
+import us.myles.ViaVersion.exception.CancelCodecException;
+import us.myles.ViaVersion.exception.CancelEncoderException;
 
 import java.util.List;
 
 public class VREncodeHandler extends MessageToMessageEncoder<ByteBuf> {
-    private final UserConnection user;
+    private final UserConnection info;
 
-    public VREncodeHandler(UserConnection user) {
-        this.user = user;
+    public VREncodeHandler(UserConnection info) {
+        this.info = info;
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-        if (CommonTransformer.preServerboundCheck(user)) {
-            throw CancelException.CACHED; // M2ME expects at least one message
-        }
-        if (!CommonTransformer.willTransformPacket(user)) {
-            out.add(msg.retain());
+    protected void encode(ChannelHandlerContext ctx, ByteBuf bytebuf, List<Object> out) throws Exception {
+        if (!info.checkIncomingPacket()) throw CancelEncoderException.generate(null);
+        if (!info.shouldTransformPacket()) {
+            out.add(bytebuf.retain());
             return;
         }
-        ByteBuf draft = ctx.alloc().buffer().writeBytes(msg);
+
+        ByteBuf transformedBuf = ctx.alloc().buffer().writeBytes(bytebuf);
         try {
-            CommonTransformer.transformServerbound(draft, user, ignored -> CancelException.CACHED);
-            out.add(draft.retain());
+            info.transformIncoming(transformedBuf, CancelEncoderException::generate);
+            out.add(transformedBuf.retain());
         } finally {
-            draft.release();
+            transformedBuf.release();
         }
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (PipelineUtil.containsCause(cause, CancelException.class)) return;
+        if (cause instanceof CancelCodecException) return;
         super.exceptionCaught(ctx, cause);
     }
 }
