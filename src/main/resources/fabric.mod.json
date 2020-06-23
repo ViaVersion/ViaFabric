@@ -31,6 +31,9 @@
     "minecraft": ">1.15.2",
     "viaversion": ">=3.0.0-SNAPSHOT"
   },
+  "conflicts": {
+    "fabric-registry-sync": "*"
+  },
   "recommends": {
   },
   "mixins": [
