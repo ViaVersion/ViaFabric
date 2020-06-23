@@ -31,6 +31,9 @@
     "minecraft": "<1.16",
     "viaversion": ">=3.0.0-SNAPSHOT"
   },
+  "conflicts": {
+    "fabric-registry-sync": "*"
+  },
   "recommends": {
   },
   "icon": "assets/viafabric/textures/logo.png",
