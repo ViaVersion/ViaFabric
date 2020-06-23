@@ -38,7 +38,7 @@ A chart with compatible versions is available at https://viaversion.com
 
 
 **Alternatives to this mod:**
-- [MultiConnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): this client-side mod does also translate older protocols and fixes some differences between versions, which ViaFabric don't. Currently (23-06-2020) it goes down to 1.10.
+- [MultiConnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): this client-side mod does also translate older protocols and fixes some differences between versions, which ViaFabric don't. Currently (2020-06-23) it goes down to 1.10.
 - [ProtocolSupport](https://protocol.support/): This plugin for Bukkit allows clients to connect from older versions (down to 1.4.7).
 
 ## WARNING
