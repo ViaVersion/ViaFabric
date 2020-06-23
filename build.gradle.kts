@@ -47,7 +47,7 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    implementation("us.myles:viaversion:3.0.0-SNAPSHOT") { isTransitive = false }
+    implementation("us.myles:viaversion:3.0.1-SNAPSHOT") { isTransitive = false }
 
     // Use 1.14.4 release, probably intermediary will make it work on snapshots
     // https://modmuss50.me/fabric.html?&version=1.14.4
