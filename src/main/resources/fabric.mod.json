@@ -27,7 +27,7 @@
     "fabricloader": ">=0.4.0",
     "fabric-textures-v0": "*",
     "fabric-resource-loader-v0": "*",
-    "fabric-commands-v0": "*",
+    "fabric-command-api-v1": "*",
     "minecraft": "<1.16",
     "viaversion": ">=3.0.0-SNAPSHOT"
   },

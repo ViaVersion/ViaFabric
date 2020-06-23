@@ -2,6 +2,6 @@
   "gui.protocol_version_field.name": "Protocol Version",
   "gui.enable_client_side_button": "Enable ViaVersion",
   "gui.enable_client_side.question": "Are you sure you want to enable client-side mode?",
-  "gui.enable_client_side.warning": "I can not guarantee that this mod is allowed on every (or even any) server. This mod may cause problems with anti-cheat plugins. USE AT OWN RISK.",
+  "gui.enable_client_side.warning": "I cannot guarantee that this mod is allowed on every (or even any) server. This mod may cause problems with anti-cheat plugins. USE AT OWN RISK.",
   "gui.enable_client_side.enable": "Enable"
 }

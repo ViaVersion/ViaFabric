@@ -28,6 +28,7 @@ import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.commands.NMSCommandSender;
 import com.github.creeper123123321.viafabric.commands.UserCommandSender;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
+import com.github.creeper123123321.viafabric.util.JLoggerToLog4j;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.fabricmc.api.EnvType;
@@ -44,6 +45,7 @@ import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import org.apache.logging.log4j.LogManager;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
 import us.myles.ViaVersion.api.ViaVersionConfig;
@@ -73,6 +75,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class VRPlatform implements ViaPlatform<UUID> {
+    private final Logger logger = new JLoggerToLog4j(LogManager.getLogger("ViaVersion"));
     private final VRViaConfig config;
     private final File dataFolder;
     private final ViaConnectionManager connectionManager;
@@ -100,7 +103,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
 
     @Override
     public Logger getLogger() {
-        return ViaFabric.JLOGGER;
+        return logger;
     }
 
     @Override

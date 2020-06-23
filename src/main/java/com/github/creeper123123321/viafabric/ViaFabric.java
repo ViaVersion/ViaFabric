@@ -37,7 +37,7 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.registry.CommandRegistry;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.CommandSource;
 import org.apache.logging.log4j.LogManager;
@@ -92,9 +92,9 @@ public class ViaFabric implements ModInitializer {
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
 
-        CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaversion")));
-        CommandRegistry.INSTANCE.register(false, c -> c.register(command("viaver")));
-        CommandRegistry.INSTANCE.register(false, c -> c.register(command("vvfabric")));
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaversion")));
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaver")));
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("vvfabric")));
 
         config = new VRConfig(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());

@@ -55,10 +55,10 @@ dependencies {
     mappings("net.fabricmc:yarn:1.14.4+build.16:v2")
     modImplementation("net.fabricmc:fabric-loader:0.8.2+build.194")
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.4.3+build.247-1.14")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.13.1+build.257-1.14")
 
-    modImplementation("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
-    include("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
+    modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
+    include("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
 }
 
 minecraft {
