@@ -36,6 +36,7 @@
   },
   "recommends": {
   },
+  "icon": "assets/viafabric/textures/logo.png",
   "mixins": [
     "mixins.viafabric.json"
   ]
