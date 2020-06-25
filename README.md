@@ -38,17 +38,20 @@ A chart with compatible versions is available at https://viaversion.com
 
 
 **Commands**:
-There're 3 server-side alias ``/viaversion``, ``/vvfabric`` and ``/viaver``, and a client-side command ``/viafabricclient`` (OP permission level 3 is required for these commands, in the client it's received by [Entity Status Packet](https://wiki.vg/Entity_statuses#Player))
+- There're 3 server-side alias ``/viaversion``, ``/vvfabric`` and ``/viaver``, and a client-side command ``/viafabricclient`` (OP permission level 3 is required for these commands, in the client it's received by [Entity Status Packet](https://wiki.vg/Entity_statuses#Player))
 
 
 **Configuration**:
-ViaVersion configuration is available at ``.minecraft/config/viafabric/viaversion.yml``
-ViaFabric configuration is at ``.minecraft/config/viafabric/viafabric.yml``
+- ViaVersion configuration is available at ``.minecraft/config/viafabric/viaversion.yml``
+- ViaFabric configuration is at ``.minecraft/config/viafabric/viafabric.yml``
 
 
 **Alternatives to this mod:**
-- [MultiConnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): this client-side mod does also translate older protocols and fixes some differences between versions, which ViaFabric don't. Currently, it goes down to 1.10. (2020-06-23)
-- [ProtocolSupport](https://protocol.support/): This plugin for Bukkit allows clients to connect from older versions (down to 1.4.7).
+- [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): This discontinued client-side plugin for The 5zig Mod implemented ViaVersion, ViaBackwards and ViaRewind for 1.7.10, 1.8.9, 1.12 and 1.12.2 clients, allowing them to connect to 1.7-1.12.2 servers. It also had a protocol translation for 1.7 servers, which there's an updated version at https://github.com/KennyTV/ViaVersion/tree/hack (unsupported).
+- [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): This client-side Fabric mod does also translate older protocols and fixes some differences between versions, which ViaFabric doesn't. Currently, it goes down to 1.10. (2020-06-23)
+- [Protocol4](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/2299203-protocol4-1-0-2-allows-1-7-10-clients-to-connect): This LiteLoader client-side mod allows your 1.7.10 client to connect to 1.7.x servers.
+- [ProtocolSupport](https://protocol.support/): This Bukkit plugin allows clients to connect from older versions (down to 1.4.7).
+- [ViaVersion](https://viaversion.com): ViaVersion can run as a plugin for BungeeCord, CraftBukkit, SpongeCommon and Velocity servers.
 
 ## WARNING
 **I cannot guarantee that this mod is allowed on every (or even any) server. This mod may cause problems with anti cheat plugins. USE AT OWN RISK**
