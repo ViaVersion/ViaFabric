@@ -7,7 +7,9 @@
     "MixinServerNetworkIoChInit"
   ],
   "client": [
+    "client.MixinClientConnectionAccessor",
     "client.MixinClientConnectionChInit",
+    "client.MixinDebugHud",
     "client.MixinMultiplayerScreen"
   ],
   "injectors": {

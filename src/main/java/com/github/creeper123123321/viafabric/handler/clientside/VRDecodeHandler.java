@@ -62,4 +62,8 @@ public class VRDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
         if (cause instanceof CancelCodecException) return;
         super.exceptionCaught(ctx, cause);
     }
+
+    public UserConnection getInfo() {
+        return info;
+    }
 }

@@ -22,14 +22,15 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.platform;
+package com.github.creeper123123321.viafabric.mixin.client;
 
-import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.platform.ViaConnectionManager;
+import io.netty.channel.Channel;
+import net.minecraft.network.ClientConnection;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
-public class VRConnectionManager extends ViaConnectionManager {
-    @Override
-    public boolean isFrontEnd(UserConnection connection) {
-        return !(connection instanceof VRClientSideUserConnection);
-    }
+@Mixin(ClientConnection.class)
+public interface MixinClientConnectionAccessor {
+    @Accessor
+    Channel getChannel();
 }

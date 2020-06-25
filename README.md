@@ -17,7 +17,7 @@ Note: ViaVersion is not designed for modded Minecraft with registry synchronizat
 **Dependencies:**
 | Dependency                        | Download                                                              |
 | --------------------------------- | --------------------------------------------------------------------- |
-| ViaVersion 3.0.0+                 | https://viaversion.com/                                               |
+| ViaVersion 3.0.2+                 | dev build at https://ci.viaversion.com/job/ViaVersion/                |
 | Fabric Textures v0                | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
 | Fabric Resource Loader v0         | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
 | Fabric Command API v1             | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
