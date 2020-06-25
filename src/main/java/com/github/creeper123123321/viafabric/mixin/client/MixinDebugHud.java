@@ -43,7 +43,7 @@ import java.util.List;
 public class MixinDebugHud {
     @Inject(at = @At("RETURN"), method = "getLeftText")
     protected void getLeftText(CallbackInfoReturnable<List<String>> info) {
-        info.getReturnValue().add("[ViaFabric] " + Via.getManager().getConnections().size() + " injected ("
+        info.getReturnValue().add("[ViaFabric] Injected: " + Via.getManager().getConnections().size() + " ("
                 + Via.getManager().getConnectedClients().size() + " frontend)");
         ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) MinecraftClient.getInstance().getNetworkHandler()
                 .getConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
@@ -55,7 +55,8 @@ public class MixinDebugHud {
                 if (!protocol.getUser().isActive()) {
                     inactive = " (inactive)";
                 }
-                info.getReturnValue().add("[ViaFabric] Client injected" + inactive + ": server is " + serverVer);
+                info.getReturnValue().add("[ViaFabric] Client injected: "
+                        + serverVer.getName() + " (" + serverVer.getId() + ") server" + inactive);
             }
         }
     }
