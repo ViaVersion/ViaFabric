@@ -9,7 +9,7 @@ plugins {
 
 group = "com.github.creeper123123321.viafabric"
 val gitVersion: groovy.lang.Closure<Any> by extra
-version = "0.2.3-SNAPSHOT+" + try {
+version = "0.2.4-SNAPSHOT+" + try {
     gitVersion()
 } catch (e: Exception) {
     "unknown"
@@ -47,7 +47,7 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    implementation("us.myles:viaversion:3.0.1-SNAPSHOT") { isTransitive = false }
+    implementation("us.myles:viaversion:3.0.2-SNAPSHOT") { isTransitive = false }
 
     // Use 1.16 snapshot, probably intermediary will make it work on further versions
     // https://modmuss50.me/fabric.html?&version=1.16

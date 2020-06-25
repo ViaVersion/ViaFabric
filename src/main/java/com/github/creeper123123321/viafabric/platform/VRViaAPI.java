@@ -32,7 +32,6 @@ import us.myles.ViaVersion.api.boss.BossColor;
 import us.myles.ViaVersion.api.boss.BossStyle;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
-import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -43,7 +42,7 @@ public class VRViaAPI implements ViaAPI<UUID> {
     public int getPlayerVersion(UUID uuid) {
         UserConnection con = Via.getManager().getConnection(uuid);
         if (con != null) {
-            return con.get(ProtocolInfo.class).getProtocolVersion();
+            return con.getProtocolInfo().getProtocolVersion();
         }
         try {
             return Via.getManager().getInjector().getServerProtocolVersion();

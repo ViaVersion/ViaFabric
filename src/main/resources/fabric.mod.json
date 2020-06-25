@@ -29,7 +29,7 @@
     "fabric-resource-loader-v0": "*",
     "fabric-command-api-v1": "*",
     "minecraft": ">1.15.2",
-    "viaversion": ">=3.0.0-SNAPSHOT"
+    "viaversion": ">=3.0.2-SNAPSHOT"
   },
   "conflicts": {
     "fabric-registry-sync": "*"

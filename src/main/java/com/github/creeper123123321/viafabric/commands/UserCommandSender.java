@@ -27,7 +27,6 @@ package com.github.creeper123123321.viafabric.commands;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
 import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 
 import java.util.UUID;
 
@@ -50,11 +49,11 @@ public class UserCommandSender implements ViaCommandSender {
 
     @Override
     public UUID getUUID() {
-        return con.get(ProtocolInfo.class).getUuid();
+        return con.getProtocolInfo().getUuid();
     }
 
     @Override
     public String getName() {
-        return con.get(ProtocolInfo.class).getUsername();
+        return con.getProtocolInfo().getUsername();
     }
 }
