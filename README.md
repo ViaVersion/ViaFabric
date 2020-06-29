@@ -2,7 +2,8 @@
 [![Travis Build Status](https://travis-ci.com/ViaVersion/ViaFabric.svg?branch=master)](https://travis-ci.com/ViaVersion/ViaFabric)
 [![ViaVersion Discord](https://img.shields.io/badge/chat-on%20discord-blue.svg)](https://viaversion.com/discord)
 [![GitHub Releases](https://img.shields.io/github/downloads/ViaVersion/ViaFabric/total)](https://github.com/ViaVersion/ViaFabric/releases)
-[![CurseForge Downloads](https://cf.way2muchnoise.eu/short_391298.svg)](https://viaversion.com/fabric)
+[![CurseForge Downloads](http://cf.way2muchnoise.eu/short_391298.svg)](https://viaversion.com/fabric)
+<!-- ^ GitHub seems to not support Let's Encrypt certificates -->
 
 
 **Client-side and server-side ViaVersion implementation for Fabric**
