@@ -24,6 +24,7 @@
 
 package com.github.creeper123123321.viafabric.platform;
 
+import com.github.creeper123123321.viafabric.listeners.UpdateListener;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.platform.ViaConnectionManager;
 
@@ -31,5 +32,23 @@ public class VRConnectionManager extends ViaConnectionManager {
     //@Override TODO: check why Gradle isn't downloading the latest snapshot
     public boolean isFrontEnd(UserConnection connection) {
         return !(connection instanceof VRClientSideUserConnection);
+    }
+
+    @Override
+    public void onLoginSuccess(UserConnection connection) {
+        super.onLoginSuccess(connection);
+        if (!isFrontEnd(connection)) {
+            // We'll use it later
+            this.clients.put(connection.getProtocolInfo().getUuid(), connection);
+            UpdateListener.onJoin(connection);
+        }
+    }
+
+    @Override
+    public void onDisconnect(UserConnection connection) {
+        super.onDisconnect(connection);
+        if (!isFrontEnd(connection)) {
+            this.clients.remove(connection.getProtocolInfo().getUuid());
+        }
     }
 }

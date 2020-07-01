@@ -166,7 +166,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
         // ViaVersion seems to not need to run delayed tasks on main thread
         return new FutureTaskId(
                 ViaFabric.EVENT_LOOP
-                        .schedule(runnable, ticks * 50, TimeUnit.MILLISECONDS)
+                        .schedule(() -> runSync(runnable), ticks * 50, TimeUnit.MILLISECONDS)
                         .addListener(errorLogger())
         );
     }
@@ -176,7 +176,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
         // ViaVersion seems to not need to run repeating tasks on main thread
         return new FutureTaskId(
                 ViaFabric.EVENT_LOOP
-                        .scheduleAtFixedRate(runnable, 0, ticks * 50, TimeUnit.MILLISECONDS)
+                        .scheduleAtFixedRate(() -> runSync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS)
                         .addListener(errorLogger())
         );
     }
