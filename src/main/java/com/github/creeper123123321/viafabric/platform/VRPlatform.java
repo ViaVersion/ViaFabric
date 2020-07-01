@@ -56,9 +56,10 @@ import us.myles.ViaVersion.api.platform.TaskId;
 import us.myles.ViaVersion.api.platform.ViaConnectionManager;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
 import us.myles.ViaVersion.dump.PluginInfo;
-import us.myles.ViaVersion.protocols.protocol1_13to1_12_2.ChatRewriter;
 import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.ViaVersion.util.GsonUtil;
+import us.myles.viaversion.libs.bungeecordchat.api.chat.TextComponent;
+import us.myles.viaversion.libs.bungeecordchat.chat.ComponentSerializer;
 import us.myles.viaversion.libs.gson.JsonObject;
 
 import java.io.File;
@@ -230,7 +231,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
         runServerSync(() -> {
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
             if (player == null) return;
-            player.sendChatMessage(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)), MessageType.SYSTEM);
+            player.sendChatMessage(Text.Serializer.fromJson(legacyToJson(s)), MessageType.SYSTEM);
         });
     }
 
@@ -240,7 +241,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
         if (handler != null) {
             try {
                 handler.onChatMessage(new ChatMessageS2CPacket(
-                        Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s))
+                        Text.Serializer.fromJson(legacyToJson(s))
                 ));
             } catch (OffThreadException ignored) {
             }
@@ -263,7 +264,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
         if (handler != null) {
             try {
                 handler.onDisconnect(new DisconnectS2CPacket(
-                        Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(msg))
+                        Text.Serializer.fromJson(legacyToJson(msg))
                 ));
             } catch (OffThreadException ignored) {
             }
@@ -278,7 +279,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
         Supplier<Boolean> kickTask = () -> {
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
             if (player == null) return false;
-            player.networkHandler.disconnect(Text.Serializer.fromJson(ChatRewriter.legacyTextToJson(s)));
+            player.networkHandler.disconnect(Text.Serializer.fromJson(legacyToJson(s)));
             return true;
         };
         if (server.isOnThread()) {
@@ -348,5 +349,9 @@ public class VRPlatform implements ViaPlatform<UUID> {
     @Override
     public ViaConnectionManager getConnectionManager() {
         return connectionManager;
+    }
+
+    private String legacyToJson(String legacy) {
+        return ComponentSerializer.toString(TextComponent.fromLegacyText(legacy));
     }
 }
