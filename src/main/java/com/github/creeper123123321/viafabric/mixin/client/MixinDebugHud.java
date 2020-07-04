@@ -51,12 +51,14 @@ public class MixinDebugHud {
             ProtocolInfo protocol = ((VRDecodeHandler) viaDecoder).getInfo().getProtocolInfo();
             if (protocol != null) {
                 ProtocolVersion serverVer = ProtocolVersion.getProtocol(protocol.getServerProtocolVersion());
+                ProtocolVersion clientVer = ProtocolVersion.getProtocol(protocol.getProtocolVersion());
                 String inactive = "";
                 if (!protocol.getUser().isActive()) {
                     inactive = " (inactive)";
                 }
-                info.getReturnValue().add("[ViaFabric] Client injected: "
-                        + serverVer.getName() + " (" + serverVer.getId() + ") server" + inactive);
+                info.getReturnValue().add("[ViaFabric] Client injected: C: " +
+                        clientVer.getName() + " (" + clientVer.getId() + ") S: " +
+                        serverVer.getName() + "(" + serverVer.getId() + ")" + inactive);
             }
         }
     }

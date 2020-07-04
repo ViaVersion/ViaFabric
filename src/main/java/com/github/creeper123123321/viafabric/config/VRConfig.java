@@ -24,11 +24,11 @@
 
 package com.github.creeper123123321.viafabric.config;
 
-import net.minecraft.SharedConstants;
 import us.myles.ViaVersion.util.Config;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +36,7 @@ import java.util.Map;
 public class VRConfig extends Config {
     public static final String ENABLE_CLIENT_SIDE = "enable-client-side";
     public static final String CLIENT_SIDE_VERSION = "client-side-version";
+    public static final String CLIENT_SIDE_FORCE_DISABLE = "client-side-force-disable";
 
     public VRConfig(File configFile) {
         super(configFile);
@@ -60,16 +61,24 @@ public class VRConfig extends Config {
         return getBoolean(ENABLE_CLIENT_SIDE, false);
     }
 
-    public int getClientSideVersion() {
-        int nat = SharedConstants.getGameVersion().getProtocolVersion();
-        return !isClientSideEnabled() ? nat : getInt(CLIENT_SIDE_VERSION, -1);
-    }
-
     public void setClientSideEnabled(boolean val) {
         set(ENABLE_CLIENT_SIDE, val);
     }
 
+    public int getClientSideVersion() {
+        if (!isClientSideEnabled()) return -1;
+        return getInt(CLIENT_SIDE_VERSION, -1);
+    }
+
     public void setClientSideVersion(int val) {
         set(CLIENT_SIDE_VERSION, val);
+    }
+
+    public Collection<?> getClientSideForceDisable() {
+        return (List<?>) get(CLIENT_SIDE_FORCE_DISABLE, List.class, Collections.emptyList());
+    }
+
+    public boolean isForcedDisable(String line) {
+        return getClientSideForceDisable().contains(line);
     }
 }

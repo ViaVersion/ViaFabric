@@ -36,12 +36,8 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.MessageType;
-import net.minecraft.network.OffThreadException;
-import net.minecraft.network.packet.s2c.play.ChatMessageS2CPacket;
-import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -51,7 +47,6 @@ import us.myles.ViaVersion.api.ViaAPI;
 import us.myles.ViaVersion.api.ViaVersionConfig;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
 import us.myles.ViaVersion.api.configuration.ConfigurationProvider;
-import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.platform.TaskId;
 import us.myles.ViaVersion.api.platform.ViaConnectionManager;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
@@ -217,12 +212,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
 
     @Override
     public void sendMessage(UUID uuid, String s) {
-        UserConnection user = Via.getManager().getConnection(uuid);
-        if (user instanceof VRClientSideUserConnection) {
-            sendMessageClient(s);
-        } else {
-            sendMessageServer(uuid, s);
-        }
+        sendMessageServer(uuid, s);
     }
 
     private void sendMessageServer(UUID uuid, String s) {
@@ -235,42 +225,9 @@ public class VRPlatform implements ViaPlatform<UUID> {
         });
     }
 
-    @Environment(EnvType.CLIENT)
-    private void sendMessageClient(String s) {
-        ClientPlayNetworkHandler handler = MinecraftClient.getInstance().getNetworkHandler();
-        if (handler != null) {
-            try {
-                handler.onChatMessage(new ChatMessageS2CPacket(
-                        Text.Serializer.fromJson(legacyToJson(s))
-                ));
-            } catch (OffThreadException ignored) {
-            }
-        }
-    }
-
     @Override
     public boolean kickPlayer(UUID uuid, String s) {
-        UserConnection user = Via.getManager().getConnection(uuid);
-        if (user instanceof VRClientSideUserConnection) {
-            return kickClient(s);
-        } else {
-            return kickServer(uuid, s);
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    private boolean kickClient(String msg) {
-        ClientPlayNetworkHandler handler = MinecraftClient.getInstance().getNetworkHandler();
-        if (handler != null) {
-            try {
-                handler.onDisconnect(new DisconnectS2CPacket(
-                        Text.Serializer.fromJson(legacyToJson(msg))
-                ));
-            } catch (OffThreadException ignored) {
-            }
-            return true;
-        }
-        return false;
+        return kickServer(uuid, s);
     }
 
     private boolean kickServer(UUID uuid, String s) {

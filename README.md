@@ -35,7 +35,8 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 - your client can connect to newer versions
 
 
-A chart with compatible versions is available at https://viaversion.com
+**What versions can ViaVersion, ViaBackwards and ViaRewind translate?:**
+- See https://viaversion.com
 
 
 **Commands**:
@@ -49,10 +50,22 @@ A chart with compatible versions is available at https://viaversion.com
 
 **Alternatives to this mod:**
 - [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): This discontinued client-side plugin for The 5zig Mod implemented ViaVersion, ViaBackwards and ViaRewind for 1.7.10, 1.8.9, 1.12 and 1.12.2 clients, allowing them to connect to 1.7-1.12.2 servers. It also had a protocol translation for 1.7 servers, which there's an updated version at https://github.com/KennyTV/ViaVersion/tree/hack (unsupported).
-- [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): This client-side Fabric mod does also translate older protocols and fixes some differences between versions, which ViaFabric doesn't. Currently, it goes down to 1.10. (2020-06-23)
+- [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): This client-side Fabric mod does also accept older protocols and fixes some differences between versions, which ViaFabric doesn't. Currently, it goes down to 1.10. (2020-06-23)
 - [Protocol4](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/2299203-protocol4-1-0-2-allows-1-7-10-clients-to-connect): This LiteLoader client-side mod allows your 1.7.10 client to connect to 1.7.x servers.
 - [ProtocolSupport](https://protocol.support/): This Bukkit plugin allows clients to connect from older versions (down to 1.4.7).
 - [ViaVersion](https://viaversion.com): ViaVersion can run as a plugin for BungeeCord, CraftBukkit, SpongeCommon and Velocity servers.
+
+
+**How can I disable client-side ViaFabric?:**
+-You can disable it by resetting the anti-cheat warning in config file or by setting protocol version to -1
+
+
+**Does it work with multiconnect at same time on client?:**
+- Yes, ViaFabric can be used with multiconnect. ViaFabric will set multiconnect version auto detector to the supported version which is closest to client-side version.
+- Example of setups:
+- (1.8 server) <-> (disabled ViaFabric) <-> (auto detected 1.8 server - multiconnect on Minecraft) = doesn't work because multiconnect doesn't support it
+- (1.8 server) <-> (forced 1.8 - ViaFabric in client - suggests 1.10) <-> (detected 1.10 server - multiconnect on Minecraft) = works, with ViaVersion translating 1.8 -> 1.10 and multiconnect accepting 1.10
+- (1.8 server) <-> (forced 1.8 - ViaFabric in client - detected 1.12.2 client) <-> (forced 1.12.2 server - multiconnect on Minecraft) = works with ViaVersion translating 1.8 -> 1.12.2 and multiconnect accepting 1.12.2
 
 ## WARNING
 **I cannot guarantee that this mod is allowed on every (or even any) server. This mod may cause problems with anti cheat plugins. USE AT OWN RISK**
