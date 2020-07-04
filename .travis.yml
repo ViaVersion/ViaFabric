@@ -12,7 +12,6 @@ deploy:
     secure: B+xrpk79kvRF5AhNqHKlsUd1vloo4xe1oZjzsmsm67rrd2RS9iBgpRBC5YfCeYmxj5HviBjQx3Qzdu/zzaYP9ry5IT17t5g3OcPpP9GynyinIlfAN6TUlk9u0D7ojSYV6JJjD7Go8K9+U5E+jEn4cSIVQ4kFWH62lDyjjNQqZitd4p+/J9M4p5sQ9BiC2oUIFVMrOXZs5v0tqVSCWGp/s2OkX+ie/RYm1ULW4vvpwTlK2+fklOfq2qyityPtV1v6DQoOMJ4GdouBVGtva7hdnuHtCCqVvwTnpgmItLE68uCczgR4gQ5SIeCo7Vppda6jSseA5DDku1YwUUTRm1VOENhmv3iln9sDRiZbX17d86689FslMAltSggmg4urEPmjzlP55NCebvEsQoKp8x3XuViUOUqkQS+e/IGkK1F4oeh4YB7Mz6LyGM3TOv2gfE+nbQ4xU7s1nELoqdwUp2HshN4SFxurLtKDfC2/ZHRwtwXhGbEQgK0TSRSohxoE8a1XZvXLJ+ddc8ZZX8LqBiKgXkkEyvpAehAqK+lWsqIBJp+828CMeUet9sYNJ9QkAy3Lz8ecwuzCXEuacTW+f6XW1rBr2wPSXOJQt45xt4IfW1so7G1V5QSmcExU3uKKxkgekOnhZjT8LTmUpaSBW1Nu2a5kKuHnHvs0uDexhoJ/cEs=
   file_glob: true
   file: build/libs/*
-  cleanup: true
   on:
     repo: ViaVersion/ViaFabric
     all_branches: true
