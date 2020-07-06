@@ -27,10 +27,10 @@ package com.github.creeper123123321.viafabric.providers;
 import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
 import com.google.common.primitives.Ints;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.ClientConnection;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.exception.CancelException;
@@ -52,16 +52,18 @@ public class VRVersionProvider extends VersionProvider {
 
     {
         try {
-            Class<?> mcApiClass = Class.forName("net.earthcomputer.multiconnect.api.MultiConnectAPI");
-            Class<?> iProtocolClass = Class.forName("net.earthcomputer.multiconnect.api.IProtocol");
-            Object mcApiInstance = mcApiClass.getMethod("instance").invoke(null);
-            List<?> protocols = (List<?>) mcApiClass.getMethod("getSupportedProtocols").invoke(mcApiInstance);
-            Method getValue = iProtocolClass.getMethod("getValue");
-            multiconnectSupportedVersions = new TreeSet<>();
-            for (Object protocol : protocols) {
-                multiconnectSupportedVersions.add((Integer) getValue.invoke(protocol));
+            if (FabricLoader.getInstance().isModLoaded("multiconnect")) {
+                Class<?> mcApiClass = Class.forName("net.earthcomputer.multiconnect.api.MultiConnectAPI");
+                Class<?> iProtocolClass = Class.forName("net.earthcomputer.multiconnect.api.IProtocol");
+                Object mcApiInstance = mcApiClass.getMethod("instance").invoke(null);
+                List<?> protocols = (List<?>) mcApiClass.getMethod("getSupportedProtocols").invoke(mcApiInstance);
+                Method getValue = iProtocolClass.getMethod("getValue");
+                multiconnectSupportedVersions = new TreeSet<>();
+                for (Object protocol : protocols) {
+                    multiconnectSupportedVersions.add((Integer) getValue.invoke(protocol));
+                }
+                ViaFabric.JLOGGER.info("ViaFabric will integrate with multiconnect");
             }
-            ViaFabric.JLOGGER.info("ViaFabric will integrate with multiconnect");
         } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
                 | ClassCastException ignored) {
         }
@@ -84,7 +86,7 @@ public class VRVersionProvider extends VersionProvider {
                 }
 
                 if (info.getState() == State.STATUS && info.getProtocolVersion() == -1
-                        && clientSideVersion != -1
+                        && (clientSideVersion != -1 || blocked)
                         && connection.getChannel().pipeline().get(ClientConnection.class).getPacketListener()
                         .getClass().getName().startsWith("net.earthcomputer.multiconnect")) { // multiconnect version detector
                     int multiconnectSuggestion = getVersionForMulticonnect(clientSideVersion);
@@ -95,9 +97,8 @@ public class VRVersionProvider extends VersionProvider {
                     newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class);
                     throw CancelException.generate();
                 }
-                if (blocked) return info.getProtocolVersion();
+                if (clientSideVersion == -1 || blocked) return info.getProtocolVersion();
             }
-            if (clientSideVersion == -1) clientSideVersion = ProtocolRegistry.SERVER_PROTOCOL;
             return clientSideVersion;
         }
         return super.getServerProtocol(connection);
