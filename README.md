@@ -57,7 +57,7 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 
 **How can I disable client-side ViaFabric?:**
--You can disable it by resetting the anti-cheat warning in config file or by setting protocol version to -1
+- You can disable it by resetting the anti-cheat warning in config file or by setting protocol version to -1
 
 
 **Does it work with multiconnect at same time on client?:**

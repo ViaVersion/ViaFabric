@@ -45,7 +45,7 @@ public class MixinDebugHud {
     protected void getLeftText(CallbackInfoReturnable<List<String>> info) {
         info.getReturnValue().add("[ViaFabric] Injected: " + Via.getManager().getConnections().size() + " ("
                 + Via.getManager().getConnectedClients().size() + " frontend)");
-        ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) MinecraftClient.getInstance().getNetworkHandler()
+        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) MinecraftClient.getInstance().getNetworkHandler()
                 .getConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
         if (viaDecoder instanceof VRDecodeHandler) {
             ProtocolInfo protocol = ((VRDecodeHandler) viaDecoder).getInfo().getProtocolInfo();
@@ -58,7 +58,7 @@ public class MixinDebugHud {
                 }
                 info.getReturnValue().add("[ViaFabric] Client injected: C: " +
                         clientVer.getName() + " (" + clientVer.getId() + ") S: " +
-                        serverVer.getName() + "(" + serverVer.getId() + ")" + inactive);
+                        serverVer.getName() + " (" + serverVer.getId() + ")" + inactive);
             }
         }
     }
