@@ -30,6 +30,7 @@ import com.google.common.primitives.Ints;
 import net.minecraft.network.ClientConnection;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.data.UserConnection;
+import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.exception.CancelException;
@@ -70,31 +71,33 @@ public class VRVersionProvider extends VersionProvider {
     public int getServerProtocol(UserConnection connection) throws Exception {
         if (connection instanceof VRClientSideUserConnection) {
             int clientSideVersion = ViaFabric.config.getClientSideVersion();
+            boolean blocked = false;
             if (connection.getChannel() != null) {
-                ProtocolInfo info = connection.getProtocolInfo();
+                ProtocolInfo info = Objects.requireNonNull(connection.getProtocolInfo());
 
                 SocketAddress addr = connection.getChannel().remoteAddress();
                 if (addr instanceof InetSocketAddress && (isDisabled(((InetSocketAddress) addr).getHostString())
                         || ((((InetSocketAddress) addr).getAddress() != null) &&
                         (isDisabled(((InetSocketAddress) addr).getAddress().getHostAddress())
                                 || isDisabled(((InetSocketAddress) addr).getAddress().getHostName()))))) {
-                    return -1;
+                    blocked = true;
                 }
 
-                if (info != null
-                        && info.getState() == State.STATUS
-                        && info.getProtocolVersion() == -1
+                if (info.getState() == State.STATUS && info.getProtocolVersion() == -1
                         && clientSideVersion != -1
                         && connection.getChannel().pipeline().get(ClientConnection.class).getPacketListener()
                         .getClass().getName().startsWith("net.earthcomputer.multiconnect")) { // multiconnect version detector
                     int multiconnectSuggestion = getVersionForMulticonnect(clientSideVersion);
+                    if (blocked) multiconnectSuggestion = -1;
                     ViaFabric.JLOGGER.info("Sending " + ProtocolVersion.getProtocol(multiconnectSuggestion) + " for multiconnect version detector");
                     PacketWrapper newAnswer = new PacketWrapper(0x00, null, connection);
                     newAnswer.write(Type.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion + "}}");
                     newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class);
                     throw CancelException.generate();
                 }
+                if (blocked) return info.getProtocolVersion();
             }
+            if (clientSideVersion == -1) clientSideVersion = ProtocolRegistry.SERVER_PROTOCOL;
             return clientSideVersion;
         }
         return super.getServerProtocol(connection);
@@ -103,7 +106,7 @@ public class VRVersionProvider extends VersionProvider {
     private int getVersionForMulticonnect(int clientSideVersion) {
         // https://github.com/ViaVersion/ViaVersion/blob/master/velocity/src/main/java/us/myles/ViaVersion/velocity/providers/VelocityVersionProvider.java
         // multiconnect supports it
-        int[] compatibleProtocols = multiconnectSupportedVersions.stream().mapToInt(it -> it).toArray();
+        int[] compatibleProtocols = multiconnectSupportedVersions.stream().mapToInt(Integer::intValue).toArray();
         if (Arrays.binarySearch(compatibleProtocols, clientSideVersion) >= 0)
             return clientSideVersion;
 
