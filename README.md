@@ -10,7 +10,7 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod supports 1.14.4/1.15.x (on `ver/1.14` branch) and 1.16 snapshots (on `master` branch) with Fabric Loader. Check the Minecraft version in file name when downloading from GitHub Releases.
+This mod supports 1.14.4/1.15.x (on `ver/1.14` branch) and 1.16.x/snapshots (on `master` branch) with Fabric Loader. Check the Minecraft version in file name when downloading from GitHub Releases.
 
 Note: ViaVersion is not designed for modded Minecraft with registry synchronization (fabric-registry-sync mod).
 
@@ -18,7 +18,7 @@ Note: ViaVersion is not designed for modded Minecraft with registry synchronizat
 **Dependencies:**
 | Dependency                        | Download                                                              |
 | --------------------------------- | --------------------------------------------------------------------- |
-| ViaVersion 3.0.2+                 | dev build at https://ci.viaversion.com/job/ViaVersion/                |
+| ViaVersion 3.0.2+                 | dev builds at https://ci.viaversion.com/job/ViaVersion/               |
 | Fabric Textures v0                | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
 | Fabric Resource Loader v0         | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
 | Fabric Command API v1             | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
@@ -37,6 +37,10 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 **What versions can ViaVersion, ViaBackwards and ViaRewind translate?:**
 - See https://viaversion.com
+
+
+**Can ViaVersion and ViaBackwards support snapshots?:**
+- Check https://ci.viaversion.com/job/ViaVersion-DEV/ and https://ci.viaversion.com/job/ViaBackwards-DEV/ for development builds with snapshot support
 
 
 **Commands**:
