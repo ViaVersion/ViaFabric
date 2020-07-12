@@ -24,15 +24,15 @@
 
 package com.github.creeper123123321.viafabric.util;
 
+import com.google.common.base.Predicate;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
 import java.util.Arrays;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class VersionFormatFilter implements Predicate<String> {
     @Override
-    public boolean test(String s) {
+    public boolean apply(String s) {
         try {
             Integer.parseInt(s);
             return true;

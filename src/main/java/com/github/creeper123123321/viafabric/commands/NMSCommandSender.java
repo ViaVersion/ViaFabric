@@ -24,11 +24,8 @@
 
 package com.github.creeper123123321.viafabric.commands;
 
-import io.github.cottonmc.clientcommands.CottonClientCommandSource;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
-import net.minecraft.server.command.CommandSource;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
 import us.myles.viaversion.libs.bungeecordchat.api.chat.TextComponent;
@@ -46,16 +43,12 @@ public class NMSCommandSender implements ViaCommandSender {
     @Override
     public boolean hasPermission(String s) {
         // https://gaming.stackexchange.com/questions/138602/what-does-op-permission-level-do
-        return source.hasPermissionLevel(3);
+        return source.method_6255(3, "viaversion.admin"); // the string seems to be the command
     }
 
     @Override
     public void sendMessage(String s) {
-        if (source instanceof ServerCommandSource) {
-            ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(legacyToJson(s)), false);
-        } else if (source instanceof CottonClientCommandSource) {
-            ((CottonClientCommandSource) source).sendFeedback(Text.Serializer.fromJson(legacyToJson(s)), false);
-        }
+        source.sendMessage(Text.Serializer.deserialize(legacyToJson(s)));
     }
 
     private String legacyToJson(String legacy) {
@@ -64,21 +57,16 @@ public class NMSCommandSender implements ViaCommandSender {
 
     @Override
     public UUID getUUID() {
-        if (source instanceof ServerCommandSource) {
-            Entity entity = ((ServerCommandSource) source).getEntity();
-            if (entity != null) return entity.getUuid();
-        } else if (source instanceof CottonClientCommandSource) {
-            return MinecraftClient.getInstance().player.getUuid();
+        if (source instanceof Entity) {
+            return ((Entity) source).getUuid();
         }
         return UUID.fromString(getName());
     }
 
     @Override
     public String getName() {
-        if (source instanceof ServerCommandSource) {
-            return ((ServerCommandSource) source).getName();
-        } else if (source instanceof CottonClientCommandSource) {
-            return MinecraftClient.getInstance().player.getEntityName();
+        if (source instanceof Entity) {
+            return source.getName().asString();
         }
         return "?";
     }

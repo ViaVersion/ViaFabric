@@ -26,8 +26,10 @@ package com.github.creeper123123321.viafabric.platform;
 
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.SharedConstants;
+import net.minecraft.realms.RealmsSharedConstants;
+import net.minecraft.server.MinecraftServer;
 import us.myles.ViaVersion.api.platform.ViaInjector;
 import us.myles.ViaVersion.util.GsonUtil;
 import us.myles.viaversion.libs.gson.JsonObject;
@@ -47,8 +49,16 @@ public class VRInjector implements ViaInjector {
     }
 
     @Override
-    public int getServerProtocolVersion() {
-        return SharedConstants.getGameVersion().getProtocolVersion();
+    public int getServerProtocolVersion() throws NoSuchFieldException, IllegalAccessException {
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            return getClientProtocol();
+        }
+        return MinecraftServer.getServer().getServerMetadata().getVersion().getProtocolVersion();
+    }
+
+    @Environment(EnvType.CLIENT)
+    private int getClientProtocol() throws NoSuchFieldException, IllegalAccessException {
+        return RealmsSharedConstants.class.getField("NETWORK_PROTOCOL_VERSION").getInt(null);
     }
 
     @Override

@@ -31,15 +31,13 @@ import com.github.creeper123123321.viafabric.platform.VRLoader;
 import com.github.creeper123123321.viafabric.platform.VRPlatform;
 import com.github.creeper123123321.viafabric.util.JLoggerToLog4j;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
+import io.netty.channel.local.LocalEventLoopGroup;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.event.server.ServerStartCallback;
+import net.fabricmc.fabric.api.event.server.ServerStopCallback;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.server.command.CommandSource;
+import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
@@ -55,27 +53,17 @@ public class ViaFabric implements ModInitializer {
     public static final ExecutorService ASYNC_EXECUTOR;
     public static final EventLoop EVENT_LOOP;
     public static VRConfig config;
+    public static MinecraftServer server;
 
     static {
         ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("ViaFabric-%d").build();
         ASYNC_EXECUTOR = Executors.newFixedThreadPool(8, factory);
-        EVENT_LOOP = new DefaultEventLoop(factory);
+        EVENT_LOOP = new LocalEventLoopGroup(1, factory).next(); // ugly code
     }
 
     public static String getVersion() {
         return FabricLoader.getInstance().getModContainer("viafabric")
                 .get().getMetadata().getVersion().getFriendlyString();
-    }
-
-    public static <S extends CommandSource> LiteralArgumentBuilder<S> command(String commandName) {
-        return LiteralArgumentBuilder.<S>literal(commandName)
-                .then(
-                        RequiredArgumentBuilder
-                                .<S, String>argument("args", StringArgumentType.greedyString())
-                                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
-                                .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
-                )
-                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute);
     }
 
     @Override
@@ -92,9 +80,11 @@ public class ViaFabric implements ModInitializer {
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaversion")));
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaver")));
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("vvfabric")));
+        ServerStartCallback.EVENT.register(it -> server = it);
+        ServerStopCallback.EVENT.register(it -> server = it);
+        //CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaversion")));
+        //CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaver")));
+        //CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("vvfabric")));
 
         config = new VRConfig(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());

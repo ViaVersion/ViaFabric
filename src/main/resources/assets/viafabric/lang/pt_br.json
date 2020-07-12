@@ -1,7 +1,0 @@
-{
-  "gui.protocol_version_field.name": "Versão do protocolo",
-  "gui.enable_client_side_button": "Habilitar ViaVersion",
-  "gui.enable_client_side.question": "Você tem certeza de que deseja habilitar o modo client-side?",
-  "gui.enable_client_side.warning": "Não posso garantir que este mod seja permitido em todos os (ou mesmo em quaisquer) servidores. Esse poderá causar problemas com plugins anti-trapaça. USE POR SUA PRÓPRIA CONTA E RISCO.",
-  "gui.enable_client_side.enable": "Habilitar"
-}

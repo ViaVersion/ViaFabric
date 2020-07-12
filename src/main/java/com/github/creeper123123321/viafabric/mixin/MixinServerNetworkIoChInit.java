@@ -36,9 +36,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.protocol.ProtocolPipeline;
 
-@Mixin(targets = "net.minecraft.server.ServerNetworkIo$1")
+@Mixin(targets = "net.minecraft.server.ServerNetworkIo$4")
 public class MixinServerNetworkIoChInit {
-    @Inject(method = "initChannel(Lio/netty/channel/Channel;)V", at = @At(value = "TAIL"), remap = false)
+    @Inject(method = "initChannel", at = @At(value = "TAIL"), remap = false)
     private void onInitChannel(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
             UserConnection user = new UserConnection(channel);

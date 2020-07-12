@@ -28,7 +28,7 @@ import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import com.github.creeper123123321.viafabric.handler.clientside.VRDecodeHandler;
 import io.netty.channel.ChannelHandler;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.DebugHud;
+import net.minecraft.client.gui.hud.OverlayDebug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -39,14 +39,14 @@ import us.myles.ViaVersion.protocols.base.ProtocolInfo;
 
 import java.util.List;
 
-@Mixin(DebugHud.class)
+@Mixin(OverlayDebug.class)
 public class MixinDebugHud {
-    @Inject(at = @At("RETURN"), method = "getLeftText")
+    @Inject(at = @At("RETURN"), method = "method_2505")
     protected void getLeftText(CallbackInfoReturnable<List<String>> info) {
         info.getReturnValue().add("[ViaFabric] Injected: " + Via.getManager().getConnections().size() + " ("
                 + Via.getManager().getConnectedClients().size() + " frontend)");
         @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) MinecraftClient.getInstance().getNetworkHandler()
-                .getConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
+                .getClientConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
         if (viaDecoder instanceof VRDecodeHandler) {
             ProtocolInfo protocol = ((VRDecodeHandler) viaDecoder).getInfo().getProtocolInfo();
             if (protocol != null) {

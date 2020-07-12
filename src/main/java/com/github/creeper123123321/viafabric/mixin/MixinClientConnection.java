@@ -36,24 +36,23 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
-    @Redirect(
-            method = "exceptionCaught",
-            remap = false,
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lorg/apache/logging/log4j/Logger;debug(Ljava/lang/String;Ljava/lang/Throwable;)V"
-            ))
-    private void redirectDebug(Logger logger, String message, Throwable t) {
-        if ("Failed to sent packet".equals(message)) {
-            logger.info(message, t);
-        } else {
-            logger.debug(message, t);
-        }
-    }
+    //@Redirect(
+    //        method = "exceptionCaught",
+    //        remap = false,
+    //        at = @At(
+    //                value = "INVOKE",
+    //                target = "Lorg/apache/logging/log4j/Logger;debug(Ljava/lang/String;Ljava/lang/Throwable;)V"
+    //        ))
+    //private void redirectDebug(Logger logger, String message, Throwable t) {
+    //    if ("Failed to sent packet".equals(message)) {
+    //        logger.info(message, t);
+    //    } else {
+    //        logger.debug(message, t);
+    //    }
+    //}
 
     @Redirect(method = "setCompressionThreshold", at = @At(
             value = "INVOKE",
-            remap = false,
             target = "Lio/netty/channel/ChannelPipeline;addBefore(Ljava/lang/String;Ljava/lang/String;Lio/netty/channel/ChannelHandler;)Lio/netty/channel/ChannelPipeline;"
     ))
     private ChannelPipeline decodeEncodePlacement(ChannelPipeline instance, String base, String newHandler, ChannelHandler handler) {

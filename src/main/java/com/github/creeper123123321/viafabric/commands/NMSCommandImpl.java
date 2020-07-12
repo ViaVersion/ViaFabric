@@ -24,14 +24,47 @@
 
 package com.github.creeper123123321.viafabric.commands;
 
-import com.github.creeper123123321.viafabric.ViaFabric;
-import com.mojang.brigadier.CommandDispatcher;
-import io.github.cottonmc.clientcommands.ClientCommandPlugin;
-import io.github.cottonmc.clientcommands.CottonClientCommandSource;
+import net.minecraft.command.AbstractCommand;
+import net.minecraft.command.CommandSource;
+import net.minecraft.util.math.BlockPos;
 
-public class VRClientCommands implements ClientCommandPlugin {
+import java.util.Arrays;
+import java.util.List;
+
+public class NMSCommandImpl extends AbstractCommand {
+    private VRCommandHandler handler;
+
+    public NMSCommandImpl(VRCommandHandler handler) {
+        this.handler = handler;
+    }
+
     @Override
-    public void registerCommands(CommandDispatcher<CottonClientCommandSource> commandDispatcher) {
-        commandDispatcher.register(ViaFabric.command("viafabricclient"));
+    public String getName() {
+        return "viaversion";
+    }
+
+    @Override
+    public List<String> method_5887() {
+        return Arrays.asList("vvfabric", "viaver");
+    }
+
+    @Override
+    public String getUsageTranslationKey(CommandSource commandSource) {
+        return "/viaversion help";
+    }
+
+    @Override
+    public void method_5885(CommandSource commandSource, String[] strings) {
+        handler.onCommand(new NMSCommandSender(commandSource), strings);
+    }
+
+    @Override
+    public List<String> method_5886(CommandSource commandSource, String[] strings, BlockPos blockPos) {
+        return handler.onTabComplete(new NMSCommandSender(commandSource), strings);
+    }
+
+    @Override
+    public int getPermissionLevel() {
+        return 3;
     }
 }
