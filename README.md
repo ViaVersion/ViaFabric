@@ -10,19 +10,27 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod supports 1.14.4/1.15.x (on `ver/1.14` branch) and 1.16.x/snapshots (on `master` branch) with Fabric Loader. Check the Minecraft version in file name when downloading from GitHub Releases.
+This mod supports 1.8.9 (in `mc-1.8` branch), 1.14.4/1.15.2 (in `mc-1.14-1.15` branch) and 1.16.x/snapshots (in `mc-1.16` branch) with Fabric Loader. Check the Minecraft version in file name when downloading from CurseForge/GitHub Releases.
 
 Note: ViaVersion is not designed for modded Minecraft with registry synchronization (fabric-registry-sync mod).
 
 
-**Dependencies:**
-| Dependency                        | Download                                                              |
-| --------------------------------- | --------------------------------------------------------------------- |
-| ViaVersion 3.0.2+                 | dev builds at https://ci.viaversion.com/job/ViaVersion/               |
-| Fabric Textures v0                | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
-| Fabric Resource Loader v0         | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
-| Fabric Command API v1             | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
-| (Included) Cotton Client Commands | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands   |
+**1.14+ Dependencies:**
+| Dependency                         | Download                                                              |
+| ---------------------------------- | --------------------------------------------------------------------- |
+| ViaVersion 3.0.2+                  | dev builds at https://ci.viaversion.com/job/ViaVersion/               |
+| Fabric Textures v0                 | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
+| Fabric Resource Loader v0          | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
+| Fabric Command API v1              | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
+| (Included) Cotton Client Commands  | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands   |
+
+
+**1.8.9 Dependencies:**
+| Dependency                             | Download                                                |
+| -------------------------------------- | ------------------------------------------------------- |
+| ViaVersion 3.0.2+                      | dev builds at https://ci.viaversion.com/job/ViaVersion/ |
+| Fabric Events Lifecycle v0 (mc 1.8.x)  | unknown? (https://github.com/Legacy-Fabric/fabric)      |
+| Fabric Resource Loader v0              | unknown? (https://github.com/Legacy-Fabric/fabric)      |
 
 
 With ViaVersion:

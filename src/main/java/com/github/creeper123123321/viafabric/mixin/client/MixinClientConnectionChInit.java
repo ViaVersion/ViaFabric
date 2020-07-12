@@ -39,7 +39,7 @@ import us.myles.ViaVersion.api.protocol.ProtocolPipeline;
 
 @Mixin(targets = "net.minecraft.network.ClientConnection$1")
 public class MixinClientConnectionChInit {
-    @Inject(method = "initChannel(Lio/netty/channel/Channel;)V", at = @At(value = "TAIL"), remap = false)
+    @Inject(method = "initChannel", at = @At(value = "TAIL"), remap = false)
     private void onInitChannel(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
             UserConnection user = new VRClientSideUserConnection(channel);

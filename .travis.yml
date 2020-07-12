@@ -16,7 +16,7 @@ deploy:
   on:
     repo: ViaVersion/ViaFabric
     all_branches: true
-    condition: $TRAVIS_BRANCH =~ ^(master|ver\/.*)$
+    condition: $TRAVIS_BRANCH =~ ^(mc\-.*)$
 install: true
 script:
   # Set up git user name and tag this commit
