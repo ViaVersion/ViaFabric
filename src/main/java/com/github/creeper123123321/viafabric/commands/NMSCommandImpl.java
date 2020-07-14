@@ -27,14 +27,15 @@ package com.github.creeper123123321.viafabric.commands;
 import net.minecraft.command.AbstractCommand;
 import net.minecraft.command.CommandSource;
 import net.minecraft.util.math.BlockPos;
+import us.myles.ViaVersion.commands.ViaCommandHandler;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class NMSCommandImpl extends AbstractCommand {
-    private VRCommandHandler handler;
+    private ViaCommandHandler handler;
 
-    public NMSCommandImpl(VRCommandHandler handler) {
+    public NMSCommandImpl(ViaCommandHandler handler) {
         this.handler = handler;
     }
 
@@ -50,7 +51,7 @@ public class NMSCommandImpl extends AbstractCommand {
 
     @Override
     public String getUsageTranslationKey(CommandSource commandSource) {
-        return "/viaversion help";
+        return "/viaversion [help|subcommand]";
     }
 
     @Override

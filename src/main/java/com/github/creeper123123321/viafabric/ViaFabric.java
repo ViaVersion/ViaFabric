@@ -24,6 +24,7 @@
 
 package com.github.creeper123123321.viafabric;
 
+import com.github.creeper123123321.viafabric.commands.NMSCommandImpl;
 import com.github.creeper123123321.viafabric.commands.VRCommandHandler;
 import com.github.creeper123123321.viafabric.config.VRConfig;
 import com.github.creeper123123321.viafabric.platform.VRInjector;
@@ -36,6 +37,7 @@ import io.netty.channel.local.LocalEventLoopGroup;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.server.ServerStartCallback;
 import net.fabricmc.fabric.api.event.server.ServerStopCallback;
+import net.fabricmc.fabric.api.registry.FabricCommandRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 import org.apache.logging.log4j.LogManager;
@@ -82,9 +84,7 @@ public class ViaFabric implements ModInitializer {
 
         ServerStartCallback.EVENT.register(it -> server = it);
         ServerStopCallback.EVENT.register(it -> server = it);
-        //CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaversion")));
-        //CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaver")));
-        //CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("vvfabric")));
+        FabricCommandRegistry.INSTANCE.register(new NMSCommandImpl(Via.getManager().getCommandHandler()));
 
         config = new VRConfig(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());

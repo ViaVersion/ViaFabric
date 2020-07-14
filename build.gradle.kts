@@ -55,14 +55,14 @@ dependencies {
     implementation("us.myles:viaversion:3.0.2-SNAPSHOT") { isTransitive = false }
 
     // Use 1.8.9 Legacy Fabric https://github.com/Legacy-Fabric/fabric-example-mod/blob/master/gradle.properties
-    compile("com.google.guava:guava:23.5-jre")
+    implementation("com.google.guava:guava:23.5-jre")
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("net.fabricmc:yarn:1.8.9+build.202007011615:v2")
     modCompile("net.fabricmc:fabric-loader-1.8.9:0.8.2+build.202004131640") {
         exclude(module = "guava")
     }
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.2.2-1.8.9")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.2.7-1.8.9")
 
     //modImplementation("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
     //include("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
@@ -70,7 +70,7 @@ dependencies {
 
 minecraft {
     this.intermediaryUrl = JavaFunction {
-        "https://dl.bintray.com/legacy-fabric/Legacy-Fabric-Maven/net/fabricmc/intermediary/" + it + "/intermediary-" + it + "-v2.jar";
+        "https://dl.bintray.com/legacy-fabric/Legacy-Fabric-Maven/net/fabricmc/intermediary/$it/intermediary-$it-v2.jar"
     }
 }
 
