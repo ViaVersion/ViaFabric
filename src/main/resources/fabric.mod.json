@@ -28,7 +28,7 @@
     "viaversion": ">3.0.1"
   },
   "conflicts": {
-    "fabric-registry-sync": "*"
+    "fabric-registry-sync-v0": "*"
   },
   "recommends": {
   },
