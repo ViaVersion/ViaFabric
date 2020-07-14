@@ -12,25 +12,26 @@ Allows the connection to/from different Minecraft versions on your Minecraft cli
 
 This mod supports 1.8.9 (in `mc-1.8` branch), 1.14.4/1.15.2 (in `mc-1.14-1.15` branch) and 1.16.x/snapshots (in `mc-1.16` branch) with Fabric Loader. Check the Minecraft version in file name when downloading from CurseForge/GitHub Releases.
 
-Note: ViaVersion is not designed for modded Minecraft with registry synchronization (fabric-registry-sync mod).
+Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not work with modded registry entries or registry synchronization (fabric-registry-sync mod).
 
 
 **1.14+ Dependencies:**
-| Dependency                         | Download                                                              |
-| ---------------------------------- | --------------------------------------------------------------------- |
-| ViaVersion 3.0.2+                  | dev builds at https://ci.viaversion.com/job/ViaVersion/               |
-| Fabric Textures v0                 | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
-| Fabric Resource Loader v0          | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
-| Fabric Command API v1              | https://www.curseforge.com/minecraft/mc-mods/fabric-api               |
-| (Included) Cotton Client Commands  | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands   |
+| Dependency                        | Download                                                            |
+| --------------------------------- | ------------------------------------------------------------------- |
+| ViaVersion 3.0.2+                 | dev builds at https://ci.viaversion.com/job/ViaVersion/             |
+| Fabric Textures v0                | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
+| Fabric Resource Loader v0         | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
+| Fabric Command API v1             | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
+| (Bundled) Cotton Client Commands  | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands |
 
 
 **1.8.9 Dependencies:**
-| Dependency                             | Download                                                |
-| -------------------------------------- | ------------------------------------------------------- |
-| ViaVersion 3.0.2+                      | dev builds at https://ci.viaversion.com/job/ViaVersion/ |
-| Fabric Events Lifecycle v0 (mc 1.8.x)  | unknown? (https://github.com/Legacy-Fabric/fabric)      |
-| Fabric Resource Loader v0              | unknown? (https://github.com/Legacy-Fabric/fabric)      |
+| Dependency                 | Download                                                |
+| -------------------------- | ------------------------------------------------------- |
+| ViaVersion 3.0.2+          | dev builds at https://ci.viaversion.com/job/ViaVersion/ |
+| Fabric Commands v0         | unknown? (https://github.com/Legacy-Fabric/fabric)      |
+| Fabric Events Lifecycle v0 | unknown? (https://github.com/Legacy-Fabric/fabric)      |
+| Fabric Resource Loader v0  | unknown? (https://github.com/Legacy-Fabric/fabric)      |
 
 
 With ViaVersion:
@@ -52,7 +53,7 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 
 **Commands**:
-- There're 3 server-side alias ``/viaversion``, ``/vvfabric`` and ``/viaver``, and a client-side command ``/viafabricclient`` (OP permission level 3 is required for these commands, in the client it's received by [Entity Status Packet](https://wiki.vg/Entity_statuses#Player))
+- There're 3 server-side alias ``/viaversion``, ``/vvfabric`` and ``/viaver``, and a client-side command ``/viafabricclient`` for Minecraft 1.14+ (OP permission level 3 is required for these commands, received by [Entity Status Packet](https://wiki.vg/Entity_statuses#Player))
 
 
 **Configuration**:
