@@ -15,6 +15,7 @@ Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not
 
 
 **1.14+ Dependencies:**
+
 | Dependency                        | Download                                                            |
 | --------------------------------- | ------------------------------------------------------------------- |
 | ViaVersion 3.0.2+                 | dev builds at https://ci.viaversion.com/job/ViaVersion/             |
@@ -25,6 +26,7 @@ Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not
 
 
 **1.8.9 Dependencies:**
+
 | Dependency                 | Download                                                |
 | -------------------------- | ------------------------------------------------------- |
 | ViaVersion 3.0.2+          | dev builds at https://ci.viaversion.com/job/ViaVersion/ |
