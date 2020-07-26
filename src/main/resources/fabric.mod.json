@@ -12,7 +12,50 @@
   },
   "environment": "*",
   "authors": [
-    "creeper123123321"
+    {
+      "name": "creeper123123321",
+      "contact": {
+        "homepage": "https://creeper123123321.keybase.pub/"
+      }
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Gerrygames",
+      "contact": {
+        "homepage": "https://github.com/Gerrygames"
+      }
+    },
+    {
+      "name": "KennyTV",
+      "contact": {
+        "homepage": "https://github.com/KennyTV"
+      }
+    },
+    {
+      "name": "Patbox",
+      "contact": {
+        "homepage": "https://github.com/Patbox"
+      }
+    },
+    {
+      "name": "Frozen-Tofu",
+      "contact": {
+        "homepage": "https://github.com/Frozen-Tofu"
+      }
+    },
+    {
+      "name": "DreenDex",
+      "contact": {
+        "homepage": "https://github.com/DreenDex"
+      }
+    },
+    {
+      "name": "GitHub contributors",
+      "contact": {
+        "homepage": "https://github.com/ViaVersion/ViaFabric/graphs/contributors"
+      }
+    }
   ],
   "entrypoints": {
     "main": [
