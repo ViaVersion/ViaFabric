@@ -46,7 +46,10 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 
 **What versions can ViaVersion, ViaBackwards and ViaRewind translate?:**
-- See https://viaversion.com
+- Server-side:
+[![Graph with ViaVersion supported versions](https://i.imgur.com/0u20Y2u.png)](https://viaversion.com)
+- Client-side:
+![Graph with ViaFabric client-side supported versions](https://cdn.discordapp.com/attachments/523251999899385875/736978053925961734/unknown.png)
 
 
 **Can ViaVersion and ViaBackwards support snapshots?:**
