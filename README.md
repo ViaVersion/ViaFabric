@@ -56,7 +56,8 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 | 1.8.9 | ✓ | ⏪ | ⟲ | ⟲ | ⟲ |
 | 1.14.4 | ✓ | ✓ | ✓ | ⟲ | ⟲ |
 | 1.15.2 | ✓ | ✓ | ✓ | ✓ | ⟲ |
-| 1.15.2 | ✓ | ✓ | ✓ | ✓ | ✓ |
+| 1.16.2 | ✓ | ✓ | ✓ | ✓ | ✓ |
+
 ✓ = ViaVersion ⟲ = ViaBackwards ⏪ = ViaRewind
 
 **Can ViaVersion and ViaBackwards support snapshots?:**
