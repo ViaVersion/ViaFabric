@@ -2,7 +2,7 @@
 [![Travis Build Status](https://travis-ci.com/ViaVersion/ViaFabric.svg?branch=master)](https://travis-ci.com/ViaVersion/ViaFabric)
 [![ViaVersion Discord](https://img.shields.io/badge/chat-on%20discord-blue.svg)](https://viaversion.com/discord)
 [![CurseForge Downloads](http://cf.way2muchnoise.eu/full_391298_downloads.svg)](https://viaversion.com/fabric)
-[![CurseForge Downloads](http://cf.way2muchnoise.eu/versions/391298.svg)](https://viaversion.com/fabric)
+[![CurseForge Versions](http://cf.way2muchnoise.eu/versions/391298.svg)](https://viaversion.com/fabric)
 <!-- ^ GitHub seems to not support Let's Encrypt certificates -->
 
 
@@ -50,8 +50,14 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 - Server-side:
 [![Graph with ViaVersion supported versions](https://i.imgur.com/0u20Y2u.png)](https://viaversion.com)
 - Client-side:
-![Graph with ViaFabric client-side supported versions](https://cdn.discordapp.com/attachments/523251999899385875/736978053925961734/unknown.png)
 
+| Your Client | 1.8.x | 1.9.x | 1.10-1.14.4 | 1.15.x | 1.16.x |
+| ------ | ----- | ----- | ----------- | ------ | ------ |
+| 1.8.9 | ✓ | ⏪ | ⟲ | ⟲ | ⟲ |
+| 1.14.4 | ✓ | ✓ | ✓ | ⟲ | ⟲ |
+| 1.15.2 | ✓ | ✓ | ✓ | ✓ | ⟲ |
+| 1.15.2 | ✓ | ✓ | ✓ | ✓ | ✓ |
+✓ = ViaVersion ⟲ = ViaBackwards ⏪ = ViaRewind
 
 **Can ViaVersion and ViaBackwards support snapshots?:**
 - Check https://ci.viaversion.com/job/ViaVersion-DEV/ and https://ci.viaversion.com/job/ViaBackwards-DEV/ for development builds with snapshot support
