@@ -1,6 +1,9 @@
 ---
 name: Bug report
 about: Create a bug report so we can fix it
+title: ''
+labels: bug
+assignees: ''
 
 ---
 

@@ -1,6 +1,9 @@
 ---
 name: Feature request
 about: Suggest an idea for ViaFabric
+title: ''
+labels: enhancement
+assignees: ''
 
 ---
 
