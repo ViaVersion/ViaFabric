@@ -52,7 +52,7 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    implementation("us.myles:viaversion:3.0.2-SNAPSHOT") { isTransitive = false }
+    implementation("us.myles:viaversion:3.1.0-1.16.2-pre1") { isTransitive = false }
 
     // Use 1.8.9 Legacy Fabric https://github.com/Legacy-Fabric/fabric-example-mod/blob/master/gradle.properties
     implementation("com.google.guava:guava:23.5-jre")
