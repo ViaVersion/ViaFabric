@@ -35,6 +35,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.Version;
+import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
@@ -113,12 +115,8 @@ public class VRPlatform implements ViaPlatform<UUID> {
 
     @Override
     public String getPluginVersion() {
-        try {
-            return VersionInfo.class.getField("VERSION").get(null).toString();
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        return "?";
+        return FabricLoader.getInstance().getModContainer("viaversion").map(ModContainer::getMetadata)
+                .map(ModMetadata::getVersion).map(Version::getFriendlyString).orElse("UNKNOWN");
     }
 
     @Override
