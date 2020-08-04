@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a bug report so we can fix it
+about: Create a bug report, so we can fix it
 title: ''
 labels: bug
 assignees: ''
@@ -10,9 +10,9 @@ assignees: ''
 **Describe the bug, provide any errors**
 A clear and concise description of what the bug is. Can you paste the error into https://gist.github.com?
 
-**Is this happening specifically by ViaFabric?**
+**Is this happening specifically on ViaFabric?**
 (Optional)
-- [ ] It seems to not happen when using ViaVersion/ViaBackwards/ViaRewind installed on Bukkit/BungeeCord/Sponge/Velocity servers.
+- [ ] It seems to not happen when using ViaVersion/ViaBackwards/ViaRewind installed on Bukkit/BungeeCord/Sponge/Velocity server.
 
 **How can we reproduce it?**
 Steps to reproduce the behavior:
