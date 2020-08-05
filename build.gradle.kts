@@ -71,10 +71,14 @@ dependencies {
     include("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
 }
 
+if (!System.getenv()["curse_api_key"].isNullOrBlank() && branch.startsWith("mc-")) {
+    defaultTasks("clean", "build", "curseforge")
+} else {
+    defaultTasks("clean", "build")
+}
+
 curseforge {
-    if (project.hasProperty("curse_api_key")) {
-        apiKey = project.properties["curse_api_key"]
-    }
+    apiKey = System.getenv()["curse_api_key"]
     project(closureOf<com.matthewprenger.cursegradle.CurseProject> {
         id = "391298"
         changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
