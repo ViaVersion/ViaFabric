@@ -22,4 +22,4 @@ install: true
 script:
   # Set up git user name and tag this commit
   - if [ -z $TRAVIS_TAG ] && [ -z $(git tag -l --points-at HEAD) ]; then git config --local user.name "creeper12313321"; git config --local user.email "7974274+creeper123123321@users.noreply.github.com"; export TRAVIS_TAG=build-$TRAVIS_JOB_NUMBER; git tag $TRAVIS_TAG; fi
-  - ./gradlew clean build
+  - ./gradlew
