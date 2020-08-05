@@ -20,10 +20,11 @@ Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not
 | Dependency                        | Download                                                            |
 | --------------------------------- | ------------------------------------------------------------------- |
 | ViaVersion 3.0.2+                 | https://ci.viaversion.com/job/ViaVersion/                           |
-| Fabric Textures v0                | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
-| Fabric Resource Loader v0         | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
-| Fabric Command API v1             | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
 | (Bundled) Cotton Client Commands  | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands |
+| Fabric Command API v1             | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
+| Fabric Resource Loader v0         | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
+| Fabric Textures v0                | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
+| (Bundled) ProgrammerArtInjector   | https://www.curseforge.com/minecraft/mc-mods/programmerartinjector  |
 
 
 **1.8.9 Dependencies:**
@@ -86,11 +87,11 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 
 **Does it work with multiconnect at same time on client?:**
-- Yes, ViaFabric can be used with multiconnect. ViaFabric will set multiconnect version auto detector to the supported version which is closest to client-side version.
+- Yes, ViaFabric can be used with multiconnect. ViaFabric will send to their version auto detector their closest supported version.
 - Example of setups:
-- (1.8 server) <-> (disabled ViaFabric) <-> (auto detected 1.8 server - multiconnect on Minecraft) = doesn't work because multiconnect doesn't support it
-- (1.8 server) <-> (forced 1.8 - ViaFabric in client - suggests 1.10) <-> (detected 1.10 server - multiconnect on Minecraft) = works, with ViaVersion translating 1.8 -> 1.10 and multiconnect accepting 1.10
-- (1.8 server) <-> (forced 1.8 - ViaFabric in client - detected 1.12.2 client) <-> (forced 1.12.2 server - multiconnect on Minecraft) = works with ViaVersion translating 1.8 -> 1.12.2 and multiconnect accepting 1.12.2
+- (1.8 server) <-> (disabled ViaFabric) <-> (auto detected 1.8 server - multiconnect) = doesn't work because multiconnect doesn't support it
+- (1.8 server) <-> (forced 1.8 - ViaFabric - suggests 1.10) <-> (detected 1.10 server - multiconnect) = works, ViaVersion translating 1.8 -> 1.10 and multiconnect accepting 1.10
+- (1.8 server) <-> (forced 1.8 - ViaFabric - detected 1.12.2 client) <-> (forced 1.12.2 server - multiconnect) = works, ViaVersion translating 1.8 -> 1.12.2 and multiconnect accepting 1.12.2
 
 ## WARNING
 **I cannot guarantee that this mod is allowed on every (or even any) server. This mod may cause problems with anti cheat plugins. USE AT OWN RISK**
