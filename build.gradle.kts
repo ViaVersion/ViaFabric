@@ -82,7 +82,7 @@ if (!System.getenv()["curse_api_key"].isNullOrBlank() && branch.startsWith("mc-"
 }
 
 curseforge {
-    apiKey = System.getenv()["curse_api_key"]
+    apiKey = System.getenv()["curse_api_key"] ?: "undefined"
     project(closureOf<com.matthewprenger.cursegradle.CurseProject> {
         id = "391298"
         changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
