@@ -5,16 +5,23 @@ plugins {
     id("net.minecrell.licenser") version "0.4.1"
     id("fabric-loom") version "0.4-SNAPSHOT"
     id("com.palantir.git-version") version "0.12.0-rc2"
+    id("com.matthewprenger.cursegradle") version "1.4.0"
 }
 
 group = "com.github.creeper123123321.viafabric"
 val gitVersion: groovy.lang.Closure<String> by extra
 val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
-version = "0.2.5-SNAPSHOT+" + try {
-    val travisBranch: String? = System.getenv("TRAVIS_BRANCH") // version details doesn't work on travis
-    gitVersion() + "-" + if (travisBranch.isNullOrBlank()) versionDetails().branchName else travisBranch
+
+val travisBranch: String? = System.getenv("TRAVIS_BRANCH") // version details doesn't work on travis
+val branch = if (!travisBranch.isNullOrBlank()) travisBranch else try {
+    versionDetails().branchName
 } catch (e: Exception) {
-    e.printStackTrace()
+    "unknown"
+}
+
+version = "0.2.5-SNAPSHOT+" + try {
+    gitVersion() + "-" + branch
+} catch (e: Exception) {
     "unknown"
 }
 extra.set("archivesBaseName", "ViaFabric")
@@ -62,6 +69,45 @@ dependencies {
 
     modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
     include("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
+}
+
+curseforge {
+    if (project.hasProperty("curse_api_key")) {
+        apiKey = project.properties["curse_api_key"]
+    }
+    project(closureOf<com.matthewprenger.cursegradle.CurseProject> {
+        id = "391298"
+        changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
+        releaseType = "alpha"
+        when (branch) {
+            "mc-1.8" -> addGameVersion("1.8.9")
+            "mc-1.14-1.15" -> {
+                addGameVersion("1.14.4")
+                addGameVersion("1.15.2")
+            }
+            "mc-1.16" -> {
+                addGameVersion("1.16.1")
+            }
+        }
+        addGameVersion("Fabric")
+        mainArtifact(file("${project.buildDir}/libs/${project.base.archivesBaseName}-${project.version}.jar"), closureOf<com.matthewprenger.cursegradle.CurseArtifact> {
+            relations(closureOf<com.matthewprenger.cursegradle.CurseRelation> {
+                if (branch == "mc-1.8") {
+                    requiredDependency("400281") // Legacy Fabric API
+                } else {
+                    requiredDependency("306612") // Fabric API
+                    embeddedLibrary("323986") // Cotton Client Commands
+                }
+            })
+            displayName = "[$branch] ViaFabric ${project.version}"
+        })
+        afterEvaluate {
+            uploadTask.dependsOn("remapJar")
+        }
+    })
+    options(closureOf<com.matthewprenger.cursegradle.Options> {
+        forgeGradleIntegration = false
+    })
 }
 
 minecraft {
