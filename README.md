@@ -19,7 +19,7 @@ Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not
 
 | Dependency                        | Download                                                            |
 | --------------------------------- | ------------------------------------------------------------------- |
-| ViaVersion 3.0.2+                 | dev builds at https://ci.viaversion.com/job/ViaVersion/             |
+| ViaVersion 3.0.2+                 | https://ci.viaversion.com/job/ViaVersion/                           |
 | Fabric Textures v0                | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
 | Fabric Resource Loader v0         | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
 | Fabric Command API v1             | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
@@ -28,15 +28,15 @@ Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not
 
 **1.8.9 Dependencies:**
 
-| Dependency                 | Download                                                |
-| -------------------------- | ------------------------------------------------------- |
-| ViaVersion 3.0.2+          | dev builds at https://ci.viaversion.com/job/ViaVersion/ |
-| Fabric Commands v0         | unknown? (https://github.com/Legacy-Fabric/fabric)      |
-| Fabric Events Lifecycle v0 | unknown? (https://github.com/Legacy-Fabric/fabric)      |
-| Fabric Resource Loader v0  | unknown? (https://github.com/Legacy-Fabric/fabric)      |
+| Dependency                 | Download                                                       |
+| -------------------------- | -------------------------------------------------------------- |
+| ViaVersion 3.0.2+          | https://ci.viaversion.com/job/ViaVersion/                      |
+| Fabric Commands v0         | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api |
+| Fabric Events Lifecycle v0 | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api |
+| Fabric Resource Loader v0  | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api |
 
 
-With ViaVersion:
+With [ViaVersion](https://viaversion.com):
 - your server can accept newer versions
 - your client can connect to older versions
 
@@ -58,10 +58,10 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 | 1.15.2 | ✓ | ✓ | ✓ | ✓ | ⟲ |
 | 1.16.2 | ✓ | ✓ | ✓ | ✓ | ✓ |
 
-✓ = ViaVersion ⟲ = ViaBackwards ⏪ = ViaRewind
+✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪ = [ViaRewind](https://viaversion.com/rewind)
 
-**Can ViaVersion and ViaBackwards support snapshots?:**
-- Check https://ci.viaversion.com/job/ViaVersion-DEV/ and https://ci.viaversion.com/job/ViaBackwards-DEV/ for development builds with snapshot support
+**Can ViaVersion, ViaBackwards and ViaRewind support snapshots?:**
+- Check https://ci.viaversion.com/job/ViaVersion-DEV/, https://ci.viaversion.com/job/ViaBackwards-DEV/ and https://ci.viaversion.com/job/ViaRewind-DEV/ for development builds with snapshot support
 
 
 **Commands**:
