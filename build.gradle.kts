@@ -20,7 +20,7 @@ val branch = if (!travisBranch.isNullOrBlank()) travisBranch else try {
     "unknown"
 }
 
-version = "0.2.5-SNAPSHOT+" + try {
+version = "0.2.6-SNAPSHOT+" + try {
     gitVersion() + "-" + branch
 } catch (e: Exception) {
     "unknown"
@@ -71,8 +71,11 @@ dependencies {
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.2.7-1.8.9")
 
-    //modImplementation("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
-    //include("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
+    //modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
+    //include("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
+
+    //modImplementation("com.extracraftx.minecraft:ProgrammerArtInjector:1.2.0")
+    //include("com.extracraftx.minecraft:ProgrammerArtInjector:1.2.0")
 }
 
 if (!System.getenv()["curse_api_key"].isNullOrBlank() && branch.startsWith("mc-")) {
@@ -105,6 +108,7 @@ curseforge {
                 } else {
                     requiredDependency("fabric-api")
                     embeddedLibrary("cotton-client-commands")
+                    embeddedLibrary("programmerartinjector")
                 }
             })
             displayName = "[$branch] ViaFabric ${project.version}"

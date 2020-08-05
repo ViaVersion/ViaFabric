@@ -101,7 +101,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
                 40, 20, // Size
                 0, 0, // Start pos of texture
                 20, // v Hover offset
-                new Identifier("viafabric:textures/gui/via_button.png"),
+                new Identifier("viafabric:textures/gui/widgets.png"),
                 256, 256, // Texture size (1.8 is 256x256)
                 button -> MinecraftClient.getInstance().openScreen(new ConfirmScreen(
                         (answer, id) -> {
