@@ -97,10 +97,10 @@ curseforge {
         mainArtifact(file("${project.buildDir}/libs/${project.base.archivesBaseName}-${project.version}.jar"), closureOf<com.matthewprenger.cursegradle.CurseArtifact> {
             relations(closureOf<com.matthewprenger.cursegradle.CurseRelation> {
                 if (branch == "mc-1.8") {
-                    requiredDependency("400281") // Legacy Fabric API
+                    requiredDependency("legacy-fabric-api")
                 } else {
-                    requiredDependency("306612") // Fabric API
-                    embeddedLibrary("323986") // Cotton Client Commands
+                    requiredDependency("fabric-api")
+                    embeddedLibrary("cotton-client-commands")
                 }
             })
             displayName = "[$branch] ViaFabric ${project.version}"
