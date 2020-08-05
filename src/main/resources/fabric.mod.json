@@ -72,6 +72,7 @@
     "fabric-resource-loader-v0": "*",
     "fabric-command-api-v1": "*",
     "minecraft": ">1.15.2",
+    "programmerartinjector": "*",
     "viaversion": ">3.0.1"
   },
   "conflicts": {
