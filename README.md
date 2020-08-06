@@ -17,15 +17,14 @@ Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not
 
 **1.14+ Dependencies:**
 
-| Dependency                        | Download                                                            |
-| --------------------------------- | ------------------------------------------------------------------- |
-| ViaVersion 3.0.2+                 | https://ci.viaversion.com/job/ViaVersion/                           |
-| (Bundled) Cotton Client Commands  | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands |
-| Fabric Command API v1             | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
-| Fabric Resource Loader v0         | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
-| Fabric Textures v0                | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
-| (Bundled) ProgrammerArtInjector   | https://www.curseforge.com/minecraft/mc-mods/programmerartinjector  |
-
+| Dependency                                                               | Download                                                                                   |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| (Bundled outdated 3.1.0-1.16.2-pre2 ``-DEV`` CI build) ViaVersion 3.0.2+ | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
+| (Bundled) Cotton Client Commands                                         | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands                        |
+| Fabric Command API v1                                                    | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
+| Fabric Resource Loader v0                                                | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
+| Fabric Textures v0                                                       | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
+| (Bundled) ProgrammerArtInjector                                          | https://www.curseforge.com/minecraft/mc-mods/programmerartinjector                         |
 
 **1.8.9 Dependencies:**
 
@@ -47,6 +46,10 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 - your client can connect to newer versions
 
 
+**How can I install ViaBackwards/ViaRewind?:**
+- Just drop it into mods folder. Make sure you are using versions compatible with the ViaVersion version you are using. ViaVersion-DEV/ViaBackwards-DEV/ViaRewind-DEV and ViaVersion/ViaBackwards/ViaRewind CI builds are only compatible to each other if they have the same label (``-DEV`` or empty).
+
+
 **What versions can ViaVersion, ViaBackwards and ViaRewind translate?:**
 - Server-side:
 [![Graph with ViaVersion supported versions](https://i.imgur.com/0u20Y2u.png)](https://viaversion.com)
@@ -60,6 +63,7 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 | 1.16.2 | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪ = [ViaRewind](https://viaversion.com/rewind)
+
 
 **Can ViaVersion, ViaBackwards and ViaRewind support snapshots?:**
 - Check https://ci.viaversion.com/job/ViaVersion-DEV/, https://ci.viaversion.com/job/ViaBackwards-DEV/ and https://ci.viaversion.com/job/ViaRewind-DEV/ for development builds with snapshot support
