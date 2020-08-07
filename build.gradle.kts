@@ -19,7 +19,7 @@ val branch = if (!travisBranch.isNullOrBlank()) travisBranch else try {
     "unknown"
 }
 
-version = "0.2.6-SNAPSHOT+" + try {
+version = "0.2.7-SNAPSHOT+" + try {
     gitVersion() + "-" + branch
 } catch (e: Exception) {
     "unknown"
@@ -58,8 +58,8 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    implementation("us.myles:viaversion:3.1.0-1.16.2-pre2") { isTransitive = false }
-    include("us.myles:viaversion:3.1.0-1.16.2-pre2")
+    implementation("us.myles:viaversion:3.1.0-1.16.2-pre3") { isTransitive = false }
+    include("us.myles:viaversion:3.1.0-1.16.2-pre3")
     include("org.yaml:snakeyaml:1.26")
 
     // Use 1.16 snapshot, probably intermediary will make it work on further versions
