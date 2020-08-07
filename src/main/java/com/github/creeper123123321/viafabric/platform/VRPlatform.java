@@ -36,6 +36,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.metadata.ModMetadata;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.Text;
@@ -86,8 +87,9 @@ public class VRPlatform implements ViaPlatform<UUID> {
 
     public static MinecraftServer getServer() {
         // In 1.8.9 integrated server instance exists even if it's not running
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) return MinecraftServer.getServer();
-        return ViaFabric.server;
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
+                && !MinecraftClient.getInstance().isIntegratedServerRunning()) return null;
+        return MinecraftServer.getServer();
     }
 
     @Override

@@ -65,7 +65,6 @@
   "depends": {
     "fabricloader": ">=0.4.0",
     "fabric-commands-v0": "*",
-    "fabric-events-lifecycle-v0": "*",
     "fabric-resource-loader-v0": "*",
     "minecraft": "<1.13",
     "viaversion": ">3.0.1"
