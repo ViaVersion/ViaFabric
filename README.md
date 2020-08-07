@@ -19,7 +19,7 @@ Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not
 
 | Dependency                                                               | Download                                                                                   |
 | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| (Bundled outdated 3.1.0-1.16.2-pre2 ``-DEV`` CI build) ViaVersion 3.0.2+ | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
+| (Bundled outdated 3.1.0-1.16.2-pre3 ``-DEV`` CI build) ViaVersion 3.0.2+ | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
 | (Bundled) Cotton Client Commands                                         | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands                        |
 | Fabric Command API v1                                                    | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
 | Fabric Resource Loader v0                                                | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
@@ -28,12 +28,11 @@ Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not
 
 **1.8.9 Dependencies:**
 
-| Dependency                 | Download                                                       |
-| -------------------------- | -------------------------------------------------------------- |
-| ViaVersion 3.0.2+          | https://ci.viaversion.com/job/ViaVersion/                      |
-| Fabric Commands v0         | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api |
-| Fabric Events Lifecycle v0 | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api |
-| Fabric Resource Loader v0  | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api |
+| Dependency                                                               | Download                                                                                   |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| (Bundled outdated 3.1.0-1.16.2-pre3 ``-DEV`` CI build) ViaVersion 3.0.2+ | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
+| Fabric Commands v0                                                       | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
+| Fabric Resource Loader v0                                                | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
 
 
 With [ViaVersion](https://viaversion.com):
@@ -53,11 +52,12 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 **What versions can ViaVersion, ViaBackwards and ViaRewind translate?:**
 - Server-side:
 [![Graph with ViaVersion supported versions](https://i.imgur.com/0u20Y2u.png)](https://viaversion.com)
+
 - Client-side:
 
 | Your Client | 1.8.x | 1.9.x | 1.10-1.14.4 | 1.15.x | 1.16.x |
-| ------ | ----- | ----- | ----------- | ------ | ------ |
-| 1.8.9 | ✓ | ⏪ | ⟲ | ⟲ | ⟲ |
+| ----------- | ----- | ----- | ----------- | ------ | ------ |
+| 1.8.9  | ✓ | ⏪ | ⟲ | ⟲ | ⟲ |
 | 1.14.4 | ✓ | ✓ | ✓ | ⟲ | ⟲ |
 | 1.15.2 | ✓ | ✓ | ✓ | ✓ | ⟲ |
 | 1.16.2 | ✓ | ✓ | ✓ | ✓ | ✓ |
