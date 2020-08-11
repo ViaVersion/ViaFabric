@@ -58,9 +58,18 @@ public class VRVersionProvider extends VersionProvider {
                 Object mcApiInstance = mcApiClass.getMethod("instance").invoke(null);
                 List<?> protocols = (List<?>) mcApiClass.getMethod("getSupportedProtocols").invoke(mcApiInstance);
                 Method getValue = iProtocolClass.getMethod("getValue");
+                Method isMulticonnectBeta;
+                try {
+                    isMulticonnectBeta = iProtocolClass.getMethod("isMulticonnectBeta");
+                } catch (NoSuchMethodException e) {
+                    isMulticonnectBeta = null;
+                }
                 multiconnectSupportedVersions = new TreeSet<>();
                 for (Object protocol : protocols) {
-                    multiconnectSupportedVersions.add((Integer) getValue.invoke(protocol));
+                    // Do not use versions with beta multiconnect support, which may have stability issues
+                    if (isMulticonnectBeta == null || !(Boolean) isMulticonnectBeta.invoke(protocol)) {
+                        multiconnectSupportedVersions.add((Integer) getValue.invoke(protocol));
+                    }
                 }
                 ViaFabric.JLOGGER.info("ViaFabric will integrate with multiconnect");
             }
