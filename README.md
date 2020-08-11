@@ -17,22 +17,22 @@ Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not
 
 **1.14+ Dependencies:**
 
-| Dependency                                                               | Download                                                                                   |
-| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| (Bundled outdated 3.1.0-1.16.2-pre3 ``-DEV`` CI build) ViaVersion 3.0.2+ | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
-| (Bundled) Cotton Client Commands                                         | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands                        |
-| Fabric Command API v1                                                    | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
-| Fabric Resource Loader v0                                                | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
-| Fabric Textures v0                                                       | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
-| (Bundled) ProgrammerArtInjector                                          | https://www.curseforge.com/minecraft/mc-mods/programmerartinjector                         |
+| Dependency                                | Download                                                                                   |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------ |
+| (Bundled 3.1.0 release) ViaVersion 3.0.2+ | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
+| (Bundled) Cotton Client Commands          | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands                        |
+| Fabric Command API v1                     | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
+| Fabric Resource Loader v0                 | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
+| Fabric Textures v0                        | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
+| (Bundled) ProgrammerArtInjector           | https://www.curseforge.com/minecraft/mc-mods/programmerartinjector                         |
 
 **1.8.9 Dependencies:**
 
-| Dependency                                                               | Download                                                                                   |
-| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| (Bundled outdated 3.1.0-1.16.2-pre3 ``-DEV`` CI build) ViaVersion 3.0.2+ | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
-| Fabric Commands v0                                                       | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
-| Fabric Resource Loader v0                                                | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
+| Dependency                                | Download                                                                                   |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------ |
+| (Bundled 3.1.0 release) ViaVersion 3.0.2+ | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
+| Fabric Commands v0                        | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
+| Fabric Resource Loader v0                 | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
 
 
 With [ViaVersion](https://viaversion.com):
@@ -91,10 +91,10 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 
 **Does it work with multiconnect at same time on client?:**
-- Yes, ViaFabric can be used with multiconnect. ViaFabric will send to their version auto detector their closest supported version.
+- Yes, ViaFabric can be used with multiconnect. ViaFabric will send to their version auto detector their closest supported version. (multiconnect beta-supported versions (currently 1.10) aren't used)
 - Example of setups:
 - (1.8 server) <-> (disabled ViaFabric) <-> (auto detected 1.8 server - multiconnect) = doesn't work because multiconnect doesn't support it
-- (1.8 server) <-> (forced 1.8 - ViaFabric - suggests 1.10) <-> (detected 1.10 server - multiconnect) = works, ViaVersion translating 1.8 -> 1.10 and multiconnect accepting 1.10
+- (1.8 server) <-> (forced 1.8 - ViaFabric - suggests 1.11) <-> (detected 1.11 server - multiconnect) = works, ViaVersion translating 1.8 -> 1.11 and multiconnect accepting 1.11
 - (1.8 server) <-> (forced 1.8 - ViaFabric - detected 1.12.2 client) <-> (forced 1.12.2 server - multiconnect) = works, ViaVersion translating 1.8 -> 1.12.2 and multiconnect accepting 1.12.2
 
 ## WARNING
