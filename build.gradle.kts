@@ -107,7 +107,7 @@ curseforge {
                 addGameVersion("1.15.2")
             }
             "mc-1.16" -> {
-                addGameVersion("1.16-SNAPSHOT")
+                addGameVersion("1.16-Snapshot")
                 addGameVersion("1.16")
                 addGameVersion("1.16.1")
                 addGameVersion("1.16.2")
