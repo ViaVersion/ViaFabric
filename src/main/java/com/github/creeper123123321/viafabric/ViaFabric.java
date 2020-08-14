@@ -79,9 +79,18 @@ public class ViaFabric implements ModInitializer {
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
 
-        FabricCommandRegistry.INSTANCE.register(new NMSCommandImpl(Via.getManager().getCommandHandler()));
+        try {
+            registerCommandsV0();
+        } catch (NoClassDefFoundError ignored2) {
+            JLOGGER.info("Couldn't register command as Fabric Commands isn't installed");
+        }
 
         config = new VRConfig(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());
+    }
+
+    @SuppressWarnings("deprecation")
+    private void registerCommandsV0() {
+        FabricCommandRegistry.INSTANCE.register(new NMSCommandImpl(Via.getManager().getCommandHandler()));
     }
 }
