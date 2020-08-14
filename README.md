@@ -59,7 +59,7 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 | 1.8.9  | ✓ | ⏪ | ⟲ | ⟲ | ⟲ |
 | 1.14.x | ✓ | ✓ | ✓ | ⟲ | ⟲ |
 | 1.15.x | ✓ | ✓ | ✓ | ✓ | ⟲ |
-| 1.16.2 | ✓ | ✓ | ✓ | ✓ | ✓ |
+| 1.16.x | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪ = [ViaRewind](https://viaversion.com/rewind)
 
