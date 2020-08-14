@@ -19,7 +19,7 @@ val branch = if (!travisBranch.isNullOrBlank()) travisBranch else try {
     "unknown"
 }
 
-version = "0.2.7-SNAPSHOT+" + try {
+version = "0.2.8-SNAPSHOT+" + try {
     gitVersion() + "-" + branch
 } catch (e: Exception) {
     "unknown"
@@ -89,14 +89,28 @@ curseforge {
         id = "391298"
         changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
         releaseType = "alpha"
+        addGameVersion("Java 8")
+        if (branch != "mc-1.8") {
+            addGameVersion("Java 9")
+            addGameVersion("Java 10")
+        }
         when (branch) {
             "mc-1.8" -> addGameVersion("1.8.9")
             "mc-1.14-1.15" -> {
+                addGameVersion("1.14")
+                addGameVersion("1.14.1")
+                addGameVersion("1.14.2")
+                addGameVersion("1.14.3")
                 addGameVersion("1.14.4")
+                addGameVersion("1.15")
+                addGameVersion("1.15.1")
                 addGameVersion("1.15.2")
             }
             "mc-1.16" -> {
+                addGameVersion("1.16-SNAPSHOT")
+                addGameVersion("1.16")
                 addGameVersion("1.16.1")
+                addGameVersion("1.16.2")
             }
         }
         addGameVersion("Fabric")
