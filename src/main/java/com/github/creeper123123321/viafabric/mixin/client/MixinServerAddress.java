@@ -26,31 +26,29 @@
 package com.github.creeper123123321.viafabric.mixin.client;
 
 import com.github.creeper123123321.viafabric.ViaFabricAddress;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.ServerAddress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.Arrays;
-
 @Mixin(ServerAddress.class)
 public class MixinServerAddress {
-    @Redirect(method = "parse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ServerAddress;resolveSrv(Ljava/lang/String;)[Ljava/lang/String;"))
-    private static String[] modifySrvAddr(String address) {
+    @Redirect(method = "parse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ServerAddress;resolveSrv(Ljava/lang/String;)Lcom/mojang/datafixers/util/Pair;"))
+    private static Pair<String, Integer> modifySrvAddr(String address) {
         ViaFabricAddress viaAddr = new ViaFabricAddress().parse(address);
         if (viaAddr.viaSuffix == null) {
             return resolveSrv(address);
         }
 
-        String[] resolvedSrv = resolveSrv(viaAddr.realAddress);
-        resolvedSrv[0] = resolvedSrv[0].replaceAll("\\.$", "") + "." + viaAddr.viaSuffix;
+        Pair<String, Integer> resolvedSrv = resolveSrv(viaAddr.realAddress).mapFirst(it -> it.replaceAll("\\.$", "") + "." + viaAddr.viaSuffix);
 
         return resolvedSrv;
     }
 
     @Shadow
-    private static String[] resolveSrv(String address) {
+    private static Pair<String, Integer> resolveSrv(String address) {
         throw new IllegalStateException();
     }
 }
