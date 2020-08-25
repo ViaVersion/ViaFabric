@@ -31,7 +31,9 @@ import com.github.creeper123123321.viafabric.config.VRConfig;
 import com.github.creeper123123321.viafabric.platform.VRInjector;
 import com.github.creeper123123321.viafabric.platform.VRLoader;
 import com.github.creeper123123321.viafabric.platform.VRPlatform;
+import com.github.creeper123123321.viafabric.protocol.ViaFabricHostnameProtocol;
 import com.github.creeper123123321.viafabric.util.JLoggerToLog4j;
+import com.google.common.collect.Range;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.netty.channel.EventLoop;
 import io.netty.channel.local.LocalEventLoopGroup;
@@ -42,6 +44,7 @@ import org.apache.logging.log4j.LogManager;
 import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.data.MappingDataLoader;
+import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -76,6 +79,8 @@ public class ViaFabric implements ModInitializer {
         FabricLoader.getInstance().getModContainer("viabackwards").ifPresent(mod -> MappingDataLoader.enableMappingsCache());
 
         Via.getManager().init();
+
+        ProtocolRegistry.registerBaseProtocol(ViaFabricHostnameProtocol.INSTANCE, Range.lessThan(Integer.MIN_VALUE));
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
 
