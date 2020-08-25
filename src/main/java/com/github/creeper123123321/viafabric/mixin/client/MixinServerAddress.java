@@ -25,30 +25,32 @@
 
 package com.github.creeper123123321.viafabric.mixin.client;
 
-import com.github.creeper123123321.viafabric.ProtocolViaFabricHostname;
-import com.github.creeper123123321.viafabric.handler.CommonTransformer;
-import com.github.creeper123123321.viafabric.handler.clientside.VRDecodeHandler;
-import com.github.creeper123123321.viafabric.handler.clientside.VREncodeHandler;
-import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
-import io.netty.channel.Channel;
-import io.netty.channel.socket.SocketChannel;
+import com.github.creeper123123321.viafabric.ViaFabricAddress;
+import net.minecraft.network.ServerAddress;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.protocol.ProtocolPipeline;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(targets = "net.minecraft.network.ClientConnection$1")
-public class MixinClientConnectionChInit {
-    @Inject(method = "initChannel", at = @At(value = "TAIL"), remap = false)
-    private void onInitChannel(Channel channel, CallbackInfo ci) {
-        if (channel instanceof SocketChannel) {
-            UserConnection user = new VRClientSideUserConnection(channel);
-            new ProtocolPipeline(user).add(ProtocolViaFabricHostname.INSTANCE);
+import java.util.Arrays;
 
-            channel.pipeline().addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new VREncodeHandler(user));
-            channel.pipeline().addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new VRDecodeHandler(user));
+@Mixin(ServerAddress.class)
+public class MixinServerAddress {
+    @Redirect(method = "parse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ServerAddress;resolveSrv(Ljava/lang/String;)[Ljava/lang/String;"))
+    private static String[] modifySrvAddr(String address) {
+        ViaFabricAddress viaAddr = new ViaFabricAddress().parse(address);
+        if (viaAddr.viaSuffix == null) {
+            return resolveSrv(address);
         }
+
+        String[] resolvedSrv = resolveSrv(viaAddr.realAddress);
+        resolvedSrv[0] = resolvedSrv[0].replaceAll("\\.$", "") + "." + viaAddr.viaSuffix;
+
+        return resolvedSrv;
+    }
+
+    @Shadow
+    private static String[] resolveSrv(String address) {
+        throw new IllegalStateException();
     }
 }
