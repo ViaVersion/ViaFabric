@@ -26,6 +26,7 @@
 package com.github.creeper123123321.viafabric.providers;
 
 import com.github.creeper123123321.viafabric.ViaFabric;
+import com.github.creeper123123321.viafabric.ViaFabricAddress;
 import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
 import com.google.common.primitives.Ints;
 import net.fabricmc.loader.api.FabricLoader;
@@ -83,11 +84,17 @@ public class VRVersionProvider extends VersionProvider {
     public int getServerProtocol(UserConnection connection) throws Exception {
         if (connection instanceof VRClientSideUserConnection) {
             int clientSideVersion = ViaFabric.config.getClientSideVersion();
+            SocketAddress addr = connection.getChannel().remoteAddress();
+
+            if (addr instanceof InetSocketAddress && ViaFabric.config.isClientSideEnabled()) {
+                int addrVersion = new ViaFabricAddress().parse(((InetSocketAddress) addr).getHostName()).protocol;
+                if (addrVersion != 0) clientSideVersion = addrVersion;
+            }
+
             boolean blocked = false;
             if (connection.getChannel() != null) {
                 ProtocolInfo info = Objects.requireNonNull(connection.getProtocolInfo());
 
-                SocketAddress addr = connection.getChannel().remoteAddress();
                 if (addr instanceof InetSocketAddress && (isDisabled(((InetSocketAddress) addr).getHostString())
                         || ((((InetSocketAddress) addr).getAddress() != null) &&
                         (isDisabled(((InetSocketAddress) addr).getAddress().getHostAddress())

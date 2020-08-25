@@ -59,7 +59,7 @@ public class ViaFabric implements ModInitializer {
     public static VRConfig config;
 
     static {
-        ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("ViaFabric-%d").build();
+        ThreadFactory factory = new ThreadFactoryBuilder().setDaemon(true).setNameFormat("ViaFabric-%d").build();
         ASYNC_EXECUTOR = Executors.newFixedThreadPool(8, factory);
         EVENT_LOOP = new DefaultEventLoop(factory);
     }
