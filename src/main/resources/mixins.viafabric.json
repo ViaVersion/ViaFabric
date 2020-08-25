@@ -9,8 +9,11 @@
   "client": [
     "client.MixinClientConnectionAccessor",
     "client.MixinClientConnectionChInit",
+    "client.MixinConnectScreenThread",
     "client.MixinDebugHud",
-    "client.MixinMultiplayerScreen"
+    "client.MixinMultiplayerScreen",
+    "client.MixinServerAddress",
+    "client.MixinServerPinger"
   ],
   "injectors": {
     "defaultRequire": 1
