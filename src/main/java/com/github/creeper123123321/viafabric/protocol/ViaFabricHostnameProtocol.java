@@ -23,8 +23,9 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric;
+package com.github.creeper123123321.viafabric.protocol;
 
+import com.github.creeper123123321.viafabric.ViaFabricAddress;
 import us.myles.ViaVersion.api.PacketWrapper;
 import us.myles.ViaVersion.api.protocol.SimpleProtocol;
 import us.myles.ViaVersion.api.remapper.PacketRemapper;
@@ -32,8 +33,8 @@ import us.myles.ViaVersion.api.remapper.ValueTransformer;
 import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.packets.State;
 
-public class ProtocolViaFabricHostname extends SimpleProtocol {
-    public static final ProtocolViaFabricHostname INSTANCE = new ProtocolViaFabricHostname();
+public class ViaFabricHostnameProtocol extends SimpleProtocol {
+    public static final ViaFabricHostnameProtocol INSTANCE = new ViaFabricHostnameProtocol();
 
     @Override
     protected void registerPackets() {

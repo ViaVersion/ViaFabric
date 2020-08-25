@@ -89,6 +89,10 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 - You can disable it by resetting the anti-cheat warning in config file or by setting protocol version to -1
 
 
+**How can I set the version for specific servers?:**
+- Append ._v(VERSION).viafabric. Example: ``minigame.example.com._v1_8.viafabric``, ``native.example.com._v-1.viafabric``
+
+
 **Does it work with multiconnect at same time on client?:**
 - Yes, ViaFabric can be used with multiconnect. ViaFabric will send to their version auto detector their closest supported version. (multiconnect beta-supported versions (currently 1.10) aren't used)
 - Example of setups:

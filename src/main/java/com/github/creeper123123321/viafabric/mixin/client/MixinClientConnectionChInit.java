@@ -25,7 +25,7 @@
 
 package com.github.creeper123123321.viafabric.mixin.client;
 
-import com.github.creeper123123321.viafabric.ProtocolViaFabricHostname;
+import com.github.creeper123123321.viafabric.protocol.ViaFabricHostnameProtocol;
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import com.github.creeper123123321.viafabric.handler.clientside.VRDecodeHandler;
 import com.github.creeper123123321.viafabric.handler.clientside.VREncodeHandler;
@@ -45,7 +45,7 @@ public class MixinClientConnectionChInit {
     private void onInitChannel(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
             UserConnection user = new VRClientSideUserConnection(channel);
-            new ProtocolPipeline(user).add(ProtocolViaFabricHostname.INSTANCE);
+            new ProtocolPipeline(user).add(ViaFabricHostnameProtocol.INSTANCE);
 
             channel.pipeline().addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new VREncodeHandler(user));
             channel.pipeline().addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new VRDecodeHandler(user));
