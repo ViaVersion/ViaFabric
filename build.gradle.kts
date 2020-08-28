@@ -118,7 +118,7 @@ curseforge {
                 } else {
                     requiredDependency("fabric-api")
                     embeddedLibrary("cotton-client-commands")
-                    embeddedLibrary("programmerartinjector")
+//                    embeddedLibrary("programmerartinjector")
                 }
             })
             displayName = "[$branch] ViaFabric ${project.version}"
