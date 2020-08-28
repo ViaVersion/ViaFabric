@@ -23,7 +23,6 @@ Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not
 | (Bundled) Cotton Client Commands          | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands                        |
 | (Optional) Fabric Command API v1/v0       | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
 | Fabric Resource Loader v0                 | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
-| (Bundled) ProgrammerArtInjector           | https://www.curseforge.com/minecraft/mc-mods/programmerartinjector                         |
 
 **1.8.9 Dependencies:**
 
