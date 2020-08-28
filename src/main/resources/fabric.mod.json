@@ -70,7 +70,6 @@
     "fabricloader": ">=0.4.0",
     "fabric-resource-loader-v0": "*",
     "minecraft": "<1.16",
-    "programmerartinjector": "*",
     "viaversion": ">3.0.1"
   },
   "conflicts": {

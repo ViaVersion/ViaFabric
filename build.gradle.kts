@@ -19,7 +19,7 @@ val branch = if (!travisBranch.isNullOrBlank()) travisBranch else try {
     "unknown"
 }
 
-version = "0.2.9-SNAPSHOT+" + try {
+version = "0.2.10-SNAPSHOT+" + try {
     gitVersion() + "-" + branch
 } catch (e: Exception) {
     "unknown"
@@ -72,9 +72,6 @@ dependencies {
 
     modImplementation("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
     include("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
-
-    modImplementation("com.extracraftx.minecraft:ProgrammerArtInjector:1.2.0")
-    include("com.extracraftx.minecraft:ProgrammerArtInjector:1.2.0")
 }
 
 if (!System.getenv()["curse_api_key"].isNullOrBlank() && branch.startsWith("mc-")) {
