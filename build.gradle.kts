@@ -6,6 +6,7 @@ plugins {
     id("fabric-loom") version "0.4-SNAPSHOT"
     id("com.palantir.git-version") version "0.12.0-rc2"
     id("com.matthewprenger.cursegradle") version "1.4.0"
+    id("maven-publish")
 }
 
 group = "com.github.creeper123123321.viafabric"
@@ -19,7 +20,7 @@ val branch = if (!travisBranch.isNullOrBlank()) travisBranch else try {
     "unknown"
 }
 
-version = "0.2.10-SNAPSHOT+" + try {
+version = "0.2.11-SNAPSHOT+" + try {
     gitVersion() + "-" + branch
 } catch (e: Exception) {
     "unknown"
@@ -58,8 +59,8 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    implementation("us.myles:viaversion:3.1.0") { isTransitive = false }
-    include("us.myles:viaversion:3.1.0")
+    implementation("us.myles:viaversion:3.1.1") { isTransitive = false }
+    include("us.myles:viaversion:3.1.1")
     include("org.yaml:snakeyaml:1.26")
 
     // Use 1.14.4 release, probably intermediary will make it work on snapshots
@@ -108,6 +109,7 @@ curseforge {
                 addGameVersion("1.16")
                 addGameVersion("1.16.1")
                 addGameVersion("1.16.2")
+                addGameVersion("1.16.3")
             }
         }
         addGameVersion("Fabric")
@@ -137,4 +139,39 @@ minecraft {
 
 license {
     include("**/*.java")
+}
+
+tasks.jar {
+    from("LICENSE")
+}
+
+
+// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+// if it is present.
+// If you remove this task, sources will not be generated.
+tasks.register("sourcesJar", type = Jar::class) {
+    dependsOn(tasks.getByName("classes"))
+    archiveClassifier.set("sources")
+    from(sourceSets.main.get().allSource)
+}
+
+// configure the maven publication
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            // add all the jars that should be included when publishing to maven
+            artifact(tasks.getByName("remapJar")) {
+                builtBy(tasks.getByName("remapJar"))
+            }
+            artifact(tasks.getByName("sourcesJar")) {
+                builtBy(tasks.getByName("remapSourcesJar"))
+            }
+        }
+    }
+
+    // select the repositories you want to publish to
+    repositories {
+        // uncomment to publish to the local maven
+        // mavenLocal()
+    }
 }
