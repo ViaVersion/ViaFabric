@@ -67,12 +67,12 @@ dependencies {
     // Use 1.8.9 Legacy Fabric https://github.com/Legacy-Fabric/fabric-example-mod/blob/master/gradle.properties
     implementation("com.google.guava:guava:23.5-jre")
     minecraft("com.mojang:minecraft:1.8.9")
-    mappings("net.fabricmc:yarn:1.8.9+build.202007011615:v2")
-    modCompile("net.fabricmc:fabric-loader-1.8.9:0.8.2+build.202004131640") {
+    mappings("net.fabricmc:yarn:1.8.9+build.202008241659:v2")
+    modCompile("net.fabricmc:fabric-loader-1.8.9:0.8.7+build.202008300717") {
         exclude(module = "guava")
     }
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.2.7-1.8.9")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.7.3")
 
     //modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
     //include("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
@@ -97,12 +97,14 @@ curseforge {
         }
         when (branch) {
             "mc-1.8" -> addGameVersion("1.8.9")
-            "mc-1.14-1.15" -> {
+            "mc-1.14" -> {
                 addGameVersion("1.14")
                 addGameVersion("1.14.1")
                 addGameVersion("1.14.2")
                 addGameVersion("1.14.3")
                 addGameVersion("1.14.4")
+            }
+            "mc-1.15" -> {
                 addGameVersion("1.15")
                 addGameVersion("1.15.1")
                 addGameVersion("1.15.2")

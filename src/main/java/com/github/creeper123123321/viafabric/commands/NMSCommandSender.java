@@ -44,7 +44,7 @@ public class NMSCommandSender implements ViaCommandSender {
     @Override
     public boolean hasPermission(String s) {
         // https://gaming.stackexchange.com/questions/138602/what-does-op-permission-level-do
-        return source.method_6255(3, "viaversion.admin"); // the string seems to be the command
+        return source.canUseCommand(3, "viaversion.admin"); // the string seems to be the command
     }
 
     @Override

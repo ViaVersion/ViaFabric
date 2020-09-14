@@ -41,12 +41,12 @@ public class NMSCommandImpl extends AbstractCommand {
     }
 
     @Override
-    public String getName() {
+    public String getCommandName() {
         return "viaversion";
     }
 
     @Override
-    public List<String> method_5887() {
+    public List<String> getAliases() {
         return Arrays.asList("vvfabric", "viaver");
     }
 
@@ -56,12 +56,12 @@ public class NMSCommandImpl extends AbstractCommand {
     }
 
     @Override
-    public void method_5885(CommandSource commandSource, String[] strings) {
+    public void execute(CommandSource commandSource, String[] strings) {
         handler.onCommand(new NMSCommandSender(commandSource), strings);
     }
 
     @Override
-    public List<String> method_5886(CommandSource commandSource, String[] strings, BlockPos blockPos) {
+    public List<String> getAutoCompleteHints(CommandSource commandSource, String[] strings, BlockPos blockPos) {
         return handler.onTabComplete(new NMSCommandSender(commandSource), strings);
     }
 
