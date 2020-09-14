@@ -94,12 +94,14 @@ curseforge {
         }
         when (branch) {
             "mc-1.8" -> addGameVersion("1.8.9")
-            "mc-1.14-1.15" -> {
+            "mc-1.14" -> {
                 addGameVersion("1.14")
                 addGameVersion("1.14.1")
                 addGameVersion("1.14.2")
                 addGameVersion("1.14.3")
                 addGameVersion("1.14.4")
+            }
+            "mc-1.15" -> {
                 addGameVersion("1.15")
                 addGameVersion("1.15.1")
                 addGameVersion("1.15.2")
