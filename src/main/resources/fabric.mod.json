@@ -69,7 +69,7 @@
     "cotton-client-commands": "*",
     "fabricloader": ">=0.4.0",
     "fabric-resource-loader-v0": "*",
-    "minecraft": "<1.16",
+    "minecraft": "1.15.x",
     "viaversion": ">3.0.1"
   },
   "conflicts": {

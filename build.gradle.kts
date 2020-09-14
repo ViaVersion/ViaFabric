@@ -65,11 +65,11 @@ dependencies {
 
     // Use 1.14.4 release, probably intermediary will make it work on snapshots
     // https://modmuss50.me/fabric.html?&version=1.14.4
-    minecraft("com.mojang:minecraft:1.14.4")
-    mappings("net.fabricmc:yarn:1.14.4+build.16:v2")
-    modImplementation("net.fabricmc:fabric-loader:0.8.2+build.194")
+    minecraft("com.mojang:minecraft:1.15.2")
+    mappings("net.fabricmc:yarn:1.15.2+build.17:v2")
+    modImplementation("net.fabricmc:fabric-loader:0.9.3+build.207")
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.13.1+build.257-1.14")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.19.0+build.325-1.15")
 
     modImplementation("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
     include("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
@@ -94,12 +94,14 @@ curseforge {
         }
         when (branch) {
             "mc-1.8" -> addGameVersion("1.8.9")
-            "mc-1.14-1.15" -> {
+            "mc-1.14" -> {
                 addGameVersion("1.14")
                 addGameVersion("1.14.1")
                 addGameVersion("1.14.2")
                 addGameVersion("1.14.3")
                 addGameVersion("1.14.4")
+            }
+            "mc-1.15" -> {
                 addGameVersion("1.15")
                 addGameVersion("1.15.1")
                 addGameVersion("1.15.2")
