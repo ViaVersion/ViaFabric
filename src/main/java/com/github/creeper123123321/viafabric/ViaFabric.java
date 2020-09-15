@@ -50,6 +50,7 @@ import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.data.MappingDataLoader;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -59,12 +60,14 @@ public class ViaFabric implements ModInitializer {
     public static final Logger JLOGGER = new JLoggerToLog4j(LogManager.getLogger("ViaFabric"));
     public static final ExecutorService ASYNC_EXECUTOR;
     public static final EventLoop EVENT_LOOP;
+    public static CompletableFuture<Void> INIT_FUTURE = new CompletableFuture<>();
     public static VRConfig config;
 
     static {
         ThreadFactory factory = new ThreadFactoryBuilder().setDaemon(true).setNameFormat("ViaFabric-%d").build();
         ASYNC_EXECUTOR = Executors.newFixedThreadPool(8, factory);
         EVENT_LOOP = new DefaultEventLoop(factory);
+        EVENT_LOOP.submit(INIT_FUTURE::join); // https://github.com/ViaVersion/ViaFabric/issues/53 ugly workaround code but works tm
     }
 
     public static String getVersion() {
@@ -112,6 +115,8 @@ public class ViaFabric implements ModInitializer {
 
         config = new VRConfig(FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());
+
+        INIT_FUTURE.complete(null);
     }
 
     private void registerCommandsV1() {
