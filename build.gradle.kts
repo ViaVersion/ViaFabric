@@ -20,7 +20,7 @@ val branch = if (!travisBranch.isNullOrBlank()) travisBranch else try {
     "unknown"
 }
 
-version = "0.2.12-SNAPSHOT+" + try {
+version = "0.2.13-SNAPSHOT+" + try {
     gitVersion() + "-" + branch
 } catch (e: Exception) {
     "unknown"
@@ -70,6 +70,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:0.8.2+build.194")
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.13.1+build.257-1.14")
+    modImplementation("io.github.prospector:modmenu:1.7.16.1.14.4+build.128")
 
     modImplementation("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
     include("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
@@ -137,6 +138,7 @@ curseforge {
 }
 
 minecraft {
+    accessWidener("src/main/resources/viafabric.accesswidener")
 }
 
 license {
