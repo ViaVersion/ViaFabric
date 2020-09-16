@@ -23,25 +23,14 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.mixin.client;
+package com.github.creeper123123321.viafabric.gui;
 
-import com.github.creeper123123321.viafabric.ViaFabricAddress;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.network.ServerAddress;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import io.github.prospector.modmenu.api.ConfigScreenFactory;
+import io.github.prospector.modmenu.api.ModMenuApi;
 
-@Mixin(ServerAddress.class)
-public abstract class MixinServerAddress {
-    @Redirect(method = "parse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ServerAddress;resolveServer(Ljava/lang/String;)Lcom/mojang/datafixers/util/Pair;"))
-    private static Pair<String, Integer> modifySrvAddr(String address) {
-        ViaFabricAddress viaAddr = new ViaFabricAddress().parse(address);
-        if (viaAddr.viaSuffix == null) {
-            return ServerAddress.resolveServer(address);
-        }
-
-        return ServerAddress.resolveServer(viaAddr.realAddress).mapFirst(it -> it.replaceAll("\\.$", "") + "." + viaAddr.viaSuffix);
+public class ModMenuConfig implements ModMenuApi {
+    @Override
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
+        return ViaConfigScreen::new;
     }
 }
