@@ -38,6 +38,7 @@ public class VRConfig extends Config {
     public static final String ENABLE_CLIENT_SIDE = "enable-client-side";
     public static final String CLIENT_SIDE_VERSION = "client-side-version";
     public static final String CLIENT_SIDE_FORCE_DISABLE = "client-side-force-disable";
+    public static final String HIDE_BUTTON = "hide-button";
 
     public VRConfig(File configFile) {
         super(configFile);
@@ -77,6 +78,14 @@ public class VRConfig extends Config {
 
     public Collection<?> getClientSideForceDisable() {
         return (List<?>) get(CLIENT_SIDE_FORCE_DISABLE, List.class, Collections.emptyList());
+    }
+
+    public void setHideButton(boolean val) {
+        set(HIDE_BUTTON, val);
+    }
+
+    public boolean isHideButton() {
+        return getBoolean(HIDE_BUTTON, false);
     }
 
     public boolean isForcedDisable(String line) {

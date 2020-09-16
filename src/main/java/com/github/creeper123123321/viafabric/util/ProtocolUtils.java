@@ -25,15 +25,24 @@
 
 package com.github.creeper123123321.viafabric.util;
 
-import com.google.common.base.Predicate;
+import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class VersionFormatFilter implements Predicate<String> {
-    @Override
-    public boolean apply(String s) {
+public class ProtocolUtils {
+    public static boolean isSupported(int server, int client) {
+        return server == client || ProtocolRegistry.getProtocolPath(client, server) != null;
+    }
+
+    public static String getProtocolName(int id) {
+        ProtocolVersion ver = ProtocolVersion.getProtocol(id);
+        if (ver == null) return Integer.toString(id);
+        return ver.getName();
+    }
+
+    public static boolean isStartOfProtocolText(String s) {
         try {
             Integer.parseInt(s);
             return true;
@@ -51,5 +60,27 @@ public class VersionFormatFilter implements Predicate<String> {
                         .anyMatch(ver -> ver.startsWith(s));
             }
         }
+    }
+
+    public static Integer parseProtocolId(String s) {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException ignored) {
+            ProtocolVersion closest = ProtocolVersion.getClosest(s);
+            if (closest == null) return null;
+            return closest.getId();
+        }
+    }
+
+    public static String[] getProtocolSuggestions(String text) {
+        return ProtocolVersion.getProtocols().stream()
+                .map(ProtocolVersion::getName)
+                .flatMap(str -> Stream.concat(
+                        Arrays.stream(str.split("-")),
+                        Arrays.stream(new String[]{str})
+                ))
+                .distinct()
+                .filter(ver -> ver.startsWith(text))
+                .toArray(String[]::new);
     }
 }

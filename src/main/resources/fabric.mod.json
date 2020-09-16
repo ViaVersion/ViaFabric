@@ -60,6 +60,9 @@
   "entrypoints": {
     "main": [
       "com.github.creeper123123321.viafabric.ViaFabric"
+    ],
+    "modmenu": [
+      "com.github.creeper123123321.viafabric.gui.ModMenuConfig"
     ]
   },
   "depends": {
@@ -77,5 +80,6 @@
   "icon": "assets/viafabric/textures/logo.png",
   "mixins": [
     "mixins.viafabric.json"
-  ]
+  ],
+  "accessWidener": "viafabric.accesswidener"
 }

@@ -21,7 +21,7 @@ val branch = if (!travisBranch.isNullOrBlank()) travisBranch else try {
     "unknown"
 }
 
-version = "0.2.12-SNAPSHOT+" + try {
+version = "0.2.13-SNAPSHOT+" + try {
     gitVersion() + "-" + branch
 } catch (e: Exception) {
     "unknown"
@@ -46,6 +46,7 @@ repositories {
     maven(url = "https://server.bbkr.space/artifactory/libs-snapshot")
     maven(url = "https://server.bbkr.space/artifactory/libs-release")
     maven(url = "https://dl.bintray.com/legacy-fabric/Legacy-Fabric-Maven")
+    maven(url = "https://jitpack.io/")
 }
 
 
@@ -73,6 +74,7 @@ dependencies {
     }
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.7.3")
+    modImplementation("com.github.shedaniel:modmenu-1.8.9:1.8.9-SNAPSHOT")
 
     //modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
     //include("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
@@ -143,6 +145,7 @@ minecraft {
     this.intermediaryUrl = JavaFunction {
         "https://dl.bintray.com/legacy-fabric/Legacy-Fabric-Maven/net/fabricmc/intermediary/$it/intermediary-$it-v2.jar"
     }
+    accessWidener("src/main/resources/viafabric.accesswidener")
 }
 
 license {

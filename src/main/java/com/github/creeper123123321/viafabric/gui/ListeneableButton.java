@@ -23,26 +23,28 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.mixin.client;
+package com.github.creeper123123321.viafabric.gui;
 
-import com.github.creeper123123321.viafabric.ViaFabricAddress;
-import net.minecraft.network.ServerAddress;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import net.minecraft.client.gui.widget.ButtonWidget;
 
-@Mixin(ServerAddress.class)
-public class MixinServerAddress {
-    @Redirect(method = "parse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ServerAddress;resolveSrv(Ljava/lang/String;)[Ljava/lang/String;"))
-    private static String[] modifySrvAddr(String address) {
-        ViaFabricAddress viaAddr = new ViaFabricAddress().parse(address);
-        if (viaAddr.viaSuffix == null) {
-            return ServerAddress.resolveSrv(address);
-        }
+import java.util.function.Consumer;
 
-        String[] resolvedSrv = ServerAddress.resolveSrv(viaAddr.realAddress);
-        resolvedSrv[0] = resolvedSrv[0].replaceAll("\\.$", "") + "." + viaAddr.viaSuffix;
+public class ListeneableButton extends ButtonWidget {
+    private Consumer<ButtonWidget> click;
 
-        return resolvedSrv;
+    public ListeneableButton(int id, int x, int y, String message, Consumer<ButtonWidget> click) {
+        super(id, x, y, message);
+        this.click = click;
+    }
+
+    public ListeneableButton(int id, int x, int y, int width, int height, String message, Consumer<ButtonWidget> click) {
+        super(id, x, y, width, height, message);
+        this.click = click;
+    }
+
+    @Override
+    public void mouseReleased(int mouseX, int mouseY) {
+        super.mouseReleased(mouseX, mouseY);
+        click.accept(this);
     }
 }
