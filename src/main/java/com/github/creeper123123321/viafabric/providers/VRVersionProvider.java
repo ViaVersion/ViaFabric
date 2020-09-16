@@ -28,6 +28,7 @@ package com.github.creeper123123321.viafabric.providers;
 import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.ViaFabricAddress;
 import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
+import com.github.creeper123123321.viafabric.util.ProtocolUtils;
 import com.google.common.primitives.Ints;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.ClientConnection;
@@ -83,42 +84,50 @@ public class VRVersionProvider extends VersionProvider {
     @Override
     public int getServerProtocol(UserConnection connection) throws Exception {
         if (connection instanceof VRClientSideUserConnection) {
-            int clientSideVersion = ViaFabric.config.getClientSideVersion();
+            int serverVer = ViaFabric.config.getClientSideVersion();
             SocketAddress addr = connection.getChannel().remoteAddress();
 
             if (addr instanceof InetSocketAddress && ViaFabric.config.isClientSideEnabled()) {
                 int addrVersion = new ViaFabricAddress().parse(((InetSocketAddress) addr).getHostName()).protocol;
-                if (addrVersion != 0) clientSideVersion = addrVersion;
+                if (addrVersion != 0) serverVer = addrVersion;
             }
 
-            boolean blocked = false;
             if (connection.getChannel() != null) {
                 ProtocolInfo info = Objects.requireNonNull(connection.getProtocolInfo());
 
-                if (addr instanceof InetSocketAddress && (isDisabled(((InetSocketAddress) addr).getHostString())
-                        || ((((InetSocketAddress) addr).getAddress() != null) &&
-                        (isDisabled(((InetSocketAddress) addr).getAddress().getHostAddress())
-                                || isDisabled(((InetSocketAddress) addr).getAddress().getHostName()))))) {
-                    blocked = true;
-                }
+                boolean blocked = checkAddressBlocked(addr);
+                boolean supported = ProtocolUtils.isSupported(serverVer, info.getProtocolVersion());
 
-                if (info.getState() == State.STATUS && info.getProtocolVersion() == -1
-                        && (clientSideVersion != -1 || blocked)
-                        && connection.getChannel().pipeline().get(ClientConnection.class).getPacketListener()
-                        .getClass().getName().startsWith("net.earthcomputer.multiconnect")) { // multiconnect version detector
-                    int multiconnectSuggestion = getVersionForMulticonnect(clientSideVersion);
-                    if (blocked) multiconnectSuggestion = -1;
-                    ViaFabric.JLOGGER.info("Sending " + ProtocolVersion.getProtocol(multiconnectSuggestion) + " for multiconnect version detector");
-                    PacketWrapper newAnswer = new PacketWrapper(0x00, null, connection);
-                    newAnswer.write(Type.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion + "}}");
-                    newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class);
-                    throw CancelException.generate();
-                }
-                if (clientSideVersion == -1 || blocked) return info.getProtocolVersion();
+                handleMulticonnectPing(connection, info, blocked, supported, serverVer);
+
+                if (serverVer == -1 || blocked) return info.getProtocolVersion();
             }
-            return clientSideVersion;
+            return serverVer;
         }
         return super.getServerProtocol(connection);
+    }
+
+    private boolean checkAddressBlocked(SocketAddress addr) {
+        return addr instanceof InetSocketAddress && (isDisabled(((InetSocketAddress) addr).getHostString())
+                || ((((InetSocketAddress) addr).getAddress() != null) &&
+                (isDisabled(((InetSocketAddress) addr).getAddress().getHostAddress())
+                        || isDisabled(((InetSocketAddress) addr).getAddress().getHostName()))));
+    }
+
+    private void handleMulticonnectPing(UserConnection connection, ProtocolInfo info, boolean blocked, boolean supported, int serverVer) throws Exception {
+        if (info.getState() == State.STATUS
+                && info.getProtocolVersion() == -1
+                && connection.getChannel().pipeline().get(ClientConnection.class).getPacketListener()
+                .getClass().getName().startsWith("net.earthcomputer.multiconnect") // multiconnect version detector
+                && (supported || blocked)) { // Intercept the connection
+            int multiconnectSuggestion = getVersionForMulticonnect(serverVer);
+            if (blocked) multiconnectSuggestion = -1;
+            ViaFabric.JLOGGER.info("Sending " + ProtocolVersion.getProtocol(multiconnectSuggestion) + " for multiconnect version detector");
+            PacketWrapper newAnswer = new PacketWrapper(0x00, null, connection);
+            newAnswer.write(Type.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion + "}}");
+            newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class);
+            throw CancelException.generate();
+        }
     }
 
     private int getVersionForMulticonnect(int clientSideVersion) {

@@ -28,11 +28,8 @@ package com.github.creeper123123321.viafabric.mixin.client;
 import com.github.creeper123123321.viafabric.ViaFabricAddress;
 import net.minecraft.network.ServerAddress;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-
-import java.util.Arrays;
 
 @Mixin(ServerAddress.class)
 public class MixinServerAddress {
@@ -40,17 +37,12 @@ public class MixinServerAddress {
     private static String[] modifySrvAddr(String address) {
         ViaFabricAddress viaAddr = new ViaFabricAddress().parse(address);
         if (viaAddr.viaSuffix == null) {
-            return resolveSrv(address);
+            return ServerAddress.resolveSrv(address);
         }
 
-        String[] resolvedSrv = resolveSrv(viaAddr.realAddress);
+        String[] resolvedSrv = ServerAddress.resolveSrv(viaAddr.realAddress);
         resolvedSrv[0] = resolvedSrv[0].replaceAll("\\.$", "") + "." + viaAddr.viaSuffix;
 
         return resolvedSrv;
-    }
-
-    @Shadow
-    private static String[] resolveSrv(String address) {
-        throw new IllegalStateException();
     }
 }

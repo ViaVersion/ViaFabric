@@ -23,33 +23,19 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.util;
+package com.github.creeper123123321.viafabric.gui;
 
-import us.myles.ViaVersion.api.protocol.ProtocolVersion;
+import io.github.prospector.modmenu.api.ConfigScreenFactory;
+import io.github.prospector.modmenu.api.ModMenuApi;
 
-import java.util.Arrays;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
-
-public class VersionFormatFilter implements Predicate<String> {
+public class ModMenuConfig implements ModMenuApi {
     @Override
-    public boolean test(String s) {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException e) {
-            try {
-                Integer.parseInt(s + '0');
-                return true;
-            } catch (NumberFormatException e2) {
-                return ProtocolVersion.getProtocols().stream()
-                        .map(ProtocolVersion::getName)
-                        .flatMap(str -> Stream.concat(
-                                Arrays.stream(str.split("-")),
-                                Arrays.stream(new String[]{str})
-                        ))
-                        .anyMatch(ver -> ver.startsWith(s));
-            }
-        }
+    public String getModId() {
+        return "viafabric";
+    }
+
+    @Override
+    public ConfigScreenFactory<?> getModConfigScreenFactory() {
+        return ViaConfigScreen::new;
     }
 }

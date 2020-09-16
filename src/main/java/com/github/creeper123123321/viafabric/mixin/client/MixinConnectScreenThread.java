@@ -35,7 +35,7 @@ import java.net.UnknownHostException;
 
 @Mixin(targets = "net/minecraft/client/gui/screen/ConnectScreen$1", priority = 2000) // don't know if it will work with MinerParty mod
 public class MixinConnectScreenThread {
-    @Redirect(method = "run", at = @At(value = "INVOKE",
+    @Redirect(method = "run()V", at = @At(value = "INVOKE",
                     target = "Ljava/net/InetAddress;getByName(Ljava/lang/String;)Ljava/net/InetAddress;"))
     private InetAddress resolveViaFabricAddr(String address) throws UnknownHostException {
         ViaFabricAddress viaAddr = new ViaFabricAddress().parse(address);

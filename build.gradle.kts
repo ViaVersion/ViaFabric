@@ -20,7 +20,7 @@ val branch = if (!travisBranch.isNullOrBlank()) travisBranch else try {
     "unknown"
 }
 
-version = "0.2.12-SNAPSHOT+" + try {
+version = "0.2.13-SNAPSHOT+" + try {
     gitVersion() + "-" + branch
 } catch (e: Exception) {
     "unknown"
@@ -70,6 +70,9 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:0.9.3+build.207")
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.19.0+build.325-1.15")
+    // Use 1.16 snapshot, probably intermediary will make it work on further versions
+    // https://modmuss50.me/fabric.html?&version=1.16
+    modImplementation("io.github.prospector:modmenu:1.10.2+build.32")
 
     modImplementation("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
     include("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
@@ -137,6 +140,7 @@ curseforge {
 }
 
 minecraft {
+    accessWidener("src/main/resources/viafabric.accesswidener")
 }
 
 license {

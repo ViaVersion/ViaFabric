@@ -1,0 +1,4 @@
+accessWidener	v1	named
+
+# @Shadow bug workaround https://github.com/FabricMC/fabric-loom/issues/279
+accessible    method    net/minecraft/network/ServerAddress    resolveSrv    (Ljava/lang/String;)[Ljava/lang/String;
