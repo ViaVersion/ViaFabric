@@ -92,6 +92,7 @@ public class ViaConfigScreen extends Screen {
         protocolVersion.setListener(new ChangedListener(this::onChangeVersionField));
         int clientSideVersion = ViaFabric.config.getClientSideVersion();
         protocolVersion.setText(ProtocolUtils.getProtocolName(clientSideVersion));
+        onChangeVersionField(protocolVersion.getText());
 
         //this.children.add(protocolVersion);
 
@@ -194,6 +195,18 @@ public class ViaConfigScreen extends Screen {
     public void tick() {
         super.tick();
         protocolVersion.tick();
+    }
+
+    @Override
+    protected void keyPressed(char character, int code) {
+        super.keyPressed(character, code);
+        protocolVersion.keyPressed(character, code);
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int button) {
+        super.mouseClicked(mouseX, mouseY, button);
+        protocolVersion.mouseClicked(mouseX, mouseY, button);
     }
 }
 
