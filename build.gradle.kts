@@ -4,7 +4,7 @@ import java.util.function.Function as JavaFunction
 plugins {
     id("java")
     id("net.minecrell.licenser") version "0.4.1"
-    id("fabric-loom") version "0.4-SNAPSHOT"
+    id("fabric-loom") version "0.5-SNAPSHOT"
     id("com.palantir.git-version") version "0.12.0-rc2"
     id("com.matthewprenger.cursegradle") version "1.4.0"
     id("maven-publish")
