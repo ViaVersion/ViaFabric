@@ -10,7 +10,7 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod supports 1.8.9 (in `mc-1.8` branch), 1.14.x/1.15.x (in `mc-1.14-1.15` branch) and 1.16.x/snapshots (in `mc-1.16` branch) with Fabric Loader. Check the Minecraft version in file name when downloading from CurseForge/GitHub Releases.
+This mod can be installed on 1.8.9 (in `mc-1.8` branch), 1.14.x/1.15.x (in `mc-1.14-1.15` branch) and 1.16.x/snapshots (in `mc-1.16` branch) with Fabric Loader. Check the Minecraft version in file name when downloading from CurseForge/GitHub Releases.
 
 Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not work with modded registry entries or registry synchronization (fabric-registry-sync mod).
 
