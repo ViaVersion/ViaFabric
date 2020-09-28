@@ -5,10 +5,10 @@
   "gui.enable_client_side.warning": "Ich kann nicht garantieren, dass diese Mod auf jedem (oder überhaupt einem) Server erlaubt ist. Diese Mod könnte eventuell Probleme mit Anti-Cheat Plugins hervorrufen. VERWENDUNG AUF EIGENE GEFAHR.",
   "gui.enable_client_side.enable": "Aktivieren",
   "gui.viafabric_config.title": "ViaFabric-Konfigurationen",
-  "gui.client_side.enable": "Client-seitig aktivieren",
-  "gui.client_side.disable": "Client-Seite deaktivieren",
+  "gui.client_side.enable": "Clientseitigen Modus aktivieren",
+  "gui.client_side.disable": "Clientseitigen Modus deaktivieren",
   "gui.ping_version.translated": "VIA: %s",
-  "gui.hide_via_button.enable": "Schaltfläche VIA ausblenden",
-  "gui.hide_via_button.disable": "Schaltfläche VIA anzeigen",
+  "gui.hide_via_button.enable": "VIA Button ausblenden",
+  "gui.hide_via_button.disable": "VIA Button anzeigen",
   "gui.via_button": "VIA"
 }
