@@ -1,0 +1,14 @@
+{
+  "gui.protocol_version_field.name": "Версия протокола",
+  "gui.enable_client_side_button": "Включить ViaVersion",
+  "gui.enable_client_side.question": "Вы уверены, что хотите включить режим на стороне клиента?",
+  "gui.enable_client_side.warning": "Я не могу гарантировать, что этот мод разрешен на каждом (или даже любом) сервере. Этот мод может вызвать проблемы с анти-разогревающими плагинами. ИСПОЛЬЗОВАНИЕ НА СВОЙ СТРАХ И РИСК.",
+  "gui.enable_client_side.enable": "Включить",
+  "gui.viafabric_config.title": "ViaFabric Конфигурации",
+  "gui.client_side.enable": "Разрешите клиентскому отделу",
+  "gui.client_side.disable": "Отключить сторону клиента",
+  "gui.ping_version.translated": "VIA: %s",
+  "gui.hide_via_button.enable": "Скрыть кнопку VIA",
+  "gui.hide_via_button.disable": "Показать кнопку VIA",
+  "gui.via_button": "VIA"
+}

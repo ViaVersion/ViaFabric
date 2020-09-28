@@ -1,0 +1,14 @@
+{
+  "gui.protocol_version_field.name": "Version du protocole",
+  "gui.enable_client_side_button": "Activer ViaVersion",
+  "gui.enable_client_side.question": "Êtes vous sûr de vouloir activer le mode coté client ?",
+  "gui.enable_client_side.warning": "Je ne peux pas vous garantir que ce mod est autorisé dans tous (ou même aucun) serveur. Ce mod peut causer des problèmes avec les plugin anti-cheat. À UTILISEZ À VOS RISQUES ET PERILS.",
+  "gui.enable_client_side.enable": "Activer",
+  "gui.viafabric_config.title": "Configuration de ViaFabric",
+  "gui.client_side.enable": "Activer coté client",
+  "gui.client_side.disable": "Désactiver coté client",
+  "gui.ping_version.translated": "VIA: %s",
+  "gui.hide_via_button.enable": "Cacher le bouton VIA",
+  "gui.hide_via_button.disable": "Montrer le bouton VIA",
+  "gui.via_button": "VIA"
+}

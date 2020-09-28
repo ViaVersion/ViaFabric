@@ -1,0 +1,14 @@
+{
+  "gui.protocol_version_field.name": "プロトコルバージョン",
+  "gui.enable_client_side_button": "ViaVersionを有効にする",
+  "gui.enable_client_side.question": "本当にクライアントサイドモードを有効にしますか？",
+  "gui.enable_client_side.warning": "私はこのMODがすべての(あるいはどのサーバーでも)許可されていることを保証することはできません。このMODはアンチチートプラグインの問題を引き起こす可能性があります。自己責任で使用してください。",
+  "gui.enable_client_side.enable": "有効化",
+  "gui.viafabric_config.title": "ViaFabricの構成",
+  "gui.client_side.enable": "クライアント側を有効にする",
+  "gui.client_side.disable": "クライアント側を無効にする",
+  "gui.ping_version.translated": "VIA: %s",
+  "gui.hide_via_button.enable": "VIAボタンを隠す",
+  "gui.hide_via_button.disable": "VIAボタンを表示",
+  "gui.via_button": "VIA"
+}
