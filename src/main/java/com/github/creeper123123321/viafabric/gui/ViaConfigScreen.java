@@ -130,12 +130,12 @@ public class ViaConfigScreen extends Screen {
         if (!ViaFabric.config.isClientSideEnabled()) {
             MinecraftClient.getInstance().openScreen(new ConfirmScreen(
                     answer -> {
-                        MinecraftClient.getInstance().openScreen(this);
                         if (answer) {
                             ViaFabric.config.setClientSideEnabled(true);
                             ViaFabric.config.saveConfig();
                             widget.setMessage(getClientSideText().asString());
                         }
+                        MinecraftClient.getInstance().openScreen(this);
                     },
                     new TranslatableText("gui.enable_client_side.question"),
                     new TranslatableText("gui.enable_client_side.warning"),
