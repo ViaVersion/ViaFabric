@@ -177,6 +177,7 @@ public class ViaConfigScreen extends Screen {
         widget.setMessage(getHideViaButtonText().asString());
     }
 
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground();
         drawCenteredString(this.font, this.title.asString(), this.width / 2, 20, 16777215);
