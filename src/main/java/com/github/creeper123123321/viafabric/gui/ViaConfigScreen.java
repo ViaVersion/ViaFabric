@@ -178,7 +178,7 @@ public class ViaConfigScreen extends Screen {
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+    public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
         drawCenteredString(this.font, this.title.asString(), this.width / 2, 20, 16777215);
         super.render(mouseX, mouseY, delta);
