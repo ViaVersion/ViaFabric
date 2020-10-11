@@ -184,6 +184,7 @@ public class ViaConfigScreen extends Screen {
         widget.message = getHideViaButtonText().asString();
     }
 
+    @Override
     public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
         drawCenteredString(this.textRenderer, this.title.asString(), this.width / 2, 20, 16777215);
