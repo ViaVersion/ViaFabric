@@ -62,6 +62,7 @@ public class ViaConfigScreen extends Screen {
         return 0xE0E0E0; // Default
     }
 
+    @Override
     protected void init() {
         int entries = 0;
 
