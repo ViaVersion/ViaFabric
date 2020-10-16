@@ -37,9 +37,8 @@ public class ProtocolUtils {
     }
 
     public static String getProtocolName(int id) {
-        ProtocolVersion ver = ProtocolVersion.getProtocol(id);
-        if (ver == null) return Integer.toString(id);
-        return ver.getName();
+        if (!ProtocolVersion.isRegistered(id)) return Integer.toString(id);
+        return ProtocolVersion.getProtocol(id).getName();
     }
 
     public static boolean isStartOfProtocolText(String s) {
