@@ -28,6 +28,7 @@ package com.github.creeper123123321.viafabric.providers;
 import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.ViaFabricAddress;
 import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
+import com.github.creeper123123321.viafabric.service.ProtocolAutoDetector;
 import com.github.creeper123123321.viafabric.util.ProtocolUtils;
 import com.google.common.primitives.Ints;
 import net.fabricmc.loader.api.FabricLoader;
@@ -48,10 +49,11 @@ import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 public class VRVersionProvider extends VersionProvider {
-    private Set<Integer> multiconnectSupportedVersions = null;
+    private int[] multiconnectSupportedVersions = null;
 
     {
         try {
@@ -67,13 +69,14 @@ public class VRVersionProvider extends VersionProvider {
                 } catch (NoSuchMethodException e) {
                     isMulticonnectBeta = null;
                 }
-                multiconnectSupportedVersions = new TreeSet<>();
+                Set<Integer> vers = new TreeSet<>();
                 for (Object protocol : protocols) {
                     // Do not use versions with beta multiconnect support, which may have stability issues
                     if (isMulticonnectBeta == null || !(Boolean) isMulticonnectBeta.invoke(protocol)) {
-                        multiconnectSupportedVersions.add((Integer) getValue.invoke(protocol));
+                        vers.add((Integer) getValue.invoke(protocol));
                     }
                 }
+                multiconnectSupportedVersions = vers.stream().mapToInt(Integer::intValue).toArray();
                 ViaFabric.JLOGGER.info("ViaFabric will integrate with multiconnect");
             }
         } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
@@ -84,24 +87,36 @@ public class VRVersionProvider extends VersionProvider {
     @Override
     public int getServerProtocol(UserConnection connection) throws Exception {
         if (connection instanceof VRClientSideUserConnection) {
+            ProtocolInfo info = Objects.requireNonNull(connection.getProtocolInfo());
+
+            if (!ViaFabric.config.isClientSideEnabled()) {
+                return info.getProtocolVersion();
+            }
+
             int serverVer = ViaFabric.config.getClientSideVersion();
             SocketAddress addr = connection.getChannel().remoteAddress();
 
-            if (addr instanceof InetSocketAddress && ViaFabric.config.isClientSideEnabled()) {
+            if (addr instanceof InetSocketAddress) {
                 int addrVersion = new ViaFabricAddress().parse(((InetSocketAddress) addr).getHostName()).protocol;
                 if (addrVersion != 0) serverVer = addrVersion;
+
+                try {
+                    if (serverVer == -2) {
+                        // sadly we'll need to block netty thread, we'll need to be fast
+                        return ProtocolAutoDetector.SERVER_VER.get((InetSocketAddress) addr).get(1, TimeUnit.SECONDS).getId();
+                    }
+                } catch (Exception e) {
+                    ViaFabric.JLOGGER.warning("Couldn't auto detect: " + e);
+                }
             }
 
-            if (connection.getChannel() != null) {
-                ProtocolInfo info = Objects.requireNonNull(connection.getProtocolInfo());
+            boolean blocked = checkAddressBlocked(addr);
+            boolean supported = ProtocolUtils.isSupported(serverVer, info.getProtocolVersion());
 
-                boolean blocked = checkAddressBlocked(addr);
-                boolean supported = ProtocolUtils.isSupported(serverVer, info.getProtocolVersion());
+            handleMulticonnectPing(connection, info, blocked, supported, serverVer);
 
-                handleMulticonnectPing(connection, info, blocked, supported, serverVer);
+            if (blocked || !supported) serverVer = info.getProtocolVersion();
 
-                if (serverVer == -1 || blocked) return info.getProtocolVersion();
-            }
             return serverVer;
         }
         return super.getServerProtocol(connection);
@@ -125,7 +140,7 @@ public class VRVersionProvider extends VersionProvider {
             ViaFabric.JLOGGER.info("Sending " + ProtocolVersion.getProtocol(multiconnectSuggestion) + " for multiconnect version detector");
             PacketWrapper newAnswer = new PacketWrapper(0x00, null, connection);
             newAnswer.write(Type.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion + "}}");
-            newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class);
+            newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class, true, true);
             throw CancelException.generate();
         }
     }
@@ -133,7 +148,7 @@ public class VRVersionProvider extends VersionProvider {
     private int getVersionForMulticonnect(int clientSideVersion) {
         // https://github.com/ViaVersion/ViaVersion/blob/master/velocity/src/main/java/us/myles/ViaVersion/velocity/providers/VelocityVersionProvider.java
         // multiconnect supports it
-        int[] compatibleProtocols = multiconnectSupportedVersions.stream().mapToInt(Integer::intValue).toArray();
+        int[] compatibleProtocols = multiconnectSupportedVersions;
         if (Arrays.binarySearch(compatibleProtocols, clientSideVersion) >= 0)
             return clientSideVersion;
 

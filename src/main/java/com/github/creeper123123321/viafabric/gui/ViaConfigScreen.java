@@ -135,6 +135,7 @@ public class ViaConfigScreen extends Screen {
                     answer -> {
                         if (answer) {
                             ViaFabric.config.setClientSideEnabled(true);
+                            ViaFabric.config.setClientSideVersion(-2); // AUTO
                             ViaFabric.config.saveConfig();
                             widget.setMessage(getClientSideText());
                         }
