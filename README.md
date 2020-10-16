@@ -44,7 +44,10 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 
 **How can I install ViaBackwards/ViaRewind?:**
-- Just drop it into mods folder. Make sure you are using versions compatible with the ViaVersion version you are using. ViaVersion-DEV/ViaBackwards-DEV/ViaRewind-DEV and ViaVersion/ViaBackwards/ViaRewind CI builds are only compatible to each other if they have the same label (``-DEV`` or empty).
+- Just drop them into mods folder. Make sure you are using versions compatible with the ViaVersion version you are using.
+- There are reposts on CurseForge:
+- https://www.curseforge.com/minecraft/mc-mods/viabackwards
+- https://www.curseforge.com/minecraft/mc-mods/viarewind
 
 
 **What versions can ViaVersion, ViaBackwards and ViaRewind translate?:**
@@ -78,14 +81,21 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 **Alternatives to this mod:**
 - [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): This discontinued client-side plugin for The 5zig Mod implemented ViaVersion, ViaBackwards and ViaRewind for 1.7.10, 1.8.9, 1.12 and 1.12.2 clients, allowing them to connect to 1.7-1.12.2 servers. It also had a protocol translation for 1.7 servers, which there's an updated version at https://github.com/KennyTV/ViaVersion/tree/hack (unsupported).
-- [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): This client-side Fabric mod does also accept older protocols and fixes some differences between versions, which ViaFabric doesn't. Currently, it goes down to 1.10. (2020-06-23)
+- [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): This client-side Fabric mod does also accept older protocols and fixes some differences between versions, which ViaFabric doesn't. Currently, it goes down to 1.11 (stable) and 1.9.2 (experimental). (2020-10-16) (Supports only latest Minecraft client version)
 - [Protocol4](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/2299203-protocol4-1-0-2-allows-1-7-10-clients-to-connect): This LiteLoader client-side mod allows your 1.7.10 client to connect to 1.7.x servers.
 - [ProtocolSupport](https://protocol.support/): This Bukkit plugin allows clients to connect from older versions (down to 1.4.7).
 - [ViaVersion](https://viaversion.com): ViaVersion can run as a plugin for BungeeCord, CraftBukkit, SpongeCommon and Velocity servers.
 
 
 **How can I disable client-side ViaFabric?:**
-- You can disable it by resetting the anti-cheat warning in config file or by setting protocol version to -1
+- You can disable it in the menu or by setting global protocol version to -1 (this will keep per-server translations still enabled)
+
+
+**How to use protocol auto detector?:**
+- For using globally, set the protocol to AUTO or -2. For using in a specific server: ddns.example.com._v-2.viafabric
+- The protocol auto detector will try to ping with the client native protocol version so if you have ViaVersion or similar in the server it will use the translator, differently than multiconnect which uses -1 version, which may get the native server version.
+- It may block the network thread up to 1 second.
+- The versions are cached for 100 seconds.
 
 
 **How can I set the version for specific servers?:**
@@ -93,7 +103,7 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 
 **Does it work with multiconnect at same time on client?:**
-- Yes, ViaFabric can be used with multiconnect. ViaFabric will send to their version auto detector their closest supported version. (multiconnect beta-supported versions (currently 1.10) aren't used)
+- Yes, ViaFabric can be used with multiconnect. ViaFabric will send to their version auto detector their closest supported version. (multiconnect beta-supported versions (currently 1.10 and 1.9) aren't used)
 - Example of setups:
 - (1.8 server) <-> (disabled ViaFabric) <-> (auto detected 1.8 server - multiconnect) = doesn't work because multiconnect doesn't support it
 - (1.8 server) <-> (forced 1.8 - ViaFabric - suggests 1.11) <-> (detected 1.11 server - multiconnect) = works, ViaVersion translating 1.8 -> 1.11 and multiconnect accepting 1.11
