@@ -68,7 +68,6 @@ public class VRConfig extends Config {
     }
 
     public int getClientSideVersion() {
-        if (!isClientSideEnabled()) return -1;
         return getInt(CLIENT_SIDE_VERSION, -1);
     }
 

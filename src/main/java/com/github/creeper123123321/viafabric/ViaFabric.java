@@ -45,6 +45,7 @@ import us.myles.ViaVersion.ViaManager;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.data.MappingDataLoader;
 import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
+import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -84,6 +85,7 @@ public class ViaFabric implements ModInitializer {
         Via.getManager().init();
 
         ProtocolRegistry.registerBaseProtocol(ViaFabricHostnameProtocol.INSTANCE, Range.lessThan(Integer.MIN_VALUE));
+        ProtocolVersion.register(new ProtocolVersion(-2, "AUTO"));
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
 
