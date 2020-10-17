@@ -27,11 +27,11 @@ package com.github.creeper123123321.viafabric.mixin.client;
 
 import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
+import com.github.creeper123123321.viafabric.handler.clientside.ProtocolDetectionHandler;
 import com.github.creeper123123321.viafabric.handler.clientside.VRDecodeHandler;
 import com.github.creeper123123321.viafabric.handler.clientside.VREncodeHandler;
 import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
 import com.github.creeper123123321.viafabric.protocol.ViaFabricHostnameProtocol;
-import com.github.creeper123123321.viafabric.service.ProtocolAutoDetector;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,8 +40,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.protocol.ProtocolPipeline;
-
-import java.util.concurrent.ExecutionException;
 
 @Mixin(targets = "net.minecraft.network.ClientConnection$5")
 public class MixinClientConnectionChInit {
@@ -54,13 +52,8 @@ public class MixinClientConnectionChInit {
             channel.pipeline()
                     .addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new VREncodeHandler(user))
                     .addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new VRDecodeHandler(user));
-
-            if (channel.remoteAddress() != null) {
-                try {
-                    ProtocolAutoDetector.SERVER_VER.get(((SocketChannel) channel).remoteAddress()); // Let's cache it before we need it, and hope we'll not block netty thread
-                } catch (ExecutionException e) {
-                    ViaFabric.JLOGGER.warning("Protocol auto detector error: " + e);
-                }
+            if (ViaFabric.config.isClientSideEnabled()) {
+                channel.pipeline().addAfter(CommonTransformer.HANDLER_ENCODER_NAME, "via-autoprotocol", new ProtocolDetectionHandler());
             }
         }
     }

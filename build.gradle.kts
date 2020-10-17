@@ -21,7 +21,7 @@ val branch = if (!travisBranch.isNullOrBlank()) travisBranch else try {
     "unknown"
 }
 
-version = "0.2.13-SNAPSHOT+" + try {
+version = "0.2.14-SNAPSHOT+" + try {
     gitVersion() + "-" + branch
 } catch (e: Exception) {
     "unknown"
