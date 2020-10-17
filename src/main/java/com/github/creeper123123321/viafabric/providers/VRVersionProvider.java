@@ -116,7 +116,7 @@ public class VRVersionProvider extends VersionProvider {
             boolean blocked = checkAddressBlocked(addr);
             boolean supported = ProtocolUtils.isSupported(serverVer, info.getProtocolVersion());
 
-            handleMulticonnectPing(connection, info, blocked, supported, serverVer);
+            handleMulticonnectPing(connection, info, blocked, serverVer);
 
             if (blocked || !supported) serverVer = info.getProtocolVersion();
 
@@ -132,12 +132,11 @@ public class VRVersionProvider extends VersionProvider {
                         || isDisabled(((InetSocketAddress) addr).getAddress().getHostName()))));
     }
 
-    private void handleMulticonnectPing(UserConnection connection, ProtocolInfo info, boolean blocked, boolean supported, int serverVer) throws Exception {
+    private void handleMulticonnectPing(UserConnection connection, ProtocolInfo info, boolean blocked, int serverVer) throws Exception {
         if (info.getState() == State.STATUS
                 && info.getProtocolVersion() == -1
                 && connection.getChannel().pipeline().get(ClientConnection.class).getPacketListener()
-                .getClass().getName().startsWith("net.earthcomputer.multiconnect") // multiconnect version detector
-                && (supported || blocked)) { // Intercept the connection
+                .getClass().getName().startsWith("net.earthcomputer.multiconnect")) { // Intercept the connection
             int multiconnectSuggestion = getVersionForMulticonnect(serverVer);
             if (blocked) multiconnectSuggestion = -1;
             ViaFabric.JLOGGER.info("Sending " + ProtocolVersion.getProtocol(multiconnectSuggestion) + " for multiconnect version detector");
@@ -150,24 +149,22 @@ public class VRVersionProvider extends VersionProvider {
 
     private int getVersionForMulticonnect(int clientSideVersion) {
         // https://github.com/ViaVersion/ViaVersion/blob/master/velocity/src/main/java/us/myles/ViaVersion/velocity/providers/VelocityVersionProvider.java
-        // multiconnect supports it
         int[] compatibleProtocols = multiconnectSupportedVersions;
-        if (Arrays.binarySearch(compatibleProtocols, clientSideVersion) >= 0)
-            return clientSideVersion;
 
-        // Older than multiconnect supports, get the lowest version
+        if (Arrays.binarySearch(compatibleProtocols, clientSideVersion) >= 0) {
+            return clientSideVersion;
+        }
+
         if (clientSideVersion < compatibleProtocols[0]) {
             return compatibleProtocols[0];
         }
 
-        // Loop through all protocols to get the closest protocol id that multiconnect supports (and that viaversion does too)
-
         // TODO: This needs a better fix, i.e checking ProtocolRegistry to see if it would work.
-        // This is more of a workaround for snapshot support by multiconnect.
         for (int i = compatibleProtocols.length - 1; i >= 0; i--) {
             int protocol = compatibleProtocols[i];
-            if (clientSideVersion > protocol && ProtocolVersion.isRegistered(protocol))
+            if (clientSideVersion > protocol && ProtocolVersion.isRegistered(protocol)) {
                 return protocol;
+            }
         }
 
         ViaFabric.JLOGGER.severe("multiconnect integration: Panic, no protocol id found for " + clientSideVersion);
