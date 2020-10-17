@@ -103,7 +103,7 @@ public class VRVersionProvider extends VersionProvider {
                 try {
                     if (serverVer == -2) {
                         // sadly we'll need to block netty thread, we'll need to be fast
-                        return ProtocolAutoDetector.SERVER_VER.get((InetSocketAddress) addr).get(1, TimeUnit.SECONDS).getId();
+                        serverVer = ProtocolAutoDetector.SERVER_VER.get((InetSocketAddress) addr).get(1, TimeUnit.SECONDS).getId();
                     }
                 } catch (Exception e) {
                     ViaFabric.JLOGGER.warning("Couldn't auto detect: " + e);
