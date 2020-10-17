@@ -94,8 +94,8 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 **How to use protocol auto detector?:**
 - For using globally, set the protocol to AUTO or -2. For using in a specific server: ddns.example.com._v-2.viafabric
 - The protocol auto detector will try to ping with the client native protocol version so if you have ViaVersion or similar in the server it will use the translator, differently than multiconnect which uses -1 version, which may get the native server version.
-- It may block the network thread up to 1 second.
-- The versions are cached for 100 seconds.
+- It may hold your handshake for up to 10 seconds.
+- The results are cached for 100 seconds.
 
 
 **How can I set the version for specific servers?:**
