@@ -96,7 +96,7 @@ public class ProtocolAutoDetector {
                                                 .getProtocolVersion());
                                         future.complete(ver);
                                         ViaFabric.JLOGGER.info("Auto-detected " + ver + " for " + address);
-                                        clientConnection.disconnect(LiteralText.EMPTY);
+                                        clientConnection.disconnect(new LiteralText(""));
                                     }
 
                                     @Override
