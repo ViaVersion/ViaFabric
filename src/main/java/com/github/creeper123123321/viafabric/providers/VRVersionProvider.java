@@ -49,7 +49,6 @@ import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 public class VRVersionProvider extends VersionProvider {
@@ -102,8 +101,12 @@ public class VRVersionProvider extends VersionProvider {
 
                 try {
                     if (serverVer == -2) {
-                        // sadly we'll need to block netty thread, we'll need to be fast
-                        serverVer = ProtocolAutoDetector.SERVER_VER.get((InetSocketAddress) addr).get(1, TimeUnit.SECONDS).getId();
+                        // Hope protocol was autodetected
+                        ProtocolVersion autoVer =
+                                ProtocolAutoDetector.SERVER_VER.get((InetSocketAddress) addr).getNow(null);
+                        if (autoVer != null) {
+                            serverVer = autoVer.getId();
+                        }
                     }
                 } catch (Exception e) {
                     ViaFabric.JLOGGER.warning("Couldn't auto detect: " + e);
