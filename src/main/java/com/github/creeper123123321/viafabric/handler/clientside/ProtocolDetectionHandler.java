@@ -30,6 +30,7 @@ import com.github.creeper123123321.viafabric.service.ProtocolAutoDetector;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
+import io.netty.util.ReferenceCountUtil;
 import us.myles.ViaVersion.api.Pair;
 
 import java.net.InetSocketAddress;
@@ -53,11 +54,13 @@ public class ProtocolDetectionHandler extends ChannelDuplexHandler {
                     ViaFabric.JLOGGER.warning("Timeout for protocol auto-detection in "
                             + ctx.channel().remoteAddress() + " server");
                     hold = false;
+                    drainQueue(ctx);
                     ctx.pipeline().remove(this);
                 }, 10, TimeUnit.SECONDS);
                 ProtocolAutoDetector.SERVER_VER.get(((InetSocketAddress) ctx.channel().remoteAddress()))
                         .whenComplete((obj, ex) -> {
                             hold = false;
+                            drainQueue(ctx);
                             ctx.pipeline().remove(this);
                             timeoutRun.cancel(false);
                         });
@@ -97,7 +100,8 @@ public class ProtocolDetectionHandler extends ChannelDuplexHandler {
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        drainQueue(ctx);
+        queuedMessages.forEach(ReferenceCountUtil::release);
+        queuedMessages.clear();
         super.handlerRemoved(ctx);
     }
 }
