@@ -136,9 +136,9 @@ public class VRVersionProvider extends VersionProvider {
         if (info.getState() == State.STATUS
                 && info.getProtocolVersion() == -1
                 && connection.getChannel().pipeline().get(ClientConnection.class).getPacketListener()
-                .getClass().getName().startsWith("net.earthcomputer.multiconnect")) { // Intercept the connection
-            int multiconnectSuggestion = getVersionForMulticonnect(serverVer);
-            if (blocked) multiconnectSuggestion = -1;
+                .getClass().getName().startsWith("net.earthcomputer.multiconnect")
+        && (blocked || ProtocolUtils.isSupported(serverVer, getVersionForMulticonnect(serverVer)))) { // Intercept the connection
+            int multiconnectSuggestion = blocked ? -1 : getVersionForMulticonnect(serverVer);
             ViaFabric.JLOGGER.info("Sending " + ProtocolVersion.getProtocol(multiconnectSuggestion) + " for multiconnect version detector");
             PacketWrapper newAnswer = new PacketWrapper(0x00, null, connection);
             newAnswer.write(Type.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion + "}}");
