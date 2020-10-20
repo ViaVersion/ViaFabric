@@ -1,0 +1,14 @@
+{
+  "gui.protocol_version_field.name": "Protocolversie",
+  "gui.enable_client_side_button": "Schakel ViaVersion in",
+  "gui.enable_client_side.question": "Weet u zeker dat u de client-side modus wilt inschakelen?",
+  "gui.enable_client_side.warning": "Ik kan niet garanderen dat deze mod op elke (of zelfs maar één) server is toegestaan. Deze mod kan problemen veroorzaken met anti-cheat plugins. GEBRUIK OP EIGEN RISICO.",
+  "gui.enable_client_side.enable": "Schakel in",
+  "gui.viafabric_config.title": "ViaFabric-configuraties",
+  "gui.client_side.enable": "Klantenservice inschakelen",
+  "gui.client_side.disable": "Cliëntenservice uitschakelen",
+  "gui.ping_version.translated": "VIA: %s",
+  "gui.hide_via_button.enable": "VIA-knop verbergen",
+  "gui.hide_via_button.disable": "Toon VIA-knop",
+  "gui.via_button": "VIA"
+}
