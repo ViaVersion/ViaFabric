@@ -1,0 +1,12 @@
+gui.protocol_version_field.name=Versión del protocolo
+gui.enable_client_side_button=Activar ViaVersion
+gui.enable_client_side.question=¿Estás seguro de que quieres habilitar el modo de lado del cliente?
+gui.enable_client_side.warning=No puedo garantizar que este mod esté permitido en todos (o incluso en cualquier) los servidores. Este mod puede causar problemas con los plugins anti-cheat. EL USO DE ESTE MOD ES BAJO SU PROPIO RIESGO.
+gui.enable_client_side.enable=Activar
+gui.viafabric_config.title=Configuraciones de ViaFabric
+gui.client_side.enable=Activar el lado del cliente
+gui.client_side.disable=Desactivar el lado del cliente
+gui.ping_version.translated=VIA: %s
+gui.hide_via_button.enable=Ocultar el botón VIA
+gui.hide_via_button.disable=Mostrar el botón VIA
+gui.via_button=VIA
