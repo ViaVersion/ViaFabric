@@ -21,7 +21,7 @@ val branch = if (!travisBranch.isNullOrBlank()) travisBranch else try {
     "unknown"
 }
 
-version = "0.2.15-SNAPSHOT+" + try {
+version = "0.2.16-SNAPSHOT+" + try {
     gitVersion() + "-" + branch
 } catch (e: Exception) {
     "unknown"
@@ -61,8 +61,8 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    implementation("us.myles:viaversion:3.2.0-1.16.4-rc1") { isTransitive = false }
-    include("us.myles:viaversion:3.2.0-1.16.4-rc1")
+    implementation("us.myles:viaversion:3.2.0") { isTransitive = false }
+    include("us.myles:viaversion:3.2.0")
     include("org.yaml:snakeyaml:1.26")
 
     // Use 1.8.9 Legacy Fabric https://github.com/Legacy-Fabric/fabric-example-mod/blob/master/gradle.properties
