@@ -79,11 +79,13 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 - ViaFabric configuration is at ``.minecraft/config/viafabric/viafabric.yml``
 
 
-**Alternatives to this mod:**
+**Alternatives/similar mods/proxies/plugins:**
 - [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): This discontinued client-side plugin for The 5zig Mod implemented ViaVersion, ViaBackwards and ViaRewind for 1.7.10, 1.8.9, 1.12 and 1.12.2 clients, allowing them to connect to 1.7-1.12.2 servers. It also had a protocol translation for 1.7 servers, which there's an updated version at https://github.com/KennyTV/ViaVersion/tree/hack (unsupported).
+- [DirtMultiversion](https://github.com/DirtPowered/DirtMultiversion): Proxy allowing to connect down to Beta 1.3 with newer Minecraft client versions (currently).
 - [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): This client-side Fabric mod does also accept older protocols and fixes some differences between versions, which ViaFabric doesn't. Currently, it goes down to 1.11 (stable) and 1.9.2 (experimental). (2020-10-16) (Supports only latest Minecraft client version)
 - [Protocol4](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/2299203-protocol4-1-0-2-allows-1-7-10-clients-to-connect): This LiteLoader client-side mod allows your 1.7.10 client to connect to 1.7.x servers.
 - [ProtocolSupport](https://protocol.support/): This Bukkit plugin allows clients to connect from older versions (down to 1.4.7).
+- [VIAaaS](https://github.com/ViaVersion/VIAaaS): Standalone ViaVersion proxy with ViaBackwards and ViaRewind, allowing you to connect without a mod installed on your client. Supports online mode.
 - [ViaVersion](https://viaversion.com): ViaVersion can run as a plugin for BungeeCord, CraftBukkit, SpongeCommon and Velocity servers.
 
 
