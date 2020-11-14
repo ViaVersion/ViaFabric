@@ -83,7 +83,10 @@
   },
   "icon": "assets/viafabric/textures/logo.png",
   "mixins": [
-    "mixins.viafabric.json"
+    "mixins.viafabric.address.json",
+    "mixins.viafabric.gui.json",
+    "mixins.viafabric.debug.json",
+    "mixins.viafabric.pipeline.json"
   ],
   "accessWidener": "viafabric.accesswidener"
 }
