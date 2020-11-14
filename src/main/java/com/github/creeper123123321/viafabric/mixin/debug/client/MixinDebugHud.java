@@ -26,7 +26,7 @@
 package com.github.creeper123123321.viafabric.mixin.debug.client;
 
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
-import com.github.creeper123123321.viafabric.handler.clientside.VRDecodeHandler;
+import com.github.creeper123123321.viafabric.handler.FabricDecodeHandler;
 import io.netty.channel.ChannelHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.DebugHud;
@@ -48,8 +48,8 @@ public class MixinDebugHud {
                 + Via.getManager().getConnectedClients().size() + " frontend)");
         @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) MinecraftClient.getInstance().getNetworkHandler()
                 .getConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
-        if (viaDecoder instanceof VRDecodeHandler) {
-            ProtocolInfo protocol = ((VRDecodeHandler) viaDecoder).getInfo().getProtocolInfo();
+        if (viaDecoder instanceof FabricDecodeHandler) {
+            ProtocolInfo protocol = ((FabricDecodeHandler) viaDecoder).getInfo().getProtocolInfo();
             if (protocol != null) {
                 ProtocolVersion serverVer = ProtocolVersion.getProtocol(protocol.getServerProtocolVersion());
                 ProtocolVersion clientVer = ProtocolVersion.getProtocol(protocol.getProtocolVersion());

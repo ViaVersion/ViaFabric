@@ -27,7 +27,6 @@ package com.github.creeper123123321.viafabric.providers;
 
 import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.ViaFabricAddress;
-import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
 import com.github.creeper123123321.viafabric.service.ProtocolAutoDetector;
 import com.github.creeper123123321.viafabric.util.ProtocolUtils;
 import com.google.common.primitives.Ints;
@@ -85,7 +84,7 @@ public class VRVersionProvider extends VersionProvider {
 
     @Override
     public int getServerProtocol(UserConnection connection) throws Exception {
-        if (connection instanceof VRClientSideUserConnection) {
+        if (connection.isClientSide()) {
             ProtocolInfo info = Objects.requireNonNull(connection.getProtocolInfo());
 
             if (!ViaFabric.config.isClientSideEnabled()) {
