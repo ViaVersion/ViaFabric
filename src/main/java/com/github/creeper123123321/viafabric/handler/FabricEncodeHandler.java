@@ -30,7 +30,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.exception.CancelCodecException;
-import us.myles.ViaVersion.exception.CancelDecoderException;
 import us.myles.ViaVersion.exception.CancelEncoderException;
 import us.myles.ViaVersion.util.PipelineUtil;
 
@@ -45,7 +44,7 @@ public class FabricEncodeHandler extends MessageToMessageEncoder<ByteBuf> {
 
     @Override
     protected void encode(final ChannelHandlerContext ctx, ByteBuf bytebuf, final List<Object> out) throws Exception {
-        if (!info.checkOutgoingPacket()) throw CancelDecoderException.generate(null);
+        if (!info.checkOutgoingPacket()) throw CancelEncoderException.generate(null);
         if (!info.shouldTransformPacket()) {
             out.add(bytebuf.retain());
             return;
