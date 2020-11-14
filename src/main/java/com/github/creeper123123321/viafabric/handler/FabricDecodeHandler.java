@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.handler.serverside;
+package com.github.creeper123123321.viafabric.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -40,6 +40,10 @@ public class FabricDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
 
     public FabricDecodeHandler(UserConnection info) {
         this.info = info;
+    }
+
+    public UserConnection getInfo() {
+        return info;
     }
 
     @Override

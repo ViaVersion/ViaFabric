@@ -26,8 +26,8 @@
 package com.github.creeper123123321.viafabric.mixin.pipeline;
 
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
-import com.github.creeper123123321.viafabric.handler.serverside.FabricDecodeHandler;
-import com.github.creeper123123321.viafabric.handler.serverside.FabricEncodeHandler;
+import com.github.creeper123123321.viafabric.handler.FabricDecodeHandler;
+import com.github.creeper123123321.viafabric.handler.FabricEncodeHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import org.spongepowered.asm.mixin.Mixin;
