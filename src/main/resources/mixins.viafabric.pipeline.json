@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "com.github.creeper123123321.viafabric.mixin.pipeline",
+  "mixins": [
+    "MixinClientConnection",
+    "MixinServerNetworkIoChInit"
+  ],
+  "client": [
+    "client.MixinClientConnectionChInit"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

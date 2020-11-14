@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.mixin.client;
+package com.github.creeper123123321.viafabric.mixin.gui.client;
 
 import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.gui.ViaButton;

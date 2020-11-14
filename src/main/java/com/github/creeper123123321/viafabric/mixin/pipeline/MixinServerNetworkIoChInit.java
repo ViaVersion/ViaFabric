@@ -23,15 +23,11 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.mixin.client;
+package com.github.creeper123123321.viafabric.mixin.pipeline;
 
-import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
-import com.github.creeper123123321.viafabric.handler.clientside.ProtocolDetectionHandler;
-import com.github.creeper123123321.viafabric.handler.clientside.VRDecodeHandler;
-import com.github.creeper123123321.viafabric.handler.clientside.VREncodeHandler;
-import com.github.creeper123123321.viafabric.platform.VRClientSideUserConnection;
-import com.github.creeper123123321.viafabric.protocol.ViaFabricHostnameProtocol;
+import com.github.creeper123123321.viafabric.handler.serverside.FabricDecodeHandler;
+import com.github.creeper123123321.viafabric.handler.serverside.FabricEncodeHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,20 +37,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.protocol.ProtocolPipeline;
 
-@Mixin(targets = "net.minecraft.network.ClientConnection$5")
-public class MixinClientConnectionChInit {
+@Mixin(targets = "net.minecraft.server.ServerNetworkIo$4")
+public class MixinServerNetworkIoChInit {
     @Inject(method = "initChannel", at = @At(value = "TAIL"), remap = false)
     private void onInitChannel(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
-            UserConnection user = new VRClientSideUserConnection(channel);
-            new ProtocolPipeline(user).add(ViaFabricHostnameProtocol.INSTANCE);
+            UserConnection user = new UserConnection(channel);
+            new ProtocolPipeline(user);
 
-            channel.pipeline()
-                    .addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new VREncodeHandler(user))
-                    .addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new VRDecodeHandler(user));
-            if (ViaFabric.config.isClientSideEnabled()) {
-                channel.pipeline().addAfter(CommonTransformer.HANDLER_ENCODER_NAME, "via-autoprotocol", new ProtocolDetectionHandler());
-            }
+            channel.pipeline().addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new FabricEncodeHandler(user));
+            channel.pipeline().addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new FabricDecodeHandler(user));
         }
     }
 }

@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.mixin;
+package com.github.creeper123123321.viafabric.mixin.pipeline;
 
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import io.netty.channel.ChannelHandler;
