@@ -23,27 +23,29 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.handler.clientside;
+package com.github.creeper123123321.viafabric.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToMessageDecoder;
+import io.netty.handler.codec.MessageToMessageEncoder;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.exception.CancelCodecException;
 import us.myles.ViaVersion.exception.CancelDecoderException;
+import us.myles.ViaVersion.exception.CancelEncoderException;
+import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.util.List;
 
-public class VRDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
+public class FabricEncodeHandler extends MessageToMessageEncoder<ByteBuf> {
     private final UserConnection info;
 
-    public VRDecodeHandler(UserConnection info) {
+    public FabricEncodeHandler(UserConnection info) {
         this.info = info;
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf bytebuf, List<Object> out) throws Exception {
-        info.checkOutgoingPacket();
+    protected void encode(final ChannelHandlerContext ctx, ByteBuf bytebuf, final List<Object> out) throws Exception {
+        if (!info.checkOutgoingPacket()) throw CancelDecoderException.generate(null);
         if (!info.shouldTransformPacket()) {
             out.add(bytebuf.retain());
             return;
@@ -51,7 +53,7 @@ public class VRDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
 
         ByteBuf transformedBuf = ctx.alloc().buffer().writeBytes(bytebuf);
         try {
-            info.transformOutgoing(transformedBuf, CancelDecoderException::generate);
+            info.transformOutgoing(transformedBuf, CancelEncoderException::generate);
             out.add(transformedBuf.retain());
         } finally {
             transformedBuf.release();
@@ -60,11 +62,7 @@ public class VRDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        if (cause instanceof CancelCodecException) return;
+        if (PipelineUtil.containsCause(cause, CancelCodecException.class)) return;
         super.exceptionCaught(ctx, cause);
-    }
-
-    public UserConnection getInfo() {
-        return info;
     }
 }
