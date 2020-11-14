@@ -61,6 +61,7 @@ dependencies {
     // transitive = false because Guava is conflicting on runClient
     implementation("us.myles:viaversion:3.2.0") { isTransitive = false }
     include("us.myles:viaversion:3.2.0")
+    implementation("org.yaml:snakeyaml:1.26")
     include("org.yaml:snakeyaml:1.26")
 
     // Use 1.14.4 release, probably intermediary will make it work on snapshots
