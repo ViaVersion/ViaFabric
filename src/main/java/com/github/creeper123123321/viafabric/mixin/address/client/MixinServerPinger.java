@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 
-package com.github.creeper123123321.viafabric.mixin.client;
+package com.github.creeper123123321.viafabric.mixin.address.client;
 
 import com.github.creeper123123321.viafabric.ViaFabricAddress;
 import net.minecraft.client.network.MultiplayerServerListPinger;
