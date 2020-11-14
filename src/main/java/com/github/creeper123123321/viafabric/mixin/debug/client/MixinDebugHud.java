@@ -44,8 +44,8 @@ import java.util.List;
 public class MixinDebugHud {
     @Inject(at = @At("RETURN"), method = "method_2505")
     protected void getLeftText(CallbackInfoReturnable<List<String>> info) {
-        info.getReturnValue().add("[ViaFabric] Injected: " + Via.getManager().getConnections().size() + " ("
-                + Via.getManager().getConnectedClients().size() + " frontend)");
+        String line = "[ViaFabric] I: " + Via.getManager().getConnections().size() + " (F: "
+                + Via.getManager().getConnectedClients().size() + ")";
         @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) MinecraftClient.getInstance().getNetworkHandler()
                 .getClientConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
         if (viaDecoder instanceof FabricDecodeHandler) {
@@ -53,14 +53,11 @@ public class MixinDebugHud {
             if (protocol != null) {
                 ProtocolVersion serverVer = ProtocolVersion.getProtocol(protocol.getServerProtocolVersion());
                 ProtocolVersion clientVer = ProtocolVersion.getProtocol(protocol.getProtocolVersion());
-                String inactive = "";
-                if (!protocol.getUser().isActive()) {
-                    inactive = " (inactive)";
-                }
-                info.getReturnValue().add("[ViaFabric] Client injected: C: " +
-                        clientVer.getName() + " (" + clientVer.getId() + ") S: " +
-                        serverVer.getName() + " (" + serverVer.getId() + ")" + inactive);
+                line += " / C: " + clientVer.getName() + " (" + clientVer.getId() + ") S: "
+                        + serverVer.getName() + " (" + serverVer.getId() + ") A: " + protocol.getUser().isActive();
             }
         }
+
+        info.getReturnValue().add(line);
     }
 }
