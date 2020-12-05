@@ -30,7 +30,6 @@ import com.github.creeper123123321.viafabric.service.ProtocolAutoDetector;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
-import io.netty.util.ReferenceCountUtil;
 import us.myles.ViaVersion.api.Pair;
 
 import java.net.InetSocketAddress;
@@ -59,8 +58,6 @@ public class ProtocolDetectionHandler extends ChannelDuplexHandler {
                 }, 10, TimeUnit.SECONDS);
                 ProtocolAutoDetector.SERVER_VER.get(((InetSocketAddress) ctx.channel().remoteAddress()))
                         .whenComplete((obj, ex) -> {
-                            hold = false;
-                            drainQueue(ctx);
                             ctx.pipeline().remove(this);
                             timeoutRun.cancel(false);
                         });
@@ -91,6 +88,12 @@ public class ProtocolDetectionHandler extends ChannelDuplexHandler {
         }
     }
 
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        drainQueue(ctx);
+        super.channelInactive(ctx);
+    }
+
     private void drainQueue(ChannelHandlerContext ctx) {
         queuedMessages.forEach(it -> ctx.write(it.getKey(), it.getValue()));
         queuedMessages.clear();
@@ -100,8 +103,7 @@ public class ProtocolDetectionHandler extends ChannelDuplexHandler {
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        queuedMessages.forEach(ReferenceCountUtil::release);
-        queuedMessages.clear();
+        drainQueue(ctx);
         super.handlerRemoved(ctx);
     }
 }
