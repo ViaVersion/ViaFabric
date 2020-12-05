@@ -37,7 +37,7 @@ public class VRViaConfig extends AbstractViaConfig {
     // Based on Sponge ViaVersion
     private static List<String> UNSUPPORTED = Arrays.asList("anti-xray-patch", "bungee-ping-interval",
             "bungee-ping-save", "bungee-servers", "quick-move-action-fix", "nms-player-ticking",
-            "item-cache", "velocity-ping-interval", "velocity-ping-save", "velocity-servers",
+            "velocity-ping-interval", "velocity-ping-save", "velocity-servers",
             "blockconnection-method", "change-1_9-hitbox", "change-1_14-hitbox");
 
     public VRViaConfig(File configFile) {
@@ -63,11 +63,6 @@ public class VRViaConfig extends AbstractViaConfig {
 
     @Override
     public boolean isAntiXRay() {
-        return false;
-    }
-
-    @Override
-    public boolean isItemCache() {
         return false;
     }
 
