@@ -28,12 +28,9 @@ package com.github.creeper123123321.viafabric.providers;
 import com.github.creeper123123321.viafabric.ViaFabric;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.world.WorldTickCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -70,30 +67,22 @@ public class VRHandItemProvider extends HandItemProvider {
     @Environment(EnvType.CLIENT)
     public void registerClientTick() {
         try {
-            ClientTickEvents.END_WORLD_TICK.register(clientWorld -> tickClient());
-        } catch (NoClassDefFoundError ignored) {
-            try {
-                WorldTickCallback.EVENT.register(world -> {
-                    if (world.isClient) {
-                        tickClient();
-                    }
-                });
-            } catch (NoClassDefFoundError ignored2) {
-                ViaFabric.JLOGGER.info("Fabric Lifecycle V0/V1 isn't installed");
-            }
+            WorldTickCallback.EVENT.register(world -> {
+                if (world.isClient) {
+                    tickClient();
+                }
+            });
+        } catch (NoClassDefFoundError ignored2) {
+            ViaFabric.JLOGGER.info("Fabric Lifecycle V0/V1 isn't installed");
         }
     }
 
     public void registerServerTick() {
-        try {
-            ServerTickEvents.END_WORLD_TICK.register(this::tickServer);
-        } catch (NoClassDefFoundError ignored) {
-            WorldTickCallback.EVENT.register(world -> {
-                if (!world.isClient) {
-                    tickServer(world);
-                }
-            });
-        }
+        WorldTickCallback.EVENT.register(world -> {
+            if (!world.isClient) {
+                tickServer(world);
+            }
+        });
     }
 
     private void tickClient() {
