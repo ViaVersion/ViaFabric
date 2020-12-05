@@ -42,6 +42,7 @@ import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
 import net.minecraft.network.packet.s2c.query.QueryPongS2CPacket;
 import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
+import net.minecraft.server.ServerMetadata;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
@@ -92,10 +93,15 @@ public class ProtocolAutoDetector {
                                 clientConnection.setPacketListener(new ClientQueryPacketListener() {
                                     @Override
                                     public void onResponse(QueryResponseS2CPacket packet) {
-                                        ProtocolVersion ver = ProtocolVersion.getProtocol(packet.getServerMetadata().getVersion()
-                                                .getProtocolVersion());
-                                        future.complete(ver);
-                                        ViaFabric.JLOGGER.info("Auto-detected " + ver + " for " + address);
+                                        ServerMetadata meta = packet.getServerMetadata();
+                                        ServerMetadata.Version version;
+                                        if (meta != null && (version = meta.getVersion()) != null) {
+                                            ProtocolVersion ver = ProtocolVersion.getProtocol(version.getProtocolVersion());
+                                            future.complete(ver);
+                                            ViaFabric.JLOGGER.info("Auto-detected " + ver + " for " + address);
+                                        } else {
+                                            future.completeExceptionally(new IllegalArgumentException("Null version in query response"));
+                                        }
                                         clientConnection.disconnect(new LiteralText(""));
                                     }
 
