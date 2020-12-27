@@ -115,6 +115,9 @@ curseforge {
                 addGameVersion("1.16.3")
                 addGameVersion("1.16.4")
             }
+            "mc-1.17" -> {
+                addGameVersion("1.17")
+            }
         }
         addGameVersion("Fabric")
         mainArtifact(file("${project.buildDir}/libs/${project.base.archivesBaseName}-${project.version}.jar"), closureOf<com.matthewprenger.cursegradle.CurseArtifact> {
