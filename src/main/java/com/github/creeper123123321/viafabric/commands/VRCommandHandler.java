@@ -30,7 +30,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.server.command.CommandSource;
+import net.minecraft.command.CommandSource;
 import us.myles.ViaVersion.commands.ViaCommandHandler;
 
 import java.util.concurrent.CompletableFuture;

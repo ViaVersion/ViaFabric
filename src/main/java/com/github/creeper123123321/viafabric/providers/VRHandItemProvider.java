@@ -99,14 +99,14 @@ public class VRHandItemProvider extends HandItemProvider {
     private void tickClient() {
         ClientPlayerEntity p = MinecraftClient.getInstance().player;
         if (p != null) {
-            clientItem = fromNative(p.inventory.getMainHandStack());
+            clientItem = fromNative(p.getInventory().getMainHandStack());
         }
     }
 
     private void tickServer(World world) {
         serverPlayers.clear();
         world.getPlayers().forEach(it -> serverPlayers
-                .put(it.getUuid(), fromNative(it.inventory.getMainHandStack())));
+                .put(it.getUuid(), fromNative(it.getInventory().getMainHandStack())));
     }
 
     private Item fromNative(ItemStack original) {

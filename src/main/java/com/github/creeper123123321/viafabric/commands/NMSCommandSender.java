@@ -27,8 +27,8 @@ package com.github.creeper123123321.viafabric.commands;
 
 import io.github.cottonmc.clientcommands.CottonClientCommandSource;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
-import net.minecraft.server.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
