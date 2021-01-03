@@ -28,13 +28,6 @@ version = "0.3.0-SNAPSHOT+" + try {
 extra.set("archivesBaseName", "ViaFabric")
 description = "Client-side and server-side ViaVersion implementation for Fabric"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
-extra.set("sourceCompatibility", 1.8)
-extra.set("targetCompatibility", 1.8)
-
 repositories {
     mavenLocal()
     mavenCentral()
@@ -97,29 +90,14 @@ curseforge {
             addGameVersion("Java 10")
         }
         when (branch) {
-            "mc-1.8" -> addGameVersion("1.8.9")
-            "mc-1.14" -> {
-                addGameVersion("1.14")
-                addGameVersion("1.14.1")
-                addGameVersion("1.14.2")
-                addGameVersion("1.14.3")
-                addGameVersion("1.14.4")
-            }
-            "mc-1.15" -> {
-                addGameVersion("1.15")
-                addGameVersion("1.15.1")
-                addGameVersion("1.15.2")
-            }
-            "mc-1.16" -> {
-                addGameVersion("1.16")
-                addGameVersion("1.16.1")
-                addGameVersion("1.16.2")
-                addGameVersion("1.16.3")
-                addGameVersion("1.16.4")
-            }
-            "mc-1.17" -> {
-                addGameVersion("1.17")
-            }
+            "mc-1.8" -> listOf("1.8.9")
+            "mc-1.14" -> listOf("1.14", "1.14.1", "1.14.2", "1.14.3", "1.14.4")
+            "mc-1.15" -> listOf("1.15", "1.15.1", "1.15.2")
+            "mc-1.16" -> listOf("1.16", "1.16.1", "1.16.2", "1.16.3", "1.16.4")
+            "mc-1.17" -> listOf("1.17")
+            else -> emptyList()
+        }.forEach {
+            addGameVersion(it)
         }
         addGameVersion("Fabric")
         mainArtifact(file("${project.buildDir}/libs/${project.base.archivesBaseName}-${project.version}.jar"), closureOf<com.matthewprenger.cursegradle.CurseArtifact> {
@@ -129,7 +107,6 @@ curseforge {
                 } else {
                     requiredDependency("fabric-api")
                     embeddedLibrary("cotton-client-commands")
-//                    embeddedLibrary("programmerartinjector")
                 }
             })
             displayName = "[$branch] ViaFabric ${project.version}"
@@ -155,14 +132,27 @@ tasks.jar {
     from("LICENSE")
 }
 
+tasks.withType<JavaCompile> {
+    // ensure that the encoding is set to UTF-8, no matter what the system default is
+    // this fixes some edge cases with special characters not displaying correctly
+    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+    // If Javadoc is generated, this must be specified in that task too.
+    options.encoding = "UTF-8"
 
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
-tasks.register("sourcesJar", type = Jar::class) {
-    dependsOn(tasks.getByName("classes"))
-    archiveClassifier.set("sources")
-    from(sourceSets.main.get().allSource)
+    // The Minecraft launcher currently installs Java 8 for users, so your mod probably wants to target Java 8 too
+    // JDK 9 introduced a new way of specifying this that will make sure no newer classes or methods are used.
+    // We'll use that if it's available, but otherwise we'll use the older option.
+    val targetVersion = 8
+    if (JavaVersion.current().isJava9Compatible) {
+        options.release.set(targetVersion)
+    } else {
+        sourceCompatibility = JavaVersion.toVersion(targetVersion).toString()
+        targetCompatibility = JavaVersion.toVersion(targetVersion).toString()
+    }
+}
+
+java {
+    withSourcesJar()
 }
 
 // configure the maven publication
