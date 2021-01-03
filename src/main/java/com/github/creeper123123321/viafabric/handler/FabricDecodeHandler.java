@@ -26,6 +26,7 @@
 package com.github.creeper123123321.viafabric.handler;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import us.myles.ViaVersion.api.data.UserConnection;
@@ -35,6 +36,7 @@ import us.myles.ViaVersion.util.PipelineUtil;
 
 import java.util.List;
 
+@ChannelHandler.Sharable
 public class FabricDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
     private final UserConnection info;
 

@@ -26,17 +26,25 @@
 package com.github.creeper123123321.viafabric.mixin.pipeline;
 
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
+import com.github.creeper123123321.viafabric.handler.FabricDecodeHandler;
+import com.github.creeper123123321.viafabric.handler.FabricEncodeHandler;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.network.ClientConnection;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
+    @Shadow private Channel channel;
+
     @Redirect(
             method = "exceptionCaught",
             remap = false,
@@ -52,25 +60,20 @@ public class MixinClientConnection {
         }
     }
 
-    @Redirect(method = "setCompressionThreshold", at = @At(
-            value = "INVOKE",
-            remap = false,
-            target = "Lio/netty/channel/ChannelPipeline;addBefore(Ljava/lang/String;Ljava/lang/String;Lio/netty/channel/ChannelHandler;)Lio/netty/channel/ChannelPipeline;"
+    @Inject(method = "setCompressionThreshold", at = @At(
+            value = "RETURN",
+            remap = false
     ))
-    private ChannelPipeline decodeEncodePlacement(ChannelPipeline instance, String base, String newHandler, ChannelHandler handler) {
-        // Fixes the handler order
-        switch (base) {
-            case "decoder": {
-                if (instance.get(CommonTransformer.HANDLER_DECODER_NAME) != null)
-                    base = CommonTransformer.HANDLER_DECODER_NAME;
-                break;
-            }
-            case "encoder": {
-                if (instance.get(CommonTransformer.HANDLER_ENCODER_NAME) != null)
-                    base = CommonTransformer.HANDLER_ENCODER_NAME;
-                break;
-            }
+    private void fixCompressionOrder(int compressionThreshold, CallbackInfo ci) {
+        if (channel.pipeline().get(FabricEncodeHandler.class) == null) return;
+        if (channel.pipeline().names().indexOf("compress")
+                < channel.pipeline().names().indexOf(CommonTransformer.HANDLER_ENCODER_NAME)) {
+            return; // Order is correct or compression is disabled
         }
-        return instance.addBefore(base, newHandler, handler);
+        // Fixes the handler order
+        FabricDecodeHandler decode = channel.pipeline().remove(FabricDecodeHandler.class);
+        FabricEncodeHandler encode = channel.pipeline().remove(FabricEncodeHandler.class);
+        channel.pipeline().addAfter("decompress", "via-decoder", decode);
+        channel.pipeline().addAfter("compress", "via-encoder", encode);
     }
 }
