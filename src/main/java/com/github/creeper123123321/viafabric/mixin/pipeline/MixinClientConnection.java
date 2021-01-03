@@ -26,50 +26,54 @@
 package com.github.creeper123123321.viafabric.mixin.pipeline;
 
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelPipeline;
+import com.github.creeper123123321.viafabric.handler.FabricDecodeHandler;
+import com.github.creeper123123321.viafabric.handler.FabricEncodeHandler;
+import io.netty.channel.Channel;
 import net.minecraft.network.ClientConnection;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
-    //@Redirect(
-    //        method = "exceptionCaught",
-    //        remap = false,
-    //        at = @At(
-    //                value = "INVOKE",
-    //                target = "Lorg/apache/logging/log4j/Logger;debug(Ljava/lang/String;Ljava/lang/Throwable;)V"
-    //        ))
-    //private void redirectDebug(Logger logger, String message, Throwable t) {
-    //    if ("Failed to sent packet".equals(message)) {
-    //        logger.info(message, t);
-    //    } else {
-    //        logger.debug(message, t);
-    //    }
-    //}
+    @Shadow
+    private Channel channel;
 
-    @Redirect(method = "setCompressionThreshold(I)V", at = @At(
-            value = "INVOKE",
-            target = "Lio/netty/channel/ChannelPipeline;addBefore(Ljava/lang/String;Ljava/lang/String;Lio/netty/channel/ChannelHandler;)Lio/netty/channel/ChannelPipeline;"
-    ))
-    private ChannelPipeline decodeEncodePlacement(ChannelPipeline instance, String base, String newHandler, ChannelHandler handler) {
-        // Fixes the handler order
-        switch (base) {
-            case "decoder": {
-                if (instance.get(CommonTransformer.HANDLER_DECODER_NAME) != null)
-                    base = CommonTransformer.HANDLER_DECODER_NAME;
-                break;
-            }
-            case "encoder": {
-                if (instance.get(CommonTransformer.HANDLER_ENCODER_NAME) != null)
-                    base = CommonTransformer.HANDLER_ENCODER_NAME;
-                break;
-            }
+    /*
+    @Redirect(
+            method = "exceptionCaught",
+            remap = false,
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lorg/apache/logging/log4j/Logger;debug(Ljava/lang/String;Ljava/lang/Throwable;)V"
+            ))
+    private void redirectDebug(Logger logger, String message, Throwable t) {
+        if ("Failed to sent packet".equals(message)) {
+            logger.info(message, t);
+        } else {
+            logger.debug(message, t);
         }
-        return instance.addBefore(base, newHandler, handler);
+    }
+    */
+
+    @Inject(method = "setCompressionThreshold", at = @At(
+            value = "RETURN",
+            remap = false
+    ))
+    private void fixCompressionOrder(int compressionThreshold, CallbackInfo ci) {
+        if (channel.pipeline().get(FabricEncodeHandler.class) == null) return;
+        if (channel.pipeline().names().indexOf("compress")
+                < channel.pipeline().names().indexOf(CommonTransformer.HANDLER_ENCODER_NAME)) {
+            return; // Order is correct or compression is disabled
+        }
+        // Fixes the handler order
+        FabricDecodeHandler decode = channel.pipeline().remove(FabricDecodeHandler.class);
+        FabricEncodeHandler encode = channel.pipeline().remove(FabricEncodeHandler.class);
+        channel.pipeline().addAfter("decompress", "via-decoder", decode);
+        channel.pipeline().addAfter("compress", "via-encoder", encode);
     }
 }
