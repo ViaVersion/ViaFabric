@@ -102,7 +102,7 @@ public class VRVersionProvider extends VersionProvider {
                     if (serverVer == -2) {
                         // Hope protocol was autodetected
                         ProtocolVersion autoVer =
-                                ProtocolAutoDetector.SERVER_VER.get((InetSocketAddress) addr).getNow(null);
+                                ProtocolAutoDetector.detectVersion((InetSocketAddress) addr).getNow(null);
                         if (autoVer != null) {
                             serverVer = autoVer.getId();
                         }

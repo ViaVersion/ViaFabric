@@ -25,18 +25,13 @@
 
 package com.github.creeper123123321.viafabric.mixin.pipeline;
 
-import com.github.creeper123123321.viafabric.handler.CommonTransformer;
-import com.github.creeper123123321.viafabric.handler.FabricDecodeHandler;
-import com.github.creeper123123321.viafabric.handler.FabricEncodeHandler;
 import io.netty.channel.Channel;
 import net.minecraft.network.ClientConnection;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
@@ -59,21 +54,4 @@ public class MixinClientConnection {
         }
     }
     */
-
-    @Inject(method = "setCompressionThreshold", at = @At(
-            value = "RETURN",
-            remap = false
-    ))
-    private void fixCompressionOrder(int compressionThreshold, CallbackInfo ci) {
-        if (channel.pipeline().get(FabricEncodeHandler.class) == null) return;
-        if (channel.pipeline().names().indexOf("compress")
-                < channel.pipeline().names().indexOf(CommonTransformer.HANDLER_ENCODER_NAME)) {
-            return; // Order is correct or compression is disabled
-        }
-        // Fixes the handler order
-        FabricDecodeHandler decode = channel.pipeline().remove(FabricDecodeHandler.class);
-        FabricEncodeHandler encode = channel.pipeline().remove(FabricEncodeHandler.class);
-        channel.pipeline().addAfter("decompress", "via-decoder", decode);
-        channel.pipeline().addAfter("compress", "via-encoder", encode);
-    }
 }

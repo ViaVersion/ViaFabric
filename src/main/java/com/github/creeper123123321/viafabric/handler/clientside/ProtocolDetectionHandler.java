@@ -35,7 +35,6 @@ import us.myles.ViaVersion.api.Pair;
 import java.net.InetSocketAddress;
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -48,23 +47,19 @@ public class ProtocolDetectionHandler extends ChannelDuplexHandler {
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
         if (ctx.channel().remoteAddress() instanceof InetSocketAddress) {
-            try {
-                ScheduledFuture<?> timeoutRun = ctx.executor().schedule(() -> {
-                    ViaFabric.JLOGGER.warning("Timeout for protocol auto-detection in "
-                            + ctx.channel().remoteAddress() + " server");
-                    hold = false;
-                    drainQueue(ctx);
-                    ctx.pipeline().remove(this);
-                }, 10, TimeUnit.SECONDS);
-                ProtocolAutoDetector.SERVER_VER.get(((InetSocketAddress) ctx.channel().remoteAddress()))
-                        .whenComplete((obj, ex) -> {
-                            ctx.pipeline().remove(this);
-                            timeoutRun.cancel(false);
-                        });
-                // Let's cache it before we need it
-            } catch (ExecutionException e) {
-                ViaFabric.JLOGGER.warning("Protocol auto detector error: " + e);
-            }
+            ScheduledFuture<?> timeoutRun = ctx.executor().schedule(() -> {
+                ViaFabric.JLOGGER.warning("Timeout for protocol auto-detection in "
+                        + ctx.channel().remoteAddress() + " server");
+                hold = false;
+                drainQueue(ctx);
+                ctx.pipeline().remove(this);
+            }, 10, TimeUnit.SECONDS);
+            ProtocolAutoDetector.detectVersion(((InetSocketAddress) ctx.channel().remoteAddress()))
+                    .whenComplete((obj, ex) -> {
+                        ctx.pipeline().remove(this);
+                        timeoutRun.cancel(false);
+                    });
+            // Let's cache it before we need it
         }
     }
 
