@@ -47,21 +47,23 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 @Environment(EnvType.CLIENT)
 public class ProtocolAutoDetector {
-    public static LoadingCache<InetSocketAddress, CompletableFuture<ProtocolVersion>> SERVER_VER = CacheBuilder.newBuilder()
+    private static LoadingCache<InetSocketAddress, CompletableFuture<ProtocolVersion>> SERVER_VER = CacheBuilder.newBuilder()
             .expireAfterAccess(100, TimeUnit.SECONDS)
             .build(CacheLoader.from((address) -> {
                 CompletableFuture<ProtocolVersion> future = new CompletableFuture<>();
 
                 try {
                     final ClientConnection clientConnection = new ClientConnection(NetworkSide.CLIENTBOUND);
-
-                    ViaFabricAddress viaAddr = new ViaFabricAddress().parse(address.getHostString());
 
                     ChannelFuture ch = new Bootstrap()
                             .group(ClientConnection.CLIENT_IO_GROUP.get())
@@ -121,7 +123,7 @@ public class ProtocolAutoDetector {
                                     }
                                 });
 
-                                clientConnection.send(new HandshakeC2SPacket(viaAddr.realAddress,
+                                clientConnection.send(new HandshakeC2SPacket(address.getHostString(),
                                         address.getPort(), NetworkState.STATUS));
                                 clientConnection.send(new QueryRequestC2SPacket());
                             });
@@ -133,4 +135,16 @@ public class ProtocolAutoDetector {
 
                 return future;
             }));
+
+    public static CompletableFuture<ProtocolVersion> detectVersion(InetSocketAddress address) {
+        try {
+            InetSocketAddress real = new InetSocketAddress(InetAddress.getByAddress
+                    (new ViaFabricAddress().parse(address.getHostString()).realAddress,
+                            address.getAddress().getAddress()), address.getPort());
+            return SERVER_VER.get(real);
+        } catch (UnknownHostException | ExecutionException e) {
+            ViaFabric.JLOGGER.log(Level.WARNING, "Protocol auto detector error: ", e);
+            return CompletableFuture.completedFuture(null);
+        }
+    }
 }
