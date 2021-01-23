@@ -59,11 +59,11 @@ dependencies {
 
     // Use 1.16 snapshot, probably intermediary will make it work on further versions
     // https://modmuss50.me/fabric.html?&version=1.16
-    minecraft("com.mojang:minecraft:20w51a")
-    mappings("net.fabricmc:yarn:20w51a+build.16:v2")
-    modImplementation("net.fabricmc:fabric-loader:0.10.8")
+    minecraft("com.mojang:minecraft:21w03a")
+    mappings("net.fabricmc:yarn:21w03a+build.14:v2")
+    modImplementation("net.fabricmc:fabric-loader:0.11.1")
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.28.4+1.17")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.29.5+1.17")
     modImplementation("io.github.prospector:modmenu:1.14.5+build.30")
 
     modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
