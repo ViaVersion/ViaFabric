@@ -140,5 +140,15 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 - (1.8 server) <-> (forced 1.8 - ViaFabric - detected 1.12.2 client) <-> (forced 1.12.2 server - multiconnect) = works,
   ViaVersion is translating 1.8 -> 1.12.2 and multiconnect is accepting 1.12.2
 
+
+**Differences with multiconnect:**
+- ViaFabric main objective is to simply implement a ViaVersion platform
+- ViaVersion works kinda of in a "MITM proxy" way
+- ViaVersion is designed for servers
+- multiconnect modifies client code more deeply, reverting movement changes
+- multiconnect is designed for clients and only works on latest client version
+- multiconnect is less likely to trigger anticheats
+
+
 ## WARNING
 **I cannot guarantee that this mod is allowed on every (or even any) server. This mod may cause problems with anti cheat plugins. USE AT OWN RISK**
