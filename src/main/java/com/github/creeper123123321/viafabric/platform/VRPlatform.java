@@ -53,7 +53,6 @@ import us.myles.ViaVersion.api.platform.TaskId;
 import us.myles.ViaVersion.api.platform.ViaConnectionManager;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
 import us.myles.ViaVersion.dump.PluginInfo;
-import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.ViaVersion.util.GsonUtil;
 import us.myles.viaversion.libs.bungeecordchat.api.chat.TextComponent;
 import us.myles.viaversion.libs.bungeecordchat.chat.ComponentSerializer;

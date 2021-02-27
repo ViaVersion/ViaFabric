@@ -52,18 +52,18 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    implementation("us.myles:viaversion:3.2.1") { isTransitive = false }
+    implementation("us.myles:viaversion:3.3.0-21w08b") { isTransitive = false }
     include("us.myles:viaversion:3.2.1")
     implementation("org.yaml:snakeyaml:1.26")
     include("org.yaml:snakeyaml:1.26")
 
     // Use 1.16 snapshot, probably intermediary will make it work on further versions
     // https://modmuss50.me/fabric.html?&version=1.16
-    minecraft("com.mojang:minecraft:21w05a")
-    mappings("net.fabricmc:yarn:21w05a+build.1:v2")
-    modImplementation("net.fabricmc:fabric-loader:0.11.1")
+    minecraft("com.mojang:minecraft:21w08b")
+    mappings("net.fabricmc:yarn:21w08b+build.5:v2")
+    modImplementation("net.fabricmc:fabric-loader:0.11.2")
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.30.1+1.17")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.31.1+1.17")
     modImplementation("io.github.prospector:modmenu:1.14.5+build.30")
 
     modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
