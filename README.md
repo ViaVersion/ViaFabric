@@ -62,10 +62,10 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 <table style="empty-cells: hide">
   <tr><th></th><th colspan="5"> Your Client </th></tr>
   <tr><th>&nbsp;</th><th>1.8.x</th><th>1.9.x</th><th>1.10-1.14.4</th><th>1.15.x</th><th>1.16.x</th></tr>
-  <tr><th>1.8.9</th><td>✓</td><td>⏪</td><td>⟲</td><td>⟲</td><td>⟲</td></tr>
-  <tr><th>1.14.x</th><td>✓</td><td>✓</td><td>✓</td><td>⟲</td><td>⟲</td></tr>
-  <tr><th>1.15.x</th><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>⟲</td></tr>
-  <tr><th>1.16.x</th><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+  <tr><td>1.8.9</td><td>✓</td><td>⏪</td><td>⟲</td><td>⟲</td><td>⟲</td></tr>
+  <tr><td>1.14.x</td><td>✓</td><td>✓</td><td>✓</td><td>⟲</td><td>⟲</td></tr>
+  <tr><td>1.15.x</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>⟲</td></tr>
+  <tr><td>1.16.x</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
 </table>
 
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪ = [ViaRewind](https://viaversion.com/rewind)
