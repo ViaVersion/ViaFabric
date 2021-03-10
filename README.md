@@ -59,13 +59,14 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 [![Graph with ViaVersion supported versions](https://i.imgur.com/0u20Y2u.png)](https://viaversion.com)
 
 - Client-side:
-
-| Your Client | 1.8.x | 1.9.x | 1.10-1.14.4 | 1.15.x | 1.16.x |
-| ----------- | ----- | ----- | ----------- | ------ | ------ |
-| 1.8.9  | ✓ | ⏪ | ⟲ | ⟲ | ⟲ |
-| 1.14.x | ✓ | ✓ | ✓ | ⟲ | ⟲ |
-| 1.15.x | ✓ | ✓ | ✓ | ✓ | ⟲ |
-| 1.16.x | ✓ | ✓ | ✓ | ✓ | ✓ |
+<table style="empty-cells: hide">
+  <tr><th></th><th></th><th colspan="5"> Your Client </th></tr>
+  <tr><th rowspan="5" style="transform: rotate(-90deg);">Server Version</th><th>&nbsp;</th><th>1.8.x</th><th>1.9.x</th><th>1.10-1.14.4</th><th>1.15.x</th><th>1.16.x</th></tr>
+  <tr><th>1.8.9</th><td>✓</td><td>⏪</td><td>⟲</td><td>⟲</td><td>⟲</td></tr>
+  <tr><th>1.14.x</th><td>✓</td><td>✓</td><td>✓</td><td>⟲</td><td>⟲</td></tr>
+  <tr><th>1.15.x</th><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>⟲</td></tr>
+  <tr><th>1.16.x</th><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+</table>
 
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪ = [ViaRewind](https://viaversion.com/rewind)
 
