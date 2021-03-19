@@ -1,7 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id("java")
+    `java-library`
     id("net.minecrell.licenser") version "0.4.1"
     id("fabric-loom") version "0.5-SNAPSHOT"
     id("com.palantir.git-version") version "0.12.0-rc2"
@@ -136,20 +136,12 @@ tasks.withType<JavaCompile> {
     // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
     // If Javadoc is generated, this must be specified in that task too.
     options.encoding = "UTF-8"
-
-    // The Minecraft launcher currently installs Java 8 for users, so your mod probably wants to target Java 8 too
-    // JDK 9 introduced a new way of specifying this that will make sure no newer classes or methods are used.
-    // We'll use that if it's available, but otherwise we'll use the older option.
-    val targetVersion = 8
-    if (JavaVersion.current().isJava9Compatible) {
-        options.release.set(targetVersion)
-    } else {
-        sourceCompatibility = JavaVersion.toVersion(targetVersion).toString()
-        targetCompatibility = JavaVersion.toVersion(targetVersion).toString()
-    }
 }
 
 java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
     withSourcesJar()
 }
 
