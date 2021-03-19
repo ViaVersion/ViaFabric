@@ -32,6 +32,7 @@ import net.fabricmc.fabric.api.event.world.WorldTickCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.minecraft.item.Item;
@@ -98,7 +99,9 @@ public class VRHandItemProvider extends HandItemProvider {
     }
 
     private Item fromNative(ItemStack original) {
-        int id = swordId(net.minecraft.item.Item.REGISTRY.getIdentifier(original.getItem()).toString());
+        Identifier iid = net.minecraft.item.Item.REGISTRY.getIdentifier(original.getItem());
+        if (iid == null) return new Item(0, (byte) 0, (short) 0, null);
+        int id = swordId(iid.toString());
         return new Item(id, (byte) original.count, (short) original.getDamage(), null);
     }
 
