@@ -99,6 +99,7 @@ public class VRHandItemProvider extends HandItemProvider {
     }
 
     private Item fromNative(ItemStack original) {
+        if (original.getItem() == null) return new Item(0, (byte) 0, (short) 0, null);
         Identifier iid = net.minecraft.item.Item.REGISTRY.getIdentifier(original.getItem());
         if (iid == null) return new Item(0, (byte) 0, (short) 0, null);
         int id = swordId(iid.toString());
