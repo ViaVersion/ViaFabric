@@ -25,6 +25,7 @@
 
 package com.github.creeper123123321.viafabric.commands;
 
+import com.github.creeper123123321.viafabric.platform.VRPlatform;
 import io.github.cottonmc.clientcommands.CottonClientCommandSource;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandSource;
@@ -32,8 +33,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
-import us.myles.viaversion.libs.bungeecordchat.api.chat.TextComponent;
-import us.myles.viaversion.libs.bungeecordchat.chat.ComponentSerializer;
 
 import java.util.UUID;
 
@@ -53,14 +52,10 @@ public class NMSCommandSender implements ViaCommandSender {
     @Override
     public void sendMessage(String s) {
         if (source instanceof ServerCommandSource) {
-            ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(legacyToJson(s)), false);
+            ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(VRPlatform.legacyToJson(s)), false);
         } else if (source instanceof CottonClientCommandSource) {
-            ((CottonClientCommandSource) source).sendFeedback(Text.Serializer.fromJson(legacyToJson(s)), false);
+            ((CottonClientCommandSource) source).sendFeedback(Text.Serializer.fromJson(VRPlatform.legacyToJson(s)), false);
         }
-    }
-
-    private String legacyToJson(String legacy) {
-        return ComponentSerializer.toString(TextComponent.fromLegacyText(legacy));
     }
 
     @Override

@@ -54,10 +54,9 @@ import us.myles.ViaVersion.api.platform.ViaConnectionManager;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
 import us.myles.ViaVersion.dump.PluginInfo;
 import us.myles.ViaVersion.util.GsonUtil;
-import us.myles.viaversion.libs.bungeecordchat.api.chat.TextComponent;
-import us.myles.viaversion.libs.bungeecordchat.chat.ComponentSerializer;
 import us.myles.viaversion.libs.gson.JsonObject;
-
+import us.myles.viaversion.libs.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import us.myles.viaversion.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -307,7 +306,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
         return connectionManager;
     }
 
-    private String legacyToJson(String legacy) {
-        return ComponentSerializer.toString(TextComponent.fromLegacyText(legacy));
+    public static String legacyToJson(String legacy) {
+        return GsonComponentSerializer.gson().serialize(LegacyComponentSerializer.legacySection().deserialize(legacy));
     }
 }
