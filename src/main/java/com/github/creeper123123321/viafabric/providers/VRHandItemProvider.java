@@ -36,6 +36,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import us.myles.ViaVersion.api.data.UserConnection;
 import us.myles.ViaVersion.api.minecraft.item.Item;
@@ -110,7 +111,9 @@ public class VRHandItemProvider extends HandItemProvider {
     }
 
     private Item fromNative(ItemStack original) {
-        int id = swordId(Registry.ITEM.getId(original.getItem()).toString());
+        Identifier iid = Registry.ITEM.getId(original.getItem());
+        if (iid == null) return new Item(0, (byte) 0, (short) 0, null);
+        int id = swordId(iid.toString());
         return new Item(id, (byte) original.getCount(), (short) original.getDamage(), null);
     }
 
