@@ -13,8 +13,8 @@ group = "com.github.creeper123123321.viafabric"
 val gitVersion: groovy.lang.Closure<String> by extra
 val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
 
-val travisBranch: String? = System.getenv("TRAVIS_BRANCH") // version details doesn't work on travis
-val branch = if (!travisBranch.isNullOrBlank()) travisBranch else try {
+val githubShaInfo: String? = System.getenv("GITHUB_SHA")?.substring(0, 10) // version details doesn't work on gh actions
+val branch = if (!githubShaInfo.isNullOrBlank()) githubShaInfo else try {
     versionDetails().branchName
 } catch (e: Exception) {
     "unknown"
