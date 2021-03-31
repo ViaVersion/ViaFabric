@@ -8,28 +8,19 @@ on: [pull_request, push]
 
 jobs:
   build:
-    strategy:
-      matrix:
-        # Use these Java versions
-        java: [
-            11
-        ]
-        os: [windows-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - name: checkout repository
         uses: actions/checkout@v2
-      - name: setup jdk ${{ matrix.java }}
+      - name: setup jdk 11
         uses: actions/setup-java@v1
         with:
-          java-version: ${{ matrix.java }}
-      - name: make gradle wrapper executable
-        if: ${{ runner.os != 'Windows' }}
-        run: chmod +x ./gradlew
+          java-version: 11
       - name: build
-        run: ./gradlew build
+        env:
+          curse_api_key: ${{ secrets.CREEPER_CF }}
+        run: ./gradlew
       - name: capture build artifacts
-        if: ${{ runner.os == 'Windows' && matrix.java == '11' }} # Only upload artifacts built from LTS java on one OS
         uses: actions/upload-artifact@v2
         with:
           name: Artifacts
