@@ -14,14 +14,14 @@ val gitVersion: groovy.lang.Closure<String> by extra
 val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
 
 val githubShaInfo: String? = System.getenv("GITHUB_SHA")?.substring(0, 10) // version details doesn't work on gh actions
-val branch = if (!githubShaInfo.isNullOrBlank()) githubShaInfo else try {
+val branch = try {
     versionDetails().branchName
 } catch (e: Exception) {
     "unknown"
 }
 
 version = "0.3.1-SNAPSHOT+" + try {
-    gitVersion() + "-" + branch
+    (githubShaInfo ?: gitVersion()) + "-" + branch
 } catch (e: Exception) {
     "unknown"
 }
