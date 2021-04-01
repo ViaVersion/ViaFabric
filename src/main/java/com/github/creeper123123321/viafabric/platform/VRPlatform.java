@@ -50,14 +50,12 @@ import us.myles.ViaVersion.api.ViaVersionConfig;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
 import us.myles.ViaVersion.api.configuration.ConfigurationProvider;
 import us.myles.ViaVersion.api.platform.TaskId;
-import us.myles.ViaVersion.api.platform.ViaConnectionManager;
 import us.myles.ViaVersion.api.platform.ViaPlatform;
 import us.myles.ViaVersion.dump.PluginInfo;
-import us.myles.ViaVersion.sponge.VersionInfo;
 import us.myles.ViaVersion.util.GsonUtil;
-import us.myles.viaversion.libs.bungeecordchat.api.chat.TextComponent;
-import us.myles.viaversion.libs.bungeecordchat.chat.ComponentSerializer;
 import us.myles.viaversion.libs.gson.JsonObject;
+import us.myles.viaversion.libs.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import us.myles.viaversion.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -76,14 +74,12 @@ public class VRPlatform implements ViaPlatform<UUID> {
     private final Logger logger = new JLoggerToLog4j(LogManager.getLogger("ViaVersion"));
     private final VRViaConfig config;
     private final File dataFolder;
-    private final ViaConnectionManager connectionManager;
     private final ViaAPI<UUID> api;
 
     public VRPlatform() {
         Path configDir = FabricLoader.getInstance().getConfigDirectory().toPath().resolve("ViaFabric");
         config = new VRViaConfig(configDir.resolve("viaversion.yml").toFile());
         dataFolder = configDir.toFile();
-        connectionManager = new ViaConnectionManager();
         api = new VRViaAPI();
     }
 
@@ -97,6 +93,10 @@ public class VRPlatform implements ViaPlatform<UUID> {
     @Environment(EnvType.CLIENT)
     private static MinecraftServer getIntegratedServer() {
         return MinecraftClient.getInstance().getServer();
+    }
+
+    public static String legacyToJson(String legacy) {
+        return GsonComponentSerializer.gson().serialize(LegacyComponentSerializer.legacySection().deserialize(legacy));
     }
 
     @Override
@@ -196,7 +196,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
         if (server != null && server.isOnThread()) {
             return getServerPlayers();
         }
-        return Via.getManager().getConnectedClients().values().stream()
+        return Via.getManager().getConnectionManager().getConnectedClients().values().stream()
                 .map(UserCommandSender::new)
                 .toArray(ViaCommandSender[]::new);
     }
@@ -301,14 +301,5 @@ public class VRPlatform implements ViaPlatform<UUID> {
     @Override
     public boolean isOldClientsAllowed() {
         return true;
-    }
-
-    @Override
-    public ViaConnectionManager getConnectionManager() {
-        return connectionManager;
-    }
-
-    private String legacyToJson(String legacy) {
-        return ComponentSerializer.toString(TextComponent.fromLegacyText(legacy));
     }
 }

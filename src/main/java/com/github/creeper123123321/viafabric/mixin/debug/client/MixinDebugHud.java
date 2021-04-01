@@ -44,8 +44,8 @@ import java.util.List;
 public class MixinDebugHud {
     @Inject(at = @At("RETURN"), method = "getLeftText")
     protected void getLeftText(CallbackInfoReturnable<List<String>> info) {
-        String line = "[ViaFabric] I: " + Via.getManager().getConnections().size() + " (F: "
-                + Via.getManager().getConnectedClients().size() + ")";
+        String line = "[ViaFabric] I: " + Via.getManager().getConnectionManager().getConnections().size() + " (F: "
+                + Via.getManager().getConnectionManager().getConnectedClients().size() + ")";
         @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) MinecraftClient.getInstance().getNetworkHandler()
                 .getConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
         if (viaDecoder instanceof FabricDecodeHandler) {
