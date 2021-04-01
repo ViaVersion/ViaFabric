@@ -29,8 +29,8 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
-import us.myles.viaversion.libs.bungeecordchat.api.chat.TextComponent;
-import us.myles.viaversion.libs.bungeecordchat.chat.ComponentSerializer;
+import us.myles.viaversion.libs.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import us.myles.viaversion.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.UUID;
 
@@ -53,7 +53,7 @@ public class NMSCommandSender implements ViaCommandSender {
     }
 
     private String legacyToJson(String legacy) {
-        return ComponentSerializer.toString(TextComponent.fromLegacyText(legacy));
+        return GsonComponentSerializer.gson().serialize(LegacyComponentSerializer.legacySection().deserialize(legacy));
     }
 
     @Override

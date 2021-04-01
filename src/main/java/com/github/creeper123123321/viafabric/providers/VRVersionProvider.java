@@ -38,10 +38,7 @@ import us.myles.ViaVersion.api.protocol.ProtocolVersion;
 import us.myles.ViaVersion.api.type.Type;
 import us.myles.ViaVersion.exception.CancelException;
 import us.myles.ViaVersion.packets.State;
-import us.myles.ViaVersion.protocols.base.BaseProtocol1_16;
-import us.myles.ViaVersion.protocols.base.BaseProtocol1_7;
-import us.myles.ViaVersion.protocols.base.ProtocolInfo;
-import us.myles.ViaVersion.protocols.base.VersionProvider;
+import us.myles.ViaVersion.protocols.base.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -50,7 +47,7 @@ import java.net.SocketAddress;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public class VRVersionProvider extends VersionProvider {
+public class VRVersionProvider extends BaseVersionProvider {
     private int[] multiconnectSupportedVersions = null;
 
     {
