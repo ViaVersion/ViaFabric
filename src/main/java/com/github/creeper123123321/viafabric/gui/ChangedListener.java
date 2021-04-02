@@ -25,11 +25,11 @@
 
 package com.github.creeper123123321.viafabric.gui;
 
-import net.minecraft.class_703;
+import net.minecraft.client.gui.widget.PagedEntryListWidget;
 
 import java.util.function.Consumer;
 
-public class ChangedListener implements class_703.WidgetListener {
+public class ChangedListener implements PagedEntryListWidget.Listener {
     private Consumer<String> consumer;
 
     public ChangedListener(Consumer<String> consumer) {
@@ -37,17 +37,15 @@ public class ChangedListener implements class_703.WidgetListener {
     }
 
     @Override
-    public void method_2596(int i, boolean bl) {
-
+    public void setBooleanValue(int id, boolean value) {
     }
 
     @Override
-    public void method_2594(int i, float f) {
-
+    public void setFloatValue(int id, float value) {
     }
 
     @Override
-    public void textModified(int id, String text) {
+    public void setStringValue(int id, String text) {
         consumer.accept(text);
     }
 }

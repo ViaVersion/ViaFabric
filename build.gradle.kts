@@ -38,7 +38,7 @@ repositories {
     maven(url = "https://maven.fabricmc.net/")
     maven(url = "https://server.bbkr.space/artifactory/libs-snapshot")
     maven(url = "https://server.bbkr.space/artifactory/libs-release")
-    maven(url = "https://dl.bintray.com/legacy-fabric/Legacy-Fabric-Maven")
+    maven(url = "https://maven.legacyfabric.net/")
     maven(url = "https://jitpack.io/")
 }
 
@@ -62,8 +62,8 @@ dependencies {
     // Use 1.8.9 Legacy Fabric https://github.com/Legacy-Fabric/fabric-example-mod/blob/master/gradle.properties
     implementation("com.google.guava:guava:23.5-jre")
     minecraft("com.mojang:minecraft:1.8.9")
-    mappings("net.fabricmc:yarn:1.8.9+build.202008241659:v2")
-    modCompile("net.fabricmc:fabric-loader-1.8.9:0.8.7+build.202008300717") {
+    mappings("net.fabricmc:yarn:1.8.9+build.202103291533:v2")
+    modCompile("net.fabricmc:fabric-loader-1.8.9:0.11.1+build.202102220648") {
         exclude(module = "guava")
     }
 
@@ -124,7 +124,7 @@ curseforge {
 
 minecraft {
     this.intermediaryUrl = JavaFunction {
-        "https://dl.bintray.com/legacy-fabric/Legacy-Fabric-Maven/net/fabricmc/intermediary/$it/intermediary-$it-v2.jar"
+        "https://maven.legacyfabric.net/net/fabricmc/intermediary/$it/intermediary-$it-v2.jar"
     }
     accessWidener("src/main/resources/viafabric.accesswidener")
 }
