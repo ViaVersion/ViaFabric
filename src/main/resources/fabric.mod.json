@@ -4,7 +4,7 @@
   "name": "ViaFabric",
   "version": "@version@",
   "description": "@description@",
-  "license": "MIT",
+  "license": "GPL-3.0",
   "contact": {
     "homepage": "https://viaversion.com/fabric",
     "issues": "https://github.com/ViaVersion/ViaFabric/issues",
