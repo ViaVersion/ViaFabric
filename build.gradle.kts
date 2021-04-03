@@ -67,8 +67,8 @@ dependencies {
         exclude(module = "guava")
     }
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.10.3")
-    modImplementation("com.github.shedaniel:modmenu-1.8.9:1.8.9-SNAPSHOT")
+    modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:1.1.0+1.8.9")
+//    modImplementation("com.github.shedaniel:modmenu-1.8.9:1.8.9-SNAPSHOT")
 
     //modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
     //include("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")

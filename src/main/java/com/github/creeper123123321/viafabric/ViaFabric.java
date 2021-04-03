@@ -38,7 +38,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.netty.channel.EventLoop;
 import io.netty.channel.local.LocalEventLoopGroup;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.registry.FabricCommandRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import us.myles.ViaVersion.ViaManagerImpl;
@@ -51,6 +50,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.logging.Logger;
+
+import net.legacyfabric.fabric.api.registry.CommandRegistry;
 
 public class ViaFabric implements ModInitializer {
     public static final Logger JLOGGER = new JLoggerToLog4j(LogManager.getLogger("ViaFabric"));
@@ -102,6 +103,6 @@ public class ViaFabric implements ModInitializer {
 
     @SuppressWarnings("deprecation")
     private void registerCommandsV0() {
-        FabricCommandRegistry.INSTANCE.register(new NMSCommandImpl(Via.getManager().getCommandHandler()));
+        CommandRegistry.INSTANCE.register(new NMSCommandImpl(Via.getManager().getCommandHandler()));
     }
 }
