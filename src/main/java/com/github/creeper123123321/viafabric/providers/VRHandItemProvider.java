@@ -28,9 +28,8 @@ package com.github.creeper123123321.viafabric.providers;
 import com.github.creeper123123321.viafabric.ViaFabric;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.world.WorldTickCallback;
+import net.legacyfabric.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.legacyfabric.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -68,18 +67,9 @@ public class VRHandItemProvider extends HandItemProvider {
     @Environment(EnvType.CLIENT)
     public void registerClientTick() {
         try {
-            ClientTickEvents.END_CLIENT_TICK.register(world -> tickClient());
+            ClientTickEvents.END_WORLD_TICK.register(world -> tickClient());
         } catch (NoClassDefFoundError ignored1) {
-            ViaFabric.JLOGGER.info("Fabric Lifecycle V1 isn't installed, trying V0");
-            try {
-                WorldTickCallback.EVENT.register(world -> {
-                    if (world.isClient) {
-                        tickClient();
-                    }
-                });
-            } catch (NoClassDefFoundError ignored2) {
-                ViaFabric.JLOGGER.info("Fabric Lifecycle V0/V1 aren't installed");
-            }
+            ViaFabric.JLOGGER.info("Fabric Lifecycle V1 isn't installed");
         }
     }
 
@@ -87,16 +77,7 @@ public class VRHandItemProvider extends HandItemProvider {
         try {
             ServerTickEvents.END_WORLD_TICK.register(this::tickServer);
         } catch (NoClassDefFoundError ignored1) {
-            ViaFabric.JLOGGER.info("Fabric Lifecycle V1 isn't installed, trying V0");
-            try {
-                WorldTickCallback.EVENT.register(world -> {
-                    if (!world.isClient) {
-                        tickServer(world);
-                    }
-                });
-            } catch (NoClassDefFoundError ignored2) {
-                ViaFabric.JLOGGER.info("Fabric Lifecycle V0/V1 isn't installed");
-            }
+            ViaFabric.JLOGGER.info("Fabric Lifecycle V1 isn't installed");
         }
     }
 
