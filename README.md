@@ -32,9 +32,7 @@ or registry synchronization (fabric-registry-sync mod).
 | Dependency                                | Download                                                                                   |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------ |
 | (Bundled 3.2.1 release) ViaVersion 3.2.1+ | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
-| (Optional) Fabric Commands v0             | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
-| (Optional) Fabric Lifecycle Events v1     | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
-| Fabric Resource Loader v0                 | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
+| Legacy Fabric API (**1.0.0+**)            | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
 
 
 With [ViaVersion](https://viaversion.com):
