@@ -65,8 +65,8 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.32.7+1.17")
     modImplementation("io.github.prospector:modmenu:1.14.5+build.30")
 
-    modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
-    include("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
+    //modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
+    //include("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
 }
 
 if (!System.getenv()["curse_api_key"].isNullOrBlank() && branch.startsWith("mc-")) {

@@ -15,6 +15,7 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.fabricmc.loader.api.FabricLoader;
@@ -99,6 +100,7 @@ public class ViaFabric implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaversion")));
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaver")));
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("vvfabric")));
+        ClientCommandManager.DISPATCHER.register(command("viafabricclient"));
     }
 
     @SuppressWarnings("deprecation")
