@@ -1,8 +1,8 @@
 package com.github.creeper123123321.viafabric.mixin.address.client;
 
 import com.github.creeper123123321.viafabric.ViaFabricAddress;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.network.ServerAddress;
+import com.google.common.net.HostAndPort;
+import net.minecraft.client.network.ServerAddress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,17 +11,19 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ServerAddress.class)
 public abstract class MixinServerAddress {
     @Shadow
-    private static Pair<String, Integer> resolveServer(String address) {
+    private static HostAndPort resolveServer(HostAndPort address) {
         throw new AssertionError();
     }
 
-    @Redirect(method = "parse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ServerAddress;resolveServer(Ljava/lang/String;)Lcom/mojang/datafixers/util/Pair;"))
-    private static Pair<String, Integer> modifySrvAddr(String address) {
-        ViaFabricAddress viaAddr = new ViaFabricAddress().parse(address);
+    @Redirect(method = "parse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ServerAddress;resolveServer(Lcom/google/common/net/HostAndPort;)Lcom/google/common/net/HostAndPort;"))
+    private static HostAndPort modifySrvAddr(HostAndPort address) {
+        ViaFabricAddress viaAddr = new ViaFabricAddress().parse(address.getHost());
         if (viaAddr.viaSuffix == null) {
             return resolveServer(address);
         }
 
-        return resolveServer(viaAddr.realAddress).mapFirst(it -> it.replaceAll("\\.$", "") + "." + viaAddr.viaSuffix);
+        HostAndPort resolved = resolveServer(HostAndPort.fromParts(viaAddr.realAddress, address.getPort()));
+        return HostAndPort.fromParts(
+                resolved.getHost().replaceAll("\\.$", "") + "." + viaAddr.viaSuffix, resolved.getPort());
     }
 }
