@@ -1,9 +1,9 @@
 package com.github.creeper123123321.viafabric.commands;
 
-import io.github.cottonmc.clientcommands.CottonClientCommandSource;
-import net.minecraft.client.MinecraftClient;
+import com.github.creeper123123321.viafabric.platform.VRPlatform;
+import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
-import net.minecraft.server.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 import us.myles.ViaVersion.api.command.ViaCommandSender;
@@ -28,9 +28,9 @@ public class NMSCommandSender implements ViaCommandSender {
     @Override
     public void sendMessage(String s) {
         if (source instanceof ServerCommandSource) {
-            ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(legacyToJson(s)), false);
-        } else if (source instanceof CottonClientCommandSource) {
-            ((CottonClientCommandSource) source).sendFeedback(Text.Serializer.fromJson(legacyToJson(s)), false);
+            ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(VRPlatform.legacyToJson(s)), false);
+        } else if (source instanceof FabricClientCommandSource) {
+            ((FabricClientCommandSource) source).sendFeedback(Text.Serializer.fromJson(VRPlatform.legacyToJson(s)));
         }
     }
 
@@ -43,8 +43,8 @@ public class NMSCommandSender implements ViaCommandSender {
         if (source instanceof ServerCommandSource) {
             Entity entity = ((ServerCommandSource) source).getEntity();
             if (entity != null) return entity.getUuid();
-        } else if (source instanceof CottonClientCommandSource) {
-            return MinecraftClient.getInstance().player.getUuid();
+        } else if (source instanceof FabricClientCommandSource) {
+            return ((FabricClientCommandSource) source).getPlayer().getUuid();
         }
         return UUID.fromString(getName());
     }
@@ -53,8 +53,8 @@ public class NMSCommandSender implements ViaCommandSender {
     public String getName() {
         if (source instanceof ServerCommandSource) {
             return ((ServerCommandSource) source).getName();
-        } else if (source instanceof CottonClientCommandSource) {
-            return MinecraftClient.getInstance().player.getEntityName();
+        } else if (source instanceof FabricClientCommandSource) {
+            return ((FabricClientCommandSource) source).getPlayer().getEntityName();
         }
         return "?";
     }

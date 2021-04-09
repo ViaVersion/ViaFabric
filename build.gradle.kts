@@ -37,6 +37,7 @@ repositories {
     maven(url = "https://server.bbkr.space/artifactory/libs-snapshot")
     maven(url = "https://server.bbkr.space/artifactory/libs-release")
     maven(url = "https://maven.extracraftx.com")
+    maven("https://maven.terraformersmc.com/releases/")
 }
 
 
@@ -58,15 +59,15 @@ dependencies {
 
     // Use 1.16 snapshot, probably intermediary will make it work on further versions
     // https://modmuss50.me/fabric.html?&version=1.16
-    minecraft("com.mojang:minecraft:1.16.3")
-    mappings("net.fabricmc:yarn:1.16.3+build.5:v2")
-    modImplementation("net.fabricmc:fabric-loader:0.9.3+build.207")
+    minecraft("com.mojang:minecraft:1.16.5")
+    mappings("net.fabricmc:yarn:1.16.5+build.6:v2")
+    modImplementation("net.fabricmc:fabric-loader:0.11.3")
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.20.2+build.402-1.16")
-    modImplementation("io.github.prospector:modmenu:1.14.5+build.30")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.32.5+1.16")
+    modImplementation("com.terraformersmc:modmenu:1.16.9")
 
-    modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
-    include("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
+    //modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
+    //include("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
 }
 
 if (!System.getenv()["curse_api_key"].isNullOrBlank() && branch.startsWith("mc-")) {

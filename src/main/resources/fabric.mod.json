@@ -61,15 +61,11 @@
     "main": [
       "com.github.creeper123123321.viafabric.ViaFabric"
     ],
-    "cotton-client-commands": [
-      "com.github.creeper123123321.viafabric.commands.VRClientCommands"
-    ],
     "modmenu": [
       "com.github.creeper123123321.viafabric.gui.ModMenuConfig"
     ]
   },
   "depends": {
-    "cotton-client-commands": "*",
     "fabricloader": ">=0.4.0",
     "fabric-resource-loader-v0": "*",
     "minecraft": "1.16.x",
