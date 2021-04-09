@@ -51,8 +51,8 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    implementation("us.myles:viaversion:3.3.0-21w13a") { isTransitive = false }
-    include("us.myles:viaversion:3.3.0-21w13a")
+    implementation("us.myles:viaversion:3.3.0-21w14a") { isTransitive = false }
+    include("us.myles:viaversion:3.3.0-21w14a")
     implementation("org.yaml:snakeyaml:1.26")
     include("org.yaml:snakeyaml:1.26")
 
