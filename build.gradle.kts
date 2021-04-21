@@ -51,10 +51,10 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    implementation("us.myles:viaversion:3.3.0-21w14a") { isTransitive = false }
-    include("us.myles:viaversion:3.3.0-21w14a")
-    implementation("org.yaml:snakeyaml:1.26")
-    include("org.yaml:snakeyaml:1.26")
+    implementation("us.myles:viaversion:3.3.0-21w15a") { isTransitive = false }
+    include("us.myles:viaversion:3.3.0-21w15a")
+    implementation("org.yaml:snakeyaml:1.28")
+    include("org.yaml:snakeyaml:1.28")
 
     // Use 1.16 snapshot, probably intermediary will make it work on further versions
     // https://modmuss50.me/fabric.html?&version=1.16
