@@ -26,4 +26,9 @@ public class ViaFabricHostnameProtocol extends SimpleProtocol {
             }
         });
     }
+
+    @Override
+    public boolean isBaseProtocol() {
+        return true;
+    }
 }
