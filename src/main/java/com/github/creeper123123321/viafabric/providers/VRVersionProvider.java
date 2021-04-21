@@ -55,7 +55,7 @@ public class VRVersionProvider extends BaseVersionProvider {
     }
 
     @Override
-    public int getServerProtocol(UserConnection connection) throws Exception {
+    public int getClosestServerProtocol(UserConnection connection) throws Exception {
         if (connection.isClientSide()) {
             ProtocolInfo info = Objects.requireNonNull(connection.getProtocolInfo());
 
@@ -93,7 +93,7 @@ public class VRVersionProvider extends BaseVersionProvider {
 
             return serverVer;
         }
-        return super.getServerProtocol(connection);
+        return super.getClosestServerProtocol(connection);
     }
 
     private boolean checkAddressBlocked(SocketAddress addr) {
