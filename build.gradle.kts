@@ -28,15 +28,13 @@ extra.set("archivesBaseName", "ViaFabric")
 description = "Client-side and server-side ViaVersion implementation for Fabric"
 
 repositories {
-    mavenLocal()
+    //mavenLocal()
     mavenCentral()
-    jcenter()
     maven(url = "https://repo.viaversion.com/")
     maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
     maven(url = "https://maven.fabricmc.net/")
     maven(url = "https://server.bbkr.space/artifactory/libs-snapshot")
     maven(url = "https://server.bbkr.space/artifactory/libs-release")
-    maven(url = "https://maven.extracraftx.com")
 }
 
 
