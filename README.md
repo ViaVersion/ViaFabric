@@ -1,5 +1,4 @@
 # ViaFabric
-[![Travis Build Status](https://travis-ci.com/ViaVersion/ViaFabric.svg?branch=master)](https://travis-ci.com/ViaVersion/ViaFabric)
 [![ViaVersion Discord](https://img.shields.io/badge/chat-on%20discord-blue.svg)](https://viaversion.com/discord)
 [![CurseForge Downloads](http://cf.way2muchnoise.eu/full_391298_downloads.svg)](https://viaversion.com/fabric)
 [![CurseForge Versions](http://cf.way2muchnoise.eu/versions/391298.svg)](https://viaversion.com/fabric)
@@ -17,26 +16,15 @@ Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not
 or registry synchronization (fabric-registry-sync mod).
 
 
-**1.14+ Dependencies:**
-
-| Dependency                                | Download                                                                                   |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------ |
-| (Bundled 3.2.1 release) ViaVersion 3.2.1+ | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
-| (Bundled) Cotton Client Commands          | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands                        |
-| (Optional) Fabric Command API v1/v0       | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
-| (Optional) Fabric Lifecycle Events v1/v0  | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
-| Fabric Resource Loader v0                 | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
-
-**1.8.9 Dependencies:**
-
-| Dependency                                | Download                                                                                   |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------ |
-| (Bundled 3.2.1 release) ViaVersion 3.2.1+ | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
-| (Optional) Fabric Commands v0             | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
-| (Optional) Fabric Lifecycle Events v1     | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
-| Fabric Resource Loader v0                 | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
+| Dependency                                    | Download                                                                                   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| (Bundled 3.2.1 release) ViaVersion 3.2.1+     | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
+| (Bundled) Cotton Client Commands (MC 1.14-15) | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands                        |
+| Fabric API (MC 1.14+)                         | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
+| Legacy Fabric API (MC 1.8.9)                  | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
 
 
+## ViaVersion
 With [ViaVersion](https://viaversion.com):
 - your server can accept newer versions
 - your client can connect to older versions
@@ -55,17 +43,17 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 
 **What versions can ViaVersion, ViaBackwards and ViaRewind translate?:**
-- Server-side:
-[![Graph with ViaVersion supported versions](https://i.imgur.com/0u20Y2u.png)](https://viaversion.com)
+- Server-side: See https://viaversion.com/
 
 - Client-side:
 
-| Your Client | 1.8.x | 1.9.x | 1.10-1.14.4 | 1.15.x | 1.16.x |
-| ----------- | ----- | ----- | ----------- | ------ | ------ |
-| 1.8.9  | ✓ | ⏪ | ⟲ | ⟲ | ⟲ |
-| 1.14.x | ✓ | ✓ | ✓ | ⟲ | ⟲ |
-| 1.15.x | ✓ | ✓ | ✓ | ✓ | ⟲ |
-| 1.16.x | ✓ | ✓ | ✓ | ✓ | ✓ |
+|        | 1.8.x | 1.9.x | 1.10-1.14.4 | 1.15.x | 1.16.x | 1.17.x |
+| ------ | ----- | ----- | ----------- | ------ | ------ | ------ |
+| 1.8.9 client | ✓ | ⏪ | ⟲ | ⟲ | ⟲ | ⟲ |
+| 1.14.x client | ✓ | ✓ | ✓ | ⟲ | ⟲ | ⟲ |
+| 1.15.x client | ✓ | ✓ | ✓ | ✓ | ⟲ | ⟲ |
+| 1.16.x client | ✓ | ✓ | ✓ | ✓ | ✓ | ⟲ |
+| 1.17.x client | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪ = [ViaRewind](https://viaversion.com/rewind)
 
@@ -74,18 +62,7 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 - Check https://ci.viaversion.com/job/ViaVersion-DEV/, https://ci.viaversion.com/job/ViaBackwards-DEV/ and
   https://ci.viaversion.com/job/ViaRewind-DEV/ for development builds with snapshot support
 
-
-**Commands**:
-- There're 3 server-side alias ``/viaversion``, ``/vvfabric`` and ``/viaver``, and a client-side command
-  ``/viafabricclient`` for Minecraft 1.14+ (OP permission level 3 is required for these commands, received
-  by [Entity Status Packet](https://wiki.vg/Entity_statuses#Player))
-
-
-**Configuration**:
-- ViaVersion configuration is available at ``.minecraft/config/viafabric/viaversion.yml``
-- ViaFabric configuration is at ``.minecraft/config/viafabric/viafabric.yml``
-
-
+## Alternatives
 **Alternatives/similar mods/proxies/plugins:**
 - [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): This discontinued client-side plugin for The 5zig
   Mod implemented ViaVersion, ViaBackwards and ViaRewind for 1.7.10, 1.8.9, 1.12 and 1.12.2 clients, allowing them to
@@ -105,9 +82,22 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 
 **Cool things to try:**
-- [Geyser](https://geysermc.org/): Plugins, Fabric mod and a standalone proxy for Bedrock edition translation.
+- [Geyser](https://geysermc.org/): Plugins, Fabric mod and a standalone proxy for allowing Bedrock Edition on Java Edition servers.
 - [PolyMc](https://github.com/TheEpicBlock/PolyMc): Fabric mods which translates modded items and blocks, allowing
   vanilla to connect using resource packs.
+
+
+## Commands
+**Commands**:
+- There're 3 server-side alias ``/viaversion``, ``/vvfabric`` and ``/viaver``, and a client-side command
+  ``/viafabricclient`` for Minecraft 1.14+ (OP permission level 3 is required for these commands, received
+  by [Entity Status Packet](https://wiki.vg/Entity_statuses#Player))
+
+
+## Configs
+**Configuration**:
+- ViaVersion configuration is available at ``.minecraft/config/viafabric/viaversion.yml``
+- ViaFabric configuration is at ``.minecraft/config/viafabric/viafabric.yml``
 
 
 **How can I disable client-side ViaFabric?:**
@@ -127,6 +117,7 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 - Append ._v(VERSION).viafabric. Example: ``minigame.example.com._v1_8.viafabric``, ``native.example.com._v-1.viafabric``, ``auto.example.com._v-2.viafabric``
 
 
+## multiconnect
 **Does it work with multiconnect at same time on client?:**
 - Yes, ViaFabric can be used with multiconnect. ViaFabric will send to their version auto detector their closest
   supported version. (multiconnect beta-supported versions (currently < 1.11) aren't used)
@@ -145,6 +136,8 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 - ViaFabric main objective is to simply implement a ViaVersion platform
 - ViaVersion works kinda of in a "MITM proxy" way
 - ViaVersion is designed for servers
+- ViaFabric can be installed on more versions
+- multiconnect only supports the latest Minecraft version
 - multiconnect modifies client code more deeply, reverting movement changes
 - multiconnect is designed for clients and only works on latest client version
 - multiconnect is less likely to trigger anticheats
