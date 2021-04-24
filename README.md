@@ -16,33 +16,31 @@ Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not
 or registry synchronization (fabric-registry-sync mod).
 
 
-| Dependency                                    | Download                                                                                   |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| (Bundled 3.2.1 release) ViaVersion 3.2.1+     | https://ci.viaversion.com/job/ViaVersion/ or https://ci.viaversion.com/job/ViaVersion-DEV/ |
-| (Bundled) Cotton Client Commands (MC 1.14-15) | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands                        |
-| Fabric API (MC 1.14+)                         | https://www.curseforge.com/minecraft/mc-mods/fabric-api                                    |
-| Legacy Fabric API (MC 1.8.9)                  | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api                             |
+| Dependency                                    | Download                                                            |
+| --------------------------------------------- | ------------------------------------------------------------------- |
+| (Bundled) ViaVersion                          | https://viaversion.com/                                             |
+| (Bundled) Cotton Client Commands (MC 1.14-15) | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands |
+| Fabric API (MC 1.14+)                         | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
+| Legacy Fabric API (MC 1.8.9)                  | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api      |
 
 
 ## ViaVersion
-With [ViaVersion](https://viaversion.com):
-- your server can accept newer versions
-- your client can connect to older versions
-
-
-Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewind](https://viaversion.com/rewind)):
-- your server can accept older versions
-- your client can connect to newer versions
-
-
 **How can I install ViaBackwards/ViaRewind?:**
 - Just drop them into mods folder. Make sure you are using versions compatible with the ViaVersion version you are using.
-- There are reposts on CurseForge:
-- https://www.curseforge.com/minecraft/mc-mods/viabackwards
-- https://www.curseforge.com/minecraft/mc-mods/viarewind
+- CurseForge links:
+  [ViaBackwards](https://www.curseforge.com/minecraft/mc-mods/viabackwards)
+  [ViaRewind](https://www.curseforge.com/minecraft/mc-mods/viarewind)
 
 
 **What versions can ViaVersion, ViaBackwards and ViaRewind translate?:**
+- **With [ViaVersion](https://viaversion.com)**:
+  Your server can accept newer versions.
+  Your client can connect to older versions.
+
+- **Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewind](https://viaversion.com/rewind))**:
+  Your server can accept older versions.
+  Your client can connect to newer versions.
+
 - Server-side: See https://viaversion.com/
 
 - Client-side:
@@ -59,8 +57,7 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 
 **Can ViaVersion, ViaBackwards and ViaRewind support snapshots?:**
-- Check https://ci.viaversion.com/job/ViaVersion-DEV/, https://ci.viaversion.com/job/ViaBackwards-DEV/ and
-  https://ci.viaversion.com/job/ViaRewind-DEV/ for development builds with snapshot support
+- Check https://ci.viaversion.com/ for development builds with snapshot support
 
 ## Alternatives
 **Alternatives/similar mods/proxies/plugins:**
@@ -105,16 +102,17 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 
 **How to use protocol auto detector?:**
-- For using globally, set the protocol to AUTO or -2. For using in a specific server: ddns.example.com._v-2.viafabric
-- The protocol auto detector will try to ping with the client native protocol version so if you have ViaVersion or
-  similar in the server it will use the translator, differently than multiconnect which uses -1 version,
+- For using globally, set the protocol to AUTO or -2. For using in a specific server: ``ddns.example.com._v-2.viafabric``
+- The protocol auto detector will try to ping with the client native protocol version. If you have ViaVersion or
+  similar in the server it may use the translated version, differently than multiconnect which uses -1 version,
   which may get the native server version.
 - It may hold your handshake for up to 10 seconds.
-- The results are cached for 100 seconds.
+- The auto-detected version is cached for 100 seconds.
 
 
 **How can I set the version for specific servers?:**
-- Append ._v(VERSION).viafabric. Example: ``minigame.example.com._v1_8.viafabric``, ``native.example.com._v-1.viafabric``, ``auto.example.com._v-2.viafabric``
+- Append ._v(VERSION).viafabric.
+- Examples: ``minigame.example.com._v1_8.viafabric``, ``native.example.com._v-1.viafabric``, ``auto.example.com._v-2.viafabric``
 
 
 ## multiconnect
@@ -134,9 +132,9 @@ Adding [ViaBackwards](https://viaversion.com/backwards) (and optionally [ViaRewi
 
 **Differences with multiconnect:**
 - ViaFabric main objective is to simply implement a ViaVersion platform
+- ViaFabric can be installed on more versions
 - ViaVersion works kinda of in a "MITM proxy" way
 - ViaVersion is designed for servers
-- ViaFabric can be installed on more versions
 - multiconnect only supports the latest Minecraft version
 - multiconnect modifies client code more deeply, reverting movement changes
 - multiconnect is designed for clients and only works on latest client version
