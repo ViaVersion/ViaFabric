@@ -20,7 +20,7 @@ import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.server.ServerMetadata;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import us.myles.ViaVersion.api.protocol.ProtocolVersion;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;

@@ -6,7 +6,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.minecraft.command.CommandSource;
-import us.myles.ViaVersion.commands.ViaCommandHandler;
+import com.viaversion.viaversion.commands.ViaCommandHandler;
 
 import java.util.concurrent.CompletableFuture;
 

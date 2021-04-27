@@ -1,6 +1,6 @@
 package com.github.creeper123123321.viafabric.platform;
 
-import us.myles.ViaVersion.AbstractViaConfig;
+import com.viaversion.viaversion.configuration.AbstractViaConfig;
 
 import java.io.File;
 import java.net.URL;

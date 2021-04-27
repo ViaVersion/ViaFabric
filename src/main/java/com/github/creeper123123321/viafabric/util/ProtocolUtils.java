@@ -1,14 +1,14 @@
 package com.github.creeper123123321.viafabric.util;
 
-import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
-import us.myles.ViaVersion.api.protocol.ProtocolVersion;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class ProtocolUtils {
     public static boolean isSupported(int server, int client) {
-        return server == client || ProtocolRegistry.getProtocolPath(client, server) != null;
+        return server == client || Via.getManager().getProtocolManager().getProtocolPath(client, server) != null;
     }
 
     public static String getProtocolName(int id) {
@@ -42,7 +42,7 @@ public class ProtocolUtils {
         } catch (NumberFormatException ignored) {
             ProtocolVersion closest = ProtocolVersion.getClosest(s);
             if (closest == null) return null;
-            return closest.getId();
+            return closest.getVersion();
         }
     }
 

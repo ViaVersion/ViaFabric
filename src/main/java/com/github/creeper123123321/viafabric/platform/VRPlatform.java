@@ -5,6 +5,8 @@ import com.github.creeper123123321.viafabric.commands.NMSCommandSender;
 import com.github.creeper123123321.viafabric.commands.UserCommandSender;
 import com.github.creeper123123321.viafabric.util.FutureTaskId;
 import com.github.creeper123123321.viafabric.util.JLoggerToLog4j;
+import com.viaversion.viaversion.api.configuration.ViaVersionConfig;
+import com.viaversion.viaversion.api.platform.PlatformTask;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import net.fabricmc.api.EnvType;
@@ -19,18 +21,16 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import org.apache.logging.log4j.LogManager;
-import us.myles.ViaVersion.api.Via;
-import us.myles.ViaVersion.api.ViaAPI;
-import us.myles.ViaVersion.api.ViaVersionConfig;
-import us.myles.ViaVersion.api.command.ViaCommandSender;
-import us.myles.ViaVersion.api.configuration.ConfigurationProvider;
-import us.myles.ViaVersion.api.platform.TaskId;
-import us.myles.ViaVersion.api.platform.ViaPlatform;
-import us.myles.ViaVersion.dump.PluginInfo;
-import us.myles.ViaVersion.util.GsonUtil;
-import us.myles.viaversion.libs.gson.JsonObject;
-import us.myles.viaversion.libs.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import us.myles.viaversion.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.ViaAPI;
+import com.viaversion.viaversion.api.command.ViaCommandSender;
+import com.viaversion.viaversion.api.configuration.ConfigurationProvider;
+import com.viaversion.viaversion.api.platform.ViaPlatform;
+import com.viaversion.viaversion.dump.PluginInfo;
+import com.viaversion.viaversion.util.GsonUtil;
+import com.viaversion.viaversion.libs.gson.JsonObject;
+import com.viaversion.viaversion.libs.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import com.viaversion.viaversion.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -96,7 +96,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
-    public TaskId runAsync(Runnable runnable) {
+    public FutureTaskId runAsync(Runnable runnable) {
         return new FutureTaskId(CompletableFuture
                 .runAsync(runnable, ViaFabric.ASYNC_EXECUTOR)
                 .exceptionally(throwable -> {
@@ -109,7 +109,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
-    public TaskId runSync(Runnable runnable) {
+    public FutureTaskId runSync(Runnable runnable) {
         if (getServer() != null) {
             return runServerSync(runnable);
         } else {
@@ -117,12 +117,12 @@ public class VRPlatform implements ViaPlatform<UUID> {
         }
     }
 
-    private TaskId runServerSync(Runnable runnable) {
+    private FutureTaskId runServerSync(Runnable runnable) {
         // Kick task needs to be on main thread, it does already have error logger
         return new FutureTaskId(CompletableFuture.runAsync(runnable, getServer()));
     }
 
-    private TaskId runEventLoop(Runnable runnable) {
+    private FutureTaskId runEventLoop(Runnable runnable) {
         return new FutureTaskId(
                 ViaFabric.EVENT_LOOP
                         .submit(runnable)
@@ -131,7 +131,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
-    public TaskId runSync(Runnable runnable, Long ticks) {
+    public PlatformTask runSync(Runnable runnable, Long ticks) {
         // ViaVersion seems to not need to run delayed tasks on main thread
         return new FutureTaskId(
                 ViaFabric.EVENT_LOOP
@@ -141,7 +141,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
-    public TaskId runRepeatingSync(Runnable runnable, Long ticks) {
+    public PlatformTask runRepeatingSync(Runnable runnable, Long ticks) {
         // ViaVersion seems to not need to run repeating tasks on main thread
         return new FutureTaskId(
                 ViaFabric.EVENT_LOOP
@@ -156,13 +156,6 @@ public class VRPlatform implements ViaPlatform<UUID> {
                 future.cause().printStackTrace();
             }
         };
-    }
-
-    @Override
-    public void cancelTask(TaskId taskId) {
-        if (taskId instanceof FutureTaskId) {
-            ((FutureTaskId) taskId).getObject().cancel(false);
-        }
     }
 
     @Override

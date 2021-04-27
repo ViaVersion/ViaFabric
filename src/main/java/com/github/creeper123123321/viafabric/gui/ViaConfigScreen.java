@@ -2,6 +2,7 @@ package com.github.creeper123123321.viafabric.gui;
 
 import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.util.ProtocolUtils;
+import com.viaversion.viaversion.api.Via;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -12,7 +13,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.TranslatableText;
-import us.myles.ViaVersion.api.protocol.ProtocolRegistry;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -94,7 +94,7 @@ public class ViaConfigScreen extends Screen {
         }
 
         protocolVersion.setEditableColor(
-                getProtocolTextColor(ProtocolUtils.isSupported(newVersion, ProtocolRegistry.SERVER_PROTOCOL),
+                getProtocolTextColor(ProtocolUtils.isSupported(newVersion, Via.getAPI().getServerVersion().lowestSupportedVersion()),
                         validProtocol));
 
         int finalNewVersion = newVersion;
