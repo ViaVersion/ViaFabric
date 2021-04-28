@@ -34,6 +34,7 @@ repositories {
     maven(url = "https://maven.fabricmc.net/")
     maven(url = "https://server.bbkr.space/artifactory/libs-snapshot")
     maven(url = "https://server.bbkr.space/artifactory/libs-release")
+    maven("https://maven.terraformersmc.com/releases/")
 }
 
 
@@ -59,7 +60,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:0.11.3")
 
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.33.0+1.17")
-    modImplementation("io.github.prospector:modmenu:1.14.5+build.30")
+    modImplementation("com.terraformersmc:modmenu:1.16.9")
 
     //modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
     //include("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
