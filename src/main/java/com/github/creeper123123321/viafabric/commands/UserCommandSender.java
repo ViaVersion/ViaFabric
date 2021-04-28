@@ -1,8 +1,8 @@
 package com.github.creeper123123321.viafabric.commands;
 
-import us.myles.ViaVersion.api.Via;
-import us.myles.ViaVersion.api.command.ViaCommandSender;
-import us.myles.ViaVersion.api.data.UserConnection;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.command.ViaCommandSender;
+import com.viaversion.viaversion.api.connection.UserConnection;
 
 import java.util.UUID;
 

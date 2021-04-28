@@ -1,19 +1,19 @@
 package com.github.creeper123123321.viafabric.protocol;
 
 import com.github.creeper123123321.viafabric.ViaFabricAddress;
-import us.myles.ViaVersion.api.PacketWrapper;
-import us.myles.ViaVersion.api.protocol.SimpleProtocol;
-import us.myles.ViaVersion.api.remapper.PacketRemapper;
-import us.myles.ViaVersion.api.remapper.ValueTransformer;
-import us.myles.ViaVersion.api.type.Type;
-import us.myles.ViaVersion.packets.State;
+import com.viaversion.viaversion.api.protocol.AbstractSimpleProtocol;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
+import com.viaversion.viaversion.api.protocol.remapper.ValueTransformer;
+import com.viaversion.viaversion.api.type.Type;
+import com.viaversion.viaversion.api.protocol.packet.State;
 
-public class ViaFabricHostnameProtocol extends SimpleProtocol {
+public class ViaFabricHostnameProtocol extends AbstractSimpleProtocol {
     public static final ViaFabricHostnameProtocol INSTANCE = new ViaFabricHostnameProtocol();
 
     @Override
     protected void registerPackets() {
-        registerIncoming(State.HANDSHAKE, 0, 0, new PacketRemapper() {
+        registerServerbound(State.HANDSHAKE, 0, 0, new PacketRemapper() {
             @Override
             public void registerMap() {
                 map(Type.VAR_INT); // Protocol version

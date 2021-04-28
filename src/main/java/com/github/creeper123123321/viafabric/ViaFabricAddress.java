@@ -1,6 +1,6 @@
 package com.github.creeper123123321.viafabric;
 
-import us.myles.ViaVersion.api.protocol.ProtocolVersion;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 import java.util.Locale;
 
@@ -32,7 +32,7 @@ public class ViaFabricAddress {
                             } catch (NumberFormatException e) {
                                 ProtocolVersion closest = ProtocolVersion.getClosest(arg.replace("_", "."));
                                 if (closest != null) {
-                                    protocol = closest.getId();
+                                    protocol = closest.getVersion();
                                 }
                             }
                         }

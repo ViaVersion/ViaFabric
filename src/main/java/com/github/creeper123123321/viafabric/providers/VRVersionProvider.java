@@ -5,15 +5,16 @@ import com.github.creeper123123321.viafabric.ViaFabricAddress;
 import com.github.creeper123123321.viafabric.service.ProtocolAutoDetector;
 import com.github.creeper123123321.viafabric.util.ProtocolUtils;
 import com.google.common.primitives.Ints;
+import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.network.ClientConnection;
-import us.myles.ViaVersion.api.PacketWrapper;
-import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.api.protocol.ProtocolVersion;
-import us.myles.ViaVersion.api.type.Type;
-import us.myles.ViaVersion.exception.CancelException;
-import us.myles.ViaVersion.packets.State;
-import us.myles.ViaVersion.protocols.base.*;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import com.viaversion.viaversion.api.type.Type;
+import com.viaversion.viaversion.exception.CancelException;
+import com.viaversion.viaversion.api.protocol.packet.State;
+import com.viaversion.viaversion.protocols.base.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -76,7 +77,7 @@ public class VRVersionProvider extends BaseVersionProvider {
                         ProtocolVersion autoVer =
                                 ProtocolAutoDetector.detectVersion((InetSocketAddress) addr).getNow(null);
                         if (autoVer != null) {
-                            serverVer = autoVer.getId();
+                            serverVer = autoVer.getVersion();
                         }
                     }
                 } catch (Exception e) {
@@ -111,7 +112,7 @@ public class VRVersionProvider extends BaseVersionProvider {
                 && (blocked || ProtocolUtils.isSupported(serverVer, getVersionForMulticonnect(serverVer)))) { // Intercept the connection
             int multiconnectSuggestion = blocked ? -1 : getVersionForMulticonnect(serverVer);
             ViaFabric.JLOGGER.info("Sending " + ProtocolVersion.getProtocol(multiconnectSuggestion) + " for multiconnect version detector");
-            PacketWrapper newAnswer = new PacketWrapper(0x00, null, connection);
+            PacketWrapper newAnswer = PacketWrapper.create(0x00, null, connection);
             newAnswer.write(Type.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion + "}}");
             newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class, true, true);
             throw CancelException.generate();

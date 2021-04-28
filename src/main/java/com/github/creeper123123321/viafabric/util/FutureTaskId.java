@@ -1,10 +1,10 @@
 package com.github.creeper123123321.viafabric.util;
 
-import us.myles.ViaVersion.api.platform.TaskId;
+import com.viaversion.viaversion.api.platform.PlatformTask;
 
 import java.util.concurrent.Future;
 
-public class FutureTaskId implements TaskId {
+public class FutureTaskId implements PlatformTask<Future<?>> {
     private final Future<?> object;
 
     public FutureTaskId(Future<?> object) {
@@ -14,5 +14,10 @@ public class FutureTaskId implements TaskId {
     @Override
     public Future<?> getObject() {
         return object;
+    }
+
+    @Override
+    public void cancel() {
+        object.cancel(false);
     }
 }

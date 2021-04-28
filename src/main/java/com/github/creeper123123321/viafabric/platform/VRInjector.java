@@ -4,9 +4,9 @@ import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
-import us.myles.ViaVersion.api.platform.ViaInjector;
-import us.myles.ViaVersion.util.GsonUtil;
-import us.myles.viaversion.libs.gson.JsonObject;
+import com.viaversion.viaversion.api.platform.ViaInjector;
+import com.viaversion.viaversion.util.GsonUtil;
+import com.viaversion.viaversion.libs.gson.JsonObject;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
