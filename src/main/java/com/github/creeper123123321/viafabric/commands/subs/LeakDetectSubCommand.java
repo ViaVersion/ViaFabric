@@ -1,8 +1,8 @@
 package com.github.creeper123123321.viafabric.commands.subs;
 
 import io.netty.util.ResourceLeakDetector;
-import us.myles.ViaVersion.api.command.ViaCommandSender;
-import us.myles.ViaVersion.api.command.ViaSubCommand;
+import com.viaversion.viaversion.api.command.ViaCommandSender;
+import com.viaversion.viaversion.api.command.ViaSubCommand;
 
 import java.util.Arrays;
 import java.util.List;

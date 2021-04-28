@@ -19,7 +19,7 @@ val branch = try {
     "unknown"
 }
 
-version = "0.3.1-SNAPSHOT+" + try {
+version = "0.4.0-SNAPSHOT+" + try {
     (githubShaInfo ?: gitVersion()) + "-" + branch
 } catch (e: Exception) {
     "unknown"
@@ -28,7 +28,6 @@ extra.set("archivesBaseName", "ViaFabric")
 description = "Client-side and server-side ViaVersion implementation for Fabric"
 
 repositories {
-    //mavenLocal()
     mavenCentral()
     maven(url = "https://repo.viaversion.com/")
     maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
@@ -49,8 +48,8 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    implementation("us.myles:viaversion:3.3.0-21w15a") { isTransitive = false }
-    include("us.myles:viaversion:3.3.0-21w15a")
+    implementation("com.viaversion:viaversion:4.0.0-21w17a") { isTransitive = false }
+    include("com.viaversion:viaversion:4.0.0-21w17a")
     implementation("org.yaml:snakeyaml:1.28")
     include("org.yaml:snakeyaml:1.28")
 

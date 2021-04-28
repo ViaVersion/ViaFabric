@@ -4,10 +4,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
-import us.myles.ViaVersion.api.data.UserConnection;
-import us.myles.ViaVersion.exception.CancelCodecException;
-import us.myles.ViaVersion.exception.CancelEncoderException;
-import us.myles.ViaVersion.util.PipelineUtil;
+import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.exception.CancelCodecException;
+import com.viaversion.viaversion.exception.CancelEncoderException;
+import com.viaversion.viaversion.util.PipelineUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;

@@ -6,7 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.MessageToByteEncoder;
 import io.netty.handler.codec.MessageToMessageDecoder;
-import us.myles.ViaVersion.util.PipelineUtil;
+import com.viaversion.viaversion.util.PipelineUtil;
 
 import java.lang.reflect.InvocationTargetException;
 

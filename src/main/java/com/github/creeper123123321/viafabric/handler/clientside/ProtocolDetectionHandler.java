@@ -2,10 +2,10 @@ package com.github.creeper123123321.viafabric.handler.clientside;
 
 import com.github.creeper123123321.viafabric.ViaFabric;
 import com.github.creeper123123321.viafabric.service.ProtocolAutoDetector;
+import com.viaversion.viaversion.util.Pair;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
-import us.myles.ViaVersion.api.Pair;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayDeque;

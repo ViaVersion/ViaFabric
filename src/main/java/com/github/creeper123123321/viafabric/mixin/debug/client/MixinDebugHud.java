@@ -2,6 +2,7 @@ package com.github.creeper123123321.viafabric.mixin.debug.client;
 
 import com.github.creeper123123321.viafabric.handler.CommonTransformer;
 import com.github.creeper123123321.viafabric.handler.FabricDecodeHandler;
+import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import io.netty.channel.ChannelHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.DebugHud;
@@ -9,9 +10,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import us.myles.ViaVersion.api.Via;
-import us.myles.ViaVersion.api.protocol.ProtocolVersion;
-import us.myles.ViaVersion.protocols.base.ProtocolInfo;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 import java.util.List;
 
@@ -28,8 +28,8 @@ public class MixinDebugHud {
             if (protocol != null) {
                 ProtocolVersion serverVer = ProtocolVersion.getProtocol(protocol.getServerProtocolVersion());
                 ProtocolVersion clientVer = ProtocolVersion.getProtocol(protocol.getProtocolVersion());
-                line += " / C: " + clientVer.getName() + " (" + clientVer.getId() + ") S: "
-                        + serverVer.getName() + " (" + serverVer.getId() + ") A: " + protocol.getUser().isActive();
+                line += " / C: " + clientVer.getName() + " (" + clientVer.getVersion() + ") S: "
+                        + serverVer.getName() + " (" + serverVer.getVersion() + ") A: " + protocol.getUser().isActive();
             }
         }
 
