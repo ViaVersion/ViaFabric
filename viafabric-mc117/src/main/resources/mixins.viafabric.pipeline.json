@@ -1,12 +1,13 @@
 {
   "required": true,
   "compatibilityLevel": "JAVA_8",
+  "package": "com.viaversion.fabric.mc117.mixin.pipeline",
   "mixins": [
-    "com.viaversion.fabric.mc117.mixin.pipeline.MixinClientConnection",
-    "com.viaversion.fabric.mc117.mixin.pipeline.MixinServerNetworkIoChInit"
+    "MixinClientConnection",
+    "MixinServerNetworkIoChInit"
   ],
   "client": [
-    "com.viaversion.fabric.mc117.mixin.pipeline.client.MixinClientConnectionChInit"
+    "client.MixinClientConnectionChInit"
   ],
   "injectors": {
     "defaultRequire": 1

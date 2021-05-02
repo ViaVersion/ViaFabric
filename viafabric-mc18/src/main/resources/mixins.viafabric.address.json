@@ -1,12 +1,13 @@
 {
   "required": true,
   "compatibilityLevel": "JAVA_8",
+  "package": "com.viaversion.fabric.mc18.mixin.address",
   "mixins": [
   ],
   "client": [
-    "com.viaversion.fabric.mc18.mixin.address.client.MixinConnectScreenThread",
-    "com.viaversion.fabric.mc18.mixin.address.client.MixinServerAddress",
-    "com.viaversion.fabric.mc18.mixin.address.client.MixinServerPinger"
+    "client.MixinConnectScreenThread",
+    "client.MixinServerAddress",
+    "client.MixinServerPinger"
   ],
   "injectors": {
     "defaultRequire": 1

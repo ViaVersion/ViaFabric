@@ -280,7 +280,6 @@ dependencies {
 
     include("com.viaversion:viaversion:4.0.0-21w17a")
     include("org.yaml:snakeyaml:1.28")
-    include("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
 
     afterEvaluate {
         subprojects.each {
@@ -309,7 +308,7 @@ curseforge {
             relations {
                 requiredDependency("fabric-api")
                 requiredDependency("legacy-fabric-api")
-                embeddedLibrary("cotton-client-commands")
+                optionalDependency("cotton-client-commands")
             }
         }
 

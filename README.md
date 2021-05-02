@@ -9,19 +9,18 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod can be installed on 1.8.9, 1.14.x, 1.15.x, 1.16.x and 1.17 snapshots (in separate branches) with Fabric Loader.
-Check the Minecraft version in file name when downloading from CurseForge/GitHub Releases.
+This mod can be installed on 1.8.9, 1.14.x, 1.15.x, 1.16.x and 1.17 snapshots with Fabric Loader.
 
 Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not work with modded registry entries
 or registry synchronization (fabric-registry-sync mod).
 
 
-| Dependency                                    | Download                                                            |
-| --------------------------------------------- | ------------------------------------------------------------------- |
-| (Bundled) ViaVersion                          | https://viaversion.com/                                             |
-| (Bundled) Cotton Client Commands (MC 1.14-15) | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands |
-| Fabric API (MC 1.14+)                         | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
-| Legacy Fabric API (MC 1.8.9)                  | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api      |
+| Dependency                                     | Download                                                            |
+| ---------------------------------------------- | ------------------------------------------------------------------- |
+| (Bundled) ViaVersion                           | https://viaversion.com/                                             |
+| (Optional) Cotton Client Commands (MC 1.14-15) | https://www.curseforge.com/minecraft/mc-mods/cotton-client-commands |
+| Fabric API (MC 1.14+)                          | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
+| Legacy Fabric API (MC 1.8.9)                   | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api      |
 
 
 ## ViaVersion

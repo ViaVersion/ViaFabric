@@ -132,7 +132,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
-    public PlatformTask runSync(Runnable runnable, Long ticks) {
+    public PlatformTask runSync(Runnable runnable, long ticks) {
         // ViaVersion seems to not need to run delayed tasks on main thread
         return new FutureTaskId(
                 ViaFabric.EVENT_LOOP
@@ -142,7 +142,7 @@ public class VRPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
-    public PlatformTask runRepeatingSync(Runnable runnable, Long ticks) {
+    public PlatformTask runRepeatingSync(Runnable runnable, long ticks) {
         // ViaVersion seems to not need to run repeating tasks on main thread
         return new FutureTaskId(
                 ViaFabric.EVENT_LOOP

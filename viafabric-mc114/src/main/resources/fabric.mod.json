@@ -39,7 +39,6 @@
     ]
   },
   "depends": {
-    "cotton-client-commands": "*",
     "fabricloader": ">=0.4.0",
     "fabric-resource-loader-v0": "*",
     "minecraft": "1.14.x",
@@ -49,7 +48,8 @@
     "fabric-registry-sync-v0": "*"
   },
   "recommends": {
-    "fabric-command-api-v1": "*"
+    "fabric-command-api-v1": "*",
+    "cotton-client-commands": "*"
   },
   "icon": "assets/viafabric/textures/logo.png",
   "mixins": [
