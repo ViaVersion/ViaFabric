@@ -129,8 +129,8 @@ allprojects {
         processResources {
             filesMatching("fabric.mod.json") {
                 filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
-                        version    : version,
-                        description: description
+                        version    : rootProject.version,
+                        description: rootProject.description
                 ])
             }
         }
@@ -319,7 +319,7 @@ curseforge {
     }
 }
 
-if (getBranch() == "master" && ENV.CURSEFORGE_API_KEY && !ENV.CURSEFORGE_API_KEY.isEmpty()) {
+if (getBranch() == "main" && ENV.CURSEFORGE_API_KEY && !ENV.CURSEFORGE_API_KEY.isEmpty()) {
     defaultTasks("clean", "build", "curseforge")
 } else {
     defaultTasks("clean", "build")
