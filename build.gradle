@@ -16,7 +16,6 @@ class Globals {
 version = Globals.baseVersion + "+" + (ENV.GITHUB_RUN_NUMBER ? "" : "local-") + getBranch()
 logger.lifecycle("Building ViaFabric: " + version)
 
-import org.apache.commons.codec.digest.DigestUtils
 import net.fabricmc.loom.task.RunClientTask
 import net.fabricmc.loom.task.RunServerTask
 
@@ -118,13 +117,13 @@ allprojects {
     }
 
     jar {
-        classifier = "dev"
+        archiveClassifier = "dev"
     }
 
     afterEvaluate {
         remapJar {
             input = file("${project.buildDir}/libs/$archivesBaseName-${version}-dev.jar")
-            archiveName = "${archivesBaseName}-${version}.jar"
+            archiveFileName = "${archivesBaseName}-${version}.jar"
         }
 
         artifacts {
@@ -134,8 +133,8 @@ allprojects {
         processResources {
             filesMatching("fabric.mod.json") {
                 filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
-                    version: version,
-                    description: description
+                        version    : version,
+                        description: description
                 ])
             }
         }
@@ -220,7 +219,7 @@ subprojects {
 task remapMavenJar(type: net.fabricmc.loom.task.RemapJarTask, dependsOn: jar) {
     afterEvaluate {
         input = file("${project.buildDir}/libs/${archivesBaseName}-${version}-dev.jar")
-        archiveName = "${archivesBaseName}-${version}-maven.jar"
+        archiveFileName = "${archivesBaseName}-${version}-maven.jar"
         addNestedDependencies = false
     }
 }
@@ -279,6 +278,10 @@ dependencies {
     mappings("net.fabricmc:yarn:1.8.9+build.202103291533:v2")
     modCompile("net.fabricmc:fabric-loader:0.10.5+build.213")
 
+    include("com.viaversion:viaversion:4.0.0-21w17a")
+    include("org.yaml:snakeyaml:1.28")
+    include("io.github.cottonmc:cotton-client-commands:1.0.0+1.15.2")
+
     afterEvaluate {
         subprojects.each {
             compile project(path: ":${it.name}", configuration: "dev")
@@ -298,11 +301,16 @@ curseforge {
         id = "391298"
         changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
         releaseType = "alpha"
-        addGameVersion "1.17"
-        addGameVersion "Fabric"
+        Arrays.<String> asList("1.17", "1.16.5", "1.15.2", "1.14.4", "1.8.9", "Java 8", "Java 9", "Java 10", "Fabric")
+                .forEach { ver -> addGameVersion(ver) }
 
         mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")) {
             displayName = "[${getBranch()}] ViaFabric $Globals.baseVersion"
+            relations {
+                requiredDependency("fabric-api")
+                requiredDependency("legacy-fabric-api")
+                embeddedLibrary("cotton-client-commands")
+            }
         }
 
         afterEvaluate {
@@ -313,4 +321,10 @@ curseforge {
     options {
         forgeGradleIntegration = false
     }
+}
+
+if (getBranch() == "master" && ENV.CURSEFORGE_API_KEY && !ENV.CURSEFORGE_API_KEY.isEmpty()) {
+    defaultTasks("clean", "build", "curseforge")
+} else {
+    defaultTasks("clean", "build")
 }

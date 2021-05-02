@@ -12,4 +12,6 @@ rootProject.name = "viafabric"
 
 include "viafabric-mc18"
 include "viafabric-mc114"
+include "viafabric-mc115"
+include "viafabric-mc116"
 include "viafabric-mc117"

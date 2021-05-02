@@ -1,3 +1,4 @@
+import java.util.function.Function as JFun
 version = rootProject.version
 
 dependencies {
@@ -7,4 +8,10 @@ dependencies {
 
 	modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:1.1.0+1.8.9")
 	modImplementation("io.github.boogiemonster1o1:modmenu:0.1.0+1.8.9")
+}
+
+minecraft {
+	intermediaryUrl = JFun {
+		"https://maven.legacyfabric.net/net/fabricmc/intermediary/$it/intermediary-$it-v2.jar"
+	}
 }

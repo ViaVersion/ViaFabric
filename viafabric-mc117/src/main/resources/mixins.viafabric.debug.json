@@ -1,12 +1,11 @@
 {
   "required": true,
   "compatibilityLevel": "JAVA_8",
-  "package": "com.viaversion.fabric.mc117.mixin.debug",
   "mixins": [
   ],
   "client": [
-    "client.MixinClientConnectionAccessor",
-    "client.MixinDebugHud"
+    "com.viaversion.fabric.mc117.mixin.debug.client.MixinClientConnectionAccessor",
+    "com.viaversion.fabric.mc117.mixin.debug.client.MixinDebugHud"
   ],
   "injectors": {
     "defaultRequire": 0

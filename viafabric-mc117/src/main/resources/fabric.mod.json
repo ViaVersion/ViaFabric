@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "viafabric-impl",
+  "id": "viafabric-mc117",
   "name": "ViaFabric",
   "version": "@version@",
   "description": "@description@",
@@ -8,8 +8,7 @@
   "contact": {
     "homepage": "https://viaversion.com/fabric",
     "issues": "https://github.com/ViaVersion/ViaFabric/issues",
-    "sources": "https://github.com/ViaVersion/ViaFabric",
-    "discord": "https://discord.gg/viaversion"
+    "sources": "https://github.com/ViaVersion/ViaFabric"
   },
   "environment": "*",
   "authors": [

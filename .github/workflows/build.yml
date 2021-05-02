@@ -18,7 +18,7 @@ jobs:
           java-version: 11
       - name: build
         env:
-          curse_api_key: ${{ secrets.CREEPER_CF }}
+          CURSEFORGE_API_KEY: ${{ secrets.CREEPER_CF }}
         run: ./gradlew
       - name: capture build artifacts
         uses: actions/upload-artifact@v2

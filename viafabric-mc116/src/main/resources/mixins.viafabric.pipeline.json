@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "com.viaversion.fabric.mc116.mixin.pipeline.MixinClientConnection",
+    "com.viaversion.fabric.mc116.mixin.pipeline.MixinServerNetworkIoChInit"
+  ],
+  "client": [
+    "com.viaversion.fabric.mc116.mixin.pipeline.client.MixinClientConnectionChInit"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
