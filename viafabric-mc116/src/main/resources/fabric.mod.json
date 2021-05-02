@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "viafabric-mc116",
-  "name": "ViaFabric",
+  "name": "ViaFabric for 1.16",
   "version": "@version@",
   "description": "@description@",
   "license": "GPL-3.0",
@@ -53,5 +53,10 @@
     "mixins.viafabric116.gui.json",
     "mixins.viafabric116.debug.json",
     "mixins.viafabric116.pipeline.json"
-  ]
+  ],
+  "custom": {
+    "modmenu": {
+      "parent": "viafabric"
+    }
+  }
 }

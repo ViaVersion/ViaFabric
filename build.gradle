@@ -13,6 +13,7 @@ class Globals {
     static def baseVersion = "0.4.0"
 }
 
+description = "Client-side and server-side ViaVersion implementation for Fabric"
 version = Globals.baseVersion + "+" + (ENV.GITHUB_RUN_NUMBER ? "" : "local-") + getBranch()
 logger.lifecycle("Building ViaFabric: " + version)
 

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "viafabric-mc18",
-  "name": "ViaFabric",
+  "name": "ViaFabric for 1.8",
   "version": "@version@",
   "description": "@description@",
   "license": "GPL-3.0",
@@ -53,5 +53,10 @@
     "mixins.viafabric18.gui.json",
     "mixins.viafabric18.debug.json",
     "mixins.viafabric18.pipeline.json"
-  ]
+  ],
+  "custom": {
+    "modmenu": {
+      "parent": "viafabric"
+    }
+  }
 }

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "viafabric-mc115",
-  "name": "ViaFabric",
+  "name": "ViaFabric for 1.15",
   "version": "@version@",
   "description": "@description@",
   "license": "GPL-3.0",
@@ -57,5 +57,10 @@
     "mixins.viafabric115.gui.json",
     "mixins.viafabric115.debug.json",
     "mixins.viafabric115.pipeline.json"
-  ]
+  ],
+  "custom": {
+    "modmenu": {
+      "parent": "viafabric"
+    }
+  }
 }
