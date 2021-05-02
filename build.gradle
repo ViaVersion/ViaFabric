@@ -95,10 +95,6 @@ allprojects {
         dev
     }
 
-    loom {
-        shareCaches = true
-    }
-
     repositories {
         mavenCentral()
         maven { url = "https://repo.viaversion.com/" }
