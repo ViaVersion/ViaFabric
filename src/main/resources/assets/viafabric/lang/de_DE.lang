@@ -1,0 +1,12 @@
+gui.protocol_version_field.name=Protokoll Version
+gui.enable_client_side_button=ViaVersion aktivieren
+gui.enable_client_side.question=Bist du dir sicher, dass du den clientseitigen Modus aktivieren möchtest?
+gui.enable_client_side.warning=Ich kann nicht garantieren, dass diese Mod auf jedem (oder überhaupt einem) Server erlaubt ist. Diese Mod könnte eventuell Probleme mit Anti-Cheat Plugins hervorrufen. VERWENDUNG AUF EIGENE GEFAHR.
+gui.enable_client_side.enable=Aktivieren
+gui.viafabric_config.title=ViaFabric-Konfigurationen
+gui.client_side.enable=Clientseitig aktivieren
+gui.client_side.disable=Clientseitig deaktivieren
+gui.ping_version.translated=VIA: %s
+gui.hide_via_button.enable=VIA Button ausblenden
+gui.hide_via_button.disable=VIA Button anzeigen
+gui.via_button=VIA

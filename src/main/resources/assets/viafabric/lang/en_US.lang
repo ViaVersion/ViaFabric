@@ -1,0 +1,12 @@
+gui.protocol_version_field.name=Protocol Version
+gui.enable_client_side_button=Enable ViaVersion
+gui.enable_client_side.question=Are you sure you want to enable client-side mode?
+gui.enable_client_side.warning=I cannot guarantee that this mod is allowed on every (or even any) server. This mod may cause problems with anti-cheat plugins. USE AT OWN RISK.
+gui.enable_client_side.enable=Enable
+gui.viafabric_config.title=ViaFabric Configurations
+gui.client_side.enable=Enable client-side
+gui.client_side.disable=Disable client-side
+gui.ping_version.translated"=VIA: %s
+gui.hide_via_button.enable=Hide VIA button
+gui.hide_via_button.disable=Show VIA button
+gui.via_button="VIA

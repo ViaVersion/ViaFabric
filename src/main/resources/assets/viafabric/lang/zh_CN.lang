@@ -1,0 +1,12 @@
+gui.protocol_version_field.name=协议版本
+gui.enable_client_side_button=启用 ViaVersion
+gui.enable_client_side.question=您确定要启用客户端模式？
+gui.enable_client_side.warning=我无法保证所有（甚至任何一个）服务器允许您使用这个 mod。这个 mod 可能被反作弊插件作出误判。使用后果自负。
+gui.enable_client_side.enable=启用
+gui.viafabric_config.title=ViaFabric配置
+gui.client_side.enable=启用客户端
+gui.client_side.disable=禁用客户端
+gui.ping_version.translated=VIA: %s
+gui.hide_via_button.enable=隐藏VIA按钮
+gui.hide_via_button.disable=显示VIA按钮
+gui.via_button=VIA

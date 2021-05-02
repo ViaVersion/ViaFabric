@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "id": "viafabric-impl",
+  "name": "ViaFabric",
+  "version": "@version@",
+  "description": "@description@",
+  "license": "GPL-3.0",
+  "contact": {
+    "homepage": "https://viaversion.com/fabric",
+    "issues": "https://github.com/ViaVersion/ViaFabric/issues",
+    "sources": "https://github.com/ViaVersion/ViaFabric"
+  },
+  "environment": "*",
+  "authors": [
+    {
+      "name": "creeper123123321",
+      "contact": {
+        "homepage": "https://creeper123123321.github.io/"
+      }
+    }
+  ],
+  "contributors": [
+    {
+      "name": "GitHub contributors",
+      "contact": {
+        "homepage": "https://github.com/ViaVersion/ViaFabric/graphs/contributors"
+      }
+    }
+  ],
+  "entrypoints": {
+    "main": [
+      "com.viaversion.fabric.mc114.ViaFabric"
+    ],
+    "cotton-client-commands": [
+      "com.viaversion.fabric.mc114.commands.VRClientCommands"
+    ],
+    "modmenu": [
+      "com.viaversion.fabric.mc114.gui.ModMenuConfig"
+    ]
+  },
+  "depends": {
+    "cotton-client-commands": "*",
+    "fabricloader": ">=0.4.0",
+    "fabric-resource-loader-v0": "*",
+    "minecraft": "1.14.x",
+    "viaversion": ">3.0.1"
+  },
+  "conflicts": {
+    "fabric-registry-sync-v0": "*"
+  },
+  "recommends": {
+    "fabric-command-api-v1": "*"
+  },
+  "icon": "assets/viafabric/textures/logo.png",
+  "mixins": [
+    "mixins.viafabric.address.json",
+    "mixins.viafabric.gui.json",
+    "mixins.viafabric.debug.json",
+    "mixins.viafabric.pipeline.json"
+  ]
+}

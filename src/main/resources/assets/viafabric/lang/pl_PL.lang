@@ -1,0 +1,12 @@
+gui.protocol_version_field.name=Wersja protokołu
+gui.enable_client_side_button=Włącz ViaVersion
+gui.enable_client_side.question=Jesteś pewien, że chcesz włączyć tryb client-side?
+gui.enable_client_side.warning=Nie możemy zagwarantować, że ten mod jest dozwolony na każdym (lub jakimkolwiek) serwerze. Ten mod może powodować problemy z anty-cheatami. UŻYWASZ NA WŁASNE RYZYKO!.
+gui.enable_client_side.enable=Włączyć
+gui.viafabric_config.title=Konfiguracje ViaFabric
+gui.client_side.enable=Włączenie po stronie klienta
+gui.client_side.disable=Wyłączenie po stronie klienta
+gui.ping_version.translated=VIA: %s
+gui.hide_via_button.enable=Ukrycie przycisku VIA
+gui.hide_via_button.disable=Pokaż przycisk VIA
+gui.via_button=VIA

@@ -1,6 +1,5 @@
 pluginManagement {
     repositories {
-        jcenter()
         maven {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
@@ -8,3 +7,9 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+rootProject.name = "viafabric"
+
+include "viafabric-mc18"
+include "viafabric-mc114"
+include "viafabric-mc117"

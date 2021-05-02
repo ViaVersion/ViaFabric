@@ -1,0 +1,12 @@
+gui.protocol_version_field.name=Protokolli versioon
+gui.enable_client_side_button=Luba ViaVersion
+gui.enable_client_side.question=Kas soovid kindlasti lubada kliendipoolse režiimi?
+gui.enable_client_side.warning=Ma ei saa garanteerida selle modi lubamist igas (mistahes) serveris. See mod võib põhjustada sohivastaste pluginatega probleeme. KASUTA OMAL VASTUTUSEL.
+gui.enable_client_side.enable=Luba
+gui.viafabric_config.title=ViaFabricu seadistused
+gui.client_side.enable=Luba kliendipoolne
+gui.client_side.disable=Keela kliendipoolne
+gui.ping_version.translated=VIA: %s
+gui.hide_via_button.enable=Peida VIA nupp
+gui.hide_via_button.disable=Kuva VIA nuppu
+gui.via_button=VIA

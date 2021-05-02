@@ -1,0 +1,12 @@
+gui.protocol_version_field.name=Versão do protocolo
+gui.enable_client_side_button=Habilitar ViaVersion
+gui.enable_client_side.question=Você tem certeza de que deseja habilitar o modo cliente?
+gui.enable_client_side.warning=Não posso garantir que este mod seja permitido em todos os (ou mesmo em quaisquer) servidores. Esse poderá causar problemas com plugins anti-trapaça. USE POR SUA PRÓPRIA CONTA E RISCO.
+gui.enable_client_side.enable=Habilitar
+gui.viafabric_config.title=Configurações de ViaFabric
+gui.client_side.enable=Habilitar modo cliente
+gui.client_side.disable=Desativar modo cliente
+gui.ping_version.translated=VIA: %s
+gui.hide_via_button.enable=Esconder botão VIA
+gui.hide_via_button.disable=Mostrar botão VIA
+gui.via_button=VIA
