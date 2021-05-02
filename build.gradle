@@ -144,6 +144,13 @@ allprojects {
         archiveClassifier = "sources"
         from sourceSets.main.allSource
     }
+
+    minecraft {
+        intermediaryUrl = {
+            if (it == "1.8.9") "https://maven.legacyfabric.net/net/fabricmc/intermediary/$it/intermediary-$it-v2.jar"
+            else "https://maven.fabricmc.net/net/fabricmc/intermediary/$it/intermediary-$it-v2.jar"
+        }
+    }
 }
 
 javadoc {
@@ -283,7 +290,7 @@ dependencies {
 
     afterEvaluate {
         subprojects.each {
-            compile project(path: ":${it.name}", configuration: "dev")
+            implementation project(path: ":${it.name}", configuration: "dev")
             include project("${it.name}:")
 
             testmodCompile project("${it.name}:").sourceSets.testmod.output
