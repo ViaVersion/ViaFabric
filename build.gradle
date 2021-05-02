@@ -9,12 +9,8 @@ plugins {
 
 def ENV = System.getenv()
 
-class Globals {
-    static def baseVersion = "0.4.0"
-}
-
 description = "Client-side and server-side ViaVersion implementation for Fabric"
-version = Globals.baseVersion + "+" + (ENV.GITHUB_RUN_NUMBER ? "" : "local-") + getBranch()
+version = "0.4.0" + "+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
 logger.lifecycle("Building ViaFabric: " + version)
 
 import net.fabricmc.loom.task.RunClientTask
@@ -302,7 +298,7 @@ curseforge {
                 .forEach { ver -> addGameVersion(ver) }
 
         mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")) {
-            displayName = "[${getBranch()}] ViaFabric $Globals.baseVersion"
+            displayName = "[${getBranch()}] ViaFabric " + rootProject.version
             relations {
                 requiredDependency("fabric-api")
                 requiredDependency("legacy-fabric-api")
