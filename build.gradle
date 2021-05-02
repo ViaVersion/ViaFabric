@@ -2,7 +2,7 @@
 plugins {
     id "java"
     id "maven-publish"
-    id "fabric-loom" version "0.5.43" apply false
+    id "fabric-loom" version "0.7-SNAPSHOT" apply false
     id "org.ajoberstar.grgit" version "3.1.1"
     id "com.matthewprenger.cursegradle" version "1.4.0"
 }
@@ -190,10 +190,6 @@ task javadocJar(type: Jar) {
 build.dependsOn javadocJar
 
 subprojects {
-    dependencies {
-        testmodCompile sourceSets.main.output
-    }
-
     task remapMavenJar(type: Copy, dependsOn: remapJar) {
         afterEvaluate {
             from("${project.buildDir}/libs/$archivesBaseName-${version}.jar")
@@ -283,17 +279,15 @@ sourceSets {
 dependencies {
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("net.fabricmc:yarn:1.8.9+build.202103291533:v2")
-    modCompile("net.fabricmc:fabric-loader:0.10.5+build.213")
+    modImplementation("net.fabricmc:fabric-loader:0.10.5+build.213")
 
     include("com.viaversion:viaversion:4.0.0-21w17a")
     include("org.yaml:snakeyaml:1.28")
 
     afterEvaluate {
         subprojects.each {
-            implementation project(path: ":${it.name}", configuration: "dev")
+            //implementation project(path: ":${it.name}", configuration: "dev")
             include project("${it.name}:")
-
-            testmodCompile project("${it.name}:").sourceSets.testmod.output
         }
     }
 }
