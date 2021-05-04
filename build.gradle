@@ -300,8 +300,8 @@ curseforge {
         mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")) {
             displayName = "[${getBranch()}] ViaFabric " + rootProject.version
             relations {
-                requiredDependency("fabric-api")
-                requiredDependency("legacy-fabric-api")
+                optionalDependency("fabric-api")
+                optionalDependency("legacy-fabric-api")
                 optionalDependency("cotton-client-commands")
             }
         }
