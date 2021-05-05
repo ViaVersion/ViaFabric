@@ -8,6 +8,7 @@ plugins {
 }
 
 def ENV = System.getenv()
+def vvVer = "4.0.0-21w18a"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
 version = "0.4.0" + "+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
@@ -73,21 +74,6 @@ allprojects {
 
     group = "com.viaversion.fabric"
 
-    sourceSets {
-        testmod {
-            compileClasspath += main.compileClasspath
-            runtimeClasspath += main.runtimeClasspath
-        }
-    }
-
-    task runTestmodClient(type: RunClientTask) {
-        classpath sourceSets.testmod.runtimeClasspath
-    }
-
-    task runTestmodServer(type: RunServerTask) {
-        classpath sourceSets.testmod.runtimeClasspath
-    }
-
     configurations {
         dev
     }
@@ -105,7 +91,7 @@ allprojects {
 
     dependencies {
         // transitive = false because Guava is conflicting on runClient
-        implementation("com.viaversion:viaversion:4.0.0-21w17a") { transitive = false }
+        implementation("com.viaversion:viaversion:$vvVer") { transitive = false }
         implementation("org.yaml:snakeyaml:1.28")
     }
 
@@ -265,16 +251,12 @@ void setupRepositories(RepositoryHandler repositories) {
 
 subprojects.each { remapJar.dependsOn("${it.path}:remapJar") }
 
-sourceSets {
-    testmod
-}
-
 dependencies {
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("net.fabricmc:yarn:1.8.9+build.202103291533:v2")
     modImplementation("net.fabricmc:fabric-loader:0.10.5+build.213")
 
-    include("com.viaversion:viaversion:4.0.0-21w17a")
+    include("com.viaversion:viaversion:$vvVer")
     include("org.yaml:snakeyaml:1.28")
 
     afterEvaluate {
