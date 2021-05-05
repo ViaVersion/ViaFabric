@@ -16,6 +16,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/
+          key: ${{ runner.os }}-via-cache
       - name: build
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CREEPER_CF }}
