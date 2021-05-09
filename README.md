@@ -130,14 +130,14 @@ or registry synchronization (fabric-registry-sync mod).
 
 
 **Differences with multiconnect:**
-- ViaFabric main objective is to simply implement a ViaVersion platform
-- ViaFabric can be installed on more versions
-- ViaVersion works kinda of in a "MITM proxy" way
-- ViaVersion is designed for servers
-- multiconnect only supports the latest Minecraft version
-- multiconnect modifies client code more deeply, reverting movement changes
-- multiconnect is designed for clients and only works on latest client version
-- multiconnect is less likely to trigger anticheats
+
+|  | ViaVersion | multiconnect |
+| --- | --- | --- |
+| Designed for | servers | clients |
+| Can be installed on | multiple client/server versions | latest client version |
+| Objectives | simply implement ViaVersion | version support with fixes to version changes |
+| How does it work? | modifying packets at network code | modifying client code more deeply |
+| Triggering anti-cheats | very likely | less likely |
 
 
 ## WARNING
