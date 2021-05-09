@@ -1,7 +1,7 @@
 package com.viaversion.fabric.mc115.gui;
 
 import com.viaversion.fabric.mc115.ViaFabric;
-import com.viaversion.fabric.mc115.util.ProtocolUtils;
+import com.viaversion.fabric.common.util.ProtocolUtils;
 import com.viaversion.viaversion.api.Via;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

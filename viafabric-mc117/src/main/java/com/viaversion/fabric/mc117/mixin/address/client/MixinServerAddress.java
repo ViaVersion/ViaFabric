@@ -1,7 +1,7 @@
 package com.viaversion.fabric.mc117.mixin.address.client;
 
-import com.viaversion.fabric.mc117.ViaFabricAddress;
 import com.google.common.net.HostAndPort;
+import com.viaversion.fabric.common.VFAddressParser;
 import net.minecraft.client.network.ServerAddress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,7 +17,7 @@ public abstract class MixinServerAddress {
 
     @Redirect(method = "parse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ServerAddress;resolveServer(Lcom/google/common/net/HostAndPort;)Lcom/google/common/net/HostAndPort;"))
     private static HostAndPort modifySrvAddr(HostAndPort address) {
-        ViaFabricAddress viaAddr = new ViaFabricAddress().parse(address.getHost());
+        VFAddressParser viaAddr = new VFAddressParser().parse(address.getHost());
         if (viaAddr.viaSuffix == null) {
             return resolveServer(address);
         }

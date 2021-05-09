@@ -1,6 +1,6 @@
 package com.viaversion.fabric.mc117.commands;
 
-import com.viaversion.fabric.mc117.platform.VRPlatform;
+import com.viaversion.fabric.mc117.platform.FabricPlatform;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
@@ -26,9 +26,9 @@ public class NMSCommandSender implements ViaCommandSender {
     @Override
     public void sendMessage(String s) {
         if (source instanceof ServerCommandSource) {
-            ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(VRPlatform.legacyToJson(s)), false);
+            ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(FabricPlatform.legacyToJson(s)), false);
         } else if (source instanceof FabricClientCommandSource) {
-            ((FabricClientCommandSource) source).sendFeedback(Text.Serializer.fromJson(VRPlatform.legacyToJson(s)));
+            ((FabricClientCommandSource) source).sendFeedback(Text.Serializer.fromJson(FabricPlatform.legacyToJson(s)));
         }
     }
 

@@ -1,5 +1,6 @@
 package com.viaversion.fabric.mc117.handler;
 
+import com.viaversion.fabric.common.handler.CommonTransformer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;

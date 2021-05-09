@@ -32,26 +32,21 @@
       "com.viaversion.fabric.mc115.ViaFabric"
     ],
     "cotton-client-commands": [
-      "com.viaversion.fabric.mc115.commands.VRClientCommands"
+      "com.viaversion.fabric.mc115.commands.VFClientCommands"
     ],
     "modmenu": [
       "com.viaversion.fabric.mc115.gui.ModMenuConfig"
     ]
   },
   "depends": {
-    "fabricloader": ">=0.4.0",
     "fabric-resource-loader-v0": "*",
     "minecraft": "1.15.x",
     "viaversion": ">3.0.1"
-  },
-  "conflicts": {
-    "fabric-registry-sync-v0": "*"
   },
   "recommends": {
     "fabric-command-api-v1": "*",
     "cotton-client-commands": "*"
   },
-  "icon": "assets/viafabric/textures/logo.png",
   "mixins": [
     "mixins.viafabric115.address.json",
     "mixins.viafabric115.gui.json",

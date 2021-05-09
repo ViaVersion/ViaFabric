@@ -1,6 +1,6 @@
 package com.viaversion.fabric.mc117.commands;
 
-import com.viaversion.fabric.mc117.commands.subs.LeakDetectSubCommand;
+import com.viaversion.fabric.common.commands.subs.LeakDetectSubCommand;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;

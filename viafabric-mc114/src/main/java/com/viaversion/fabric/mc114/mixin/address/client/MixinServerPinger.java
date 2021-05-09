@@ -1,6 +1,6 @@
 package com.viaversion.fabric.mc114.mixin.address.client;
 
-import com.viaversion.fabric.mc114.ViaFabricAddress;
+import com.viaversion.fabric.common.VFAddressParser;
 import net.minecraft.client.network.MultiplayerServerListPinger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,7 +14,7 @@ public class MixinServerPinger {
     @Redirect(method = "add", at = @At(value = "INVOKE",
             target = "Ljava/net/InetAddress;getByName(Ljava/lang/String;)Ljava/net/InetAddress;"))
     private InetAddress resolveViaFabricAddr(String address) throws UnknownHostException {
-        ViaFabricAddress viaAddr = new ViaFabricAddress().parse(address);
+        VFAddressParser viaAddr = new VFAddressParser().parse(address);
         if (viaAddr.viaSuffix == null) {
             return InetAddress.getByName(address);
         }

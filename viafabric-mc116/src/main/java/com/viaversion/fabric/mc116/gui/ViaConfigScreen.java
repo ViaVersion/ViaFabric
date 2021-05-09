@@ -1,7 +1,7 @@
 package com.viaversion.fabric.mc116.gui;
 
 import com.viaversion.fabric.mc116.ViaFabric;
-import com.viaversion.fabric.mc116.util.ProtocolUtils;
+import com.viaversion.fabric.common.util.ProtocolUtils;
 import com.viaversion.viaversion.api.Via;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

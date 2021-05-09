@@ -36,18 +36,13 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.4.0",
     "legacy-fabric-resource-loader-v1": "*",
     "minecraft": "1.8.x",
     "viaversion": ">3.0.1"
   },
-  "conflicts": {
-    "fabric-registry-sync-v0": "*"
-  },
   "recommends": {
     "fabric-command-api-v0": "*"
   },
-  "icon": "assets/viafabric/textures/logo.png",
   "mixins": [
     "mixins.viafabric18.address.json",
     "mixins.viafabric18.gui.json",

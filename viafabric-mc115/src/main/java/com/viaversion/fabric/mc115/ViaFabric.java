@@ -1,17 +1,21 @@
 package com.viaversion.fabric.mc115;
 
-import com.viaversion.fabric.mc115.commands.VRCommandHandler;
-import com.viaversion.fabric.mc115.config.VRConfig;
-import com.viaversion.fabric.mc115.platform.VRInjector;
-import com.viaversion.fabric.mc115.platform.VRLoader;
-import com.viaversion.fabric.mc115.platform.VRPlatform;
-import com.viaversion.fabric.mc115.protocol.ViaFabricHostnameProtocol;
-import com.viaversion.fabric.mc115.util.JLoggerToLog4j;
 import com.google.common.collect.Range;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.viaversion.fabric.common.config.VFConfig;
+import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
+import com.viaversion.fabric.common.util.JLoggerToLog4j;
+import com.viaversion.fabric.mc115.commands.VRCommandHandler;
+import com.viaversion.fabric.mc115.platform.FabricInjector;
+import com.viaversion.fabric.mc115.platform.VRLoader;
+import com.viaversion.fabric.mc115.platform.FabricPlatform;
+import com.viaversion.viaversion.ViaManagerImpl;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.data.MappingDataLoader;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
 import net.fabricmc.api.ModInitializer;
@@ -20,10 +24,6 @@ import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.CommandSource;
 import org.apache.logging.log4j.LogManager;
-import com.viaversion.viaversion.ViaManagerImpl;
-import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.data.MappingDataLoader;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -36,7 +36,7 @@ public class ViaFabric implements ModInitializer {
     public static final ExecutorService ASYNC_EXECUTOR;
     public static final EventLoop EVENT_LOOP;
     public static CompletableFuture<Void> INIT_FUTURE = new CompletableFuture<>();
-    public static VRConfig config;
+    public static VFConfig config;
 
     static {
         ThreadFactory factory = new ThreadFactoryBuilder().setDaemon(true).setNameFormat("ViaFabric-%d").build();
@@ -64,16 +64,16 @@ public class ViaFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         Via.init(ViaManagerImpl.builder()
-                .injector(new VRInjector())
+                .injector(new FabricInjector())
                 .loader(new VRLoader())
                 .commandHandler(new VRCommandHandler())
-                .platform(new VRPlatform()).build());
+                .platform(new FabricPlatform()).build());
 
         FabricLoader.getInstance().getModContainer("viabackwards").ifPresent(mod -> MappingDataLoader.enableMappingsCache());
 
         ((ViaManagerImpl) Via.getManager()).init();
 
-        Via.getManager().getProtocolManager().registerBaseProtocol(ViaFabricHostnameProtocol.INSTANCE, Range.lessThan(Integer.MIN_VALUE));
+        Via.getManager().getProtocolManager().registerBaseProtocol(HostnameParserProtocol.INSTANCE, Range.lessThan(Integer.MIN_VALUE));
         ProtocolVersion.register(-2, "AUTO");
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
@@ -89,7 +89,7 @@ public class ViaFabric implements ModInitializer {
             }
         }
 
-        config = new VRConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
+        config = new VFConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());
 
         INIT_FUTURE.complete(null);

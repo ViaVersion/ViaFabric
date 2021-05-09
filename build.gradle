@@ -14,9 +14,6 @@ description = "Client-side and server-side ViaVersion implementation for Fabric"
 version = "0.4.0" + "+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
 logger.lifecycle("Building ViaFabric: " + version)
 
-import net.fabricmc.loom.task.RunClientTask
-import net.fabricmc.loom.task.RunServerTask
-
 def getBranch() {
     def ENV = System.getenv()
     if (ENV.GITHUB_REF) {
@@ -31,32 +28,6 @@ def getBranch() {
     def branch = grgit.branch.current().name
     return branch.substring(branch.lastIndexOf("/") + 1)
 }
-
-def moduleDependencies(project, List<String> depNames) {
-    def deps = depNames.iterator().collect { project.dependencies.project(path: ":$it", configuration: 'dev') }
-    project.dependencies {
-        deps.each {
-            compile it
-        }
-    }
-    project.publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                pom.withXml {
-                    def depsNode = asNode().appendNode("dependencies")
-                    deps.each {
-                        def depNode = depsNode.appendNode("dependency")
-                        depNode.appendNode("groupId", it.group)
-                        depNode.appendNode("artifactId", it.name)
-                        depNode.appendNode("version", it.version)
-                        depNode.appendNode("scope", "compile")
-                    }
-                }
-            }
-        }
-    }
-}
-
 
 allprojects {
     apply plugin: "maven-publish"
@@ -93,6 +64,8 @@ allprojects {
         // transitive = false because Guava is conflicting on runClient
         implementation("com.viaversion:viaversion:$vvVer") { transitive = false }
         implementation("org.yaml:snakeyaml:1.28")
+
+        modImplementation("net.fabricmc:fabric-loader:0.11.3")
     }
 
     jar {
@@ -108,14 +81,14 @@ allprojects {
         artifacts {
             dev file: file("${project.buildDir}/libs/$archivesBaseName-${version}-dev.jar"), type: "jar", builtBy: jar
         }
+    }
 
-        processResources {
-            filesMatching("fabric.mod.json") {
-                filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
-                        version    : rootProject.version,
-                        description: rootProject.description
-                ])
-            }
+    processResources {
+        filesMatching("fabric.mod.json") {
+            filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+                    version    : rootProject.version,
+                    description: rootProject.description
+            ])
         }
     }
 
@@ -132,43 +105,11 @@ allprojects {
     }
 }
 
-javadoc {
-    options {
-        source = "8"
-        encoding = "UTF-8"
-        charSet = "UTF-8"
-        memberLevel = JavadocMemberLevel.PACKAGE
-        links(
-                "https://guava.dev/releases/21.0/api/docs/",
-                "https://asm.ow2.io/javadoc/",
-                "https://docs.oracle.com/javase/8/docs/api/",
-                "http://jenkins.liteloader.com/job/Mixin/javadoc/",
-                "https://logging.apache.org/log4j/2.x/log4j-api/apidocs/"
-                // Need to add minecraft jd publication etc once there is one available
-        )
-        // Disable the crazy super-strict doclint tool in Java 8
-        addStringOption("Xdoclint:none", "-quiet")
-    }
-
-    allprojects.each {
-        source(it.sourceSets.main.allJava.srcDirs)
-    }
-
-    classpath = sourceSets.main.compileClasspath
-    include("**/api/**")
-    failOnError false
-}
-
-task javadocJar(type: Jar) {
-    dependsOn javadoc
-    from javadoc.destinationDir
-    //Set as `fatjavadoc` to prevent an ide form trying to use this javadoc, over using the modules javadoc
-    archiveClassifier = "fatjavadoc"
-}
-
-build.dependsOn javadocJar
-
 subprojects {
+    dependencies {
+        implementation rootProject
+    }
+
     task remapMavenJar(type: Copy, dependsOn: remapJar) {
         afterEvaluate {
             from("${project.buildDir}/libs/$archivesBaseName-${version}.jar")
@@ -194,8 +135,6 @@ subprojects {
 
         setupRepositories(repositories)
     }
-
-    javadoc.enabled = false
 }
 
 task remapMavenJar(type: net.fabricmc.loom.task.RemapJarTask, dependsOn: jar) {
@@ -216,8 +155,6 @@ publishing {
             artifact(sourcesJar) {
                 builtBy remapSourcesJar
             }
-
-            artifact javadocJar
 
             pom.withXml {
                 def depsNode = asNode().appendNode("dependencies")
@@ -254,16 +191,13 @@ subprojects.each { remapJar.dependsOn("${it.path}:remapJar") }
 dependencies {
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("net.fabricmc:yarn:1.8.9+build.202103291533:v2")
-    modImplementation("net.fabricmc:fabric-loader:0.10.5+build.213")
 
     include("com.viaversion:viaversion:$vvVer")
     include("org.yaml:snakeyaml:1.28")
 
-    afterEvaluate {
-        subprojects.each {
-            //implementation project(path: ":${it.name}", configuration: "dev")
-            include project("${it.name}:")
-        }
+    subprojects.each {
+        //implementation project(path: ":${it.name}", configuration: "dev")
+        include project("${it.name}:")
     }
 }
 

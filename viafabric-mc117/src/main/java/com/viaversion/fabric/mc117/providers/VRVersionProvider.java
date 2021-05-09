@@ -1,9 +1,9 @@
 package com.viaversion.fabric.mc117.providers;
 
+import com.viaversion.fabric.common.VFAddressParser;
 import com.viaversion.fabric.mc117.ViaFabric;
-import com.viaversion.fabric.mc117.ViaFabricAddress;
 import com.viaversion.fabric.mc117.service.ProtocolAutoDetector;
-import com.viaversion.fabric.mc117.util.ProtocolUtils;
+import com.viaversion.fabric.common.util.ProtocolUtils;
 import com.google.common.primitives.Ints;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import net.fabricmc.loader.api.FabricLoader;
@@ -68,7 +68,7 @@ public class VRVersionProvider extends BaseVersionProvider {
             SocketAddress addr = connection.getChannel().remoteAddress();
 
             if (addr instanceof InetSocketAddress) {
-                int addrVersion = new ViaFabricAddress().parse(((InetSocketAddress) addr).getHostName()).protocol;
+                int addrVersion = new VFAddressParser().parse(((InetSocketAddress) addr).getHostName()).protocol;
                 if (addrVersion != 0) serverVer = addrVersion;
 
                 try {

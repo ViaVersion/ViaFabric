@@ -1,20 +1,22 @@
 package com.viaversion.fabric.mc115.providers;
 
-import com.viaversion.fabric.mc115.ViaFabric;
-import com.viaversion.fabric.mc115.ViaFabricAddress;
-import com.viaversion.fabric.mc115.service.ProtocolAutoDetector;
-import com.viaversion.fabric.mc115.util.ProtocolUtils;
 import com.google.common.primitives.Ints;
+import com.viaversion.fabric.common.VFAddressParser;
+import com.viaversion.fabric.common.util.ProtocolUtils;
+import com.viaversion.fabric.mc115.ViaFabric;
+import com.viaversion.fabric.mc115.service.ProtocolAutoDetector;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.network.ClientConnection;
-import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.exception.CancelException;
-import com.viaversion.viaversion.api.protocol.packet.State;
-import com.viaversion.viaversion.protocols.base.*;
+import com.viaversion.viaversion.protocols.base.BaseProtocol1_16;
+import com.viaversion.viaversion.protocols.base.BaseProtocol1_7;
+import com.viaversion.viaversion.protocols.base.BaseVersionProvider;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.network.ClientConnection;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -68,7 +70,7 @@ public class VRVersionProvider extends BaseVersionProvider {
             SocketAddress addr = connection.getChannel().remoteAddress();
 
             if (addr instanceof InetSocketAddress) {
-                int addrVersion = new ViaFabricAddress().parse(((InetSocketAddress) addr).getHostName()).protocol;
+                int addrVersion = new VFAddressParser().parse(((InetSocketAddress) addr).getHostName()).protocol;
                 if (addrVersion != 0) serverVer = addrVersion;
 
                 try {

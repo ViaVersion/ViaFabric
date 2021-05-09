@@ -1,6 +1,6 @@
 package com.viaversion.fabric.mc114.mixin.debug.client;
 
-import com.viaversion.fabric.mc114.handler.CommonTransformer;
+import com.viaversion.fabric.common.handler.CommonTransformer;
 import com.viaversion.fabric.mc114.handler.FabricDecodeHandler;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import io.netty.channel.ChannelHandler;

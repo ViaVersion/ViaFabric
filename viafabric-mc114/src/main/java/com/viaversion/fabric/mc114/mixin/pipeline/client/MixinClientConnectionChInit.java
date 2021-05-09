@@ -1,11 +1,11 @@
 package com.viaversion.fabric.mc114.mixin.pipeline.client;
 
 import com.viaversion.fabric.mc114.ViaFabric;
-import com.viaversion.fabric.mc114.handler.CommonTransformer;
+import com.viaversion.fabric.common.handler.CommonTransformer;
 import com.viaversion.fabric.mc114.handler.FabricDecodeHandler;
 import com.viaversion.fabric.mc114.handler.FabricEncodeHandler;
 import com.viaversion.fabric.mc114.handler.clientside.ProtocolDetectionHandler;
-import com.viaversion.fabric.mc114.protocol.ViaFabricHostnameProtocol;
+import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import io.netty.channel.Channel;
@@ -22,7 +22,7 @@ public class MixinClientConnectionChInit {
     private void onInitChannel(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
             UserConnection user = new UserConnectionImpl(channel, true);
-            new ProtocolPipelineImpl(user).add(ViaFabricHostnameProtocol.INSTANCE);
+            new ProtocolPipelineImpl(user).add(HostnameParserProtocol.INSTANCE);
 
             channel.pipeline()
                     .addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new FabricEncodeHandler(user))

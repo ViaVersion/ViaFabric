@@ -1,6 +1,6 @@
 package com.viaversion.fabric.mc116.mixin.pipeline;
 
-import com.viaversion.fabric.mc116.handler.CommonTransformer;
+import com.viaversion.fabric.common.handler.CommonTransformer;
 import com.viaversion.fabric.mc116.handler.FabricDecodeHandler;
 import com.viaversion.fabric.mc116.handler.FabricEncodeHandler;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
