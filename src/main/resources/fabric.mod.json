@@ -14,7 +14,7 @@
   "depends": {
     "fabricloader": ">=0.10.0",
     "minecraft": ["1.8.x", "1.14.x", "1.15.x", "1.16.x", "1.17.x"],
-    "viaversion": ">=4.0.0"
+    "viaversion": ">=3.99.0"
   },
   "environment": "*",
   "authors": [
