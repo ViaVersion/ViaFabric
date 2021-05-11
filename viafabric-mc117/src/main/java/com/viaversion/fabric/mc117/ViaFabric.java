@@ -18,7 +18,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.CommandSource;
 import org.apache.logging.log4j.LogManager;
@@ -83,12 +82,7 @@ public class ViaFabric implements ModInitializer {
         try {
             registerCommandsV1();
         } catch (NoClassDefFoundError ignored) {
-            try {
-                registerCommandsV0();
-                JLOGGER.info("Using Fabric Commands V0");
-            } catch (NoClassDefFoundError ignored2) {
-                JLOGGER.info("Couldn't register command as Fabric Commands isn't installed");
-            }
+            JLOGGER.info("Couldn't register command as Fabric Commands isn't installed");
         }
 
         config = new VFConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
@@ -104,12 +98,5 @@ public class ViaFabric implements ModInitializer {
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             ClientCommandManager.DISPATCHER.register(command("viafabricclient"));
         }
-    }
-
-    @SuppressWarnings("deprecation")
-    private void registerCommandsV0() {
-        CommandRegistry.INSTANCE.register(false, dispatcher -> dispatcher.register(command("viaversion")));
-        CommandRegistry.INSTANCE.register(false, dispatcher -> dispatcher.register(command("viaver")));
-        CommandRegistry.INSTANCE.register(false, dispatcher -> dispatcher.register(command("vvfabric")));
     }
 }

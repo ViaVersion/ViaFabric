@@ -38,7 +38,7 @@
   "depends": {
     "legacy-fabric-resource-loader-v1": "*",
     "minecraft": "1.8.x",
-    "viaversion": ">3.0.1"
+    "viafabric": "*"
   },
   "recommends": {
     "fabric-command-api-v0": "*"
