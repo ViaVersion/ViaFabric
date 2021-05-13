@@ -8,7 +8,7 @@ plugins {
 }
 
 def ENV = System.getenv()
-def vvVer = "4.0.0-21w18a"
+def vvVer = "4.0.0-21w19a"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
 version = "0.4.0" + "+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
@@ -210,7 +210,8 @@ curseforge {
         id = "391298"
         changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
         releaseType = "alpha"
-        Arrays.<String> asList("1.17", "1.16.5", "1.15.2", "1.14.4", "1.8.9", "Java 8", "Java 9", "Java 10", "Fabric")
+        Arrays.<String> asList("1.17", "1.16.5", "1.15.2", "1.14.4", "1.8.9",
+            "Java 8", "Java 9", "Java 10", "Java 11", "Java 12", "Java 13", "Java 14", "Java 15", "Java 16", "Fabric")
                 .forEach { ver -> addGameVersion(ver) }
 
         mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")) {
