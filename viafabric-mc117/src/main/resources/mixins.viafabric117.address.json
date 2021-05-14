@@ -1,13 +1,11 @@
 {
   "required": true,
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "package": "com.viaversion.fabric.mc117.mixin.address",
   "mixins": [
   ],
   "client": [
-    "client.MixinConnectScreenThread",
-    "client.MixinServerAddress",
-    "client.MixinServerPinger"
+    "client.MixinAllowedAddressResolver"
   ],
   "injectors": {
     "defaultRequire": 1

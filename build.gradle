@@ -1,8 +1,10 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 // Stolen https://github.com/FabricMC/fabric/blob/1.17/build.gradle
 plugins {
     id "java"
     id "maven-publish"
-    id "fabric-loom" version "0.7-SNAPSHOT" apply false
+    id "fabric-loom" version "0.8-SNAPSHOT" apply false
     id "org.ajoberstar.grgit" version "3.1.1"
     id "com.matthewprenger.cursegradle" version "1.4.0"
 }
@@ -11,8 +13,8 @@ def ENV = System.getenv()
 def vvVer = "4.0.0-21w19a"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
-version = "0.4.0" + "+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
-logger.lifecycle("Building ViaFabric: " + version)
+version = "0.4.0+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
+logger.lifecycle("Building ViaFabric: $version")
 
 def getBranch() {
     def ENV = System.getenv()
@@ -85,7 +87,7 @@ allprojects {
 
     processResources {
         filesMatching("fabric.mod.json") {
-            filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+            filter(ReplaceTokens, tokens: [
                     version    : rootProject.version,
                     description: rootProject.description
             ])
@@ -196,7 +198,6 @@ dependencies {
     include("org.yaml:snakeyaml:1.28")
 
     subprojects.each {
-        //implementation project(path: ":${it.name}", configuration: "dev")
         include project("${it.name}:")
     }
 }

@@ -1,6 +1,6 @@
 {
   "required": true,
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "package": "com.viaversion.fabric.mc117.mixin.debug",
   "mixins": [
   ],
