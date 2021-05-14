@@ -25,6 +25,7 @@ public class ProtocolUtils {
                 Integer.parseInt(s + '0');
                 return true;
             } catch (NumberFormatException e2) {
+                if (ProtocolVersion.getClosest(s) != null) return true;
                 return ProtocolVersion.getProtocols().stream()
                         .map(ProtocolVersion::getName)
                         .flatMap(str -> Stream.concat(

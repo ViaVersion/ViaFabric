@@ -1,9 +1,9 @@
 package com.viaversion.fabric.mc18.mixin.pipeline.client;
 
+import com.viaversion.fabric.common.handler.FabricDecodeHandler;
+import com.viaversion.fabric.common.handler.FabricEncodeHandler;
 import com.viaversion.fabric.mc18.ViaFabric;
 import com.viaversion.fabric.common.handler.CommonTransformer;
-import com.viaversion.fabric.mc18.handler.FabricDecodeHandler;
-import com.viaversion.fabric.mc18.handler.FabricEncodeHandler;
 import com.viaversion.fabric.mc18.handler.clientside.ProtocolDetectionHandler;
 import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
 import com.viaversion.viaversion.connection.UserConnectionImpl;

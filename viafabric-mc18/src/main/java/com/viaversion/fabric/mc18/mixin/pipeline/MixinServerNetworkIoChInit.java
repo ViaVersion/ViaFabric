@@ -1,8 +1,8 @@
 package com.viaversion.fabric.mc18.mixin.pipeline;
 
 import com.viaversion.fabric.common.handler.CommonTransformer;
-import com.viaversion.fabric.mc18.handler.FabricDecodeHandler;
-import com.viaversion.fabric.mc18.handler.FabricEncodeHandler;
+import com.viaversion.fabric.common.handler.FabricDecodeHandler;
+import com.viaversion.fabric.common.handler.FabricEncodeHandler;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import io.netty.channel.Channel;

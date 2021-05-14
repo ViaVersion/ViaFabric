@@ -1,7 +1,7 @@
 package com.viaversion.fabric.mc116.mixin.debug.client;
 
 import com.viaversion.fabric.common.handler.CommonTransformer;
-import com.viaversion.fabric.mc116.handler.FabricDecodeHandler;
+import com.viaversion.fabric.common.handler.FabricDecodeHandler;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import io.netty.channel.ChannelHandler;
 import net.minecraft.client.MinecraftClient;

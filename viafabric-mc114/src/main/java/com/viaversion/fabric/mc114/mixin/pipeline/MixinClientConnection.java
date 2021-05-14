@@ -1,12 +1,15 @@
 package com.viaversion.fabric.mc114.mixin.pipeline;
 
+import com.viaversion.fabric.common.handler.PipelineReorderEvent;
 import io.netty.channel.Channel;
 import net.minecraft.network.ClientConnection;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(ClientConnection.class)
@@ -27,5 +30,11 @@ public class MixinClientConnection {
         } else {
             logger.debug(message, t);
         }
+    }
+
+
+    @Inject(method = "setCompressionThreshold", at = @At("RETURN"))
+    private void reorderCompression(int compressionThreshold, CallbackInfo ci) {
+        channel.pipeline().fireUserEventTriggered(new PipelineReorderEvent());
     }
 }
