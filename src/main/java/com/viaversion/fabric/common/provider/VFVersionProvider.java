@@ -14,8 +14,9 @@ import com.viaversion.viaversion.exception.CancelException;
 import com.viaversion.viaversion.protocols.base.BaseProtocol1_16;
 import com.viaversion.viaversion.protocols.base.BaseProtocol1_7;
 import com.viaversion.viaversion.protocols.base.BaseVersionProvider;
+import io.netty.channel.ChannelPipeline;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.network.ClientConnection;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
@@ -109,8 +110,7 @@ public abstract class VFVersionProvider extends BaseVersionProvider {
     private void handleMulticonnectPing(UserConnection connection, ProtocolInfo info, boolean blocked, int serverVer) throws Exception {
         if (info.getState() == State.STATUS
                 && info.getProtocolVersion() == -1
-                && connection.getChannel().pipeline().get(ClientConnection.class).getPacketListener()
-                .getClass().getName().startsWith("net.earthcomputer.multiconnect")
+                && isMulticonnectHandler(connection.getChannel().pipeline())
                 && (blocked || ProtocolUtils.isSupported(serverVer, getVersionForMulticonnect(serverVer)))) { // Intercept the connection
             int multiconnectSuggestion = blocked ? -1 : getVersionForMulticonnect(serverVer);
             getLogger().info("Sending " + ProtocolVersion.getProtocol(multiconnectSuggestion) + " for multiconnect version detector");
@@ -119,6 +119,10 @@ public abstract class VFVersionProvider extends BaseVersionProvider {
             newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class, true, true);
             throw CancelException.generate();
         }
+    }
+
+    protected boolean isMulticonnectHandler(ChannelPipeline pipe) {
+        return false;
     }
 
     private int getVersionForMulticonnect(int clientSideVersion) {
