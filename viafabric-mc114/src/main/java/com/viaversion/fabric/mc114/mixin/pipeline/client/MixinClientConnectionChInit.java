@@ -2,9 +2,7 @@ package com.viaversion.fabric.mc114.mixin.pipeline.client;
 
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
 import com.viaversion.fabric.common.handler.FabricEncodeHandler;
-import com.viaversion.fabric.mc114.ViaFabric;
 import com.viaversion.fabric.common.handler.CommonTransformer;
-import com.viaversion.fabric.mc114.handler.clientside.ProtocolDetectionHandler;
 import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
@@ -27,9 +25,6 @@ public class MixinClientConnectionChInit {
             channel.pipeline()
                     .addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new FabricEncodeHandler(user))
                     .addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new FabricDecodeHandler(user));
-            if (ViaFabric.config.isClientSideEnabled()) {
-                channel.pipeline().addAfter(CommonTransformer.HANDLER_ENCODER_NAME, "via-autoprotocol", new ProtocolDetectionHandler());
-            }
         }
     }
 }
