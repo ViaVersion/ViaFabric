@@ -1,12 +1,11 @@
 {
   "required": true,
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "package": "com.github.creeper123123321.viafabric.mixin.address",
   "mixins": [
   ],
   "client": [
     "client.MixinConnectScreenThread",
-    "client.MixinServerAddress",
     "client.MixinServerPinger"
   ],
   "injectors": {

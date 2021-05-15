@@ -2,7 +2,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     `java-library`
-    id("fabric-loom") version "0.6-SNAPSHOT"
+    id("fabric-loom") version "0.8-SNAPSHOT"
     id("com.palantir.git-version") version "0.12.0-rc2"
     id("com.matthewprenger.cursegradle") version "1.4.0"
     id("maven-publish")
@@ -49,18 +49,18 @@ tasks.named<ProcessResources>("processResources") {
 
 dependencies {
     // transitive = false because Guava is conflicting on runClient
-    implementation("com.viaversion:viaversion:4.0.0-21w17a") { isTransitive = false }
-    include("com.viaversion:viaversion:4.0.0-21w17a")
+    implementation("com.viaversion:viaversion:4.0.0-21w19a") { isTransitive = false }
+    include("com.viaversion:viaversion:4.0.0-21w19a")
     implementation("org.yaml:snakeyaml:1.28")
     include("org.yaml:snakeyaml:1.28")
 
     // https://fabricmc.net/versions.html
-    minecraft("com.mojang:minecraft:21w15a")
-    mappings("net.fabricmc:yarn:21w15a+build.16:v2")
+    minecraft("com.mojang:minecraft:21w19a")
+    mappings("net.fabricmc:yarn:21w19a+build.12:v2")
     modImplementation("net.fabricmc:fabric-loader:0.11.3")
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.33.0+1.17")
-    modImplementation("com.terraformersmc:modmenu:1.16.9")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.34.4+1.17")
+    modImplementation("com.terraformersmc:modmenu:2.0.0-beta.4")
 
     //modImplementation("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
     //include("io.github.cottonmc:cotton-client-commands:1.0.1+1.16-rc1")
@@ -149,7 +149,7 @@ tasks.withType<JavaCompile> {
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion.set(JavaLanguageVersion.of(16))
     }
     withSourcesJar()
 }
