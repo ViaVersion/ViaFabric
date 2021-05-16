@@ -1,20 +1,17 @@
 # ViaFabric
 [![ViaVersion Discord](https://img.shields.io/badge/chat-on%20discord-blue.svg)](https://viaversion.com/discord)
-[![CurseForge Downloads](http://cf.way2muchnoise.eu/full_391298_downloads.svg)](https://viaversion.com/fabric)
-[![CurseForge Versions](http://cf.way2muchnoise.eu/versions/391298.svg)](https://viaversion.com/fabric)
-<!-- ^ GitHub seems to not support Let's Encrypt certificates -->
+[![CurseForge Downloads](http://cf.way2muchnoise.eu/full_viafabric_downloads.svg)](https://viaversion.com/fabric)
+[![CurseForge Versions](http://cf.way2muchnoise.eu/versions/viafabric.svg)](https://viaversion.com/fabric)
+<!-- ^ GitHub seems to not like this https -->
 
-
-**Client-side and server-side ViaVersion implementation for Fabric**
+### Client-side and server-side ViaVersion implementation for Fabric
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
 This mod can be installed on 1.8.9, 1.14.x, 1.15.x, 1.16.x and 1.17 snapshots with Fabric Loader.
 
-Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not work with modded registry entries
-or registry synchronization (fabric-registry-sync mod).
 
-
+## Dependencies
 | Dependency                                     | Download                                                            |
 | ---------------------------------------------- | ------------------------------------------------------------------- |
 | (Bundled) ViaVersion                           | https://viaversion.com/                                             |
@@ -22,16 +19,19 @@ or registry synchronization (fabric-registry-sync mod).
 | Fabric API (MC 1.14+)                          | https://www.curseforge.com/minecraft/mc-mods/fabric-api             |
 | Legacy Fabric API (MC 1.8.9)                   | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api      |
 
+Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not work with modded registry entries
+or registry synchronization (fabric-registry-sync mod).
+
 
 ## ViaVersion
-**How can I install ViaBackwards/ViaRewind?:**
+### How can I install ViaBackwards/ViaRewind?:
 - Just drop them into mods folder. Make sure you are using versions compatible with the ViaVersion version you are using.
 - CurseForge links:
   [ViaBackwards](https://www.curseforge.com/minecraft/mc-mods/viabackwards)
   [ViaRewind](https://www.curseforge.com/minecraft/mc-mods/viarewind)
 
 
-**What versions can ViaVersion, ViaBackwards and ViaRewind translate?:**
+### What versions can ViaVersion, ViaBackwards and ViaRewind translate?:
 - **With [ViaVersion](https://viaversion.com)**:
   Your server can accept newer versions.
   Your client can connect to older versions.
@@ -55,52 +55,55 @@ or registry synchronization (fabric-registry-sync mod).
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪ = [ViaRewind](https://viaversion.com/rewind)
 
 
-**Can ViaVersion, ViaBackwards and ViaRewind support snapshots?:**
+### Can ViaVersion, ViaBackwards and ViaRewind support snapshots?:
 - Check https://ci.viaversion.com/ for development builds with snapshot support
 
 ## Alternatives
-**Alternatives/similar mods/proxies/plugins:**
+### Client-side:
 - [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): This discontinued client-side plugin for The 5zig
   Mod implemented ViaVersion, ViaBackwards and ViaRewind for 1.7.10, 1.8.9, 1.12 and 1.12.2 clients, allowing them to
-  connect to 1.7-1.12.2 servers. It also had a protocol translation for 1.7 servers, which there's an updated version
-  at https://github.com/KennyTV/ViaVersion/tree/hack (unsupported).
-- [DirtMultiversion](https://github.com/DirtPowered/DirtMultiversion): Proxy allowing to connect down to Beta 1.3
-  with newer Minecraft client versions (currently).
+  connect to 1.7-1.12.2 servers.
 - [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): This client-side Fabric mod does also 
   accept older protocols and fixes some differences between versions, which ViaFabric doesn't. Currently, it goes
-  down to 1.11 (stable) and 1.9 (experimental). (2020-10-16) (Supports only latest Minecraft client version)
+  down to 1.11 (stable) and 1.9 (experimental).
 - [Protocol4](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/2299203-protocol4-1-0-2-allows-1-7-10-clients-to-connect):
-  This LiteLoader client-side mod allows your 1.7.10 client to connect to 1.7.x servers.
-- [ProtocolSupport](https://protocol.support/): This Bukkit plugin allows clients to connect from older versions (down to 1.4.7).
+  This LiteLoader allows your 1.7.10 client connect to 1.7.x server.
+- [ViaForge](https://www.curseforge.com/minecraft/mc-mods/viaforge): Fork of ViaFabric porting it to Forge.
+
+### Server-side 
 - [VIAaaS](https://github.com/ViaVersion/VIAaaS): Standalone ViaVersion proxy with ViaBackwards and ViaRewind, allowing
   you to connect without a mod installed on your client. Supports online mode.
 - [ViaVersion](https://viaversion.com): ViaVersion can run as a plugin for BungeeCord, CraftBukkit, SpongeCommon and Velocity servers.
 
+### Standalone proxy:
+- [DirtMultiversion](https://github.com/DirtPowered/DirtMultiversion): Proxy allowing to connect down to Beta 1.3
+  with newer Minecraft client versions (currently).
+- [ProtocolSupport](https://protocol.support/): This Bukkit plugin allows clients to connect from older versions (down to 1.4.7).
 
-**Cool things to try:**
+### Cool things to try:
 - [Geyser](https://geysermc.org/): Plugins, Fabric mod and a standalone proxy for allowing Bedrock Edition on Java Edition servers.
 - [PolyMc](https://github.com/TheEpicBlock/PolyMc): Fabric mods which translates modded items and blocks, allowing
   vanilla to connect using resource packs.
 
 
 ## Commands
-**Commands**:
+### Commands:
 - There're 3 server-side alias ``/viaversion``, ``/vvfabric`` and ``/viaver``, and a client-side command
   ``/viafabricclient`` for Minecraft 1.14+ (OP permission level 3 is required for these commands, received
   by [Entity Status Packet](https://wiki.vg/Entity_statuses#Player))
 
 
 ## Configs
-**Configuration**:
+### Configuration:
 - ViaVersion configuration is available at ``.minecraft/config/viafabric/viaversion.yml``
 - ViaFabric configuration is at ``.minecraft/config/viafabric/viafabric.yml``
 
 
-**How can I disable client-side ViaFabric?:**
+### How can I disable client-side ViaFabric?:
 - You can disable it in the menu or by setting global protocol version to -1 (this will keep per-server translations still enabled)
 
 
-**How to use protocol auto detector?:**
+### How to use protocol auto detector?:
 - For using globally, set the protocol to AUTO or -2. For using in a specific server: ``ddns.example.com._v-2.viafabric``
 - The protocol auto detector will try to ping with the client native protocol version. If you have ViaVersion or
   similar in the server it may use the translated version, differently than multiconnect which uses -1 version,
@@ -109,13 +112,13 @@ or registry synchronization (fabric-registry-sync mod).
 - The auto-detected version is cached for 100 seconds.
 
 
-**How can I set the version for specific servers?:**
+### How can I set the version for specific servers?:
 - Append ._v(VERSION).viafabric.
 - Examples: ``minigame.example.com._v1_8.viafabric``, ``native.example.com._v-1.viafabric``, ``auto.example.com._v-2.viafabric``
 
 
 ## multiconnect
-**Does it work with multiconnect at same time on client?:**
+### Does it work with multiconnect at same time on client?:**
 - Yes, ViaFabric can be used with multiconnect. ViaFabric will send to their version auto detector their closest
   supported version. (multiconnect beta-supported versions (currently < 1.11) aren't used)
 - Example of configurations:
@@ -129,7 +132,7 @@ or registry synchronization (fabric-registry-sync mod).
   ViaVersion is translating 1.8 -> 1.12.2 and multiconnect is accepting 1.12.2
 
 
-**Differences with multiconnect:**
+### Differences with multiconnect:
 
 |  | ViaVersion | multiconnect |
 | --- | --- | --- |
