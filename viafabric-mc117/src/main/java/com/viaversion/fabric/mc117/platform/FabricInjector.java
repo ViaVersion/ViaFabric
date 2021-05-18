@@ -1,38 +1,22 @@
 package com.viaversion.fabric.mc117.platform;
 
 import com.viaversion.fabric.common.handler.CommonTransformer;
+import com.viaversion.fabric.common.platform.AbstractFabricInjector;
+import com.viaversion.viaversion.libs.gson.JsonObject;
+import com.viaversion.viaversion.util.GsonUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.SharedConstants;
-import com.viaversion.viaversion.api.platform.ViaInjector;
-import com.viaversion.viaversion.util.GsonUtil;
-import com.viaversion.viaversion.libs.gson.JsonObject;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-public class FabricInjector implements ViaInjector {
-    @Override
-    public void inject() {
-        // *looks at Mixins*
-    }
-
-    @Override
-    public void uninject() {
-        // not possible *plays sad violin*
-    }
-
+public class FabricInjector extends AbstractFabricInjector {
     @Override
     public int getServerProtocolVersion() {
         return SharedConstants.getGameVersion().getProtocolVersion();
     }
 
-    @Override
-    public String getEncoderName() {
-        return CommonTransformer.HANDLER_ENCODER_NAME;
-    }
-
-    @Override
     public String getDecoderName() {
         return CommonTransformer.HANDLER_DECODER_NAME;
     }
