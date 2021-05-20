@@ -10,7 +10,7 @@ plugins {
 }
 
 def ENV = System.getenv()
-def vvVer = "4.0.0-21w19a-SNAPSHOT"
+def vvVer = "4.0.0-21w20a-SNAPSHOT"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
 version = "0.4.0+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()

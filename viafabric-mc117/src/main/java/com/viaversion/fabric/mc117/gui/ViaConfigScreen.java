@@ -41,13 +41,13 @@ public class ViaConfigScreen extends Screen {
     protected void init() {
         int entries = 0;
 
-        this.addButton(new ButtonWidget(this.width / 2 - 155 + entries % 2 * 160,
+        this.method_37063(new ButtonWidget(this.width / 2 - 155 + entries % 2 * 160,
                 this.height / 6 + 24 * (entries >> 1),
                 150,
                 20, getClientSideText(), this::onClickClientSide));
         entries++;
 
-        this.addButton(new ButtonWidget(this.width / 2 - 155 + entries % 2 * 160,
+        this.method_37063(new ButtonWidget(this.width / 2 - 155 + entries % 2 * 160,
                 this.height / 6 + 24 * (entries >> 1),
                 150,
                 20, getHideViaButtonText(), this::onHideViaButton));
@@ -65,14 +65,14 @@ public class ViaConfigScreen extends Screen {
         int clientSideVersion = ViaFabric.config.getClientSideVersion();
         protocolVersion.setText(ProtocolUtils.getProtocolName(clientSideVersion));
 
-        this.children.add(protocolVersion);
+        this.method_37063(protocolVersion);
 
         //noinspection ConstantConditions
         if (entries % 2 == 1) {
             entries++;
         }
 
-        this.addButton(new ButtonWidget(this.width / 2 - 100, this.height / 6 + 24 * (entries >> 1), 200, 20, ScreenTexts.DONE, (buttonWidget) -> this.client.openScreen(this.parent)));
+        this.method_37063(new ButtonWidget(this.width / 2 - 100, this.height / 6 + 24 * (entries >> 1), 200, 20, ScreenTexts.DONE, (buttonWidget) -> this.client.openScreen(this.parent)));
     }
 
     private void onChangeVersionField(String text) {
@@ -159,7 +159,6 @@ public class ViaConfigScreen extends Screen {
         this.renderBackground(matrices);
         drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 20, 16777215);
         super.render(matrices, mouseX, mouseY, delta);
-        protocolVersion.render(matrices, mouseX, mouseY, delta);
     }
 
     @Override

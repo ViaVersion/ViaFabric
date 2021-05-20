@@ -33,6 +33,6 @@ public abstract class MixinMultiplayerScreen extends Screen {
                 it -> MinecraftClient.getInstance().openScreen(new ViaConfigScreen(this)),
                 new TranslatableText("gui.via_button"));
         if (ViaFabric.config.isHideButton()) enableClientSideViaVersion.visible = false;
-        addButton(enableClientSideViaVersion);
+        this.method_37063(enableClientSideViaVersion);
     }
 }
