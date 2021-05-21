@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-@Mixin(targets = "net/minecraft/client/gui/screen/ConnectScreen$1", priority = 2000)
+@Mixin(targets = "net.minecraft.client.gui.screen.ConnectScreen$1")
 public class MixinConnectScreenThread {
     @Redirect(method = "run()V", at = @At(value = "INVOKE",
             target = "Ljava/net/InetAddress;getByName(Ljava/lang/String;)Ljava/net/InetAddress;"))

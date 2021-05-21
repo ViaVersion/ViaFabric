@@ -5,7 +5,10 @@
   "mixins": [
   ],
   "client": [
-    "client.MixinMultiplayerScreen"
+    "client.MixinMultiplayerScreen",
+    "client.MixinMultiplayerServerListPingerListener",
+    "client.MixinServerEntry",
+    "client.MixinServerInfo"
   ],
   "injectors": {
     "defaultRequire": 0
