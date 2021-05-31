@@ -26,7 +26,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
-public abstract class VFVersionProvider extends BaseVersionProvider {
+public abstract class AbstractFabricVersionProvider extends BaseVersionProvider {
     private int[] multiconnectSupportedVersions = null;
 
     {

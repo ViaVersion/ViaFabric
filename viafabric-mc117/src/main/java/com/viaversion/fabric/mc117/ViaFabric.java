@@ -3,7 +3,7 @@ package com.viaversion.fabric.mc117;
 import com.viaversion.fabric.common.config.VFConfig;
 import com.viaversion.fabric.mc117.commands.VRCommandHandler;
 import com.viaversion.fabric.mc117.platform.FabricInjector;
-import com.viaversion.fabric.mc117.platform.VRLoader;
+import com.viaversion.fabric.mc117.platform.VFLoader;
 import com.viaversion.fabric.mc117.platform.FabricPlatform;
 import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
@@ -66,7 +66,7 @@ public class ViaFabric implements ModInitializer {
     public void onInitialize() {
         Via.init(ViaManagerImpl.builder()
                 .injector(new FabricInjector())
-                .loader(new VRLoader())
+                .loader(new VFLoader())
                 .commandHandler(new VRCommandHandler())
                 .platform(new FabricPlatform()).build());
 
