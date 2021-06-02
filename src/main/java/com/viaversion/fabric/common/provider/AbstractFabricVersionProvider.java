@@ -30,29 +30,32 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
     private int[] multiconnectSupportedVersions = null;
 
     {
+        multiconnectIntegration();
+    }
+
+    private void multiconnectIntegration() {
+        if (!FabricLoader.getInstance().isModLoaded("multiconnect")) return;
         try {
-            if (FabricLoader.getInstance().isModLoaded("multiconnect")) {
-                Class<?> mcApiClass = Class.forName("net.earthcomputer.multiconnect.api.MultiConnectAPI");
-                Class<?> iProtocolClass = Class.forName("net.earthcomputer.multiconnect.api.IProtocol");
-                Object mcApiInstance = mcApiClass.getMethod("instance").invoke(null);
-                List<?> protocols = (List<?>) mcApiClass.getMethod("getSupportedProtocols").invoke(mcApiInstance);
-                Method getValue = iProtocolClass.getMethod("getValue");
-                Method isMulticonnectBeta;
-                try {
-                    isMulticonnectBeta = iProtocolClass.getMethod("isMulticonnectBeta");
-                } catch (NoSuchMethodException e) {
-                    isMulticonnectBeta = null;
-                }
-                Set<Integer> vers = new TreeSet<>();
-                for (Object protocol : protocols) {
-                    // Do not use versions with beta multiconnect support, which may have stability issues
-                    if (isMulticonnectBeta == null || !(Boolean) isMulticonnectBeta.invoke(protocol)) {
-                        vers.add((Integer) getValue.invoke(protocol));
-                    }
-                }
-                multiconnectSupportedVersions = vers.stream().mapToInt(Integer::intValue).toArray();
-                getLogger().info("ViaFabric will integrate with multiconnect");
+            Class<?> mcApiClass = Class.forName("net.earthcomputer.multiconnect.api.MultiConnectAPI");
+            Class<?> iProtocolClass = Class.forName("net.earthcomputer.multiconnect.api.IProtocol");
+            Object mcApiInstance = mcApiClass.getMethod("instance").invoke(null);
+            List<?> protocols = (List<?>) mcApiClass.getMethod("getSupportedProtocols").invoke(mcApiInstance);
+            Method getValue = iProtocolClass.getMethod("getValue");
+            Method isMulticonnectBeta;
+            try {
+                isMulticonnectBeta = iProtocolClass.getMethod("isMulticonnectBeta");
+            } catch (NoSuchMethodException e) {
+                isMulticonnectBeta = null;
             }
+            Set<Integer> vers = new TreeSet<>();
+            for (Object protocol : protocols) {
+                // Do not use versions with beta multiconnect support, which may have stability issues
+                if (isMulticonnectBeta == null || !(Boolean) isMulticonnectBeta.invoke(protocol)) {
+                    vers.add((Integer) getValue.invoke(protocol));
+                }
+            }
+            multiconnectSupportedVersions = vers.stream().mapToInt(Integer::intValue).toArray();
+            getLogger().info("ViaFabric will integrate with multiconnect");
         } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
                 | ClassCastException ignored) {
         }
@@ -116,7 +119,7 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
             getLogger().info("Sending " + ProtocolVersion.getProtocol(multiconnectSuggestion) + " for multiconnect version detector");
             PacketWrapper newAnswer = PacketWrapper.create(0x00, null, connection);
             newAnswer.write(Type.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion + "}}");
-            newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class, true, true);
+            newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class);
             throw CancelException.generate();
         }
     }
