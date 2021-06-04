@@ -10,7 +10,7 @@ plugins {
 }
 
 def ENV = System.getenv()
-def vvVer = "4.0.0-1.17-pre5-20210604.101612-2"
+def vvVer = "4.0.0-1.17-rc1-SNAPSHOT"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
 version = "0.4.1+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
@@ -188,7 +188,9 @@ void setupRepositories(RepositoryHandler repositories) {
     }
 }
 
-subprojects.each { remapJar.dependsOn("${it.path}:remapJar") }
+subprojects.each {
+    remapJar.dependsOn("${it.path}:remapJar")
+}
 
 dependencies {
     minecraft("com.mojang:minecraft:1.8.9")
