@@ -11,6 +11,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.minecraft.item.Item;
 import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider;
 
@@ -28,16 +29,16 @@ public class VRHandItemProvider extends HandItemProvider {
         if (info.isClientSide()) {
             return getClientItem();
         } else if ((serverItem = serverPlayers.get(info.getProtocolInfo().getUuid())) != null) {
-            return new Item(serverItem);
+            return new DataItem(serverItem);
         }
         return super.getHandItem(info);
     }
 
     private Item getClientItem() {
         if (clientItem == null) {
-            return new Item(0, (byte) 0, (short) 0, null);
+            return new DataItem(0, (byte) 0, (short) 0, null);
         }
-        return new Item(clientItem);
+        return new DataItem(clientItem);
     }
 
     @Environment(EnvType.CLIENT)
@@ -76,9 +77,9 @@ public class VRHandItemProvider extends HandItemProvider {
 
     private Item fromNative(ItemStack original) {
         Identifier iid = Registry.ITEM.getId(original.getItem());
-        if (iid == null) return new Item(0, (byte) 0, (short) 0, null);
+        if (iid == null) return new DataItem(0, (byte) 0, (short) 0, null);
         int id = swordId(iid.toString());
-        return new Item(id, (byte) original.getCount(), (short) original.getDamage(), null);
+        return new DataItem(id, (byte) original.getCount(), (short) original.getDamage(), null);
     }
 
     private int swordId(String id) {
