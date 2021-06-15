@@ -8,7 +8,7 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod can be installed on 1.8.9, 1.14.x, 1.15.x, 1.16.x and 1.17 snapshots with Fabric Loader.
+This mod can be installed on 1.8.9, 1.14.x, 1.15.x, 1.16.x and 1.17.x with Fabric Loader.
 
 
 ## Dependencies
@@ -71,14 +71,14 @@ or registry synchronization (fabric-registry-sync mod).
 - [ViaForge](https://www.curseforge.com/minecraft/mc-mods/viaforge): Fork of ViaFabric porting it to Forge.
 
 ### Server-side 
-- [VIAaaS](https://github.com/ViaVersion/VIAaaS): Standalone ViaVersion proxy with ViaBackwards and ViaRewind, allowing
-  you to connect without a mod installed on your client. Supports online mode.
+- [ProtocolSupport](https://protocol.support/): This Bukkit plugin allows clients to connect from older versions (down to 1.4.7).
 - [ViaVersion](https://viaversion.com): ViaVersion can run as a plugin for BungeeCord, CraftBukkit, SpongeCommon and Velocity servers.
 
 ### Standalone proxy:
 - [DirtMultiversion](https://github.com/DirtPowered/DirtMultiversion): Proxy allowing to connect down to Beta 1.3
   with newer Minecraft client versions (currently).
-- [ProtocolSupport](https://protocol.support/): This Bukkit plugin allows clients to connect from older versions (down to 1.4.7).
+- [VIAaaS](https://github.com/ViaVersion/VIAaaS): Standalone ViaVersion proxy with ViaBackwards and ViaRewind, allowing
+  you to connect without a mod installed on your client. Supports online mode.
 
 ### Cool things to try:
 - [Geyser](https://geysermc.org/): Plugins, Fabric mod and a standalone proxy for allowing Bedrock Edition on Java Edition servers.
