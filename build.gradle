@@ -11,6 +11,7 @@ plugins {
 
 def ENV = System.getenv()
 def vvVer = "4.0.1-SNAPSHOT"
+def yamlVer = "1.29"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
 version = "0.4.1+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
@@ -65,9 +66,9 @@ allprojects {
     dependencies {
         // transitive = false because Guava is conflicting on runClient
         implementation("com.viaversion:viaversion:$vvVer") { transitive = false }
-        implementation("org.yaml:snakeyaml:1.28")
+        implementation("org.yaml:snakeyaml:$yamlVer")
 
-        modImplementation("net.fabricmc:fabric-loader:0.11.3")
+        modImplementation("net.fabricmc:fabric-loader:0.11.6")
     }
 
     jar {
@@ -197,7 +198,7 @@ dependencies {
     mappings("net.fabricmc:yarn:1.8.9+build.202103291533:v2")
 
     include("com.viaversion:viaversion:$vvVer")
-    include("org.yaml:snakeyaml:1.28")
+    include("org.yaml:snakeyaml:$yamlVer")
 
     subprojects.each {
         include project("${it.name}:")
