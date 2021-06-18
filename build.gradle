@@ -10,7 +10,7 @@ plugins {
 }
 
 def ENV = System.getenv()
-def vvVer = "4.0.1-SNAPSHOT"
+def vvVer = "4.0.1-1.17.1-pre1-SNAPSHOT"
 def yamlVer = "1.29"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
