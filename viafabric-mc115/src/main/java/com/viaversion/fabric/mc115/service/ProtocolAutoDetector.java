@@ -33,7 +33,7 @@ import java.util.logging.Level;
 @Environment(EnvType.CLIENT)
 public class ProtocolAutoDetector {
     private static LoadingCache<InetSocketAddress, CompletableFuture<ProtocolVersion>> SERVER_VER = CacheBuilder.newBuilder()
-            .expireAfterAccess(100, TimeUnit.SECONDS)
+            .expireAfterWrite(30, TimeUnit.SECONDS)
             .build(CacheLoader.from((address) -> {
                 CompletableFuture<ProtocolVersion> future = new CompletableFuture<>();
 

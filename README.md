@@ -109,7 +109,7 @@ or registry synchronization (fabric-registry-sync mod).
   similar in the server it may use the translated version, differently than multiconnect which uses -1 version,
   which may get the native server version.
 - It may hold your handshake for up to 10 seconds.
-- The auto-detected version is cached for 100 seconds.
+- The auto-detected version is cached for 30 seconds.
 
 
 ### How can I set the version for specific servers?:
