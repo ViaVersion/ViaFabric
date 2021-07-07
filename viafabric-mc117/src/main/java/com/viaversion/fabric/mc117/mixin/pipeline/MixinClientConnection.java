@@ -33,7 +33,7 @@ public class MixinClientConnection {
     }
 
     @Inject(method = "setCompressionThreshold", at = @At("RETURN"))
-    private void reorderCompression(int compressionThreshold, CallbackInfo ci) {
+    private void reorderCompression(int compressionThreshold, boolean bl, CallbackInfo ci) {
         channel.pipeline().fireUserEventTriggered(new PipelineReorderEvent());
     }
 }
