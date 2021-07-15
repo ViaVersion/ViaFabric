@@ -25,6 +25,11 @@
       }
     }
   ],
+  "entrypoints": {
+    "main": [
+      "com.viaversion.fabric.common.ViaFabric"
+    ]
+  },
   "contributors": [
     {
       "name": "GitHub contributors",
