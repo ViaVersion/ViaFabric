@@ -61,7 +61,7 @@ allprojects {
         maven { url = "https://server.bbkr.space/artifactory/libs-snapshot" }
         maven { url = "https://server.bbkr.space/artifactory/libs-release" }
         maven { url = "https://maven.legacyfabric.net/" }
-        maven { url = "https://maven.terraformersmc.com/releases/" }
+        //maven { url = "https://maven.terraformersmc.com/releases/" }
         maven { url = "https://raw.githubusercontent.com/TerraformersMC/Archive/main/releases/" }
     }
 
