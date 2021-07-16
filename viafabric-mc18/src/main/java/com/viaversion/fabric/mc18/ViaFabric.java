@@ -1,9 +1,9 @@
 package com.viaversion.fabric.mc18;
 
+import com.viaversion.fabric.common.platform.FabricInjector;
 import com.viaversion.fabric.mc18.commands.NMSCommandImpl;
 import com.viaversion.fabric.mc18.commands.VRCommandHandler;
 import com.viaversion.fabric.common.config.VFConfig;
-import com.viaversion.fabric.mc18.platform.FabricInjector;
 import com.viaversion.fabric.mc18.platform.VFLoader;
 import com.viaversion.fabric.mc18.platform.FabricPlatform;
 import com.viaversion.fabric.common.protocol.HostnameParserProtocol;

@@ -35,34 +35,4 @@ public class FabricViaConfig extends AbstractViaConfig {
     public List<String> getUnsupportedOptions() {
         return UNSUPPORTED;
     }
-
-    @Override
-    public boolean isAntiXRay() {
-        return false;
-    }
-
-    @Override
-    public boolean isNMSPlayerTicking() {
-        return false;
-    }
-
-    @Override
-    public boolean is1_12QuickMoveActionFix() {
-        return false;
-    }
-
-    @Override
-    public String getBlockConnectionMethod() {
-        return "packet";
-    }
-
-    @Override
-    public boolean is1_9HitboxFix() {
-        return false;
-    }
-
-    @Override
-    public boolean is1_14HitboxFix() {
-        return false;
-    }
 }

@@ -1,8 +1,8 @@
 package com.viaversion.fabric.mc116;
 
 import com.viaversion.fabric.common.config.VFConfig;
+import com.viaversion.fabric.common.platform.FabricInjector;
 import com.viaversion.fabric.mc116.commands.VRCommandHandler;
-import com.viaversion.fabric.mc116.platform.FabricInjector;
 import com.viaversion.fabric.mc116.platform.VFLoader;
 import com.viaversion.fabric.mc116.platform.FabricPlatform;
 import com.viaversion.fabric.common.protocol.HostnameParserProtocol;

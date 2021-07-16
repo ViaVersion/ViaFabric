@@ -35,7 +35,8 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
 
     @Override
     public boolean isProxy() {
-        return false;
+        // We kinda of have all server versions
+        return true;
     }
 
     @Override
