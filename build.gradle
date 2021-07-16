@@ -1,3 +1,4 @@
+// todo migrate this code to kotlin
 import org.apache.tools.ant.filters.ReplaceTokens
 
 // Stolen https://github.com/FabricMC/fabric/blob/1.17/build.gradle
@@ -61,6 +62,7 @@ allprojects {
         maven { url = "https://server.bbkr.space/artifactory/libs-release" }
         maven { url = "https://maven.legacyfabric.net/" }
         maven { url = "https://maven.terraformersmc.com/releases/" }
+        maven { url = "https://raw.githubusercontent.com/TerraformersMC/Archive/main/releases/" }
     }
 
     dependencies {
