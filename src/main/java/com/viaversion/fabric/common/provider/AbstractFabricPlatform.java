@@ -2,7 +2,9 @@ package com.viaversion.fabric.common.provider;
 
 import com.viaversion.fabric.common.platform.FabricViaAPI;
 import com.viaversion.fabric.common.platform.FabricViaConfig;
+import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
+import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 import com.viaversion.viaversion.api.configuration.ConfigurationProvider;
 import com.viaversion.viaversion.api.configuration.ViaVersionConfig;
@@ -110,7 +112,9 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
                 JsonObject contact = new JsonObject();
                 it.getContact().asMap().entrySet().stream()
                         .forEach(c -> contact.addProperty(c.getKey(), c.getValue()));
-                info.add("contact", contact);
+                if (contact.size() != 0) {
+                    info.add("contact", contact);
+                }
                 info.addProperty("name", it.getName());
 
                 return info;
@@ -121,6 +125,10 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
         }).forEach(mods::add);
 
         platformSpecific.add("mods", mods);
+        NativeVersionProvider ver = Via.getManager().getProviders().get(NativeVersionProvider.class);
+        if (ver != null) {
+            platformSpecific.addProperty("native version", ver.getServerProtocolVersion());
+        }
         return platformSpecific;
     }
 }

@@ -1,6 +1,6 @@
 package com.viaversion.fabric.mc114.service;
 
-import com.viaversion.fabric.common.VFAddressParser;
+import com.viaversion.fabric.common.AddressParser;
 import com.viaversion.fabric.mc114.ViaFabric;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -114,7 +114,7 @@ public class ProtocolAutoDetector {
     public static CompletableFuture<ProtocolVersion> detectVersion(InetSocketAddress address) {
         try {
             InetSocketAddress real = new InetSocketAddress(InetAddress.getByAddress
-                    (new VFAddressParser().parse(address.getHostString()).realAddress,
+                    (new AddressParser().parse(address.getHostString()).serverAddress,
                             address.getAddress().getAddress()), address.getPort());
             return SERVER_VER.get(real);
         } catch (UnknownHostException | ExecutionException e) {

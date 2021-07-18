@@ -1,9 +1,11 @@
 package com.viaversion.fabric.common.provider;
 
 import com.google.common.primitives.Ints;
-import com.viaversion.fabric.common.VFAddressParser;
+import com.viaversion.fabric.common.AddressParser;
 import com.viaversion.fabric.common.config.VFConfig;
+import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.common.util.ProtocolUtils;
+import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
@@ -66,16 +68,14 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
         if (connection.isClientSide()) {
             ProtocolInfo info = Objects.requireNonNull(connection.getProtocolInfo());
 
-            if (!getConfig().isClientSideEnabled()) {
-                return info.getProtocolVersion();
-            }
+            if (!getConfig().isClientSideEnabled()) return info.getProtocolVersion();
 
             int serverVer = getConfig().getClientSideVersion();
             SocketAddress addr = connection.getChannel().remoteAddress();
 
             if (addr instanceof InetSocketAddress) {
-                int addrVersion = new VFAddressParser().parse(((InetSocketAddress) addr).getHostName()).protocol;
-                if (addrVersion != 0) serverVer = addrVersion;
+                Integer addrVersion = new AddressParser().parse(((InetSocketAddress) addr).getHostName()).protocol;
+                if (addrVersion != null) serverVer = addrVersion;
 
                 try {
                     if (serverVer == -2) {
@@ -99,6 +99,10 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
             if (blocked || !supported) serverVer = info.getProtocolVersion();
 
             return serverVer;
+        }
+        NativeVersionProvider natProvider = Via.getManager().getProviders().get(NativeVersionProvider.class);
+        if (natProvider != null) {
+            return natProvider.getServerProtocolVersion();
         }
         return super.getClosestServerProtocol(connection);
     }

@@ -1,5 +1,6 @@
 package com.viaversion.fabric.mc114.platform;
 
+import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.mc114.providers.VRHandItemProvider;
 import com.viaversion.fabric.mc114.providers.FabricVersionProvider;
 import net.fabricmc.api.EnvType;
@@ -14,6 +15,7 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTr
 public class VFLoader implements ViaPlatformLoader {
     @Override
     public void load() {
+        Via.getManager().getProviders().use(NativeVersionProvider.class, new FabricNativeVersionProvider());
         Via.getManager().getProviders().use(MovementTransmitterProvider.class, new BungeeMovementTransmitter());
         Via.getManager().getProviders().use(VersionProvider.class, new FabricVersionProvider());
 

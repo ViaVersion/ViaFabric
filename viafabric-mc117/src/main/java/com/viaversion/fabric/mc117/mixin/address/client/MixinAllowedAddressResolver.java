@@ -1,6 +1,6 @@
 package com.viaversion.fabric.mc117.mixin.address.client;
 
-import com.viaversion.fabric.common.VFAddressParser;
+import com.viaversion.fabric.common.AddressParser;
 import net.minecraft.client.network.Address;
 import net.minecraft.client.network.AllowedAddressResolver;
 import net.minecraft.client.network.ServerAddress;
@@ -22,12 +22,12 @@ public abstract class MixinAllowedAddressResolver {
 
     @Inject(method = "resolve", at = @At(value = "HEAD"), cancellable = true)
     private void resolveVF(ServerAddress address, CallbackInfoReturnable<Optional<Address>> cir) {
-        VFAddressParser viaAddr = new VFAddressParser().parse(address.getAddress());
+        AddressParser viaAddr = new AddressParser().parse(address.getAddress());
         if (viaAddr.viaSuffix == null) {
             return;
         }
 
-        ServerAddress realAddress = new ServerAddress(viaAddr.realAddress, address.getPort());
+        ServerAddress realAddress = new ServerAddress(viaAddr.serverAddress, address.getPort());
 
         cir.setReturnValue(resolve(realAddress).map(it -> viaFabricAddSuffix(it, viaAddr.viaSuffix)));
     }

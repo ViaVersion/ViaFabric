@@ -1,6 +1,6 @@
 package com.viaversion.fabric.common.protocol;
 
-import com.viaversion.fabric.common.VFAddressParser;
+import com.viaversion.fabric.common.AddressParser;
 import com.viaversion.viaversion.api.protocol.AbstractSimpleProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketRemapper;
@@ -20,7 +20,7 @@ public class HostnameParserProtocol extends AbstractSimpleProtocol {
                 map(Type.STRING, new ValueTransformer<String, String>(Type.STRING) {
                     @Override
                     public String transform(PacketWrapper packetWrapper, String s) {
-                        return new VFAddressParser().parse(s).realAddress;
+                        return new AddressParser().parse(s).serverAddress;
                     }
                 });
             }
