@@ -98,7 +98,7 @@ public class ViaConfigScreen extends Screen {
         }
 
         protocolVersion.setEditableColor(
-                getProtocolTextColor(ProtocolUtils.isSupported(newVersion, Via.getAPI().getServerVersion().lowestSupportedVersion()),
+                getProtocolTextColor(ProtocolUtils.isSupportedClientSide(newVersion),
                         validProtocol));
 
         int finalNewVersion = newVersion;

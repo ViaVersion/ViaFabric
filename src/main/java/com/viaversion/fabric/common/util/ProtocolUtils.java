@@ -1,5 +1,6 @@
 package com.viaversion.fabric.common.util;
 
+import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
@@ -7,6 +8,12 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class ProtocolUtils {
+    public static boolean isSupportedClientSide(int server) {
+        return isSupported(server, Via.getManager().getProviders()
+                .get(NativeVersionProvider.class)
+                .getServerProtocolVersion());
+    }
+
     public static boolean isSupported(int server, int client) {
         return server == client || Via.getManager().getProtocolManager().getProtocolPath(client, server) != null;
     }

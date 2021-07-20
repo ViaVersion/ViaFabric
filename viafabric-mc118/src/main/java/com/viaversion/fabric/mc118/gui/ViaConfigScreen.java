@@ -1,6 +1,6 @@
-package com.viaversion.fabric.mc116.gui;
+package com.viaversion.fabric.mc118.gui;
 
-import com.viaversion.fabric.mc116.ViaFabric;
+import com.viaversion.fabric.mc118.ViaFabric;
 import com.viaversion.fabric.common.util.ProtocolUtils;
 import com.viaversion.viaversion.api.Via;
 import net.fabricmc.api.EnvType;
@@ -41,13 +41,13 @@ public class ViaConfigScreen extends Screen {
     protected void init() {
         int entries = 0;
 
-        this.addButton(new ButtonWidget(this.width / 2 - 155 + entries % 2 * 160,
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155 + entries % 2 * 160,
                 this.height / 6 + 24 * (entries >> 1),
                 150,
                 20, getClientSideText(), this::onClickClientSide));
         entries++;
 
-        this.addButton(new ButtonWidget(this.width / 2 - 155 + entries % 2 * 160,
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155 + entries % 2 * 160,
                 this.height / 6 + 24 * (entries >> 1),
                 150,
                 20, getHideViaButtonText(), this::onHideViaButton));
@@ -65,14 +65,14 @@ public class ViaConfigScreen extends Screen {
         int clientSideVersion = ViaFabric.config.getClientSideVersion();
         protocolVersion.setText(ProtocolUtils.getProtocolName(clientSideVersion));
 
-        this.children.add(protocolVersion);
+        this.addDrawableChild(protocolVersion);
 
         //noinspection ConstantConditions
         if (entries % 2 == 1) {
             entries++;
         }
 
-        this.addButton(new ButtonWidget(this.width / 2 - 100, this.height / 6 + 24 * (entries >> 1), 200, 20, ScreenTexts.DONE, (buttonWidget) -> this.client.openScreen(this.parent)));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 6 + 24 * (entries >> 1), 200, 20, ScreenTexts.DONE, (buttonWidget) -> this.client.setScreen(this.parent)));
     }
 
     private void onChangeVersionField(String text) {
@@ -105,7 +105,7 @@ public class ViaConfigScreen extends Screen {
 
     private void onClickClientSide(ButtonWidget widget) {
         if (!ViaFabric.config.isClientSideEnabled()) {
-            MinecraftClient.getInstance().openScreen(new ConfirmScreen(
+            MinecraftClient.getInstance().setScreen(new ConfirmScreen(
                     answer -> {
                         if (answer) {
                             ViaFabric.config.setClientSideEnabled(true);
@@ -113,7 +113,7 @@ public class ViaConfigScreen extends Screen {
                             ViaFabric.config.saveConfig();
                             widget.setMessage(getClientSideText());
                         }
-                        MinecraftClient.getInstance().openScreen(this);
+                        MinecraftClient.getInstance().setScreen(this);
                     },
                     new TranslatableText("gui.enable_client_side.question"),
                     new TranslatableText("gui.enable_client_side.warning"),
@@ -134,7 +134,7 @@ public class ViaConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        this.client.openScreen(this.parent);
+        this.client.setScreen(this.parent);
     }
 
     private TranslatableText getClientSideText() {
@@ -159,7 +159,6 @@ public class ViaConfigScreen extends Screen {
         this.renderBackground(matrices);
         drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 20, 16777215);
         super.render(matrices, mouseX, mouseY, delta);
-        protocolVersion.render(matrices, mouseX, mouseY, delta);
     }
 
     @Override

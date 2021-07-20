@@ -1,7 +1,7 @@
 {
   "required": true,
   "compatibilityLevel": "JAVA_16",
-  "package": "com.viaversion.fabric.mc117.mixin.gui",
+  "package": "com.viaversion.fabric.mc118.mixin.gui",
   "mixins": [
   ],
   "client": [

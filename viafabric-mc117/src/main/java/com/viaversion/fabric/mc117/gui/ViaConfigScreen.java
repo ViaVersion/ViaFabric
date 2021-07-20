@@ -72,7 +72,7 @@ public class ViaConfigScreen extends Screen {
             entries++;
         }
 
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 6 + 24 * (entries >> 1), 200, 20, ScreenTexts.DONE, (buttonWidget) -> this.client.openScreen(this.parent)));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 6 + 24 * (entries >> 1), 200, 20, ScreenTexts.DONE, (buttonWidget) -> this.client.setScreen(this.parent)));
     }
 
     private void onChangeVersionField(String text) {
@@ -94,7 +94,7 @@ public class ViaConfigScreen extends Screen {
         }
 
         protocolVersion.setEditableColor(
-                getProtocolTextColor(ProtocolUtils.isSupported(newVersion, Via.getAPI().getServerVersion().lowestSupportedVersion()),
+                getProtocolTextColor(ProtocolUtils.isSupportedClientSide(newVersion),
                         validProtocol));
 
         int finalNewVersion = newVersion;
@@ -105,7 +105,7 @@ public class ViaConfigScreen extends Screen {
 
     private void onClickClientSide(ButtonWidget widget) {
         if (!ViaFabric.config.isClientSideEnabled()) {
-            MinecraftClient.getInstance().openScreen(new ConfirmScreen(
+            MinecraftClient.getInstance().setScreen(new ConfirmScreen(
                     answer -> {
                         if (answer) {
                             ViaFabric.config.setClientSideEnabled(true);
@@ -113,7 +113,7 @@ public class ViaConfigScreen extends Screen {
                             ViaFabric.config.saveConfig();
                             widget.setMessage(getClientSideText());
                         }
-                        MinecraftClient.getInstance().openScreen(this);
+                        MinecraftClient.getInstance().setScreen(this);
                     },
                     new TranslatableText("gui.enable_client_side.question"),
                     new TranslatableText("gui.enable_client_side.warning"),
@@ -134,7 +134,7 @@ public class ViaConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        this.client.openScreen(this.parent);
+        this.client.setScreen(this.parent);
     }
 
     private TranslatableText getClientSideText() {

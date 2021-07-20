@@ -42,11 +42,6 @@ public class ViaFabric implements ModInitializer {
         EVENT_LOOP.submit(INIT_FUTURE::join); // https://github.com/ViaVersion/ViaFabric/issues/53 ugly workaround code but works tm
     }
 
-    public static String getVersion() {
-        return FabricLoader.getInstance().getModContainer("viafabric")
-                .get().getMetadata().getVersion().getFriendlyString();
-    }
-
     @Override
     public void onInitialize() {
         Via.init(ViaManagerImpl.builder()

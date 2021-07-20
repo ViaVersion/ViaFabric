@@ -1,30 +1,39 @@
 package com.viaversion.fabric.mc117;
 
-import com.viaversion.fabric.common.config.VFConfig;
-import com.viaversion.fabric.common.platform.FabricInjector;
-import com.viaversion.fabric.mc117.commands.VRCommandHandler;
-import com.viaversion.fabric.mc117.platform.VFLoader;
-import com.viaversion.fabric.mc117.platform.FabricPlatform;
-import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
-import com.viaversion.fabric.common.util.JLoggerToLog4j;
 import com.google.common.collect.Range;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.viaversion.fabric.common.config.VFConfig;
+import com.viaversion.fabric.common.platform.FabricInjector;
+import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
+import com.viaversion.fabric.common.util.JLoggerToLog4j;
+import com.viaversion.fabric.mc117.commands.VRCommandHandler;
+import com.viaversion.fabric.mc117.gui.ViaConfigScreen;
+import com.viaversion.fabric.mc117.mixin.gui.client.ScreenAccessor;
+import com.viaversion.fabric.mc117.platform.FabricPlatform;
+import com.viaversion.fabric.mc117.platform.VFLoader;
+import com.viaversion.viaversion.ViaManagerImpl;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.data.MappingDataLoader;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.command.CommandSource;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
-import com.viaversion.viaversion.ViaManagerImpl;
-import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.data.MappingDataLoader;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -44,11 +53,6 @@ public class ViaFabric implements ModInitializer {
         ASYNC_EXECUTOR = Executors.newFixedThreadPool(8, factory);
         EVENT_LOOP = new DefaultEventLoop(factory);
         EVENT_LOOP.submit(INIT_FUTURE::join); // https://github.com/ViaVersion/ViaFabric/issues/53 ugly workaround code but works tm
-    }
-
-    public static String getVersion() {
-        return FabricLoader.getInstance().getModContainer("viafabric")
-                .get().getMetadata().getVersion().getFriendlyString();
     }
 
     public static <S extends CommandSource> LiteralArgumentBuilder<S> command(String commandName) {
@@ -79,11 +83,8 @@ public class ViaFabric implements ModInitializer {
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
 
-        try {
-            registerCommandsV1();
-        } catch (NoClassDefFoundError ignored) {
-            JLOGGER.info("Couldn't register command as Fabric Commands isn't installed");
-        }
+        registerCommandsV1();
+        registerGui();
 
         config = new VFConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());
@@ -91,12 +92,36 @@ public class ViaFabric implements ModInitializer {
         INIT_FUTURE.complete(null);
     }
 
+    private void registerGui() {
+        try {
+            ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
+                if (!(screen instanceof MultiplayerScreen)) return;
+                ButtonWidget enableClientSideViaVersion = new TexturedButtonWidget(scaledWidth / 2 + 113, 10,
+                        40, 20, // Size
+                        0, 0, // Start pos of texture
+                        20, // v Hover offset
+                        new Identifier("viafabric:textures/gui/widgets.png"),
+                        256, 256, // Texture size
+                        it -> MinecraftClient.getInstance().setScreen(new ViaConfigScreen(screen)),
+                        new TranslatableText("gui.via_button"));
+                if (ViaFabric.config.isHideButton()) enableClientSideViaVersion.visible = false;
+                ((ScreenAccessor) screen).callAddDrawableChild(enableClientSideViaVersion);
+            });
+        } catch (NoClassDefFoundError ignored) {
+            JLOGGER.info("Couldn't register screen handler as Fabric Screen isn't installed");
+        }
+    }
+
     private void registerCommandsV1() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaversion")));
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaver")));
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("vvfabric")));
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            ClientCommandManager.DISPATCHER.register(command("viafabricclient"));
+        try {
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaversion")));
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaver")));
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("vvfabric")));
+            if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+                ClientCommandManager.DISPATCHER.register(command("viafabricclient"));
+            }
+        } catch (NoClassDefFoundError ignored) {
+            JLOGGER.info("Couldn't register command as Fabric Commands isn't installed");
         }
     }
 }
