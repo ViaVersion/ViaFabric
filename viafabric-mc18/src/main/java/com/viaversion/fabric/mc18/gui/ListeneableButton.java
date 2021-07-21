@@ -5,12 +5,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import java.util.function.Consumer;
 
 public class ListeneableButton extends ButtonWidget {
-    private Consumer<ButtonWidget> click;
-
-    public ListeneableButton(int id, int x, int y, String message, Consumer<ButtonWidget> click) {
-        super(id, x, y, message);
-        this.click = click;
-    }
+    private final Consumer<ButtonWidget> click;
 
     public ListeneableButton(int id, int x, int y, int width, int height, String message, Consumer<ButtonWidget> click) {
         super(id, x, y, width, height, message);

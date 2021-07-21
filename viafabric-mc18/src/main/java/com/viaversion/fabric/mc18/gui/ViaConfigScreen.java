@@ -2,7 +2,6 @@ package com.viaversion.fabric.mc18.gui;
 
 import com.viaversion.fabric.mc18.ViaFabric;
 import com.viaversion.fabric.common.util.ProtocolUtils;
-import com.viaversion.viaversion.api.Via;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -20,7 +19,7 @@ public class ViaConfigScreen extends Screen {
     private static CompletableFuture<Void> latestProtocolSave;
     private final Screen parent;
     private TextFieldWidget protocolVersion;
-    private Text title;
+    private final Text title;
 
     public ViaConfigScreen(Screen parent) {
         super();
@@ -91,10 +90,6 @@ public class ViaConfigScreen extends Screen {
             validProtocol = true;
         } else {
             validProtocol = false;
-            String[] suggestions = ProtocolUtils.getProtocolSuggestions(text);
-            if (suggestions.length == 1) {
-                //protocolVersion.setSuggestion(suggestions[0].substring(text.length()));
-            }
         }
 
         protocolVersion.setEditableColor(
@@ -136,11 +131,6 @@ public class ViaConfigScreen extends Screen {
     public void removed() {
         ViaFabric.config.saveConfig();
     }
-
-    //@Override
-    //public void onClose() {
-    //    MinecraftClient.getInstance().openScreen(this.parent);
-    //}
 
     private TranslatableText getClientSideText() {
         return ViaFabric.config.isClientSideEnabled() ?

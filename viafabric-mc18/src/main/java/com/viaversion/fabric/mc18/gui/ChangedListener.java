@@ -5,7 +5,7 @@ import net.minecraft.client.gui.widget.PagedEntryListWidget;
 import java.util.function.Consumer;
 
 public class ChangedListener implements PagedEntryListWidget.Listener {
-    private Consumer<String> consumer;
+    private final Consumer<String> consumer;
 
     public ChangedListener(Consumer<String> consumer) {
         this.consumer = consumer;

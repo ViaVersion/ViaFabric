@@ -1,8 +1,7 @@
 package com.viaversion.fabric.mc114.commands;
 
+import com.viaversion.fabric.common.util.RemappingUtil;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
-import com.viaversion.viaversion.libs.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import com.viaversion.viaversion.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
@@ -30,15 +29,11 @@ public class NMSCommandSender implements ViaCommandSender {
     @Override
     public void sendMessage(String s) {
         if (source instanceof ServerCommandSource) {
-            ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(legacyToJson(s)), false);
+            ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(RemappingUtil.legacyToJson(s)), false);
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
                 && source instanceof ClientCommandSource) {
-            MinecraftClient.getInstance().player.addChatMessage(Text.Serializer.fromJson(legacyToJson(s)), false);
+            MinecraftClient.getInstance().player.addChatMessage(Text.Serializer.fromJson(RemappingUtil.legacyToJson(s)), false);
         }
-    }
-
-    private String legacyToJson(String legacy) {
-        return GsonComponentSerializer.gson().serialize(LegacyComponentSerializer.legacySection().deserialize(legacy));
     }
 
     @Override

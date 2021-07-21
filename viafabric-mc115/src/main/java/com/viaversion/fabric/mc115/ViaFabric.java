@@ -10,8 +10,8 @@ import com.viaversion.fabric.common.platform.FabricInjector;
 import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
 import com.viaversion.fabric.mc115.commands.VRCommandHandler;
-import com.viaversion.fabric.mc115.platform.VFLoader;
 import com.viaversion.fabric.mc115.platform.FabricPlatform;
+import com.viaversion.fabric.mc115.platform.VFLoader;
 import com.viaversion.viaversion.ViaManagerImpl;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.data.MappingDataLoader;
@@ -20,7 +20,6 @@ import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.registry.CommandRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.command.CommandSource;
 import org.apache.logging.log4j.LogManager;
@@ -35,7 +34,7 @@ public class ViaFabric implements ModInitializer {
     public static final Logger JLOGGER = new JLoggerToLog4j(LogManager.getLogger("ViaFabric"));
     public static final ExecutorService ASYNC_EXECUTOR;
     public static final EventLoop EVENT_LOOP;
-    public static CompletableFuture<Void> INIT_FUTURE = new CompletableFuture<>();
+    public static final CompletableFuture<Void> INIT_FUTURE = new CompletableFuture<>();
     public static VFConfig config;
 
     static {
@@ -73,16 +72,7 @@ public class ViaFabric implements ModInitializer {
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
 
-        try {
-            registerCommandsV1();
-        } catch (NoClassDefFoundError ignored) {
-            try {
-                registerCommandsV0();
-                JLOGGER.info("Using Fabric Commands V0");
-            } catch (NoClassDefFoundError ignored2) {
-                JLOGGER.info("Couldn't register command as Fabric Commands isn't installed");
-            }
-        }
+        registerCommandsV1();
 
         config = new VFConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());
@@ -91,15 +81,12 @@ public class ViaFabric implements ModInitializer {
     }
 
     private void registerCommandsV1() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaversion")));
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaver")));
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("vvfabric")));
-    }
-
-    @SuppressWarnings("deprecation")
-    private void registerCommandsV0() {
-        CommandRegistry.INSTANCE.register(false, dispatcher -> dispatcher.register(command("viaversion")));
-        CommandRegistry.INSTANCE.register(false, dispatcher -> dispatcher.register(command("viaver")));
-        CommandRegistry.INSTANCE.register(false, dispatcher -> dispatcher.register(command("vvfabric")));
+        try {
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaversion")));
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaver")));
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("vvfabric")));
+        } catch (NoClassDefFoundError ignored) {
+            JLOGGER.info("Couldn't register command as Fabric Commands V1 isn't installed");
+        }
     }
 }

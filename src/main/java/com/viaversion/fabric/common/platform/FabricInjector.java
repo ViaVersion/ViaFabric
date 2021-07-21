@@ -46,7 +46,7 @@ public class FabricInjector implements ViaInjector {
     }
 
     @Override
-    public int getServerProtocolVersion() throws Exception {
+    public int getServerProtocolVersion() {
         return getServerProtocolVersions().firstInt();
     }
 }

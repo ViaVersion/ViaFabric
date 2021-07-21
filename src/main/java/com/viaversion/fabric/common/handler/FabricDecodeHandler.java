@@ -9,7 +9,6 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @ChannelHandler.Sharable

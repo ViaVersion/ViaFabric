@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class NMSCommandImpl extends AbstractCommand {
-    private ViaVersionCommand handler;
+    private final ViaVersionCommand handler;
 
     public NMSCommandImpl(ViaVersionCommand handler) {
         this.handler = handler;

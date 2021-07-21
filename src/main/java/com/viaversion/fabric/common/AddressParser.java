@@ -63,11 +63,8 @@ public class AddressParser {
         }
 
         String arg = part.substring(2);
-        switch (option) {
-            case "v": {
-                parseProtocol(arg);
-                break;
-            }
+        if ("v".equals(option)) {
+            parseProtocol(arg);
         }
 
         return true;

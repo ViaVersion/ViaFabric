@@ -1,11 +1,10 @@
 package com.viaversion.fabric.mc18.commands;
 
+import com.viaversion.fabric.common.util.RemappingUtil;
+import com.viaversion.viaversion.api.command.ViaCommandSender;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
-import com.viaversion.viaversion.api.command.ViaCommandSender;
-import com.viaversion.viaversion.libs.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import com.viaversion.viaversion.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.UUID;
 
@@ -24,11 +23,7 @@ public class NMSCommandSender implements ViaCommandSender {
 
     @Override
     public void sendMessage(String s) {
-        source.sendMessage(Text.Serializer.deserialize(legacyToJson(s)));
-    }
-
-    private String legacyToJson(String legacy) {
-        return GsonComponentSerializer.gson().serialize(LegacyComponentSerializer.legacySection().deserialize(legacy));
+        source.sendMessage(Text.Serializer.deserialize(RemappingUtil.legacyToJson(s)));
     }
 
     @Override

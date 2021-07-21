@@ -1,17 +1,21 @@
 package com.viaversion.fabric.mc116;
 
-import com.viaversion.fabric.common.config.VFConfig;
-import com.viaversion.fabric.common.platform.FabricInjector;
-import com.viaversion.fabric.mc116.commands.VRCommandHandler;
-import com.viaversion.fabric.mc116.platform.VFLoader;
-import com.viaversion.fabric.mc116.platform.FabricPlatform;
-import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
-import com.viaversion.fabric.common.util.JLoggerToLog4j;
 import com.google.common.collect.Range;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.viaversion.fabric.common.config.VFConfig;
+import com.viaversion.fabric.common.platform.FabricInjector;
+import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
+import com.viaversion.fabric.common.util.JLoggerToLog4j;
+import com.viaversion.fabric.mc116.commands.VRCommandHandler;
+import com.viaversion.fabric.mc116.platform.FabricPlatform;
+import com.viaversion.fabric.mc116.platform.VFLoader;
+import com.viaversion.viaversion.ViaManagerImpl;
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.data.MappingDataLoader;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
 import net.fabricmc.api.EnvType;
@@ -21,10 +25,6 @@ import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.CommandSource;
 import org.apache.logging.log4j.LogManager;
-import com.viaversion.viaversion.ViaManagerImpl;
-import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.data.MappingDataLoader;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -36,7 +36,7 @@ public class ViaFabric implements ModInitializer {
     public static final Logger JLOGGER = new JLoggerToLog4j(LogManager.getLogger("ViaFabric"));
     public static final ExecutorService ASYNC_EXECUTOR;
     public static final EventLoop EVENT_LOOP;
-    public static CompletableFuture<Void> INIT_FUTURE = new CompletableFuture<>();
+    public static final CompletableFuture<Void> INIT_FUTURE = new CompletableFuture<>();
     public static VFConfig config;
 
     static {
@@ -74,11 +74,7 @@ public class ViaFabric implements ModInitializer {
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
 
-        try {
-            registerCommandsV1();
-        } catch (NoClassDefFoundError ignored) {
-            JLOGGER.info("Couldn't register command as Fabric Commands isn't installed");
-        }
+        registerCommandsV1();
 
         config = new VFConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());
@@ -87,11 +83,15 @@ public class ViaFabric implements ModInitializer {
     }
 
     private void registerCommandsV1() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaversion")));
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaver")));
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("vvfabric")));
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            ClientCommandManager.DISPATCHER.register(command("viafabricclient"));
+        try {
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaversion")));
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaver")));
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("vvfabric")));
+            if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+                ClientCommandManager.DISPATCHER.register(command("viafabricclient"));
+            }
+        } catch (NoClassDefFoundError ignored) {
+            JLOGGER.info("Couldn't register command as Fabric Commands V1 isn't installed");
         }
     }
 }

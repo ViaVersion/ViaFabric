@@ -10,11 +10,11 @@ import java.util.function.Consumer;
 
 public class ViaButton extends ButtonWidget {
     // Meant to be similar to higher versions TexturedButtonWidget
-    private int startU;
-    private int startV;
-    private int offsetHoverV;
-    private Identifier texturePath;
-    private Consumer<ViaButton> onClick;
+    private final int startU;
+    private final int startV;
+    private final int offsetHoverV;
+    private final Identifier texturePath;
+    private final Consumer<ViaButton> onClick;
 
     public ViaButton(int id, int x, int y, int width, int height, int startU, int startV, int offsetHoverV, Identifier texturePath,
                      int textureSizeX, int textureSizeY, Consumer<ViaButton> onClick, String altTxt) {
@@ -34,12 +34,11 @@ public class ViaButton extends ButtonWidget {
             client.getTextureManager().bindTexture(texturePath);
             GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             boolean hover = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
-            int u = startU;
             int v = startV;
             if (hover) {
                 v += offsetHoverV;
             }
-            this.drawTexture(this.x, this.y, u, v, this.width, this.height);
+            this.drawTexture(this.x, this.y, startU, v, this.width, this.height);
         }
     }
 

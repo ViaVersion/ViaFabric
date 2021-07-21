@@ -2,7 +2,6 @@ package com.viaversion.fabric.mc117.gui;
 
 import com.viaversion.fabric.mc117.ViaFabric;
 import com.viaversion.fabric.common.util.ProtocolUtils;
-import com.viaversion.viaversion.api.Via;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;

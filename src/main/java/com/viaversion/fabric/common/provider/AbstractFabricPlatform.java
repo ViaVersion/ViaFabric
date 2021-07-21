@@ -3,6 +3,7 @@ package com.viaversion.fabric.common.provider;
 import com.viaversion.fabric.common.platform.FabricViaAPI;
 import com.viaversion.fabric.common.platform.FabricViaConfig;
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
+import com.viaversion.fabric.common.util.FutureTaskId;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
@@ -11,6 +12,9 @@ import com.viaversion.viaversion.api.configuration.ViaVersionConfig;
 import com.viaversion.viaversion.api.platform.ViaPlatform;
 import com.viaversion.viaversion.libs.gson.JsonArray;
 import com.viaversion.viaversion.libs.gson.JsonObject;
+import io.netty.channel.EventLoop;
+import io.netty.util.concurrent.Future;
+import io.netty.util.concurrent.GenericFutureListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
@@ -20,6 +24,10 @@ import org.apache.logging.log4j.LogManager;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.UUID;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
@@ -33,6 +41,51 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
         config = new FabricViaConfig(configDir.resolve("viaversion.yml").toFile());
         dataFolder = configDir.toFile();
         api = new FabricViaAPI();
+    }
+
+    protected abstract ExecutorService asyncService();
+
+    protected abstract EventLoop eventLoop();
+
+    protected FutureTaskId runEventLoop(Runnable runnable) {
+        return new FutureTaskId(eventLoop().submit(runnable).addListener(errorLogger()));
+    }
+
+    @Override
+    public FutureTaskId runAsync(Runnable runnable) {
+        return new FutureTaskId(CompletableFuture.runAsync(runnable, asyncService())
+                .exceptionally(throwable -> {
+                    if (!(throwable instanceof CancellationException)) {
+                        throwable.printStackTrace();
+                    }
+                    return null;
+                }));
+    }
+
+    @Override
+    public FutureTaskId runSync(Runnable runnable, long ticks) {
+        // ViaVersion seems to not need to run delayed tasks on main thread
+        return new FutureTaskId(eventLoop()
+                .schedule(() -> runSync(runnable), ticks * 50, TimeUnit.MILLISECONDS)
+                .addListener(errorLogger())
+        );
+    }
+
+    @Override
+    public FutureTaskId runRepeatingSync(Runnable runnable, long ticks) {
+        // ViaVersion seems to not need to run repeating tasks on main thread
+        return new FutureTaskId(eventLoop()
+                .scheduleAtFixedRate(() -> runSync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS)
+                .addListener(errorLogger())
+        );
+    }
+
+    protected <T extends Future<?>> GenericFutureListener<T> errorLogger() {
+        return future -> {
+            if (!future.isCancelled() && future.cause() != null) {
+                future.cause().printStackTrace();
+            }
+        };
     }
 
     @Override
@@ -110,7 +163,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
             mod.getMetadata().getAuthors().stream().map(it -> {
                 JsonObject info = new JsonObject();
                 JsonObject contact = new JsonObject();
-                it.getContact().asMap().entrySet().stream()
+                it.getContact().asMap().entrySet()
                         .forEach(c -> contact.addProperty(c.getKey(), c.getValue()));
                 if (contact.size() != 0) {
                     info.add("contact", contact);

@@ -7,7 +7,7 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import java.util.UUID;
 
 public class UserCommandSender implements ViaCommandSender {
-    private UserConnection con;
+    private final UserConnection con;
 
     public UserCommandSender(UserConnection con) {
         this.con = con;

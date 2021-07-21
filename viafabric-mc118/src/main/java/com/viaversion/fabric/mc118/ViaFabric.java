@@ -10,8 +10,6 @@ import com.viaversion.fabric.common.platform.FabricInjector;
 import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
 import com.viaversion.fabric.mc118.commands.VRCommandHandler;
-import com.viaversion.fabric.mc118.gui.ViaConfigScreen;
-import com.viaversion.fabric.mc118.mixin.gui.client.ScreenAccessor;
 import com.viaversion.fabric.mc118.platform.FabricPlatform;
 import com.viaversion.fabric.mc118.platform.VFLoader;
 import com.viaversion.viaversion.ViaManagerImpl;
@@ -23,16 +21,9 @@ import io.netty.channel.EventLoop;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.command.CommandSource;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.concurrent.CompletableFuture;
@@ -45,7 +36,7 @@ public class ViaFabric implements ModInitializer {
     public static final Logger JLOGGER = new JLoggerToLog4j(LogManager.getLogger("ViaFabric"));
     public static final ExecutorService ASYNC_EXECUTOR;
     public static final EventLoop EVENT_LOOP;
-    public static CompletableFuture<Void> INIT_FUTURE = new CompletableFuture<>();
+    public static final CompletableFuture<Void> INIT_FUTURE = new CompletableFuture<>();
     public static VFConfig config;
 
     static {
@@ -84,7 +75,6 @@ public class ViaFabric implements ModInitializer {
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
 
         registerCommandsV1();
-        registerGui();
 
         config = new VFConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());
@@ -92,26 +82,6 @@ public class ViaFabric implements ModInitializer {
         INIT_FUTURE.complete(null);
     }
 
-    private void registerGui() {
-        if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT) return;
-        try {
-            ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
-                if (!(screen instanceof MultiplayerScreen)) return;
-                ButtonWidget enableClientSideViaVersion = new TexturedButtonWidget(scaledWidth / 2 + 113, 10,
-                        40, 20, // Size
-                        0, 0, // Start pos of texture
-                        20, // v Hover offset
-                        new Identifier("viafabric:textures/gui/widgets.png"),
-                        256, 256, // Texture size
-                        it -> MinecraftClient.getInstance().setScreen(new ViaConfigScreen(screen)),
-                        new TranslatableText("gui.via_button"));
-                if (ViaFabric.config.isHideButton()) enableClientSideViaVersion.visible = false;
-                ((ScreenAccessor) screen).callAddDrawableChild(enableClientSideViaVersion);
-            });
-        } catch (NoClassDefFoundError ignored) {
-            JLOGGER.info("Couldn't register screen handler as Fabric Screen isn't installed");
-        }
-    }
 
     private void registerCommandsV1() {
         try {
@@ -122,7 +92,7 @@ public class ViaFabric implements ModInitializer {
                 ClientCommandManager.DISPATCHER.register(command("viafabricclient"));
             }
         } catch (NoClassDefFoundError ignored) {
-            JLOGGER.info("Couldn't register command as Fabric Commands isn't installed");
+            JLOGGER.info("Couldn't register command as Fabric Commands V1 isn't installed");
         }
     }
 }

@@ -31,6 +31,9 @@
     "main": [
       "com.viaversion.fabric.mc117.ViaFabric"
     ],
+    "client": [
+      "com.viaversion.fabric.mc117.ViaFabricClient"
+    ],
     "modmenu": [
       "com.viaversion.fabric.mc117.gui.ModMenuConfig"
     ]

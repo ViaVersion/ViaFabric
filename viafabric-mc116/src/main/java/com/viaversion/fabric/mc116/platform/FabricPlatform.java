@@ -3,14 +3,12 @@ package com.viaversion.fabric.mc116.platform;
 import com.viaversion.fabric.common.commands.UserCommandSender;
 import com.viaversion.fabric.common.provider.AbstractFabricPlatform;
 import com.viaversion.fabric.common.util.FutureTaskId;
+import com.viaversion.fabric.common.util.RemappingUtil;
 import com.viaversion.fabric.mc116.ViaFabric;
 import com.viaversion.fabric.mc116.commands.NMSCommandSender;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
-import com.viaversion.viaversion.libs.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import com.viaversion.viaversion.libs.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
+import io.netty.channel.EventLoop;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -21,9 +19,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
 import java.util.UUID;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutorService;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 
@@ -40,21 +37,14 @@ public class FabricPlatform extends AbstractFabricPlatform {
         return MinecraftClient.getInstance().getServer();
     }
 
-    public static String legacyToJson(String legacy) {
-        return GsonComponentSerializer.gson().serialize(LegacyComponentSerializer.legacySection().deserialize(legacy));
+    @Override
+    protected ExecutorService asyncService() {
+        return ViaFabric.ASYNC_EXECUTOR;
     }
 
     @Override
-    public FutureTaskId runAsync(Runnable runnable) {
-        return new FutureTaskId(CompletableFuture
-                .runAsync(runnable, ViaFabric.ASYNC_EXECUTOR)
-                .exceptionally(throwable -> {
-                    if (!(throwable instanceof CancellationException)) {
-                        throwable.printStackTrace();
-                    }
-                    return null;
-                })
-        );
+    protected EventLoop eventLoop() {
+        return ViaFabric.EVENT_LOOP;
     }
 
     @Override
@@ -69,42 +59,6 @@ public class FabricPlatform extends AbstractFabricPlatform {
     private FutureTaskId runServerSync(Runnable runnable) {
         // Kick task needs to be on main thread, it does already have error logger
         return new FutureTaskId(CompletableFuture.runAsync(runnable, getServer()));
-    }
-
-    private FutureTaskId runEventLoop(Runnable runnable) {
-        return new FutureTaskId(
-                ViaFabric.EVENT_LOOP
-                        .submit(runnable)
-                        .addListener(errorLogger())
-        );
-    }
-
-    @Override
-    public FutureTaskId runSync(Runnable runnable, long ticks) {
-        // ViaVersion seems to not need to run delayed tasks on main thread
-        return new FutureTaskId(
-                ViaFabric.EVENT_LOOP
-                        .schedule(() -> runSync(runnable), ticks * 50, TimeUnit.MILLISECONDS)
-                        .addListener(errorLogger())
-        );
-    }
-
-    @Override
-    public FutureTaskId runRepeatingSync(Runnable runnable, long ticks) {
-        // ViaVersion seems to not need to run repeating tasks on main thread
-        return new FutureTaskId(
-                ViaFabric.EVENT_LOOP
-                        .scheduleAtFixedRate(() -> runSync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS)
-                        .addListener(errorLogger())
-        );
-    }
-
-    private <T extends Future<?>> GenericFutureListener<T> errorLogger() {
-        return future -> {
-            if (!future.isCancelled() && future.cause() != null) {
-                future.cause().printStackTrace();
-            }
-        };
     }
 
     @Override
@@ -137,7 +91,7 @@ public class FabricPlatform extends AbstractFabricPlatform {
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
             if (player == null) return;
             player.sendMessage(Text.Serializer.fromJson(
-                    legacyToJson(s)
+                    RemappingUtil.legacyToJson(s)
             ), false);
         });
     }
@@ -153,7 +107,7 @@ public class FabricPlatform extends AbstractFabricPlatform {
         Supplier<Boolean> kickTask = () -> {
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
             if (player == null) return false;
-            player.networkHandler.disconnect(Text.Serializer.fromJson(legacyToJson(s)));
+            player.networkHandler.disconnect(Text.Serializer.fromJson(RemappingUtil.legacyToJson(s)));
             return true;
         };
         if (server.isOnThread()) {

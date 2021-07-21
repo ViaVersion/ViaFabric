@@ -103,9 +103,9 @@ or registry synchronization (fabric-registry-sync mod).
 - You can disable it in the menu or by setting global protocol version to -1 (this will keep per-server translations still enabled)
 
 
-### How to use protocol auto detector?:
+### How to use protocol detection?:
 - For using globally, set the protocol to AUTO or -2. For using in a specific server: ``ddns.example.com._v-2.viafabric``
-- The protocol auto detector will try to ping with the client native protocol version. If you have ViaVersion or
+- The protocol detector will try to ping with the client native protocol version. If you have ViaVersion or
   similar in the server it may use the translated version, differently than multiconnect which uses -1 version,
   which may get the native server version.
 - It may hold your handshake for up to 10 seconds.

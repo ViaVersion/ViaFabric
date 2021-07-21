@@ -1,5 +1,6 @@
 package com.viaversion.fabric.mc114.providers;
 
+import com.viaversion.fabric.common.util.RemappingUtil;
 import com.viaversion.fabric.mc114.ViaFabric;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -21,7 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class VRHandItemProvider extends HandItemProvider {
     public Item clientItem = null;
-    public Map<UUID, Item> serverPlayers = new ConcurrentHashMap<>();
+    public final Map<UUID, Item> serverPlayers = new ConcurrentHashMap<>();
 
     @Override
     public Item getHandItem(UserConnection info) {
@@ -50,7 +51,7 @@ public class VRHandItemProvider extends HandItemProvider {
                 }
             });
         } catch (NoClassDefFoundError ignored2) {
-            ViaFabric.JLOGGER.info("Fabric Lifecycle V0/V1 isn't installed");
+            ViaFabric.JLOGGER.info("Fabric Lifecycle V0 isn't installed");
         }
     }
 
@@ -77,25 +78,7 @@ public class VRHandItemProvider extends HandItemProvider {
 
     private Item fromNative(ItemStack original) {
         Identifier iid = Registry.ITEM.getId(original.getItem());
-        if (iid == null) return new DataItem(0, (byte) 0, (short) 0, null);
-        int id = swordId(iid.toString());
+        int id = RemappingUtil.swordId(iid.toString());
         return new DataItem(id, (byte) original.getCount(), (short) original.getDamage(), null);
-    }
-
-    private int swordId(String id) {
-        // https://github.com/ViaVersion/ViaVersion/blob/8de26a0ad33f5b739f5394ed80f69d14197fddc7/common/src/main/java/us/myles/ViaVersion/protocols/protocol1_9to1_8/Protocol1_9To1_8.java#L86
-        switch (id) {
-            case "minecraft:iron_sword":
-                return 267;
-            case "minecraft:wooden_sword":
-                return 268;
-            case "minecraft:golden_sword":
-                return 272;
-            case "minecraft:diamond_sword":
-                return 276;
-            case "minecraft:stone_sword":
-                return 283;
-        }
-        return 0;
     }
 }
