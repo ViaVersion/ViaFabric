@@ -1,9 +1,9 @@
 package com.viaversion.fabric.mc117;
 
 import com.viaversion.fabric.mc117.gui.ViaConfigScreen;
-import com.viaversion.fabric.mc117.mixin.gui.client.ScreenAccessor;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
+import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -30,7 +30,7 @@ public class ViaFabricClient implements ClientModInitializer {
                         it -> MinecraftClient.getInstance().setScreen(new ViaConfigScreen(screen)),
                         new TranslatableText("gui.via_button"));
                 if (ViaFabric.config.isHideButton()) enableClientSideViaVersion.visible = false;
-                ((ScreenAccessor) screen).callAddDrawableChild(enableClientSideViaVersion);
+                Screens.getButtons(screen).add(enableClientSideViaVersion);
             });
         } catch (NoClassDefFoundError ignored) {
             ViaFabric.JLOGGER.info("Couldn't register screen handler as Fabric Screen isn't installed");

@@ -5,7 +5,6 @@
   "mixins": [
   ],
   "client": [
-    "client.ScreenAccessor",
     "client.MixinMultiplayerServerListPingerListener",
     "client.MixinServerEntry",
     "client.MixinServerInfo"
