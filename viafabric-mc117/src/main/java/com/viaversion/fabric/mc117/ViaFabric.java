@@ -93,6 +93,7 @@ public class ViaFabric implements ModInitializer {
     }
 
     private void registerGui() {
+        if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT) return;
         try {
             ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
                 if (!(screen instanceof MultiplayerScreen)) return;
