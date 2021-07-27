@@ -9,4 +9,4 @@ hide-button: false
 # List of servers which ViaFabric will force disabling transforming on client-side. It can be overwritten by setting per-server version.
 # This isn't always the address in multiplayer GUI. It will use the SRV record pointer when present. Check the game log for the address.
 # Uses https://wiki.vg/Mojang_API#Blocked_Servers format (mc.example.com, *.example.com, 192.168.0.1, 192.168.*)
-client-side-force-disable: ["hypixel.net", "*.hypixel.net", "hivemc.com", "*.hivemc.com", "hivemc.eu", "*.hivemc.eu"]
+client-side-force-disable: ["hypixel.net", "*.hypixel.net", "minemen.club", "*.minemen.club"]
