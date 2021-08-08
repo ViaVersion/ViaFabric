@@ -8,7 +8,7 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod can be installed on 1.8.9, 1.14.x, 1.15.x, 1.16.x and 1.17.x with Fabric Loader.
+This mod can be installed on 1.8.9, 1.14.4, 1.15.2, 1.16.5 and 1.17.1 with Fabric Loader.
 
 
 ## Dependencies
@@ -58,25 +58,20 @@ or registry synchronization (fabric-registry-sync mod).
 ### Can ViaVersion, ViaBackwards and ViaRewind support snapshots?:
 - Check https://ci.viaversion.com/ for development builds with snapshot support
 
+
 ## Alternatives
 ### Client-side:
-- [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): This discontinued client-side plugin for The 5zig
-  Mod implemented ViaVersion, ViaBackwards and ViaRewind for 1.7.10, 1.8.9, 1.12 and 1.12.2 clients, allowing them to
-  connect to 1.7-1.12.2 servers.
-- [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): This client-side Fabric mod does also 
-  accept older protocols and fixes some differences between versions, which ViaFabric doesn't. Currently, it goes
-  down to 1.11 (stable) and 1.9 (experimental).
-- [Protocol4](https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/2299203-protocol4-1-0-2-allows-1-7-10-clients-to-connect):
-  This LiteLoader allows your 1.7.10 client connect to 1.7.x server.
+- [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): Discontinued 5zig plugin.
+- [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): Fabric mod for connecting to older versions: down to 1.11 (stable) and 1.8 (experimental).
 - [ViaForge](https://www.curseforge.com/minecraft/mc-mods/viaforge): Fork of ViaFabric porting it to Forge.
 
 ### Server-side 
-- [ProtocolSupport](https://protocol.support/): This Bukkit plugin allows clients to connect from older versions (down to 1.4.7).
-- [ViaVersion](https://viaversion.com): ViaVersion can run as a plugin for BungeeCord, CraftBukkit, SpongeCommon and Velocity servers.
+- [ProtocolSupport](https://protocol.support/): Bukkit plugin for older client versions (down to 1.4.7).
+- [ViaVersion](https://viaversion.com): Plugin for BungeeCord, CraftBukkit, SpongeCommon and Velocity servers.
 
 ### Standalone proxy:
 - [DirtMultiversion](https://github.com/DirtPowered/DirtMultiversion): Proxy allowing to connect down to Beta 1.3
-  with newer Minecraft client versions (currently).
+  with newer Minecraft client versions.
 - [VIAaaS](https://github.com/ViaVersion/VIAaaS): Standalone ViaVersion proxy with ViaBackwards and ViaRewind, allowing
   you to connect without a mod installed on your client. Supports online mode.
 
@@ -105,11 +100,8 @@ or registry synchronization (fabric-registry-sync mod).
 
 ### How to use protocol detection?:
 - For using globally, set the protocol to AUTO or -2. For using in a specific server: ``ddns.example.com._v-2.viafabric``
-- The protocol detector will try to ping with the client native protocol version. If you have ViaVersion or
-  similar in the server it may use the translated version, differently than multiconnect which uses -1 version,
-  which may get the native server version.
-- It may hold your handshake for up to 10 seconds.
-- The auto-detected version is cached for 30 seconds.
+- The protocol detector will try to ping with the client native protocol version, differently than multiconnect which uses -1 version,
+  which may detect the native server version.
 
 
 ### How can I set the version for specific servers?:
@@ -119,18 +111,8 @@ or registry synchronization (fabric-registry-sync mod).
 
 ## multiconnect
 ### Does it work with multiconnect at same time on client?:**
-- Yes, ViaFabric can be used with multiconnect. ViaFabric will send to their version auto detector their closest
-  supported version. (multiconnect beta-supported versions (currently < 1.11) aren't used)
-- Example of configurations:
-- (1.8 server) <-> (disabled ViaFabric) <-> (auto-detected 1.8 server - multiconnect) = doesn't work because
-  multiconnect doesn't support it
-- (1.8 server) <-> (detected 1.8 - ViaFabric - suggests 1.11) <-> (detected 1.11 server - multiconnect) = works,
-  ViaVersion is translating 1.8 -> 1.11 and multiconnect is accepting 1.11
-- (1.8 server) <-> (forced 1.8 - ViaFabric - suggests 1.11) <-> (detected 1.11 server - multiconnect) = works, ViaVersion
-  is translating 1.8 -> 1.11 and multiconnect is accepting 1.11
-- (1.8 server) <-> (forced 1.8 - ViaFabric - detected 1.12.2 client) <-> (forced 1.12.2 server - multiconnect) = works,
-  ViaVersion is translating 1.8 -> 1.12.2 and multiconnect is accepting 1.12.2
-
+- Yes, ViaFabric can be used with multiconnect. ViaFabric will send to its version auto detector the closest
+  non-beta supported version. (multiconnect beta-supported versions are currently < 1.11))
 
 ### Differences with multiconnect:
 
