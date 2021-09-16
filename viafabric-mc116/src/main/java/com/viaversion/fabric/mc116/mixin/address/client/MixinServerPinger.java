@@ -20,6 +20,6 @@ public class MixinServerPinger {
         }
 
         InetAddress resolved = InetAddress.getByName(viaAddr.serverAddress);
-        return InetAddress.getByAddress(resolved.getHostName() + "." + viaAddr.viaSuffix, resolved.getAddress());
+        return InetAddress.getByAddress(resolved.getHostName() + "." + viaAddr.getSuffixWithOptions(), resolved.getAddress());
     }
 }

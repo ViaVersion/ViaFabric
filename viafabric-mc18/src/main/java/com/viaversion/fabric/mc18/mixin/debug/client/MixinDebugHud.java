@@ -5,7 +5,7 @@ import com.viaversion.fabric.common.handler.FabricDecodeHandler;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import io.netty.channel.ChannelHandler;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.DebugMenuHud;
+import net.minecraft.client.gui.hud.DebugHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,9 +15,9 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 import java.util.List;
 
-@Mixin(DebugMenuHud.class)
+@Mixin(DebugHud.class)
 public class MixinDebugHud {
-    @Inject(at = @At("RETURN"), method = "method_2505")
+    @Inject(at = @At("RETURN"), method = "getLeftText")
     protected void getLeftText(CallbackInfoReturnable<List<String>> info) {
         String line = "[ViaFabric] I: " + Via.getManager().getConnectionManager().getConnections().size() + " (F: "
                 + Via.getManager().getConnectionManager().getConnectedClients().size() + ")";

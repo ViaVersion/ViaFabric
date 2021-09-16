@@ -29,7 +29,7 @@ public abstract class MixinAllowedAddressResolver {
 
         ServerAddress realAddress = new ServerAddress(viaAddr.serverAddress, address.getPort());
 
-        cir.setReturnValue(resolve(realAddress).map(it -> viaFabricAddSuffix(it, viaAddr.viaSuffix)));
+        cir.setReturnValue(resolve(realAddress).map(it -> viaFabricAddSuffix(it, viaAddr.getSuffixWithOptions())));
     }
 
     private Address viaFabricAddSuffix(Address it, String viaSuffix) {

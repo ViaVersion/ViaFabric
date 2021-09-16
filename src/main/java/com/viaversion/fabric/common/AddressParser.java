@@ -18,12 +18,19 @@ public class AddressParser {
     public String viaOptions;
 
     public AddressParser parse(String address) {
-        return parse(address, ".viafabric");
+        return parse(address, "viafabric");
+    }
+
+    public String getSuffixWithOptions() {
+        if (viaOptions != null && !viaOptions.isEmpty()) {
+            return viaOptions + "." + viaSuffix;
+        }
+        return viaSuffix;
     }
 
     public AddressParser parse(String address, String viaHostName) {
         address = StringUtils.removeEnd(address, ".");
-        String suffixRemoved = StringUtils.removeEnd(address, viaHostName);
+        String suffixRemoved = StringUtils.removeEnd(address, "." + viaHostName);
 
         if (suffixRemoved.equals(address)) {
             serverAddress = address;

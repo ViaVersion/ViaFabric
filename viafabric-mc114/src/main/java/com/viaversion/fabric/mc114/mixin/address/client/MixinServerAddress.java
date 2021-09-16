@@ -22,7 +22,7 @@ public abstract class MixinServerAddress {
         }
 
         String[] resolvedSrv = resolveSrv(viaAddr.serverAddress);
-        resolvedSrv[0] = resolvedSrv[0].replaceAll("\\.$", "") + "." + viaAddr.viaSuffix;
+        resolvedSrv[0] = resolvedSrv[0].replaceAll("\\.$", "") + "." + viaAddr.getSuffixWithOptions();
 
         return resolvedSrv;
     }
