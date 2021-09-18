@@ -79,7 +79,7 @@ allprojects {
         implementation("com.viaversion:viaversion:$vvVer") { transitive = false }
         implementation("org.yaml:snakeyaml:$yamlVer")
 
-        modImplementation("net.fabricmc:fabric-loader:0.11.6")
+        modImplementation("net.fabricmc:fabric-loader:0.11.7")
     }
 
     jar {
