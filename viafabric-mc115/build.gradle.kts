@@ -1,5 +1,3 @@
-version = rootProject.version
-
 dependencies {
     minecraft("com.mojang:minecraft:1.15.2")
     mappings("net.fabricmc:yarn:1.15.2+build.17:v2")

@@ -1,4 +1,6 @@
 // todo migrate this code to kotlin
+
+import net.fabricmc.loom.task.RemapJarTask
 import org.apache.tools.ant.filters.ReplaceTokens
 
 buildscript {
@@ -20,7 +22,7 @@ plugins {
 }
 
 def ENV = System.getenv()
-def vvVer = "4.0.2-SNAPSHOT"
+def vvVer = "4.1.0-21w37a-SNAPSHOT"
 def yamlVer = "1.29"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
@@ -57,6 +59,7 @@ allprojects {
     }
 
     group = "com.viaversion.fabric"
+    version = rootProject.version
 
     configurations {
         dev
@@ -88,8 +91,8 @@ allprojects {
 
     afterEvaluate {
         remapJar {
-            input = file("${project.buildDir}/libs/$archivesBaseName-${version}-dev.jar")
-            archiveFileName = "${archivesBaseName}-${version}.jar"
+            input = file("${project.buildDir}/libs/$archivesBaseName-${archiveVersion.get()}-dev.jar")
+            archiveFileName = "${archivesBaseName}-${archiveVersion.get()}.jar"
         }
 
         artifacts {
@@ -144,7 +147,7 @@ subprojects {
     }
 }
 
-task remapMavenJar(type: net.fabricmc.loom.task.RemapJarTask, dependsOn: jar) {
+task remapMavenJar(type: RemapJarTask, dependsOn: jar) {
     afterEvaluate {
         input = file("${project.buildDir}/libs/${archivesBaseName}-${version}-dev.jar")
         archiveFileName = "${archivesBaseName}-${version}-maven.jar"
