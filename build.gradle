@@ -1,11 +1,20 @@
 // todo migrate this code to kotlin
 import org.apache.tools.ant.filters.ReplaceTokens
 
+buildscript {
+    repositories {
+        maven { url = "https://jitpack.io" }
+    }
+
+    dependencies {
+        classpath "com.github.creeper123123321:fabric-loom:18workaround-SNAPSHOT"
+    }
+}
+
 // Stolen https://github.com/FabricMC/fabric/blob/1.17/build.gradle
 plugins {
     id "java"
     id "maven-publish"
-    id "fabric-loom" version "0.8-SNAPSHOT" apply false
     id "org.ajoberstar.grgit" version "3.1.1"
     id "com.matthewprenger.cursegradle" version "1.4.0"
 }
@@ -100,13 +109,6 @@ allprojects {
     task sourcesJar(type: Jar, dependsOn: classes) {
         archiveClassifier = "sources"
         from sourceSets.main.allSource
-    }
-
-    minecraft {
-        intermediaryUrl = {
-            if (it == "1.8.9") "https://maven.legacyfabric.net/net/fabricmc/intermediary/$it/intermediary-$it-v2.jar"
-            else "https://maven.fabricmc.net/net/fabricmc/intermediary/$it/intermediary-$it-v2.jar"
-        }
     }
 }
 
@@ -217,7 +219,7 @@ curseforge {
         changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
         releaseType = "alpha"
         Arrays.<String> asList("1.17.1", "1.16.5", "1.15.2", "1.14.4", "1.8.9",
-            "Java 8", "Java 9", "Java 10", "Java 11", "Java 12", "Java 13", "Java 14", "Java 15", "Java 16", "Java 17", "Fabric")
+                "Java 8", "Java 9", "Java 10", "Java 11", "Java 12", "Java 13", "Java 14", "Java 15", "Java 16", "Java 17", "Fabric")
                 .forEach { ver -> addGameVersion(ver) }
 
         mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")) {
