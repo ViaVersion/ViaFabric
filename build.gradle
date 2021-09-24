@@ -22,7 +22,7 @@ plugins {
 }
 
 def ENV = System.getenv()
-def vvVer = "4.1.0-21w37a-SNAPSHOT"
+def vvVer = "4.1.0-21w38a-SNAPSHOT"
 def yamlVer = "1.29"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
@@ -78,10 +78,6 @@ allprojects {
     }
 
     dependencies {
-        // transitive = false because Guava is conflicting on runClient
-        implementation("com.viaversion:viaversion:$vvVer") { transitive = false }
-        implementation("org.yaml:snakeyaml:$yamlVer")
-
         modImplementation("net.fabricmc:fabric-loader:0.11.7")
     }
 
@@ -204,7 +200,10 @@ dependencies {
     minecraft("com.mojang:minecraft:1.8.9")
     mappings("net.fabricmc:yarn:1.8.9+build.202103291533:v2")
 
+    // transitive = false because Guava is conflicting on runClient
+    implementation("com.viaversion:viaversion:$vvVer") { transitive = false }
     include("com.viaversion:viaversion:$vvVer")
+    implementation("org.yaml:snakeyaml:$yamlVer")
     include("org.yaml:snakeyaml:$yamlVer")
 
     subprojects.each {
