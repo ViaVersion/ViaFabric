@@ -22,7 +22,7 @@ plugins {
 }
 
 def ENV = System.getenv()
-def vvVer = "4.1.0-21w38a-SNAPSHOT"
+def vvVer = "4.1.0-21w40a-SNAPSHOT"
 def yamlVer = "1.29"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
@@ -82,7 +82,7 @@ allprojects {
         implementation("com.viaversion:viaversion:$vvVer") { transitive = false }
         implementation("org.yaml:snakeyaml:$yamlVer")
 
-        modImplementation("net.fabricmc:fabric-loader:0.11.7")
+        modImplementation("net.fabricmc:fabric-loader:0.12.1")
     }
 
     jar {
