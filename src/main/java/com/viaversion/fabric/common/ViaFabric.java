@@ -9,7 +9,7 @@ public class ViaFabric implements ModInitializer {
         if (FabricLoader.getInstance().getAllMods()
                 .stream()
                 .noneMatch(it -> it.getMetadata().getId().startsWith("viafabric-mc"))) {
-            System.out.println("ViaFabric didn't load correctly... Are dependencies installed?");
+            throw new IllegalStateException("ViaFabric sub-mod didn't load correctly. Check if required dependencies are installed");
         }
     }
 }
