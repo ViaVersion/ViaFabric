@@ -59,11 +59,15 @@ public class ViaFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        FabricPlatform platform = new FabricPlatform();
+
         Via.init(ViaManagerImpl.builder()
                 .injector(new FabricInjector())
                 .loader(new VFLoader())
                 .commandHandler(new VRCommandHandler())
-                .platform(new FabricPlatform()).build());
+                .platform(platform).build());
+
+        platform.init();
 
         FabricLoader.getInstance().getModContainer("viabackwards").ifPresent(mod -> MappingDataLoader.enableMappingsCache());
 

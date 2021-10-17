@@ -31,157 +31,160 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
-    private final Logger logger = new JLoggerToLog4j(LogManager.getLogger("ViaVersion"));
-    private final FabricViaConfig config;
-    private final File dataFolder;
-    private final ViaAPI<UUID> api;
+	private final Logger logger = new JLoggerToLog4j(LogManager.getLogger("ViaVersion"));
+	private FabricViaConfig config;
+	private File dataFolder;
+	private final ViaAPI<UUID> api;
 
-    {
-        Path configDir = FabricLoader.getInstance().getConfigDir().resolve("ViaFabric");
-        config = new FabricViaConfig(configDir.resolve("viaversion.yml").toFile());
-        dataFolder = configDir.toFile();
-        api = new FabricViaAPI();
-    }
+	{
+		api = new FabricViaAPI();
+	}
 
-    protected abstract ExecutorService asyncService();
+	public void init() {
+		Path configDir = FabricLoader.getInstance().getConfigDir().resolve("ViaFabric");
+		dataFolder = configDir.toFile();
+		config = new FabricViaConfig(configDir.resolve("viaversion.yml").toFile());
+	}
 
-    protected abstract EventLoop eventLoop();
+	protected abstract ExecutorService asyncService();
 
-    protected FutureTaskId runEventLoop(Runnable runnable) {
-        return new FutureTaskId(eventLoop().submit(runnable).addListener(errorLogger()));
-    }
+	protected abstract EventLoop eventLoop();
 
-    @Override
-    public FutureTaskId runAsync(Runnable runnable) {
-        return new FutureTaskId(CompletableFuture.runAsync(runnable, asyncService())
-                .exceptionally(throwable -> {
-                    if (!(throwable instanceof CancellationException)) {
-                        throwable.printStackTrace();
-                    }
-                    return null;
-                }));
-    }
+	protected FutureTaskId runEventLoop(Runnable runnable) {
+		return new FutureTaskId(eventLoop().submit(runnable).addListener(errorLogger()));
+	}
 
-    @Override
-    public FutureTaskId runSync(Runnable runnable, long ticks) {
-        // ViaVersion seems to not need to run delayed tasks on main thread
-        return new FutureTaskId(eventLoop()
-                .schedule(() -> runSync(runnable), ticks * 50, TimeUnit.MILLISECONDS)
-                .addListener(errorLogger())
-        );
-    }
+	@Override
+	public FutureTaskId runAsync(Runnable runnable) {
+		return new FutureTaskId(CompletableFuture.runAsync(runnable, asyncService())
+				.exceptionally(throwable -> {
+					if (!(throwable instanceof CancellationException)) {
+						throwable.printStackTrace();
+					}
+					return null;
+				}));
+	}
 
-    @Override
-    public FutureTaskId runRepeatingSync(Runnable runnable, long ticks) {
-        // ViaVersion seems to not need to run repeating tasks on main thread
-        return new FutureTaskId(eventLoop()
-                .scheduleAtFixedRate(() -> runSync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS)
-                .addListener(errorLogger())
-        );
-    }
+	@Override
+	public FutureTaskId runSync(Runnable runnable, long ticks) {
+		// ViaVersion seems to not need to run delayed tasks on main thread
+		return new FutureTaskId(eventLoop()
+				.schedule(() -> runSync(runnable), ticks * 50, TimeUnit.MILLISECONDS)
+				.addListener(errorLogger())
+		);
+	}
 
-    protected <T extends Future<?>> GenericFutureListener<T> errorLogger() {
-        return future -> {
-            if (!future.isCancelled() && future.cause() != null) {
-                future.cause().printStackTrace();
-            }
-        };
-    }
+	@Override
+	public FutureTaskId runRepeatingSync(Runnable runnable, long ticks) {
+		// ViaVersion seems to not need to run repeating tasks on main thread
+		return new FutureTaskId(eventLoop()
+				.scheduleAtFixedRate(() -> runSync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS)
+				.addListener(errorLogger())
+		);
+	}
 
-    @Override
-    public boolean isProxy() {
-        // We kinda of have all server versions
-        return true;
-    }
+	protected <T extends Future<?>> GenericFutureListener<T> errorLogger() {
+		return future -> {
+			if (!future.isCancelled() && future.cause() != null) {
+				future.cause().printStackTrace();
+			}
+		};
+	}
 
-    @Override
-    public void onReload() {
-    }
+	@Override
+	public boolean isProxy() {
+		// We kinda of have all server versions
+		return true;
+	}
 
-    @Override
-    public Logger getLogger() {
-        return logger;
-    }
+	@Override
+	public void onReload() {
+	}
 
-    @Override
-    public ViaVersionConfig getConf() {
-        return config;
-    }
+	@Override
+	public Logger getLogger() {
+		return logger;
+	}
 
-    @Override
-    public ViaAPI<UUID> getApi() {
-        return api;
-    }
+	@Override
+	public ViaVersionConfig getConf() {
+		return config;
+	}
 
-    @Override
-    public File getDataFolder() {
-        return dataFolder;
-    }
+	@Override
+	public ViaAPI<UUID> getApi() {
+		return api;
+	}
 
-    @Override
-    public String getPluginVersion() {
-        return FabricLoader.getInstance().getModContainer("viaversion").map(ModContainer::getMetadata)
-                .map(ModMetadata::getVersion).map(Version::getFriendlyString).orElse("UNKNOWN");
-    }
+	@Override
+	public File getDataFolder() {
+		return dataFolder;
+	}
 
-    @Override
-    public String getPlatformName() {
-        return "ViaFabric";
-    }
+	@Override
+	public String getPluginVersion() {
+		return FabricLoader.getInstance().getModContainer("viaversion").map(ModContainer::getMetadata)
+				.map(ModMetadata::getVersion).map(Version::getFriendlyString).orElse("UNKNOWN");
+	}
 
-    @Override
-    public String getPlatformVersion() {
-        return FabricLoader.getInstance().getModContainer("viafabric")
-                .get().getMetadata().getVersion().getFriendlyString();
-    }
+	@Override
+	public String getPlatformName() {
+		return "ViaFabric";
+	}
 
-    @Override
-    public boolean isPluginEnabled() {
-        return true;
-    }
+	@Override
+	public String getPlatformVersion() {
+		return FabricLoader.getInstance().getModContainer("viafabric")
+				.get().getMetadata().getVersion().getFriendlyString();
+	}
 
-    @Override
-    public ConfigurationProvider getConfigurationProvider() {
-        return config;
-    }
+	@Override
+	public boolean isPluginEnabled() {
+		return true;
+	}
 
-    @Override
-    public boolean isOldClientsAllowed() {
-        return true;
-    }
+	@Override
+	public ConfigurationProvider getConfigurationProvider() {
+		return config;
+	}
 
-    @Override
-    public JsonObject getDump() {
-        JsonObject platformSpecific = new JsonObject();
-        JsonArray mods = new JsonArray();
-        FabricLoader.getInstance().getAllMods().stream().map((mod) -> {
-            JsonObject jsonMod = new JsonObject();
-            jsonMod.addProperty("id", mod.getMetadata().getId());
-            jsonMod.addProperty("name", mod.getMetadata().getName());
-            jsonMod.addProperty("version", mod.getMetadata().getVersion().getFriendlyString());
-            JsonArray authors = new JsonArray();
-            mod.getMetadata().getAuthors().stream().map(it -> {
-                JsonObject info = new JsonObject();
-                JsonObject contact = new JsonObject();
-                it.getContact().asMap().entrySet()
-                        .forEach(c -> contact.addProperty(c.getKey(), c.getValue()));
-                if (contact.size() != 0) {
-                    info.add("contact", contact);
-                }
-                info.addProperty("name", it.getName());
+	@Override
+	public boolean isOldClientsAllowed() {
+		return true;
+	}
 
-                return info;
-            }).forEach(authors::add);
-            jsonMod.add("authors", authors);
+	@Override
+	public JsonObject getDump() {
+		JsonObject platformSpecific = new JsonObject();
+		JsonArray mods = new JsonArray();
+		FabricLoader.getInstance().getAllMods().stream().map((mod) -> {
+			JsonObject jsonMod = new JsonObject();
+			jsonMod.addProperty("id", mod.getMetadata().getId());
+			jsonMod.addProperty("name", mod.getMetadata().getName());
+			jsonMod.addProperty("version", mod.getMetadata().getVersion().getFriendlyString());
+			JsonArray authors = new JsonArray();
+			mod.getMetadata().getAuthors().stream().map(it -> {
+				JsonObject info = new JsonObject();
+				JsonObject contact = new JsonObject();
+				it.getContact().asMap().entrySet()
+						.forEach(c -> contact.addProperty(c.getKey(), c.getValue()));
+				if (contact.size() != 0) {
+					info.add("contact", contact);
+				}
+				info.addProperty("name", it.getName());
 
-            return jsonMod;
-        }).forEach(mods::add);
+				return info;
+			}).forEach(authors::add);
+			jsonMod.add("authors", authors);
 
-        platformSpecific.add("mods", mods);
-        NativeVersionProvider ver = Via.getManager().getProviders().get(NativeVersionProvider.class);
-        if (ver != null) {
-            platformSpecific.addProperty("native version", ver.getServerProtocolVersion());
-        }
-        return platformSpecific;
-    }
+			return jsonMod;
+		}).forEach(mods::add);
+
+		platformSpecific.add("mods", mods);
+		NativeVersionProvider ver = Via.getManager().getProviders().get(NativeVersionProvider.class);
+		if (ver != null) {
+			platformSpecific.addProperty("native version", ver.getServerProtocolVersion());
+		}
+		return platformSpecific;
+	}
 }

@@ -22,7 +22,7 @@ plugins {
 }
 
 def ENV = System.getenv()
-def vvVer = "4.1.0-21w40a-SNAPSHOT"
+def vvVer = "4.1.0-21w41a-SNAPSHOT"
 def yamlVer = "1.29"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
