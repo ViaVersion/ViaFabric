@@ -22,7 +22,7 @@ plugins {
 }
 
 def ENV = System.getenv()
-def vvVer = "4.1.0-21w41a-SNAPSHOT"
+def vvVer = "4.1.0-21w42a-SNAPSHOT"
 def yamlVer = "1.29"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
@@ -73,7 +73,7 @@ allprojects {
         maven { url = "https://server.bbkr.space/artifactory/libs-snapshot" }
         maven { url = "https://server.bbkr.space/artifactory/libs-release" }
         maven { url = "https://maven.legacyfabric.net/" }
-        //maven { url = "https://maven.terraformersmc.com/releases/" }
+        maven { url = "https://maven.terraformersmc.com/releases/" }
         maven { url = "https://raw.githubusercontent.com/TerraformersMC/Archive/main/releases/" }
     }
 
@@ -82,7 +82,7 @@ allprojects {
         implementation("com.viaversion:viaversion:$vvVer") { transitive = false }
         implementation("org.yaml:snakeyaml:$yamlVer")
 
-        modImplementation("net.fabricmc:fabric-loader:0.12.1")
+        modImplementation("net.fabricmc:fabric-loader:0.12.2")
     }
 
     jar {
