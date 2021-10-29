@@ -22,7 +22,7 @@ plugins {
 }
 
 def ENV = System.getenv()
-def vvVer = "4.1.0-21w42a-SNAPSHOT"
+def vvVer = "4.1.0-21w43a-SNAPSHOT"
 def yamlVer = "1.29"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
@@ -51,7 +51,7 @@ allprojects {
     tasks.withType(JavaCompile).configureEach {
         def targetVersion = 8
         if (JavaVersion.current().isJava9Compatible()) {
-            it.options.release = targetVersion
+            it.options.release.set(targetVersion)
         } else {
             sourceCompatibility = JavaVersion.toVersion(targetVersion)
             targetCompatibility = JavaVersion.toVersion(targetVersion)
@@ -82,11 +82,11 @@ allprojects {
         implementation("com.viaversion:viaversion:$vvVer") { transitive = false }
         implementation("org.yaml:snakeyaml:$yamlVer")
 
-        modImplementation("net.fabricmc:fabric-loader:0.12.2")
+        modImplementation("net.fabricmc:fabric-loader:0.12.3")
     }
 
     jar {
-        archiveClassifier = "dev"
+        archiveClassifier.set("dev")
     }
 
     afterEvaluate {
