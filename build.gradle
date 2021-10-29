@@ -26,7 +26,7 @@ def vvVer = "4.1.0-21w43a-SNAPSHOT"
 def yamlVer = "1.29"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
-version = "0.4.3+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
+version = "0.4.4+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
 logger.lifecycle("Building ViaFabric: $version")
 
 def getBranch() {
