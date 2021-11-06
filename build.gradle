@@ -3,26 +3,17 @@
 import net.fabricmc.loom.task.RemapJarTask
 import org.apache.tools.ant.filters.ReplaceTokens
 
-buildscript {
-    repositories {
-        maven { url = "https://jitpack.io" }
-    }
-
-    dependencies {
-        classpath "com.github.creeper123123321:fabric-loom:18workaround-SNAPSHOT"
-    }
-}
-
 // Stolen https://github.com/FabricMC/fabric/blob/1.17/build.gradle
 plugins {
     id "java"
     id "maven-publish"
     id "org.ajoberstar.grgit" version "3.1.1"
     id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "fabric-loom" version "0.10-SNAPSHOT" apply false
 }
 
 def ENV = System.getenv()
-def vvVer = "4.1.0-21w43a-SNAPSHOT"
+def vvVer = "4.1.0-21w44a-SNAPSHOT"
 def yamlVer = "1.29"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
@@ -49,13 +40,7 @@ allprojects {
     apply plugin: "fabric-loom"
 
     tasks.withType(JavaCompile).configureEach {
-        def targetVersion = 8
-        if (JavaVersion.current().isJava9Compatible()) {
-            it.options.release.set(targetVersion)
-        } else {
-            sourceCompatibility = JavaVersion.toVersion(targetVersion)
-            targetCompatibility = JavaVersion.toVersion(targetVersion)
-        }
+        it.options.release.set(8)
     }
 
     group = "com.viaversion.fabric"
@@ -68,13 +53,10 @@ allprojects {
     repositories {
         mavenCentral()
         maven { url = "https://repo.viaversion.com/" }
-        maven { url = "https://oss.sonatype.org/content/repositories/snapshots" }
         maven { url = "https://maven.fabricmc.net/" }
-        maven { url = "https://server.bbkr.space/artifactory/libs-snapshot" }
-        maven { url = "https://server.bbkr.space/artifactory/libs-release" }
         maven { url = "https://maven.legacyfabric.net/" }
+        maven { url = "https://server.bbkr.space/artifactory/libs-release" }
         maven { url = "https://maven.terraformersmc.com/releases/" }
-        maven { url = "https://raw.githubusercontent.com/TerraformersMC/Archive/main/releases/" }
     }
 
     dependencies {
@@ -82,7 +64,7 @@ allprojects {
         implementation("com.viaversion:viaversion:$vvVer") { transitive = false }
         implementation("org.yaml:snakeyaml:$yamlVer")
 
-        modImplementation("net.fabricmc:fabric-loader:0.12.3")
+        modImplementation("net.fabricmc:fabric-loader:0.12.5")
     }
 
     jar {
@@ -91,7 +73,7 @@ allprojects {
 
     afterEvaluate {
         remapJar {
-            input = file("${project.buildDir}/libs/$archivesBaseName-${archiveVersion.get()}-dev.jar")
+            input.set(file("${project.buildDir}/libs/$archivesBaseName-${archiveVersion.get()}-dev.jar"))
             archiveFileName = "${archivesBaseName}-${archiveVersion.get()}.jar"
         }
 
@@ -110,7 +92,7 @@ allprojects {
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
-        archiveClassifier = "sources"
+        archiveClassifier.set("sources")
         from sourceSets.main.allSource
     }
 }
@@ -149,9 +131,9 @@ subprojects {
 
 task remapMavenJar(type: RemapJarTask, dependsOn: jar) {
     afterEvaluate {
-        input = file("${project.buildDir}/libs/${archivesBaseName}-${version}-dev.jar")
+        input.set(file("${project.buildDir}/libs/${archivesBaseName}-${version}-dev.jar"))
         archiveFileName = "${archivesBaseName}-${version}-maven.jar"
-        addNestedDependencies = false
+        addNestedDependencies.set(false)
     }
 }
 
@@ -167,7 +149,7 @@ publishing {
             }
 
             pom.withXml {
-                def depsNode = asNode().appendNode("dependencies")
+                def depsNode = asNode {}.appendNode("dependencies")
                 subprojects.each {
                     def depNode = depsNode.appendNode("dependency")
                     depNode.appendNode("groupId", it.group)
@@ -182,7 +164,7 @@ publishing {
     setupRepositories(repositories)
 }
 
-void setupRepositories(RepositoryHandler repositories) {
+static void setupRepositories(RepositoryHandler repositories) {
     //repositories.mavenLocal() // uncomment for testing
     def ENV = System.getenv()
     if (ENV.MAVEN_URL) {
