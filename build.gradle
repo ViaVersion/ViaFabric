@@ -183,8 +183,9 @@ subprojects.each {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.8.9")
-    mappings("net.fabricmc:yarn:1.8.9+build.202103291533:v2")
+    // dummy version
+    minecraft("com.mojang:minecraft:1.14.4")
+    mappings("net.fabricmc:yarn:1.14.4+build.18:v2")
 
     include("com.viaversion:viaversion:$vvVer")
     include("org.yaml:snakeyaml:$yamlVer")
