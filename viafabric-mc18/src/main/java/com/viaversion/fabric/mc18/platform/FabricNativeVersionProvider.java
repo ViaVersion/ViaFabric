@@ -10,7 +10,7 @@ import net.minecraft.server.MinecraftServer;
 
 public class FabricNativeVersionProvider implements NativeVersionProvider {
     @Override
-    public int getServerProtocolVersion() {
+    public int getNativeServerVersion() {
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             return getClientProtocol();
         }

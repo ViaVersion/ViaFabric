@@ -5,7 +5,7 @@ import net.minecraft.SharedConstants;
 
 public class FabricNativeVersionProvider implements NativeVersionProvider {
     @Override
-    public int getServerProtocolVersion() {
+    public int getNativeServerVersion() {
         return SharedConstants.getGameVersion().getProtocolVersion();
     }
 }

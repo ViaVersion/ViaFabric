@@ -105,7 +105,7 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
         }
         NativeVersionProvider natProvider = Via.getManager().getProviders().get(NativeVersionProvider.class);
         if (natProvider != null) {
-            return natProvider.getServerProtocolVersion();
+            return ProtocolVersion.getProtocol(natProvider.getNativeServerVersion()).getVersion();
         }
         return super.getClosestServerProtocol(connection);
     }

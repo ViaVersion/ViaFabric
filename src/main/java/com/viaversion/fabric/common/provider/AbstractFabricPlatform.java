@@ -183,7 +183,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
 		platformSpecific.add("mods", mods);
 		NativeVersionProvider ver = Via.getManager().getProviders().get(NativeVersionProvider.class);
 		if (ver != null) {
-			platformSpecific.addProperty("native version", ver.getServerProtocolVersion());
+			platformSpecific.addProperty("native version", ver.getNativeServerVersion());
 		}
 		return platformSpecific;
 	}

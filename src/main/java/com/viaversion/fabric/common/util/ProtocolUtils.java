@@ -11,7 +11,7 @@ public class ProtocolUtils {
     public static boolean isSupportedClientSide(int server) {
         return isSupported(server, Via.getManager().getProviders()
                 .get(NativeVersionProvider.class)
-                .getServerProtocolVersion());
+                .getNativeServerVersion());
     }
 
     public static boolean isSupported(int server, int client) {
