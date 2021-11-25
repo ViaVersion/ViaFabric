@@ -13,7 +13,7 @@ plugins {
 }
 
 def ENV = System.getenv()
-def vvVer = "4.1.0-1.18-pre5-SNAPSHOT"
+def vvVer = "4.1.0-1.18-rc1-SNAPSHOT"
 def yamlVer = "1.29"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
@@ -113,15 +113,7 @@ subprojects {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                afterEvaluate {
-                    artifact(file("${project.buildDir}/libs/$archivesBaseName-${version}-maven.jar")) {
-                        builtBy remapMavenJar
-                    }
-
-                    artifact(sourcesJar) {
-                        builtBy remapSourcesJar
-                    }
-                }
+                from components.java
             }
         }
 
@@ -140,13 +132,7 @@ task remapMavenJar(type: RemapJarTask, dependsOn: jar) {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact(file("${project.buildDir}/libs/$archivesBaseName-${version}-maven.jar")) {
-                builtBy remapMavenJar
-            }
-
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
+            from components.java
 
             pom.withXml {
                 def depsNode = asNode {}.appendNode("dependencies")
