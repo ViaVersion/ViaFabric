@@ -13,7 +13,7 @@ plugins {
 }
 
 def ENV = System.getenv()
-def vvVer = "4.1.0-1.18-rc1-SNAPSHOT"
+def vvVer = "4.1.0-1.18-rc3-SNAPSHOT"
 def yamlVer = "1.29"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
@@ -46,10 +46,6 @@ allprojects {
     group = "com.viaversion.fabric"
     version = rootProject.version
 
-    configurations {
-        dev
-    }
-
     repositories {
         mavenCentral()
         maven { url = "https://repo.viaversion.com/" }
@@ -65,21 +61,6 @@ allprojects {
         implementation("org.yaml:snakeyaml:$yamlVer")
 
         modImplementation("net.fabricmc:fabric-loader:0.12.5")
-    }
-
-    jar {
-        archiveClassifier.set("dev")
-    }
-
-    afterEvaluate {
-        remapJar {
-            input.set(file("${project.buildDir}/libs/$archivesBaseName-${archiveVersion.get()}-dev.jar"))
-            archiveFileName = "${archivesBaseName}-${archiveVersion.get()}.jar"
-        }
-
-        artifacts {
-            dev file: file("${project.buildDir}/libs/$archivesBaseName-${version}-dev.jar"), type: "jar", builtBy: jar
-        }
     }
 
     processResources {
@@ -123,19 +104,27 @@ subprojects {
 
 task remapMavenJar(type: RemapJarTask, dependsOn: jar) {
     afterEvaluate {
-        input.set(file("${project.buildDir}/libs/${archivesBaseName}-${version}-dev.jar"))
+        input = jar.archiveFile
         archiveFileName = "${archivesBaseName}-${version}-maven.jar"
         addNestedDependencies.set(false)
     }
 }
 
+build.dependsOn remapMavenJar
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from components.java
+            artifact(remapMavenJar) {
+                builtBy remapMavenJar
+            }
+
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
 
             pom.withXml {
-                def depsNode = asNode {}.appendNode("dependencies")
+                def depsNode = asNode().appendNode("dependencies")
                 subprojects.each {
                     def depNode = depsNode.appendNode("dependency")
                     depNode.appendNode("groupId", it.group)
@@ -194,7 +183,7 @@ curseforge {
                 "Java 8", "Java 9", "Java 10", "Java 11", "Java 12", "Java 13", "Java 14", "Java 15", "Java 16", "Java 17", "Fabric")
                 .forEach { ver -> addGameVersion(ver) }
 
-        mainArtifact(file("${project.buildDir}/libs/${archivesBaseName}-${version}.jar")) {
+        mainArtifact(remapJar) {
             displayName = "[${getBranch()}] ViaFabric " + rootProject.version
             relations {
                 optionalDependency("fabric-api")
