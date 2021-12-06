@@ -44,13 +44,14 @@ or registry synchronization (fabric-registry-sync mod).
 
 - Client-side:
 
-|        | 1.8.x | 1.9.x | 1.10-1.14.4 | 1.15.x | 1.16.x | 1.17.x |
-| ------ | ----- | ----- | ----------- | ------ | ------ | ------ |
-| 1.8.9 client | ✓ | ⏪ | ⟲ | ⟲ | ⟲ | ⟲ |
-| 1.14.x client | ✓ | ✓ | ✓ | ⟲ | ⟲ | ⟲ |
-| 1.15.x client | ✓ | ✓ | ✓ | ✓ | ⟲ | ⟲ |
-| 1.16.x client | ✓ | ✓ | ✓ | ✓ | ✓ | ⟲ |
-| 1.17.x client | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+|        | 1.8.x | 1.9.x | 1.10-1.14.4 | 1.15.x | 1.16.x | 1.17.x | 1.18.x |
+| ------ | ----- | ----- | ----------- | ------ | ------ | ------ | ------ |
+| 1.8.9 client | ✓ | ⏪ | ⟲ | ⟲ | ⟲ | ⟲ | ⟲ |
+| 1.14.x client | ✓ | ✓ | ✓ | ⟲ | ⟲ | ⟲ | ⟲ |
+| 1.15.x client | ✓ | ✓ | ✓ | ✓ | ⟲ | ⟲ | ⟲ |
+| 1.16.x client | ✓ | ✓ | ✓ | ✓ | ✓ | ⟲ | ⟲ |
+| 1.17.x client | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ⟲ |
+| 1.18.x client | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪ = [ViaRewind](https://viaversion.com/rewind)
 
