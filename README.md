@@ -8,7 +8,7 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod can be installed on 1.8.9, 1.14.4, 1.15.2, 1.16.5 and 1.17.1 with Fabric Loader.
+This mod can be installed on 1.8.9, 1.14.4, 1.15.2, 1.16.1, 1.16.5 and 1.17.1 with Fabric Loader.
 
 
 ## Dependencies
