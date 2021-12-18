@@ -72,7 +72,8 @@ public class ViaFabric implements ModInitializer {
 
     private void registerCommandsV0() {
         try {
-            CommandRegistry.INSTANCE.register(new NMSCommandImpl(Via.getManager().getCommandHandler()));
+            // todo fix this
+            //CommandRegistry.INSTANCE.register(new NMSCommandImpl(Via.getManager().getCommandHandler()));
         } catch (NoClassDefFoundError ignored2) {
             JLOGGER.info("Couldn't register command as Fabric Commands isn't installed");
         }

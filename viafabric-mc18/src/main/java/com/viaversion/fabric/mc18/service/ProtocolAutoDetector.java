@@ -41,7 +41,7 @@ public class ProtocolAutoDetector {
                     final ClientConnection clientConnection = new ClientConnection(NetworkSide.CLIENTBOUND);
 
                     ChannelFuture ch = new Bootstrap()
-                            .group(ClientConnection.field_5955.get())
+                            .group(ClientConnection.field_11553.get())
                             .channel(NioSocketChannel.class)
                             .handler(new ChannelInitializer<Channel>() {
                                 protected void initChannel(Channel channel) {

@@ -12,7 +12,8 @@ public class ModMenuConfig implements ModMenuApi {
     }
 
     @Override
-    public Function<Screen, ? extends Screen> getConfigScreenFactory() {
-        return ViaConfigScreen::new;
+    // todo fix this
+    public Function/*<Screen, ? extends Screen>*/ getConfigScreenFactory() {
+        return it -> new ViaConfigScreen(((Screen) it));
     }
 }

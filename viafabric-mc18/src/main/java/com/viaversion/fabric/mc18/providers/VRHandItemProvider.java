@@ -1,6 +1,10 @@
 package com.viaversion.fabric.mc18.providers;
 
 import com.viaversion.fabric.mc18.ViaFabric;
+import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.minecraft.item.DataItem;
+import com.viaversion.viaversion.api.minecraft.item.Item;
+import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.legacyfabric.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -8,19 +12,15 @@ import net.legacyfabric.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.api.minecraft.item.DataItem;
-import com.viaversion.viaversion.api.minecraft.item.Item;
-import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider;
+import net.minecraft.server.MinecraftServer;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class VRHandItemProvider extends HandItemProvider {
-    public Item clientItem = null;
     public final Map<UUID, Item> serverPlayers = new ConcurrentHashMap<>();
+    public Item clientItem = null;
 
     @Override
     public Item getHandItem(UserConnection info) {
@@ -51,7 +51,7 @@ public class VRHandItemProvider extends HandItemProvider {
 
     public void registerServerTick() {
         try {
-            ServerTickEvents.END_WORLD_TICK.register(this::tickServer);
+            ServerTickEvents.END_SERVER_TICK.register(this::tickServer);
         } catch (NoClassDefFoundError ignored1) {
             ViaFabric.JLOGGER.info("Fabric Lifecycle V1 isn't installed");
         }
@@ -64,9 +64,9 @@ public class VRHandItemProvider extends HandItemProvider {
         }
     }
 
-    private void tickServer(World world) {
+    private void tickServer(MinecraftServer server) {
         serverPlayers.clear();
-        world.playerEntities.forEach(it -> serverPlayers
+        server.getPlayerManager().getPlayers().forEach(it -> serverPlayers
                 .put(it.getUuid(), fromNative(it.inventory.getMainHandStack())));
     }
 

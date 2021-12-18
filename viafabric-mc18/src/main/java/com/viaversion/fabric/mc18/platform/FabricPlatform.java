@@ -72,7 +72,7 @@ public class FabricPlatform extends AbstractFabricPlatform {
 
     private FutureTaskId runServerSync(Runnable runnable) {
         // Kick task needs to be on main thread, it does already have error logger
-        return new FutureTaskId(CompletableFuture.runAsync(runnable, it -> getServer().method_6444((Callable<Void>) () -> {
+        return new FutureTaskId(CompletableFuture.runAsync(runnable, it -> getServer().method_10815((Callable<Void>) () -> {
             it.run();
             return null;
         })));

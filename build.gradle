@@ -14,7 +14,7 @@ plugins {
 
 def ENV = System.getenv()
 def vvVer = "4.1.2-SNAPSHOT"
-def yamlVer = "1.29"
+def yamlVer = "1.30"
 
 description = "Client-side and server-side ViaVersion implementation for Fabric"
 version = "0.4.5+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
