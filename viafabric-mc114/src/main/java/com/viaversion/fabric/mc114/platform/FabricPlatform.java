@@ -1,6 +1,7 @@
 package com.viaversion.fabric.mc114.platform;
 
 import com.viaversion.fabric.common.commands.UserCommandSender;
+import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.common.provider.AbstractFabricPlatform;
 import com.viaversion.fabric.common.util.FutureTaskId;
 import com.viaversion.fabric.common.util.RemappingUtil;
@@ -106,6 +107,11 @@ public class FabricPlatform extends AbstractFabricPlatform {
             runServerSync(kickTask::get);
         }
         return false;  // Can't know if it worked
+    }
+
+    @Override
+    protected void installNativeVersionProvider() {
+        Via.getManager().getProviders().use(NativeVersionProvider.class, new FabricNativeVersionProvider());
     }
 
     @Override

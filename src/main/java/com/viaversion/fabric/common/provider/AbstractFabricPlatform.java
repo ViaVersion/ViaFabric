@@ -15,6 +15,7 @@ import com.viaversion.viaversion.libs.gson.JsonObject;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
@@ -41,10 +42,14 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
 	}
 
 	public void init() {
+		// We'll use it early for ViaInjector
+		installNativeVersionProvider();
 		Path configDir = FabricLoader.getInstance().getConfigDir().resolve("ViaFabric");
 		dataFolder = configDir.toFile();
 		config = new FabricViaConfig(configDir.resolve("viaversion.yml").toFile());
 	}
+
+	protected abstract void installNativeVersionProvider();
 
 	protected abstract ExecutorService asyncService();
 
@@ -94,7 +99,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
 	@Override
 	public boolean isProxy() {
 		// We kinda of have all server versions
-		return true;
+		return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
 	}
 
 	@Override

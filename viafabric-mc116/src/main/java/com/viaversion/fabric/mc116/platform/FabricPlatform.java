@@ -1,6 +1,7 @@
 package com.viaversion.fabric.mc116.platform;
 
 import com.viaversion.fabric.common.commands.UserCommandSender;
+import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.common.provider.AbstractFabricPlatform;
 import com.viaversion.fabric.common.util.FutureTaskId;
 import com.viaversion.fabric.common.util.RemappingUtil;
@@ -35,6 +36,11 @@ public class FabricPlatform extends AbstractFabricPlatform {
     @Environment(EnvType.CLIENT)
     private static MinecraftServer getIntegratedServer() {
         return MinecraftClient.getInstance().getServer();
+    }
+
+    @Override
+    protected void installNativeVersionProvider() {
+        Via.getManager().getProviders().use(NativeVersionProvider.class, new FabricNativeVersionProvider());
     }
 
     @Override

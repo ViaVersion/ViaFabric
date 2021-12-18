@@ -15,7 +15,6 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.MovementTr
 public class VFLoader implements ViaPlatformLoader {
     @Override
     public void load() {
-        Via.getManager().getProviders().use(NativeVersionProvider.class, new FabricNativeVersionProvider());
         Via.getManager().getProviders().use(MovementTransmitterProvider.class, new BungeeMovementTransmitter());
         Via.getManager().getProviders().use(VersionProvider.class, new FabricVersionProvider());
 

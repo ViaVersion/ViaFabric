@@ -7,6 +7,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.realms.RealmsSharedConstants;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.ServerMetadata;
 
 public class FabricNativeVersionProvider implements NativeVersionProvider {
     @Override
@@ -14,7 +15,10 @@ public class FabricNativeVersionProvider implements NativeVersionProvider {
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             return getClientProtocol();
         }
-        return MinecraftServer.getServer().getServerMetadata().getVersion().getProtocolVersion();
+
+        ServerMetadata.Version version = MinecraftServer.getServer().getServerMetadata().getVersion();
+        if (version == null) return ProtocolVersion.v1_8.getVersion();
+        return version.getProtocolVersion();
     }
 
     @Environment(EnvType.CLIENT)
