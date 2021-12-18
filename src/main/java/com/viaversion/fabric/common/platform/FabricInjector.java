@@ -1,11 +1,15 @@
 package com.viaversion.fabric.common.platform;
 
 import com.viaversion.fabric.common.handler.CommonTransformer;
+import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.platform.ViaInjector;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.libs.fastutil.ints.IntLinkedOpenHashSet;
 import com.viaversion.viaversion.libs.fastutil.ints.IntSortedSet;
+import com.viaversion.viaversion.libs.fastutil.ints.IntSortedSets;
 import com.viaversion.viaversion.libs.gson.JsonObject;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 
 public class FabricInjector implements ViaInjector {
     @Override
@@ -35,6 +39,10 @@ public class FabricInjector implements ViaInjector {
 
     @Override
     public IntSortedSet getServerProtocolVersions() {
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            int version = Via.getManager().getProviders().get(NativeVersionProvider.class).getNativeServerVersion();
+            return IntSortedSets.singleton(version);
+        }
         // On client-side we can connect to any server version
         IntSortedSet versions = new IntLinkedOpenHashSet();
         versions.add(ProtocolVersion.v1_7_1.getOriginalVersion());
