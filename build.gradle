@@ -60,7 +60,7 @@ allprojects {
         implementation("com.viaversion:viaversion:$vvVer") { transitive = false }
         implementation("org.yaml:snakeyaml:$yamlVer")
 
-        modImplementation("net.fabricmc:fabric-loader:0.12.5")
+        modImplementation("net.fabricmc:fabric-loader:0.12.12")
     }
 
     processResources {
