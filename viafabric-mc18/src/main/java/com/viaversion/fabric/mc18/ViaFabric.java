@@ -14,11 +14,11 @@ import com.viaversion.viaversion.ViaManagerImpl;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.data.MappingDataLoader;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import io.github.legacyrewoven.api.registry.CommandRegistry;
 import io.netty.channel.EventLoop;
 import io.netty.channel.local.LocalEventLoopGroup;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
-import net.legacyfabric.fabric.api.registry.CommandRegistry;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.concurrent.CompletableFuture;
@@ -72,8 +72,7 @@ public class ViaFabric implements ModInitializer {
 
     private void registerCommandsV0() {
         try {
-            // todo fix this
-            //CommandRegistry.INSTANCE.register(new NMSCommandImpl(Via.getManager().getCommandHandler()));
+            CommandRegistry.INSTANCE.register(new NMSCommandImpl(Via.getManager().getCommandHandler()));
         } catch (NoClassDefFoundError ignored2) {
             JLOGGER.info("Couldn't register command as Fabric Commands isn't installed");
         }

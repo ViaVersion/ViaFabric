@@ -51,8 +51,9 @@ allprojects {
         maven { url = "https://repo.viaversion.com/" }
         maven { url = "https://maven.fabricmc.net/" }
         maven { url = "https://maven.legacyfabric.net/" }
-        maven { url = "https://server.bbkr.space/artifactory/libs-release" }
+        maven { url = "https://maven.rewovenmc.tk/" }
         maven { url = "https://maven.terraformersmc.com/releases/" }
+        maven { url = "https://jitpack.io/"}
     }
 
     dependencies {
@@ -164,6 +165,7 @@ dependencies {
 
     include("com.viaversion:viaversion:$vvVer")
     include("org.yaml:snakeyaml:$yamlVer")
+    include("com.github.TinfoilMC:ClientCommands:1.1.0")
 
     subprojects.each {
         include project("${it.name}:")
@@ -187,8 +189,8 @@ curseforge {
             displayName = "[${getBranch()}] ViaFabric " + rootProject.version
             relations {
                 optionalDependency("fabric-api")
-                optionalDependency("legacy-fabric-api")
-                optionalDependency("cotton-client-commands")
+                //optionalDependency("legacy-fabric-api")
+                bundledDependency("cotton-client-commands")
             }
         }
 
