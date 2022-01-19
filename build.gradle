@@ -190,7 +190,7 @@ curseforge {
             relations {
                 optionalDependency("fabric-api")
                 //optionalDependency("legacy-fabric-api")
-                bundledDependency("cotton-client-commands")
+                embeddedLibrary("cotton-client-commands")
             }
         }
 
