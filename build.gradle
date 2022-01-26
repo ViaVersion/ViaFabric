@@ -1,7 +1,9 @@
 // todo migrate this code to kotlin
 
+import com.google.gson.JsonParser
 import net.fabricmc.loom.task.RemapJarTask
-import org.apache.tools.ant.filters.ReplaceTokens
+
+import java.nio.file.Files
 
 // Stolen https://github.com/FabricMC/fabric/blob/1.17/build.gradle
 plugins {
@@ -51,9 +53,8 @@ allprojects {
         maven { url = "https://repo.viaversion.com/" }
         maven { url = "https://maven.fabricmc.net/" }
         maven { url = "https://maven.legacyfabric.net/" }
-        maven { url = "https://maven.rewovenmc.tk/" }
         maven { url = "https://maven.terraformersmc.com/releases/" }
-        maven { url = "https://jitpack.io/"}
+        maven { url = "https://jitpack.io/" }
     }
 
     dependencies {
@@ -66,10 +67,7 @@ allprojects {
 
     processResources {
         filesMatching("fabric.mod.json") {
-            filter(ReplaceTokens, tokens: [
-                    version    : rootProject.version,
-                    description: rootProject.description
-            ])
+            it.expand(rootProject.properties)
         }
     }
 
@@ -169,6 +167,22 @@ dependencies {
 
     subprojects.each {
         include project("${it.name}:")
+    }
+}
+
+processResources {
+    filesMatching("assets/*/lang/*.lang") {
+        HashMap<String, String> langMap = new HashMap<>()
+        Files.list(rootProject.file("src/main/resources/assets/viafabric/lang").toPath())
+                .filter(path -> path.toString().endsWith(".json"))
+                .forEach(path -> {
+                    String legacyFile = "\n" + String.join("\n", JsonParser
+                            .parseReader(Files.newBufferedReader(path)).asJsonObject.entrySet().stream()
+                            .map(entry -> entry.key + "=" + entry.value.asString)
+                            .toArray(String[]::new))
+                    langMap.put(path.getFileName().toString().replace(".json", ""), legacyFile)
+                })
+        it.expand(langMap)
     }
 }
 

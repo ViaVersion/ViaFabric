@@ -18,7 +18,7 @@ This mod can be installed on 1.8.9, 1.14.4, 1.15.2, 1.16.5 and 1.17.1 with Fabri
 | (Bundled) ViaVersion                          | https://viaversion.com/                                        |
 | (Bundled) Cotton Client Commands (MC 1.14-15) | https://jitpack.io/#TinfoilMC/ClientCommands                   |
 | Fabric API (MC 1.14+)                         | https://www.curseforge.com/minecraft/mc-mods/fabric-api        |
-| Legacy Rewoven API (MC 1.8.9)                 | https://maven.rewovenmc.tk/net/legacyfabric/legacy-fabric-api/ |
+| Legacy Fabric API (MC 1.8.9)                  | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api |
 
 Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not work with modded registry entries or
 registry synchronization (fabric-registry-sync mod).

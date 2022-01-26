@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "viafabric-mc117",
   "name": "ViaFabric for 1.17",
-  "version": "@version@",
-  "description": "@description@",
+  "version": "${version}",
+  "description": "${description}",
   "license": "GPL-3.0",
   "contact": {
     "homepage": "https://viaversion.com/fabric",
