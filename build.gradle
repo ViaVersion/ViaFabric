@@ -1,23 +1,30 @@
 // todo migrate this code to kotlin
-
 import com.google.gson.JsonParser
-import net.fabricmc.loom.task.RemapJarTask
 
 import java.nio.file.Files
+import java.util.stream.Collectors
+import java.util.stream.IntStream
+
+buildscript {
+    dependencies {
+        classpath("com.github.TinfoilMC:CurseGradle:6e2f47d")
+    }
+}
 
 // Stolen https://github.com/FabricMC/fabric/blob/1.17/build.gradle
 plugins {
     id "java"
     id "maven-publish"
     id "org.ajoberstar.grgit" version "3.1.1"
-    id "com.matthewprenger.cursegradle" version "1.4.0"
-    id "fabric-loom" version "0.10-SNAPSHOT" apply false
+    id "fabric-loom" version "0.11-SNAPSHOT" apply false
+    id "com.github.ben-manes.versions" version "0.41.0"
 }
 
-def ENV = System.getenv()
-def vvVer = "4.1.2-SNAPSHOT"
-def yamlVer = "1.30"
+apply plugin: "me.hypherionmc.cursegradle"
 
+def ENV = System.getenv()
+
+group = "com.viaversion.fabric"
 description = "Client-side and server-side ViaVersion implementation for Fabric"
 version = "0.4.5+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
 logger.lifecycle("Building ViaFabric: $version")
@@ -45,8 +52,12 @@ allprojects {
         it.options.release.set(8)
     }
 
-    group = "com.viaversion.fabric"
     version = rootProject.version
+    group = rootProject.group
+
+    java {
+        withSourcesJar()
+    }
 
     repositories {
         mavenCentral()
@@ -59,10 +70,10 @@ allprojects {
 
     dependencies {
         // transitive = false because Guava is conflicting on runClient
-        implementation("com.viaversion:viaversion:$vvVer") { transitive = false }
-        implementation("org.yaml:snakeyaml:$yamlVer")
+        implementation("com.viaversion:viaversion:${rootProject.viaver_version}") { transitive = false }
+        implementation("org.yaml:snakeyaml:${rootProject.yaml_version}")
 
-        modImplementation("net.fabricmc:fabric-loader:0.12.12")
+        modImplementation("net.fabricmc:fabric-loader:${rootProject.loader_version}")
     }
 
     processResources {
@@ -70,24 +81,11 @@ allprojects {
             it.expand(rootProject.properties)
         }
     }
-
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        archiveClassifier.set("sources")
-        from sourceSets.main.allSource
-    }
 }
 
 subprojects {
     dependencies {
         implementation rootProject
-    }
-
-    task remapMavenJar(type: Copy, dependsOn: remapJar) {
-        afterEvaluate {
-            from("${project.buildDir}/libs/$archivesBaseName-${version}.jar")
-            into("${project.buildDir}/libs/")
-            rename { String fn -> "$archivesBaseName-${version}-maven.jar" }
-        }
     }
 
     publishing {
@@ -101,37 +99,10 @@ subprojects {
     }
 }
 
-task remapMavenJar(type: RemapJarTask, dependsOn: jar) {
-    afterEvaluate {
-        input = jar.archiveFile
-        archiveFileName = "${archivesBaseName}-${version}-maven.jar"
-        addNestedDependencies.set(false)
-    }
-}
-
-build.dependsOn remapMavenJar
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact(remapMavenJar) {
-                builtBy remapMavenJar
-            }
-
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
-
-            pom.withXml {
-                def depsNode = asNode().appendNode("dependencies")
-                subprojects.each {
-                    def depNode = depsNode.appendNode("dependency")
-                    depNode.appendNode("groupId", it.group)
-                    depNode.appendNode("artifactId", it.name)
-                    depNode.appendNode("version", it.version)
-                    depNode.appendNode("scope", "compile")
-                }
-            }
+            from components.java
         }
     }
 
@@ -161,8 +132,8 @@ dependencies {
     minecraft("com.mojang:minecraft:1.14.4")
     mappings("net.fabricmc:yarn:1.14.4+build.18:v2")
 
-    include("com.viaversion:viaversion:$vvVer")
-    include("org.yaml:snakeyaml:$yamlVer")
+    include("com.viaversion:viaversion:${rootProject.viaver_version}")
+    include("org.yaml:snakeyaml:${rootProject.yaml_version}")
     include("com.github.TinfoilMC:ClientCommands:1.1.0")
 
     subprojects.each {
@@ -186,6 +157,12 @@ processResources {
     }
 }
 
+List<String> versionToAdd = new ArrayList<>(Arrays.asList("Fabric", "1.18.1", "1.17.1",
+        "1.16.5", "1.15.2", "1.14.4", "1.8.9"))
+versionToAdd.addAll(IntStream.rangeClosed(8, 18)
+        .mapToObj { n -> (String) "Java $n" }
+        .collect(Collectors.toList()))
+
 curseforge {
     if (ENV.CURSEFORGE_API_KEY) {
         apiKey = ENV.CURSEFORGE_API_KEY
@@ -195,15 +172,14 @@ curseforge {
         id = "391298"
         changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
         releaseType = "alpha"
-        Arrays.<String> asList("1.18.1", "1.17.1", "1.16.5", "1.15.2", "1.14.4", "1.8.9",
-                "Java 8", "Java 9", "Java 10", "Java 11", "Java 12", "Java 13", "Java 14", "Java 15", "Java 16", "Java 17", "Fabric")
-                .forEach { ver -> addGameVersion(ver) }
+
+        versionToAdd.forEach { ver -> addGameVersion(ver) }
 
         mainArtifact(remapJar) {
             displayName = "[${getBranch()}] ViaFabric " + rootProject.version
             relations {
                 optionalDependency("fabric-api")
-                //optionalDependency("legacy-fabric-api")
+                optionalDependency("legacy-fabric-api")
                 embeddedLibrary("cotton-client-commands")
             }
         }
@@ -215,6 +191,7 @@ curseforge {
 
     options {
         forgeGradleIntegration = false
+        detectFabricApi = false
     }
 }
 
