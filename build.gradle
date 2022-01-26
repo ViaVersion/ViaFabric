@@ -5,22 +5,15 @@ import java.nio.file.Files
 import java.util.stream.Collectors
 import java.util.stream.IntStream
 
-buildscript {
-    dependencies {
-        classpath("com.github.TinfoilMC:CurseGradle:6e2f47d")
-    }
-}
-
 // Stolen https://github.com/FabricMC/fabric/blob/1.17/build.gradle
 plugins {
     id "java"
     id "maven-publish"
     id "org.ajoberstar.grgit" version "3.1.1"
+    id "com.matthewprenger.cursegradle" version "1.4.0"
     id "fabric-loom" version "0.11-SNAPSHOT" apply false
     id "com.github.ben-manes.versions" version "0.41.0"
 }
-
-apply plugin: "me.hypherionmc.cursegradle"
 
 def ENV = System.getenv()
 
@@ -191,7 +184,6 @@ curseforge {
 
     options {
         forgeGradleIntegration = false
-        detectFabricApi = false
     }
 }
 
