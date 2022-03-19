@@ -1,5 +1,6 @@
 package com.viaversion.fabric.mc115.gui;
 
+import com.viaversion.fabric.common.config.AbstractViaConfigScreen;
 import com.viaversion.fabric.mc115.ViaFabric;
 import com.viaversion.fabric.common.util.ProtocolUtils;
 import net.fabricmc.api.EnvType;
@@ -14,24 +15,14 @@ import net.minecraft.text.TranslatableText;
 import java.util.concurrent.CompletableFuture;
 
 @Environment(EnvType.CLIENT)
-public class ViaConfigScreen extends Screen {
+public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
     private static CompletableFuture<Void> latestProtocolSave;
     private final Screen parent;
     private TextFieldWidget protocolVersion;
 
     public ViaConfigScreen(Screen parent) {
-        super(new TranslatableText("gui.viafabric_config.title"));
+        super(new TranslatableText(TITLE_TRANSLATE_ID));
         this.parent = parent;
-    }
-
-    private static int getProtocolTextColor(boolean valid, boolean supported) {
-
-        if (!valid) {
-            return 0xff0000; // Red
-        } else if (!supported) {
-            return 0xFFA500; // Orange
-        }
-        return 0xE0E0E0; // Default
     }
 
     @Override
@@ -54,7 +45,7 @@ public class ViaConfigScreen extends Screen {
                 this.width / 2 - 155 + entries % 2 * 160,
                 this.height / 6 + 24 * (entries >> 1),
                 150,
-                20, new TranslatableText("gui.protocol_version_field.name").asString());
+                20, new TranslatableText(VERSION_TRANSLATE_ID).asString());
         entries++;
 
         protocolVersion.setTextPredicate(ProtocolUtils::isStartOfProtocolText);
