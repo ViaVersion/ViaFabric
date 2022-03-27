@@ -18,21 +18,4 @@ public class MixinClientConnection {
     private void reorderCompression(int compressionThreshold, CallbackInfo ci) {
         channel.pipeline().fireUserEventTriggered(new PipelineReorderEvent());
     }
-
-    /*
-    @Redirect(
-            method = "exceptionCaught",
-            remap = false,
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lorg/apache/logging/log4j/Logger;debug(Ljava/lang/String;Ljava/lang/Throwable;)V"
-            ))
-    private void redirectDebug(Logger logger, String message, Throwable t) {
-        if ("Failed to sent packet".equals(message)) {
-            logger.info(message, t);
-        } else {
-            logger.debug(message, t);
-        }
-    }
-    */
 }
