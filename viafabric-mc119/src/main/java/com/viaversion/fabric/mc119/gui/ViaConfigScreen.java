@@ -12,7 +12,7 @@ import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -23,7 +23,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
     private TextFieldWidget protocolVersion;
 
     public ViaConfigScreen(Screen parent) {
-        super(new TranslatableText(TITLE_TRANSLATE_ID));
+        super(Text.translatable(TITLE_TRANSLATE_ID));
         this.parent = parent;
     }
 
@@ -47,7 +47,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
                 this.width / 2 - 155 + entries % 2 * 160,
                 this.height / 6 + 24 * (entries >> 1),
                 150,
-                20, new TranslatableText("gui.protocol_version_field.name"));
+                20, Text.translatable("gui.protocol_version_field.name"));
         entries++;
 
         protocolVersion.setTextPredicate(ProtocolUtils::isStartOfProtocolText);
@@ -105,10 +105,10 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
                         }
                         MinecraftClient.getInstance().setScreen(this);
                     },
-                    new TranslatableText("gui.enable_client_side.question"),
-                    new TranslatableText("gui.enable_client_side.warning"),
-                    new TranslatableText("gui.enable_client_side.enable"),
-                    new TranslatableText("gui.cancel")
+                    Text.translatable("gui.enable_client_side.question"),
+                    Text.translatable("gui.enable_client_side.warning"),
+                    Text.translatable("gui.enable_client_side.enable"),
+                    Text.translatable("gui.cancel")
             ));
         } else {
             ViaFabric.config.setClientSideEnabled(false);
@@ -127,15 +127,15 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
         this.client.setScreen(this.parent);
     }
 
-    private TranslatableText getClientSideText() {
+    private Text getClientSideText() {
         return ViaFabric.config.isClientSideEnabled() ?
-                new TranslatableText("gui.client_side.disable")
-                : new TranslatableText("gui.client_side.enable");
+                Text.translatable("gui.client_side.disable")
+                : Text.translatable("gui.client_side.enable");
     }
 
-    private TranslatableText getHideViaButtonText() {
+    private Text getHideViaButtonText() {
         return ViaFabric.config.isHideButton() ?
-                new TranslatableText("gui.hide_via_button.disable") : new TranslatableText("gui.hide_via_button.enable");
+                Text.translatable("gui.hide_via_button.disable") : Text.translatable("gui.hide_via_button.enable");
     }
 
     private void onHideViaButton(ButtonWidget widget) {

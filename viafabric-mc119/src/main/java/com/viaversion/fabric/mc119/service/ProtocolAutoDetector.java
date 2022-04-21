@@ -18,7 +18,6 @@ import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
 import net.minecraft.network.packet.s2c.query.QueryPongS2CPacket;
 import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.server.ServerMetadata;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
@@ -79,17 +78,17 @@ public class ProtocolAutoDetector {
                                         } else {
                                             future.completeExceptionally(new IllegalArgumentException("Null version in query response"));
                                         }
-                                        clientConnection.disconnect(LiteralText.EMPTY);
+                                        clientConnection.disconnect(Text.empty());
                                     }
 
                                     @Override
                                     public void onPong(QueryPongS2CPacket packet) {
-                                        clientConnection.disconnect(new LiteralText("Pong not requested!"));
+                                        clientConnection.disconnect(Text.literal("Pong not requested!"));
                                     }
 
                                     @Override
                                     public void onDisconnected(Text reason) {
-                                        future.completeExceptionally(new IllegalStateException(reason.asString()));
+                                        future.completeExceptionally(new IllegalStateException(reason.getString()));
                                     }
 
                                     @Override

@@ -36,12 +36,12 @@
     ]
   },
   "depends": {
-    "legacy-rewoven-resource-loader-v1": "*",
+    "legacy-fabric-resource-loader-v1": "*",
     "minecraft": "1.8.x",
     "viafabric": "*"
   },
   "recommends": {
-    "fabric-command-api-v0": "*"
+    "legacy-fabric-command-api-v1": "*"
   },
   "mixins": [
     "mixins.viafabric18.address.json",

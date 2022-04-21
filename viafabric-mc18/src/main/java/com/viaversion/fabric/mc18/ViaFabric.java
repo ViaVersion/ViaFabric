@@ -62,7 +62,7 @@ public class ViaFabric implements ModInitializer {
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
 
-        registerCommandsV0();
+        registerCommandsV1();
 
         config = new VFConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());
@@ -70,10 +70,9 @@ public class ViaFabric implements ModInitializer {
         INIT_FUTURE.complete(null);
     }
 
-    private void registerCommandsV0() {
+    private void registerCommandsV1() {
         try {
-            // todo fix this, legacy fabric mapping is broken
-            //CommandRegistry.INSTANCE.register(new NMSCommandImpl(Via.getManager().getCommandHandler()));
+            CommandRegistry.INSTANCE.register(new NMSCommandImpl(Via.getManager().getCommandHandler()));
         } catch (NoClassDefFoundError ignored2) {
             JLOGGER.info("Couldn't register command as Fabric Commands isn't installed");
         }

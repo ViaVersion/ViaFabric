@@ -8,7 +8,6 @@ import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,7 +39,7 @@ public class MixinServerEntry {
     private void addServerVer(MultiplayerScreen multiplayerScreen, List<Text> tooltipText) {
         ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerInfo) this.server).getViaServerVer());
         List<Text> lines = new ArrayList<>(tooltipText);
-        lines.add(new TranslatableText("gui.ping_version.translated", proto.getName()));
+        lines.add(Text.translatable("gui.ping_version.translated", proto.getName()));
         multiplayerScreen.setTooltip(lines);
     }
 }
