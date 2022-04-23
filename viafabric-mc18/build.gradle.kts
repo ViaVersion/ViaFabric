@@ -6,6 +6,9 @@ dependencies {
     modImplementation("io.github.boogiemonster1o1:rewoven-modmenu:1.0.0+1.8.9") {
         isTransitive = false
     }
+
+    // fix newer java
+    implementation("io.netty:netty-all:4.0.56.Final")
 }
 
 loom {

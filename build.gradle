@@ -41,16 +41,24 @@ allprojects {
     apply plugin: "maven-publish"
     apply plugin: "fabric-loom"
 
+    java {
+        toolchain {
+            // lwjgl2 works with Adoptium
+            languageVersion = JavaLanguageVersion.of(17)
+            vendor = JvmVendorSpec.ADOPTIUM
+        }
+        withSourcesJar()
+    }
+
     tasks.withType(JavaCompile).configureEach {
         it.options.release.set(8)
+    }
+    tasks.withType(JavaExec).configureEach {
+        it.javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
     }
 
     version = rootProject.version
     group = rootProject.group
-
-    java {
-        withSourcesJar()
-    }
 
     repositories {
         mavenCentral()
