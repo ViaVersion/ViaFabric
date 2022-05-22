@@ -1,7 +1,7 @@
 package com.viaversion.fabric.mc119.commands;
 
 import com.viaversion.fabric.common.util.RemappingUtil;
-import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.command.ServerCommandSource;

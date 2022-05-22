@@ -20,8 +20,8 @@ import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.CommandSource;
 import org.apache.logging.log4j.LogManager;
@@ -89,9 +89,9 @@ public class ViaFabric implements ModInitializer {
 
     private void registerCommandsV1() {
         try {
-            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaversion")));
-            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("viaver")));
-            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> dispatcher.register(command("vvfabric")));
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, env) -> dispatcher.register(command("viaversion")));
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, env) -> dispatcher.register(command("viaver")));
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, env) -> dispatcher.register(command("vvfabric")));
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 ClientCommandManager.DISPATCHER.register(command("viafabricclient"));
             }
