@@ -1,5 +1,6 @@
 // todo migrate this code to kotlin
 import com.google.gson.JsonParser
+import com.modrinth.minotaur.TaskModrinthUpload
 
 import java.nio.file.Files
 import java.util.stream.Collectors
@@ -11,6 +12,7 @@ plugins {
     id "maven-publish"
     id "org.ajoberstar.grgit" version "3.1.1"
     id "com.matthewprenger.cursegradle" version "1.4.0"
+    id "com.modrinth.minotaur" version "1.1.0"
     id "fabric-loom" version "0.11-SNAPSHOT" apply false
     id "com.github.ben-manes.versions" version "0.41.0"
 }
@@ -158,11 +160,13 @@ processResources {
     }
 }
 
-List<String> versionToAdd = new ArrayList<>(Arrays.asList("Fabric", "1.19-Snapshot", "1.18.2", "1.17.1",
-        "1.16.5", "1.15.2", "1.14.4", "1.8.9"))
-versionToAdd.addAll(IntStream.rangeClosed(8, 18)
+List<String> mcReleases = new ArrayList<>(
+        Arrays.asList("1.18.2", "1.17.1", "1.16.5", "1.15.2", "1.14.4", "1.8.9"))
+List<String> javaVersions = IntStream.rangeClosed(8, 18)
         .mapToObj { n -> (String) "Java $n" }
-        .collect(Collectors.toList()))
+        .collect(Collectors.toList())
+String changelogMsg = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
+String versionNameMsg = "[${getBranch()}] ViaFabric " + rootProject.version
 
 curseforge {
     if (ENV.CURSEFORGE_API_KEY) {
@@ -171,13 +175,16 @@ curseforge {
 
     project {
         id = "391298"
-        changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
+        changelog = changelogMsg
         releaseType = "alpha"
 
-        versionToAdd.forEach { ver -> addGameVersion(ver) }
+        addGameVersion("1.19-Snapshot")
+        mcReleases.forEach { ver -> addGameVersion(ver) }
+        javaVersions.forEach(v -> addGameVersion(v))
+        addGameVersion("Fabric")
 
         mainArtifact(remapJar) {
-            displayName = "[${getBranch()}] ViaFabric " + rootProject.version
+            displayName = versionNameMsg
             relations {
                 optionalDependency("fabric-api")
                 optionalDependency("legacy-fabric-api")
@@ -195,8 +202,33 @@ curseforge {
     }
 }
 
-if (getBranch() == "main" && ENV.CURSEFORGE_API_KEY && !ENV.CURSEFORGE_API_KEY.isEmpty()) {
-    defaultTasks("clean", "build", "curseforge")
+task modrinth(type: TaskModrinthUpload, dependsOn: remapJar) {
+    onlyIf {
+        ENV.MODRINTH_TOKEN
+    }
+
+    token = ENV.MODRINTH_TOKEN
+    projectId = "YlKdE5VK"
+    releaseType = "alpha"
+    versionNumber = rootProject.version
+    versionName = versionNameMsg
+    changelog = changelogMsg
+
+    uploadFile = remapJar
+
+    addGameVersion("1.19-pre1")
+    mcReleases.forEach { v -> addGameVersion(v) }
+    addLoader("fabric")
+
+    dependencies {
+        optional.project "P7dR8mSH" // fabric api
+    }
+}
+
+if (getBranch() == "main"
+        && ENV.CURSEFORGE_API_KEY && !ENV.CURSEFORGE_API_KEY.isEmpty()
+        && ENV.MODRINTH_TOKEN && !ENV.MODRINTH_TOKEN.isEmpty()) {
+    defaultTasks("clean", "build", "curseforge", "modrinth")
 } else {
     defaultTasks("clean", "build")
 }

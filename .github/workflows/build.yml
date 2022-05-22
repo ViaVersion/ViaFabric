@@ -25,6 +25,7 @@ jobs:
       - name: build
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CREEPER_CF }}
+          MODRINTH_TOKEN: $${ secrets.MODRINTH_TOKEN }
         run: ./gradlew
       - uses: actions/upload-artifact@v2
         with:
