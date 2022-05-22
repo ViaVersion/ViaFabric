@@ -3,8 +3,8 @@
 # certain platforms or Java versions, and provides a first line of defence
 # against bad commits.
 
-name: build
-on: [ pull_request, push ]
+name: publish
+on: [workflow_dispatch] # Manual trigger
 
 jobs:
   build:
@@ -14,16 +14,11 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 17
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: build
-        run: ./gradlew build
+      - name: build and publish
+        env:
+          CURSEFORGE_API_KEY: ${{ secrets.CREEPER_CF }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: ./gradlew curseforge modrinth
       - uses: actions/upload-artifact@v2
         with:
           name: Artifacts

@@ -222,10 +222,4 @@ modrinth {
     }
 }
 
-if (getBranch() == "main"
-        && ENV.CURSEFORGE_API_KEY && !ENV.CURSEFORGE_API_KEY.isEmpty()
-        && ENV.MODRINTH_TOKEN && !ENV.MODRINTH_TOKEN.isEmpty()) {
-    defaultTasks("clean", "build", "curseforge", "modrinth")
-} else {
-    defaultTasks("clean", "build")
-}
+defaultTasks("clean", "build")
