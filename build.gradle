@@ -12,7 +12,7 @@ plugins {
     id "maven-publish"
     id "org.ajoberstar.grgit" version "3.1.1"
     id "com.matthewprenger.cursegradle" version "1.4.0"
-    id "com.modrinth.minotaur" version "1.1.0"
+    id "com.modrinth.minotaur" version "2.2.0"
     id "fabric-loom" version "0.11-SNAPSHOT" apply false
     id "com.github.ben-manes.versions" version "0.41.0"
 }
@@ -202,23 +202,20 @@ curseforge {
     }
 }
 
-task modrinth(type: TaskModrinthUpload, dependsOn: remapJar) {
-    onlyIf {
-        ENV.MODRINTH_TOKEN
-    }
+modrinth {
+    token.set(ENV.MODRINTH_TOKEN)
+    projectId.set("YlKdE5VK")
+    versionType.set("alpha")
+    versionNumber.set(rootProject.version)
+    versionName.set(versionNameMsg)
+    changelog.set(changelogMsg)
 
-    token = ENV.MODRINTH_TOKEN
-    projectId = "YlKdE5VK"
-    releaseType = "alpha"
-    versionNumber = rootProject.version
-    versionName = versionNameMsg
-    changelog = changelogMsg
+    uploadFile.set(remapJar)
 
-    uploadFile = remapJar
-
-    addGameVersion("1.19-pre1")
-    mcReleases.forEach { v -> addGameVersion(v) }
-    addLoader("fabric")
+    List<String> mcs = new ArrayList<>(mcReleases)
+    mcs.add("1.19-pre1")
+    gameVersions.set(mcs)
+    loaders.set(["fabric"])
 
     dependencies {
         optional.project "P7dR8mSH" // fabric api
