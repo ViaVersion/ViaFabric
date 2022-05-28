@@ -213,7 +213,7 @@ modrinth {
     uploadFile.set(remapJar)
 
     List<String> mcs = new ArrayList<>(mcReleases)
-    mcs.add("1.19-pre1")
+    mcs.add("1.19-pre3")
     gameVersions.set(mcs)
     loaders.set(["fabric"])
 
