@@ -3,13 +3,14 @@
 [![ViaVersion Discord](https://img.shields.io/badge/chat-on%20discord-blue.svg)](https://viaversion.com/discord)
 [![CurseForge Downloads](http://cf.way2muchnoise.eu/full_viafabric_downloads.svg)](https://viaversion.com/fabric)
 [![CurseForge Versions](http://cf.way2muchnoise.eu/versions/viafabric.svg)](https://viaversion.com/fabric)
+[![Download on Modrinth](https://img.shields.io/badge/download-modrinth-green)](https://modrinth.com/mod/viafabric)
 <!-- ^ GitHub seems to not like this https -->
 
 ### Client-side and server-side ViaVersion implementation for Fabric
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod can be installed on 1.8.9, 1.14.4, 1.15.2, 1.16.5 and 1.17.1 with Fabric Loader.
+This mod can be installed on 1.8.9, 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2 with Fabric Loader.
 
 ## Dependencies
 
@@ -125,7 +126,7 @@ registry synchronization (fabric-registry-sync mod).
 
 ## multiconnect
 
-### Does it work with multiconnect at same time on client?:**
+### Does it work with multiconnect at same time on client?:
 
 - Yes, ViaFabric can be used with multiconnect. ViaFabric will send to its version auto detector the closest non-beta
   supported version. (multiconnect beta-supported versions are currently < 1.11))
