@@ -26,13 +26,17 @@ public class NMSCommandSender implements ViaCommandSender {
         return source.hasPermissionLevel(3);
     }
 
+    public static Text fromLegacy(String legacy) {
+        return Text.Serializer.fromJson(RemappingUtil.legacyToJson(legacy));
+    }
+
     @Override
     public void sendMessage(String s) {
         if (source instanceof ServerCommandSource) {
-            ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(RemappingUtil.legacyToJson(s)), false);
+            ((ServerCommandSource) source).sendFeedback(fromLegacy(s), false);
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
                 && source instanceof ClientCommandSource) {
-            MinecraftClient.getInstance().player.addChatMessage(Text.Serializer.fromJson(RemappingUtil.legacyToJson(s)), false);
+            MinecraftClient.getInstance().player.addChatMessage(fromLegacy(s), false);
         }
     }
 

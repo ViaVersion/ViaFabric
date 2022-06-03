@@ -1,6 +1,5 @@
 package com.viaversion.fabric.mc114.platform;
 
-import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.mc114.providers.VRHandItemProvider;
 import com.viaversion.fabric.mc114.providers.FabricVersionProvider;
 import net.fabricmc.api.EnvType;
@@ -23,7 +22,6 @@ public class VFLoader implements ViaPlatformLoader {
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 handProvider.registerClientTick();
             }
-            handProvider.registerServerTick();
             Via.getManager().getProviders().use(HandItemProvider.class, handProvider);
         }
     }

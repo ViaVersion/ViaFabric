@@ -9,29 +9,19 @@ import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemPr
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
-
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class VRHandItemProvider extends HandItemProvider {
     public Item clientItem = null;
-    public final Map<UUID, Item> serverPlayers = new ConcurrentHashMap<>();
 
     @Override
     public Item getHandItem(UserConnection info) {
-        Item serverItem;
         if (info.isClientSide()) {
             return getClientItem();
-        } else if ((serverItem = serverPlayers.get(info.getProtocolInfo().getUuid())) != null) {
-            return new DataItem(serverItem);
         }
         return super.getHandItem(info);
     }
@@ -52,24 +42,11 @@ public class VRHandItemProvider extends HandItemProvider {
         }
     }
 
-    public void registerServerTick() {
-        try {
-            ServerTickEvents.END_WORLD_TICK.register(this::tickServer);
-        } catch (NoClassDefFoundError ignored) {
-        }
-    }
-
     private void tickClient() {
         ClientPlayerEntity p = MinecraftClient.getInstance().player;
         if (p != null) {
             clientItem = fromNative(p.inventory.getMainHandStack());
         }
-    }
-
-    private void tickServer(World world) {
-        serverPlayers.clear();
-        world.getPlayers().forEach(it -> serverPlayers
-                .put(it.getUuid(), fromNative(it.inventory.getMainHandStack())));
     }
 
     private Item fromNative(ItemStack original) {

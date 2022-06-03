@@ -1,6 +1,5 @@
 // todo migrate this code to kotlin
 import com.google.gson.JsonParser
-import com.modrinth.minotaur.TaskModrinthUpload
 
 import java.nio.file.Files
 import java.util.stream.Collectors
@@ -178,8 +177,8 @@ curseforge {
         changelog = changelogMsg
         releaseType = "alpha"
 
-        addGameVersion("1.19-Snapshot")
         mcReleases.forEach { ver -> addGameVersion(ver) }
+        if (!rootProject.curseforge_mc_snapshot.isEmpty()) addGameVersion(rootProject.curseforge_mc_snapshot)
         javaVersions.forEach(v -> addGameVersion(v))
         addGameVersion("Fabric")
 
@@ -213,7 +212,7 @@ modrinth {
     uploadFile.set(remapJar)
 
     List<String> mcs = new ArrayList<>(mcReleases)
-    mcs.add("1.19-pre3")
+    if (!rootProject.modrinth_mc_snapshot.isEmpty()) mcs.add(rootProject.modrinth_mc_snapshot)
     gameVersions.set(mcs)
     loaders.set(["fabric"])
 

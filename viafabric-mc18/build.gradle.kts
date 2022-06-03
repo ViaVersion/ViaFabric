@@ -8,6 +8,7 @@ dependencies {
     }
 
     // fix newer java
+    @Suppress("GradlePackageUpdate")
     implementation("io.netty:netty-all:4.0.56.Final")
 }
 

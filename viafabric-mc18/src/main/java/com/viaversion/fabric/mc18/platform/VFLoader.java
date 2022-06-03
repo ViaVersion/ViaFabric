@@ -1,6 +1,5 @@
 package com.viaversion.fabric.mc18.platform;
 
-import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.mc18.providers.VRHandItemProvider;
 import com.viaversion.fabric.mc18.providers.FabricVersionProvider;
 import net.fabricmc.api.EnvType;

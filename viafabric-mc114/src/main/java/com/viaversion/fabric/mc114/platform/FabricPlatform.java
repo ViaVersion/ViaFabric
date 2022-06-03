@@ -4,7 +4,6 @@ import com.viaversion.fabric.common.commands.UserCommandSender;
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.common.provider.AbstractFabricPlatform;
 import com.viaversion.fabric.common.util.FutureTaskId;
-import com.viaversion.fabric.common.util.RemappingUtil;
 import com.viaversion.fabric.mc114.ViaFabric;
 import com.viaversion.fabric.mc114.commands.NMSCommandSender;
 import com.viaversion.viaversion.api.Via;
@@ -18,7 +17,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.network.MessageType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -82,7 +80,7 @@ public class FabricPlatform extends AbstractFabricPlatform {
         runServerSync(() -> {
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
             if (player == null) return;
-            player.sendChatMessage(Text.Serializer.fromJson(RemappingUtil.legacyToJson(s)), MessageType.SYSTEM);
+            player.sendChatMessage(NMSCommandSender.fromLegacy(s), MessageType.SYSTEM);
         });
     }
 
@@ -97,7 +95,7 @@ public class FabricPlatform extends AbstractFabricPlatform {
         Supplier<Boolean> kickTask = () -> {
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
             if (player == null) return false;
-            player.networkHandler.disconnect(Text.Serializer.fromJson(RemappingUtil.legacyToJson(s)));
+            player.networkHandler.disconnect(NMSCommandSender.fromLegacy(s));
             return true;
         };
         if (server.isOnThread()) {

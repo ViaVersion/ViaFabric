@@ -1,11 +1,11 @@
 package com.viaversion.fabric.mc117.commands;
 
 import com.viaversion.fabric.common.util.RemappingUtil;
-import com.viaversion.fabric.mc117.platform.FabricPlatform;
 import net.fabricmc.fabric.api.client.command.v1.FabricClientCommandSource;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
 
@@ -24,12 +24,16 @@ public class NMSCommandSender implements ViaCommandSender {
         return source.hasPermissionLevel(3);
     }
 
+    public static MutableText fromLegacy(String legacy) {
+        return Text.Serializer.fromJson(RemappingUtil.legacyToJson(legacy));
+    }
+
     @Override
     public void sendMessage(String s) {
         if (source instanceof ServerCommandSource) {
-            ((ServerCommandSource) source).sendFeedback(Text.Serializer.fromJson(RemappingUtil.legacyToJson(s)), false);
+            ((ServerCommandSource) source).sendFeedback(fromLegacy(s), false);
         } else if (source instanceof FabricClientCommandSource) {
-            ((FabricClientCommandSource) source).sendFeedback(Text.Serializer.fromJson(RemappingUtil.legacyToJson(s)));
+            ((FabricClientCommandSource) source).sendFeedback(fromLegacy(s));
         }
     }
 

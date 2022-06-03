@@ -22,7 +22,6 @@ public class VFLoader implements ViaPlatformLoader {
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 handProvider.registerClientTick();
             }
-            handProvider.registerServerTick();
             Via.getManager().getProviders().use(HandItemProvider.class, handProvider);
         }
     }

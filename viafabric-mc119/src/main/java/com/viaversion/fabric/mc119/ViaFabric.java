@@ -20,7 +20,7 @@ import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.CommandSource;
@@ -93,7 +93,7 @@ public class ViaFabric implements ModInitializer {
             CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, env) -> dispatcher.register(command("viaver")));
             CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, env) -> dispatcher.register(command("vvfabric")));
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-                ClientCommandManager.DISPATCHER.register(command("viafabricclient"));
+                ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> dispatcher.register(command("viafabricclient")));
             }
         } catch (NoClassDefFoundError ignored) {
             JLOGGER.info("Couldn't register command as Fabric Commands V1 isn't installed");
