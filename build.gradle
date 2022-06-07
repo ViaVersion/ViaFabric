@@ -160,7 +160,7 @@ processResources {
 }
 
 List<String> mcReleases = new ArrayList<>(
-        Arrays.asList("1.18.2", "1.17.1", "1.16.5", "1.15.2", "1.14.4", "1.8.9"))
+        Arrays.asList("1.19", "1.18.2", "1.17.1", "1.16.5", "1.15.2", "1.14.4", "1.8.9"))
 List<String> javaVersions = IntStream.rangeClosed(8, 18)
         .mapToObj { n -> (String) "Java $n" }
         .collect(Collectors.toList())
