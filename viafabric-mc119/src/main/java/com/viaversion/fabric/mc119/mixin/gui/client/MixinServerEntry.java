@@ -24,9 +24,8 @@ public class MixinServerEntry {
     @Final
     private ServerInfo server;
 
-    // todo fix this intermediary
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0,
-            target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/class_2960;)V"))
+            target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V"))
     private void redirectPingIcon(int i, Identifier identifier) {
         if (identifier.equals(DrawableHelper.GUI_ICONS_TEXTURE) && ((ViaServerInfo) this.server).isViaTranslating()) {
             RenderSystem.setShaderTexture(i, new Identifier("viafabric:textures/gui/icons.png"));
