@@ -87,7 +87,9 @@ allprojects {
 
 subprojects {
     dependencies {
-        modImplementation rootProject
+        implementation (rootProject) {
+            exclude group: "net.fabricmc", module: "fabric-loader" // prevent duplicate fabric-loader on run
+        }
     }
 
     publishing {
