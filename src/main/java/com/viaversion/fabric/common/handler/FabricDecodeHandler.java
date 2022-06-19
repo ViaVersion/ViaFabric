@@ -66,9 +66,9 @@ public class FabricDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
         if (PipelineUtil.containsCause(cause, CancelCodecException.class)) return;
         super.exceptionCaught(ctx, cause);
 
-        if (PipelineUtil.containsCause(cause, InformativeException.class)
-                && (info.getProtocolInfo().getState() != State.HANDSHAKE
-                || Via.getManager().debugHandler().enabled())) {
+        if ((PipelineUtil.containsCause(cause, InformativeException.class)
+                && info.getProtocolInfo().getState() != State.HANDSHAKE)
+                || Via.getManager().debugHandler().enabled()) {
             cause.printStackTrace();
         }
     }
