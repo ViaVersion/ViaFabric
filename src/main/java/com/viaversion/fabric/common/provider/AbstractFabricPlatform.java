@@ -192,4 +192,9 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
 		}
 		return platformSpecific;
 	}
+
+	@Override
+	public boolean hasPlugin(String name) {
+		return FabricLoader.getInstance().isModLoaded(name);
+	}
 }
