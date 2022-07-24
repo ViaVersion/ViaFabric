@@ -8,7 +8,7 @@
   "gui.client_side.enable": "क्लाइंट साइड पर चालू करें",
   "gui.client_side.disable": "क्लाइंट साइड पर बंद करें",
   "gui.ping_version.translated": "VIA: %s",
-  "gui.hide_via_button.enable": "VIA बटन छुपाएँ"
+  "gui.hide_via_button.enable": "VIA बटन छुपाएँ",
   "gui.hide_via_button.disable": "VIA बटन दिखाएँ",
   "gui.via_button": "VIA"
 }
