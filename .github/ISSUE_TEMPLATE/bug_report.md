@@ -1,35 +1,93 @@
----
-name: Bug report
-about: Create a bug report, so we can fix it
-title: ''
-labels: bug
-assignees: ''
+name: Bug Report
+description: Report a bug or console error
+labels: [bug]
 
----
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Before reporting a bug, please see if using master/dev builds from https://ci.viaversion.com/ fixes your issue.**
+        Whenever you see fit, you can upload images or video to any of the textfields.
 
-**Describe the bug, provide any errors**
-- A clear and concise description of what the bug is.
- Can you use a paste service like https://gist.github.com?
- If possible, install Not Enough Crashes mod to make errors more legible.
+  - type: input
+    attributes:
+      label: "`/viaversion dump` Output"
+      description: |
+        Run `/viaversion dump` in the console or in the chat, then copy and paste the given link here. If you're using client-side mode, run it on singleplayer mode.
+      placeholder: |
+        https://dump.viaversion.com/...
+    validations:
+      required: true
 
-**Is this happening specifically on ViaFabric?**
-(Optional)
-- [ ] It seems to not happen when using ViaVersion/ViaBackwards/ViaRewind
- on other platforms
+  - type: textarea
+    attributes:
+      label: Console Error
+      description: |
+        If you encounter warnings/errors in your console, **paste them with https://paste.gg/ and put the paste link here**.
+        If the error is small/less than 10 lines, you may put it directly into this field.
+        Please use Not Enough Crashes if possible, making the stacktrace easier to understand.
+      value: |
+        ```
+        Put the paste.gg link or text here.
+        ```
+      placeholder: Please do not remove the grave accents; simply replace the line of text in the middle.
+    validations:
+      required: false
 
-**How can we reproduce it?**
-- Steps to reproduce the behavior
+  - type: textarea
+    attributes:
+      label: Bug Description
+      description: |
+        Describe the unexpected behavior.
+        If you want to attach screenshots, use the comment field at the bottom of the page.
+      placeholder: |
+        Example: "Placing signs on 1.13.2 causes text to disappear."
+    validations:
+      required: true
 
-**Expected behaviour**
-- A clear and concise description of what you expected to happen.
+  - type: textarea
+    attributes:
+      label: Steps to Reproduce
+      description: |
+        List the steps on how we can reproduce the issue. Make sure we can easily understand what you mean with each step.
+      placeholder: |
+        Example:
+        1. Login with a 1.13.2 client
+        2. Place a sign
+        3. The sign text is displayed wrong
+    validations:
+      required: true
 
-**Screenshots**
-- If applicable, add screenshots to help explain your problem.
+  - type: textarea
+    attributes:
+      label: Expected Behavior
+      description: |
+        Describe what exactly you expected to happen.
+      placeholder: |
+        Example: "Placed sign text should not disappear."
+    validations:
+      required: true
 
-**ViaVersion Dump**
-- Type /viaversion dump, and put the link here.
+  - type: textarea
+    attributes:
+      label: Additional Server Info
+      description: |
+        Does the server use a proxy (eg. BungeeCord)? What software are used and what plugins/mods (Check with F3 debug menu)? Are you using client-side mode?
+      placeholder: |
+        Example: "I also use BungeeCord with the following plugins: x, y, z"
+    validations:
+      required: false
 
-**Additional server info**
-- Is server using a proxy (eg. BungeeCord/Velocity)?
- What software is it using and what plugins? (Debug HUD may have it (F3))
- Are you running on client-side mode?
+  - type: checkboxes
+    attributes:
+      label: Checklist
+      description: Make sure you have followed each of the steps outlined here.
+      options:
+        - label: I have checked if this is specific to ViaFabric platform, and doesn't happen when running it on other platforms (Paper/Sponge/Velocity/Waterfall).
+          required: false
+        - label: I have included a ViaVersion dump.
+          required: true
+        - label: If applicable, I have included a paste (**not a screenshot**) of the error.
+          required: true
+        - label: I have tried the latest build(s) from https://ci.viaversion.com/ and the issue still persists.
+          required: true
