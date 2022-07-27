@@ -21,7 +21,12 @@ public class RemappingUtil {
         return 0;
     }
 
+    private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.builder()
+            .character('§')
+            .extractUrls()
+            .build();
+
     public static String legacyToJson(String legacy) {
-        return GsonComponentSerializer.gson().serialize(LegacyComponentSerializer.legacySection().deserialize(legacy));
+        return GsonComponentSerializer.gson().serialize(LEGACY_SERIALIZER.deserialize(legacy));
     }
 }
