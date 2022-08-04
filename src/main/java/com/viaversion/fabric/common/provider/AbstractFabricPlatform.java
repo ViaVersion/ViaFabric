@@ -203,7 +203,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
     public final Collection<UnsupportedSoftware> getUnsupportedSoftwareClasses() {
         List<UnsupportedSoftware> list = new ArrayList<>(ViaPlatform.super.getUnsupportedSoftwareClasses());
         list.add(new UnsupportedPlugin.Builder().name("software to mess with message signing").reason(UnsupportedSoftwareReasons.SECURE_CHAT_BYPASS_EXPLOITABLE)
-                .addPlugin("guardian").addPlugin("gaslight").addPlugin("nochatreports").build());
+                .addPlugin("guardian").addPlugin("gaslight").build());
         return Collections.unmodifiableList(list);
     }
 
