@@ -214,7 +214,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
 
     private static final class UnsupportedSoftwareReasons {
 
-        private static final String SECURE_CHAT_BYPASS_EXPLOITABLE = "By using these kind of mods, at best you mess up chat formatting, " +
-                "at worst you open yourself up to be incriminated or end up incrimating yourself when writing messages or reporting another player.";
+        private static final String SECURE_CHAT_BYPASS_EXPLOITABLE = "By using these kind of mods, you could mess up chat formatting. " + 
+		"Use with caution.";
     }
 }
