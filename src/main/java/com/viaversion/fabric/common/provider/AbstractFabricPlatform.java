@@ -9,9 +9,11 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 import com.viaversion.viaversion.api.configuration.ConfigurationProvider;
 import com.viaversion.viaversion.api.configuration.ViaVersionConfig;
+import com.viaversion.viaversion.api.platform.UnsupportedSoftware;
 import com.viaversion.viaversion.api.platform.ViaPlatform;
 import com.viaversion.viaversion.libs.gson.JsonArray;
 import com.viaversion.viaversion.libs.gson.JsonObject;
+import com.viaversion.viaversion.unsupported.UnsupportedPlugin;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
@@ -24,6 +26,10 @@ import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
@@ -193,8 +199,22 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
 		return platformSpecific;
 	}
 
-	@Override
-	public boolean hasPlugin(String name) {
+    @Override
+    public final Collection<UnsupportedSoftware> getUnsupportedSoftwareClasses() {
+        List<UnsupportedSoftware> list = new ArrayList<>(ViaPlatform.super.getUnsupportedSoftwareClasses());
+        list.add(new UnsupportedPlugin.Builder().name("software to mess with message signing").reason(UnsupportedSoftwareReasons.SECURE_CHAT_BYPASS_EXPLOITABLE)
+                .addPlugin("guardian").addPlugin("gaslight").addPlugin("nochatreports").build());
+        return Collections.unmodifiableList(list);
+    }
+
+    @Override
+	public final boolean hasPlugin(String name) {
 		return FabricLoader.getInstance().isModLoaded(name);
 	}
+
+    private static final class UnsupportedSoftwareReasons {
+
+        private static final String SECURE_CHAT_BYPASS_EXPLOITABLE = "By using these kind of mods, at best you mess up chat formatting, " +
+                "at worst you open yourself up to be incriminated or end up incrimating yourself when writing messages or reporting another player.";
+    }
 }
