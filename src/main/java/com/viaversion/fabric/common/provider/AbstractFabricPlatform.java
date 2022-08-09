@@ -199,22 +199,26 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
 		return platformSpecific;
 	}
 
-    @Override
-    public final Collection<UnsupportedSoftware> getUnsupportedSoftwareClasses() {
-        List<UnsupportedSoftware> list = new ArrayList<>(ViaPlatform.super.getUnsupportedSoftwareClasses());
-        list.add(new UnsupportedPlugin.Builder().name("software to mess with message signing").reason(UnsupportedSoftwareReasons.SECURE_CHAT_BYPASS_EXPLOITABLE)
-                .addPlugin("guardian").addPlugin("gaslight").addPlugin("nochatreports").build());
-        return Collections.unmodifiableList(list);
-    }
+	@Override
+	public final Collection<UnsupportedSoftware> getUnsupportedSoftwareClasses() {
+		List<UnsupportedSoftware> list = new ArrayList<>(ViaPlatform.super.getUnsupportedSoftwareClasses());
+		list.add(new UnsupportedPlugin.Builder().name("gaslight/guardian").reason(UnsupportedSoftwareReasons.SELF_INCRIMINATION)
+				.addPlugin("guardian").addPlugin("gaslight").build());
+		list.add(new UnsupportedPlugin.Builder().name("NoChatReports").reason(UnsupportedSoftwareReasons.NCR)
+				.addPlugin("nochatreports").build());
+		return Collections.unmodifiableList(list);
+	}
 
-    @Override
+	@Override
 	public final boolean hasPlugin(String name) {
 		return FabricLoader.getInstance().isModLoaded(name);
 	}
 
-    private static final class UnsupportedSoftwareReasons {
+	private static final class UnsupportedSoftwareReasons {
 
-        private static final String SECURE_CHAT_BYPASS_EXPLOITABLE = "By using these kind of mods, at best you mess up chat formatting, " +
-                "at worst you open yourself up to be incriminated or end up incrimating yourself when writing messages or reporting another player.";
-    }
+		private static final String SELF_INCRIMINATION = "By using these kind of mods, at best you create fishy context or silly reports, " +
+				"at worst you end up incrimating yourself when writing messages or reporting another player.";
+		private static final String NCR = "Due to a history of breaking message formatting and creating other issues related to chat handling " +
+				"(some still present), we suggest you find alternatives to this mod.";
+	}
 }
