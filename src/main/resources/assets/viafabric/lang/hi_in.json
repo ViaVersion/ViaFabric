@@ -1,0 +1,14 @@
+{
+  "gui.protocol_version_field.name": "प्रोटोकॉल संस्करण",
+  "gui.enable_client_side_button": "ViaVersion सक्षम करें",
+  "gui.enable_client_side.question": "क्या आप वाकई में उपयोगकर्ता-मोड सक्षम करना चाहते हैं?",
+  "gui.enable_client_side.warning": "यह गारंटी नहीं दी जा सकती है कि यह mod कुछ सर्वेरों पर अनुमत है क्योंकि यह छल विरोधी प्लगिन के साथ समस्या उत्पन्न कर सकता है। (सावधानी से इस्तेमाल करें!)",
+  "gui.enable_client_side.enable": "सक्षम करें",
+  "gui.viafabric_config.title": "ViaFabric कॉन्फ़िगरेशन",
+  "gui.client_side.enable": "क्लाइंट साइड पर चालू करें",
+  "gui.client_side.disable": "क्लाइंट साइड पर बंद करें",
+  "gui.ping_version.translated": "VIA: %s",
+  "gui.hide_via_button.enable": "VIA बटन छुपाएँ",
+  "gui.hide_via_button.disable": "VIA बटन दिखाएँ",
+  "gui.via_button": "VIA"
+}
