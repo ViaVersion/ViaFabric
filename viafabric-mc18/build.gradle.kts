@@ -1,8 +1,8 @@
 dependencies {
     minecraft("com.mojang:minecraft:1.8.9")
-    mappings("net.fabricmc:yarn:1.8.9+build.202112162000:v2")
+    mappings("net.legacyfabric:yarn:1.8.9+build.388:v2")
 
-    modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:1.4.2+1.8.9")
+    modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:1.7.1+1.8.9")
     modImplementation("io.github.boogiemonster1o1:rewoven-modmenu:1.0.0+1.8.9") {
         isTransitive = false
     }
@@ -13,5 +13,5 @@ dependencies {
 }
 
 loom {
-    intermediaryUrl.set("https://maven.legacyfabric.net/net/fabricmc/intermediary/%1\$s/intermediary-%1\$s-v2.jar")
+    intermediaryUrl.set("https://maven.legacyfabric.net/net/legacyfabric/intermediary/%1\$s/intermediary-%1\$s-v2.jar")
 }

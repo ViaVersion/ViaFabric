@@ -37,7 +37,7 @@ public class NMSCommandSender implements ViaCommandSender {
     @Override
     public String getName() {
         if (source instanceof Entity) {
-            return source.getName().asString();
+            return source.method_6344().asString();
         }
         return "?";
     }
