@@ -20,7 +20,7 @@ def ENV = System.getenv()
 
 group = "com.viaversion.fabric"
 description = "Client-side and server-side ViaVersion implementation for Fabric"
-version = "0.4.8+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
+version = "0.4.9+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
 logger.lifecycle("Building ViaFabric: $version")
 
 def getBranch() {
