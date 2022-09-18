@@ -1,6 +1,6 @@
 package com.viaversion.fabric.mc119.mixin.signatures1_19_0;
 
-import com.viaversion.fabric.mc119.signatures1_19_0.MessageSigner_1_19_0;
+import com.viaversion.fabric.mc119.signatures1_19_0.MessageSigner1_19_0;
 import com.viaversion.fabric.mc119.signatures1_19_0.ProtocolPatcher1_19_0;
 import net.minecraft.command.argument.DecoratableArgumentList;
 import net.minecraft.network.encryption.Signer;
@@ -23,8 +23,8 @@ public class ArgumentSignatureDataMapMixin {
     private static void injectSign(DecoratableArgumentList<?> arguments, ArgumentSignatureDataMap.ArgumentSigner signer, CallbackInfoReturnable<ArgumentSignatureDataMap> cir) {
         if (ProtocolPatcher1_19_0.shouldFixKeys) {
             final List<ArgumentSignatureDataMap.Entry> list = ArgumentSignatureDataMap.toNameValuePairs(arguments).stream().map(entry -> {
-                final MessageMetadata metadata = MessageSigner_1_19_0.get();
-                final MessageSignatureData messageSignatureData = MessageSigner_1_19_0.sign((Signer) signer, Text.literal(entry.getFirst()), metadata.sender(), metadata.timestamp(), metadata.salt());
+                final MessageMetadata metadata = MessageSigner1_19_0.get();
+                final MessageSignatureData messageSignatureData = MessageSigner1_19_0.sign((Signer) signer, Text.literal(entry.getFirst()), metadata.sender(), metadata.timestamp(), metadata.salt());
 
                 return new ArgumentSignatureDataMap.Entry(entry.getFirst(), messageSignatureData);
             }).collect(Collectors.toList());

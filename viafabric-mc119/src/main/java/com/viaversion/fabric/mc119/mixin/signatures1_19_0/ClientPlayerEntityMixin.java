@@ -1,7 +1,7 @@
 package com.viaversion.fabric.mc119.mixin.signatures1_19_0;
 
 import com.mojang.brigadier.ParseResults;
-import com.viaversion.fabric.mc119.signatures1_19_0.MessageSigner_1_19_0;
+import com.viaversion.fabric.mc119.signatures1_19_0.MessageSigner1_19_0;
 import com.viaversion.fabric.mc119.signatures1_19_0.ProtocolPatcher1_19_0;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -31,7 +31,7 @@ public class ClientPlayerEntityMixin {
                 final Signer signer = this.client.getProfileKeys().getSigner();
 
                 if (signer != null)
-                    cir.setReturnValue(MessageSigner_1_19_0.sign(signer, content.decorated(), metadata.sender(), metadata.timestamp(), metadata.salt()));
+                    cir.setReturnValue(MessageSigner1_19_0.sign(signer, content.decorated(), metadata.sender(), metadata.timestamp(), metadata.salt()));
             } catch (Exception ignored) {}
             cir.cancel();
         }
@@ -39,6 +39,6 @@ public class ClientPlayerEntityMixin {
 
     @Inject(method = "signArguments", at = @At(value = "HEAD"))
     public void injectSignArguments(MessageMetadata signer, ParseResults<CommandSource> parseResults, @Nullable Text preview, LastSeenMessageList lastSeenMessages, CallbackInfoReturnable<ArgumentSignatureDataMap> cir) {
-        MessageSigner_1_19_0.track(signer);
+        MessageSigner1_19_0.track(signer);
     }
 }

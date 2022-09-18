@@ -3,10 +3,10 @@
   "compatibilityLevel": "JAVA_16",
   "package": "com.viaversion.fabric.mc119.mixin.signatures1_19_0",
   "mixins": [
-    "ArgumentSignatureDataMapMixin",
-    "PlayerPublicKeyChPublicKeyDataMixin"
   ],
   "client": [
+    "ArgumentSignatureDataMapMixin",
+    "PlayerPublicKeyChPublicKeyDataMixin",
     "ClientPlayerEntityMixin",
     "ProfileKeysMixin"
   ],

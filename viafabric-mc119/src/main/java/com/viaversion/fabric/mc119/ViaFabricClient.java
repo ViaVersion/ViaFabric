@@ -1,7 +1,6 @@
 package com.viaversion.fabric.mc119;
 
 import com.viaversion.fabric.mc119.gui.ViaConfigScreen;
-import com.viaversion.fabric.mc119.signatures1_19_0.ProtocolPatcher1_19_0;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;

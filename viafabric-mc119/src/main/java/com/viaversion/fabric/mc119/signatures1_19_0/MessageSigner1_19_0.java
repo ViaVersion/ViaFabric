@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
  
-public class MessageSigner_1_19_0 {
+public class MessageSigner1_19_0 {
 
    public static final List<MessageMetadata> TRACKED_METADATA_LIST = new ArrayList<>();
 
