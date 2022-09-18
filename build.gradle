@@ -52,7 +52,7 @@ allprojects {
     }
 
     tasks.withType(JavaCompile).configureEach {
-        it.options.release.set(8)
+        it.options.release.set(17)
     }
     tasks.withType(JavaExec).configureEach {
         it.javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
