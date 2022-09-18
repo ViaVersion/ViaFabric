@@ -16,8 +16,6 @@ public class ViaFabricClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         registerGui();
-
-        ProtocolPatcher1_19_0.patch();
     }
 
     private void registerGui() {
