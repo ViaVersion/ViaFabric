@@ -4,6 +4,7 @@ import com.viaversion.fabric.common.config.VFConfig;
 import com.viaversion.fabric.common.provider.AbstractFabricVersionProvider;
 import com.viaversion.fabric.mc119.ViaFabric;
 import com.viaversion.fabric.mc119.service.ProtocolAutoDetector;
+import com.viaversion.fabric.mc119.signatures1_19_0.ProtocolPatcher1_19_0;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.netty.channel.ChannelPipeline;
 import net.minecraft.network.ClientConnection;
@@ -29,8 +30,12 @@ public class FabricVersionProvider extends AbstractFabricVersionProvider {
     }
 
     @Override
+    public void onFinallySetVersion(int realClientsideVersion) {
+        ProtocolPatcher1_19_0.shouldFixKeys = realClientsideVersion <= ProtocolVersion.v1_19.getVersion();
+    }
+
+    @Override
     protected boolean isMulticonnectHandler(ChannelPipeline pipe) {
-        return pipe.get(ClientConnection.class).getPacketListener()
-                .getClass().getName().startsWith("net.earthcomputer.multiconnect");
+        return pipe.get(ClientConnection.class).getPacketListener().getClass().getName().startsWith("net.earthcomputer.multiconnect");
     }
 }
