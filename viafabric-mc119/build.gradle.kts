@@ -5,3 +5,7 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.60.0+1.19.2")
     modImplementation("com.terraformersmc:modmenu:4.0.6")
 }
+
+tasks.compileJava {
+    options.release.set(17)
+}
