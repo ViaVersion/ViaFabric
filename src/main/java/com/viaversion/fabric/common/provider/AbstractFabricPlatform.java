@@ -68,20 +68,20 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
     @Override
     public FutureTaskId runAsync(Runnable runnable) {
         return new FutureTaskId(CompletableFuture.runAsync(runnable, asyncService())
-            .exceptionally(throwable -> {
-                if (!(throwable instanceof CancellationException)) {
-                    throwable.printStackTrace();
-                }
-                return null;
-            }));
+                .exceptionally(throwable -> {
+                    if (!(throwable instanceof CancellationException)) {
+                        throwable.printStackTrace();
+                    }
+                    return null;
+                }));
     }
 
     @Override
     public FutureTaskId runSync(Runnable runnable, long ticks) {
         // ViaVersion seems to not need to run delayed tasks on main thread
         return new FutureTaskId(eventLoop()
-            .schedule(() -> runSync(runnable), ticks * 50, TimeUnit.MILLISECONDS)
-            .addListener(errorLogger())
+                .schedule(() -> runSync(runnable), ticks * 50, TimeUnit.MILLISECONDS)
+                .addListener(errorLogger())
         );
     }
 
@@ -89,8 +89,8 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
     public FutureTaskId runRepeatingSync(Runnable runnable, long ticks) {
         // ViaVersion seems to not need to run repeating tasks on main thread
         return new FutureTaskId(eventLoop()
-            .scheduleAtFixedRate(() -> runSync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS)
-            .addListener(errorLogger())
+                .scheduleAtFixedRate(() -> runSync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS)
+                .addListener(errorLogger())
         );
     }
 
@@ -135,7 +135,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
     @Override
     public String getPluginVersion() {
         return FabricLoader.getInstance().getModContainer("viaversion").map(ModContainer::getMetadata)
-            .map(ModMetadata::getVersion).map(Version::getFriendlyString).orElse("UNKNOWN");
+                .map(ModMetadata::getVersion).map(Version::getFriendlyString).orElse("UNKNOWN");
     }
 
     @Override
@@ -146,7 +146,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
     @Override
     public String getPlatformVersion() {
         return FabricLoader.getInstance().getModContainer("viafabric")
-            .get().getMetadata().getVersion().getFriendlyString();
+                .get().getMetadata().getVersion().getFriendlyString();
     }
 
     @Override
@@ -178,7 +178,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
                 JsonObject info = new JsonObject();
                 JsonObject contact = new JsonObject();
                 it.getContact().asMap().entrySet()
-                    .forEach(c -> contact.addProperty(c.getKey(), c.getValue()));
+                        .forEach(c -> contact.addProperty(c.getKey(), c.getValue()));
                 if (contact.size() != 0) {
                     info.add("contact", contact);
                 }
@@ -203,7 +203,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
     public final Collection<UnsupportedSoftware> getUnsupportedSoftwareClasses() {
         List<UnsupportedSoftware> list = new ArrayList<>(ViaPlatform.super.getUnsupportedSoftwareClasses());
         list.add(new UnsupportedPlugin.Builder().name("gaslight/guardian").reason(UnsupportedSoftwareReasons.SELF_INCRIMINATION)
-            .addPlugin("guardian").addPlugin("gaslight").build());
+                .addPlugin("guardian").addPlugin("gaslight").build());
         return Collections.unmodifiableList(list);
     }
 
@@ -214,7 +214,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
 
     private static final class UnsupportedSoftwareReasons {
         private static final String SELF_INCRIMINATION = "By using these proof-of-concept TESTING mods, " +
-            "at best you create fishy context or silly reports, " +
-            "at worst you end up incriminating yourself when writing messages or reporting another player.";
+                "at best you create fishy context or silly reports, " +
+                "at worst you end up incriminating yourself when writing messages or reporting another player.";
     }
 }
