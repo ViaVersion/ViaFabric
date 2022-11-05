@@ -30,7 +30,7 @@ public abstract class MixinMultiplayerScreen extends Screen {
                 new Identifier("viafabric:textures/gui/widgets.png"),
                 256, 256, // Texture size
                 it -> MinecraftClient.getInstance().openScreen(new ViaConfigScreen(this)),
-                new TranslatableText("gui.via_button").asString());
+                new TranslatableText("gui.via_button").asUnformattedString());
         if (ViaFabric.config.isHideButton()) enableClientSideViaVersion.visible = false;
         this.buttons.add(enableClientSideViaVersion);
     }

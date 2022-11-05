@@ -32,24 +32,24 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
     public void init() {
         int entries = 0;
 
-        this.buttons.add(new ListeneableButton("clientside".hashCode(), this.width / 2 - 155 + entries % 2 * 160,
-                this.height / 6 + 24 * (entries >> 1),
+        this.buttons.add(new ListeneableButton("clientside".hashCode(), calculatePosX(this.width, entries),
+                calculatePosY(this.height, entries),
                 150,
-                20, getClientSideText().asString(), this::onClickClientSide));
+                20, getClientSideText().asUnformattedString(), this::onClickClientSide));
         entries++;
 
-        this.buttons.add(new ListeneableButton("hidevia".hashCode(), this.width / 2 - 155 + entries % 2 * 160,
-                this.height / 6 + 24 * (entries >> 1),
+        this.buttons.add(new ListeneableButton("hidevia".hashCode(), calculatePosX(this.width, entries),
+                calculatePosY(this.height, entries),
                 150,
-                20, getHideViaButtonText().asString(), this::onHideViaButton));
+                20, getHideViaButtonText().asUnformattedString(), this::onHideViaButton));
         entries++;
 
         protocolVersion = new TextFieldWidget("protover".hashCode(), textRenderer,
-                this.width / 2 - 155 + entries % 2 * 160,
-                this.height / 6 + 24 * (entries >> 1),
+                calculatePosX(this.width, entries),
+                calculatePosY(this.height, entries),
                 150,
                 20);
-        protocolVersion.setText(new TranslatableText(VERSION_TRANSLATE_ID).asString());
+        protocolVersion.setText(new TranslatableText(VERSION_TRANSLATE_ID).asUnformattedString());
         entries++;
 
         protocolVersion.setTextPredicate(ProtocolUtils::isStartOfProtocolText);
@@ -60,12 +60,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
 
         //this.children.add(protocolVersion);
 
-        //noinspection ConstantConditions
-        if (entries % 2 == 1) {
-            entries++;
-        }
-
-        buttons.add(new ListeneableButton("done".hashCode(), this.width / 2 - 100, this.height / 6 + 24 * (entries >> 1), 200, 20, new TranslatableText("gui.done").asString(),
+        buttons.add(new ListeneableButton("done".hashCode(), this.width / 2 - 100, this.height - 40, 200, 20, new TranslatableText("gui.done").asUnformattedString(),
                 (buttonWidget) -> MinecraftClient.getInstance().openScreen(this.parent)));
     }
 
@@ -83,9 +78,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
             validProtocol = false;
         }
 
-        protocolVersion.setEditableColor(
-                getProtocolTextColor(ProtocolUtils.isSupportedClientSide(newVersion),
-                        validProtocol));
+        protocolVersion.setEditableColor(getProtocolTextColor(newVersion, validProtocol));
 
         int finalNewVersion = newVersion;
         if (latestProtocolSave == null) latestProtocolSave = CompletableFuture.completedFuture(null);
@@ -101,21 +94,21 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
                             ViaFabric.config.setClientSideEnabled(true);
                             ViaFabric.config.setClientSideVersion(-2); // AUTO
                             ViaFabric.config.saveConfig();
-                            widget.message = getClientSideText().asString();
+                            widget.message = getClientSideText().asUnformattedString();
                         }
                         MinecraftClient.getInstance().openScreen(this);
                     },
-                    new TranslatableText("gui.enable_client_side.question").asString(),
-                    new TranslatableText("gui.enable_client_side.warning").asString(),
-                    new TranslatableText("gui.enable_client_side.enable").asString(),
-                    new TranslatableText("gui.cancel").asString(),
+                    new TranslatableText("gui.enable_client_side.question").asUnformattedString(),
+                    new TranslatableText("gui.enable_client_side.warning").asUnformattedString(),
+                    new TranslatableText("gui.enable_client_side.enable").asUnformattedString(),
+                    new TranslatableText("gui.cancel").asUnformattedString(),
                     "via anticheat consent".hashCode()
             ));
         } else {
             ViaFabric.config.setClientSideEnabled(false);
             ViaFabric.config.saveConfig();
         }
-        widget.message = getClientSideText().asString();
+        widget.message = getClientSideText().asUnformattedString();
     }
 
     @Override
@@ -137,13 +130,13 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
     private void onHideViaButton(ButtonWidget widget) {
         ViaFabric.config.setHideButton(!ViaFabric.config.isHideButton());
         ViaFabric.config.saveConfig();
-        widget.message = getHideViaButtonText().asString();
+        widget.message = getHideViaButtonText().asUnformattedString();
     }
 
     @Override
     public void render(int mouseX, int mouseY, float delta) {
         this.renderBackground();
-        drawCenteredString(this.textRenderer, this.title.asString(), this.width / 2, 20, 16777215);
+        drawCenteredString(this.textRenderer, this.title.asUnformattedString(), this.width / 2, 20, 16777215);
         super.render(mouseX, mouseY, delta);
         protocolVersion.render();
     }

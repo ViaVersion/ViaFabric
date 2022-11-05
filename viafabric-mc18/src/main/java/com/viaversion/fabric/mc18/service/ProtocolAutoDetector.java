@@ -89,7 +89,7 @@ public class ProtocolAutoDetector {
 
                                     @Override
                                     public void onDisconnected(Text reason) {
-                                        future.completeExceptionally(new IllegalStateException(reason.asString()));
+                                        future.completeExceptionally(new IllegalStateException(reason.asUnformattedString()));
                                     }
                                 });
 

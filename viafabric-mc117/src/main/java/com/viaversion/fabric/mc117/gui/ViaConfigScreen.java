@@ -31,21 +31,21 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
     protected void init() {
         int entries = 0;
 
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155 + entries % 2 * 160,
-                this.height / 6 + 24 * (entries >> 1),
+        this.addDrawableChild(new ButtonWidget(calculatePosX(this.width, entries),
+                calculatePosY(this.height, entries),
                 150,
                 20, getClientSideText(), this::onClickClientSide));
         entries++;
 
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 155 + entries % 2 * 160,
-                this.height / 6 + 24 * (entries >> 1),
+        this.addDrawableChild(new ButtonWidget(calculatePosX(this.width, entries),
+                calculatePosY(this.height, entries),
                 150,
                 20, getHideViaButtonText(), this::onHideViaButton));
         entries++;
 
         protocolVersion = new TextFieldWidget(this.textRenderer,
-                this.width / 2 - 155 + entries % 2 * 160,
-                this.height / 6 + 24 * (entries >> 1),
+                calculatePosX(this.width, entries),
+                calculatePosY(this.height, entries),
                 150,
                 20, new TranslatableText(VERSION_TRANSLATE_ID));
         entries++;
@@ -57,12 +57,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
 
         this.addDrawableChild(protocolVersion);
 
-        //noinspection ConstantConditions
-        if (entries % 2 == 1) {
-            entries++;
-        }
-
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height / 6 + 24 * (entries >> 1), 200, 20, ScreenTexts.DONE, (buttonWidget) -> this.client.setScreen(this.parent)));
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height - 40, 200, 20, ScreenTexts.DONE, (buttonWidget) -> this.client.setScreen(this.parent)));
     }
 
     private void onChangeVersionField(String text) {
@@ -83,9 +78,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
             }
         }
 
-        protocolVersion.setEditableColor(
-                getProtocolTextColor(ProtocolUtils.isSupportedClientSide(newVersion),
-                        validProtocol));
+        protocolVersion.setEditableColor(getProtocolTextColor(newVersion, validProtocol));
 
         int finalNewVersion = newVersion;
         if (latestProtocolSave == null) latestProtocolSave = CompletableFuture.completedFuture(null);
