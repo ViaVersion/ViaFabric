@@ -22,30 +22,35 @@ import java.util.UUID;
 @Mixin(PlayerPublicKey.PublicKeyData.class)
 public class PlayerPublicKeyChPublicKeyDataMixin implements IPublicKeyData {
 
-    @Shadow @Final private Instant expiresAt;
+    @Shadow
+    @Final
+    private Instant expiresAt;
 
-    @Shadow @Final
+    @Shadow
+    @Final
     PublicKey key;
 
     @Unique
-    private byte[] _1_19_0Key;
+    private byte[] key1_19_0;
 
-    @Redirect(method = { "write", "verifyKey" }, at = @At(value = "FIELD", target = "Lnet/minecraft/network/encryption/PlayerPublicKey$PublicKeyData;keySignature:[B"))
+    @Redirect(method = {"write", "verifyKey"}, at = @At(value = "FIELD", target = "Lnet/minecraft/network/encryption/PlayerPublicKey$PublicKeyData;keySignature:[B"))
     public byte[] replaceKeys(PlayerPublicKey.PublicKeyData instance) {
-        if (this._1_19_0Key != null && ProtocolPatcher1_19_0.shouldFixKeys)
-            return this._1_19_0Key;
+        if (this.key1_19_0 != null && ProtocolPatcher1_19_0.shouldPatchKeys) {
+            return this.key1_19_0;
+        }
 
         return instance.keySignature();
     }
 
     @Inject(method = "toSerializedString", at = @At(value = "HEAD"), cancellable = true)
     public void injectToSerializedString(UUID playerUuid, CallbackInfoReturnable<byte[]> cir) {
-        if (ProtocolPatcher1_19_0.shouldFixKeys)
+        if (ProtocolPatcher1_19_0.shouldPatchKeys) {
             cir.setReturnValue((this.expiresAt.toEpochMilli() + NetworkEncryptionUtils.encodeRsaPublicKey(this.key)).getBytes(StandardCharsets.UTF_8));
+        }
     }
 
     @Override
     public void set1_19_0Key(ByteBuffer byteBuffer) {
-        this._1_19_0Key = byteBuffer.array();
+        this.key1_19_0 = byteBuffer.array();
     }
 }

@@ -31,7 +31,7 @@ public class FabricVersionProvider extends AbstractFabricVersionProvider {
 
     @Override
     public void onFinallySetVersion(int realClientsideVersion) {
-        ProtocolPatcher1_19_0.shouldFixKeys = realClientsideVersion <= ProtocolVersion.v1_19.getVersion();
+        ProtocolPatcher1_19_0.shouldPatchKeys = realClientsideVersion <= ProtocolVersion.v1_19.getVersion();
     }
 
     @Override

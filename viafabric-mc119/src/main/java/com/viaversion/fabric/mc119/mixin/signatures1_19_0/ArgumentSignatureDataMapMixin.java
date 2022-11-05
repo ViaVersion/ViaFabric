@@ -18,18 +18,19 @@ import java.util.stream.Collectors;
 
 @Mixin(ArgumentSignatureDataMap.class)
 public class ArgumentSignatureDataMapMixin {
-
     @Inject(method = "sign", at = @At("HEAD"), cancellable = true)
     private static void injectSign(DecoratableArgumentList<?> arguments, ArgumentSignatureDataMap.ArgumentSigner signer, CallbackInfoReturnable<ArgumentSignatureDataMap> cir) {
-        if (ProtocolPatcher1_19_0.shouldFixKeys) {
-            final List<ArgumentSignatureDataMap.Entry> list = ArgumentSignatureDataMap.toNameValuePairs(arguments).stream().map(entry -> {
-                final MessageMetadata metadata = MessageSigner1_19_0.get();
-                final MessageSignatureData messageSignatureData = MessageSigner1_19_0.sign((Signer) signer, Text.literal(entry.getFirst()), metadata.sender(), metadata.timestamp(), metadata.salt());
+        if (!ProtocolPatcher1_19_0.shouldPatchKeys) return;
 
-                return new ArgumentSignatureDataMap.Entry(entry.getFirst(), messageSignatureData);
-            }).collect(Collectors.toList());
+        final List<ArgumentSignatureDataMap.Entry> list = ArgumentSignatureDataMap.toNameValuePairs(arguments)
+                .stream().map(entry -> {
+            final MessageMetadata metadata = MessageSigner1_19_0.pollLastMetadata();
+            final MessageSignatureData messageSignatureData = MessageSigner1_19_0.sign((Signer) signer,
+                    Text.literal(entry.getFirst()), metadata.sender(), metadata.timestamp(), metadata.salt());
 
-            cir.setReturnValue(new ArgumentSignatureDataMap(list));
-        }
+            return new ArgumentSignatureDataMap.Entry(entry.getFirst(), messageSignatureData);
+        }).collect(Collectors.toList());
+
+        cir.setReturnValue(new ArgumentSignatureDataMap(list));
     }
 }

@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ProfileKeys.class)
 public class ProfileKeysMixin {
-
     @Inject(method = "decodeKeyPairResponse", at = @At("RETURN"))
     private static void trackLegacyKey(KeyPairResponse keyPairResponse, CallbackInfoReturnable<PlayerPublicKey.PublicKeyData> cir) {
         ((IPublicKeyData) (Object) cir.getReturnValue()).set1_19_0Key(keyPairResponse.getLegacyPublicKeySignature());

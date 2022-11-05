@@ -9,18 +9,13 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
- 
+import java.util.*;
+
 public class MessageSigner1_19_0 {
+   public static final Deque<MessageMetadata> TRACKED_METADATA_LIST = new ArrayDeque<>();
 
-   public static final List<MessageMetadata> TRACKED_METADATA_LIST = new ArrayList<>();
-
-   public static MessageMetadata get() {
-      MessageMetadata i = TRACKED_METADATA_LIST.get(TRACKED_METADATA_LIST.size() - 1);
-      TRACKED_METADATA_LIST.remove(i);
-      return i;
+   public static MessageMetadata pollLastMetadata() {
+      return TRACKED_METADATA_LIST.pollLast();
    }
 
    public static void track(final MessageMetadata metadata) {

@@ -11,7 +11,7 @@ import com.viaversion.viaversion.protocols.protocol1_19_1to1_19.Protocol1_19_1To
 // This class modifies the 1.19.1 -> 1.19.0 transformers so that they simply pass through the original Minecraft key.
 public class ProtocolPatcher1_19_0 {
 
-    public static boolean shouldFixKeys = false;
+    public static boolean shouldPatchKeys = false;
 
     public static void patch() {
         final Protocol1_19_1To1_19 protocol1_19_1To1_19 = Via.getManager().getProtocolManager().getProtocol(Protocol1_19_1To1_19.class);
