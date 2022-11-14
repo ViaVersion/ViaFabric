@@ -12,7 +12,7 @@ import com.viaversion.fabric.common.util.JLoggerToLog4j;
 import com.viaversion.fabric.mc119.commands.VRCommandHandler;
 import com.viaversion.fabric.mc119.platform.FabricPlatform;
 import com.viaversion.fabric.mc119.platform.VFLoader;
-import com.viaversion.fabric.mc119.signatures1_19_0.ProtocolPatcher1_19_0;
+import com.viaversion.fabric.mc119.signatures1_19.ProtocolPatcher1_19;
 import com.viaversion.viaversion.ViaManagerImpl;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.data.MappingDataLoader;
@@ -84,7 +84,7 @@ public class ViaFabric implements ModInitializer {
         config = new VFConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());
 
-        ProtocolPatcher1_19_0.patch();
+        ProtocolPatcher1_19.patchIfClient();
 
         INIT_FUTURE.complete(null);
     }

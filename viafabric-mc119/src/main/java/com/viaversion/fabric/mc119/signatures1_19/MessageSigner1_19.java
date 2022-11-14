@@ -1,4 +1,4 @@
-package com.viaversion.fabric.mc119.signatures1_19_0;
+package com.viaversion.fabric.mc119.signatures1_19;
 
 import net.minecraft.network.encryption.Signer;
 import net.minecraft.network.message.MessageMetadata;
@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.*;
 
-public class MessageSigner1_19_0 {
+public class MessageSigner1_19 {
    public static final Deque<MessageMetadata> TRACKED_METADATA_LIST = new ArrayDeque<>();
 
    public static MessageMetadata pollLastMetadata() {

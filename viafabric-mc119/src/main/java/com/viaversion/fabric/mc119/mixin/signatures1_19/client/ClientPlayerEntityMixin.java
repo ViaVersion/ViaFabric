@@ -1,8 +1,8 @@
-package com.viaversion.fabric.mc119.mixin.signatures1_19_0;
+package com.viaversion.fabric.mc119.mixin.signatures1_19.client;
 
 import com.mojang.brigadier.ParseResults;
-import com.viaversion.fabric.mc119.signatures1_19_0.MessageSigner1_19_0;
-import com.viaversion.fabric.mc119.signatures1_19_0.ProtocolPatcher1_19_0;
+import com.viaversion.fabric.mc119.signatures1_19.MessageSigner1_19;
+import com.viaversion.fabric.mc119.signatures1_19.ProtocolPatcher1_19;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.command.CommandSource;
@@ -25,13 +25,13 @@ public class ClientPlayerEntityMixin {
 
     @Inject(method = "signChatMessage", at = @At("HEAD"), cancellable = true)
     public void injectSignChatMessage(MessageMetadata metadata, DecoratedContents content, LastSeenMessageList lastSeenMessages, CallbackInfoReturnable<MessageSignatureData> cir) {
-        if (!ProtocolPatcher1_19_0.shouldPatchKeys) return;
+        if (!ProtocolPatcher1_19.shouldPatchKeys) return;
 
         try {
             final Signer signer = this.client.getProfileKeys().getSigner();
 
             if (signer != null) {
-                cir.setReturnValue(MessageSigner1_19_0.sign(signer, content.decorated(), metadata.sender(),
+                cir.setReturnValue(MessageSigner1_19.sign(signer, content.decorated(), metadata.sender(),
                         metadata.timestamp(), metadata.salt()));
             }
         } catch (Exception ignored) {
@@ -41,6 +41,6 @@ public class ClientPlayerEntityMixin {
 
     @Inject(method = "signArguments", at = @At(value = "HEAD"))
     public void injectSignArguments(MessageMetadata signer, ParseResults<CommandSource> parseResults, @Nullable Text preview, LastSeenMessageList lastSeenMessages, CallbackInfoReturnable<ArgumentSignatureDataMap> cir) {
-        MessageSigner1_19_0.track(signer);
+        MessageSigner1_19.track(signer);
     }
 }

@@ -1,7 +1,7 @@
-package com.viaversion.fabric.mc119.mixin.signatures1_19_0;
+package com.viaversion.fabric.mc119.mixin.signatures1_19.client;
 
-import com.viaversion.fabric.mc119.signatures1_19_0.IPublicKeyData;
-import com.viaversion.fabric.mc119.signatures1_19_0.ProtocolPatcher1_19_0;
+import com.viaversion.fabric.mc119.signatures1_19.IPublicKeyData;
+import com.viaversion.fabric.mc119.signatures1_19.ProtocolPatcher1_19;
 import net.minecraft.network.encryption.NetworkEncryptionUtils;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import org.spongepowered.asm.mixin.Final;
@@ -35,7 +35,7 @@ public class PlayerPublicKeyChPublicKeyDataMixin implements IPublicKeyData {
 
     @Redirect(method = {"write", "verifyKey"}, at = @At(value = "FIELD", target = "Lnet/minecraft/network/encryption/PlayerPublicKey$PublicKeyData;keySignature:[B"))
     public byte[] replaceKeys(PlayerPublicKey.PublicKeyData instance) {
-        if (this.key1_19_0 != null && ProtocolPatcher1_19_0.shouldPatchKeys) {
+        if (this.key1_19_0 != null && ProtocolPatcher1_19.shouldPatchKeys) {
             return this.key1_19_0;
         }
 
@@ -44,7 +44,7 @@ public class PlayerPublicKeyChPublicKeyDataMixin implements IPublicKeyData {
 
     @Inject(method = "toSerializedString", at = @At(value = "HEAD"), cancellable = true)
     public void injectToSerializedString(UUID playerUuid, CallbackInfoReturnable<byte[]> cir) {
-        if (ProtocolPatcher1_19_0.shouldPatchKeys) {
+        if (ProtocolPatcher1_19.shouldPatchKeys) {
             cir.setReturnValue((this.expiresAt.toEpochMilli() + NetworkEncryptionUtils.encodeRsaPublicKey(this.key)).getBytes(StandardCharsets.UTF_8));
         }
     }

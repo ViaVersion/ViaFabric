@@ -1,7 +1,7 @@
-package com.viaversion.fabric.mc119.mixin.signatures1_19_0;
+package com.viaversion.fabric.mc119.mixin.signatures1_19.client;
 
 import com.mojang.authlib.yggdrasil.response.KeyPairResponse;
-import com.viaversion.fabric.mc119.signatures1_19_0.IPublicKeyData;
+import com.viaversion.fabric.mc119.signatures1_19.IPublicKeyData;
 import net.minecraft.client.util.ProfileKeys;
 import net.minecraft.network.encryption.PlayerPublicKey;
 import org.spongepowered.asm.mixin.Mixin;
