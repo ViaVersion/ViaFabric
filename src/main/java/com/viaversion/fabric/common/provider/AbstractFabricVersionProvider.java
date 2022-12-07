@@ -36,10 +36,6 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
         multiconnectIntegration();
     }
 
-    // This method indicates the correct clientside version, in case Auto Detect is used you still need the version that ViaVersion uses
-    public void onFinallySetVersion(final int realClientsideVersion) {
-    }
-
     private void multiconnectIntegration() {
         if (!FabricLoader.getInstance().isModLoaded("multiconnect")) return;
         try {
@@ -106,7 +102,6 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
 
             if (blocked || !supported) serverVer = info.getProtocolVersion();
 
-            this.onFinallySetVersion(serverVer);
             return serverVer;
         }
         NativeVersionProvider natProvider = Via.getManager().getProviders().get(NativeVersionProvider.class);

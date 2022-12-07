@@ -31,14 +31,18 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
     protected void init() {
         int entries = 0;
 
-        this.addDrawableChild(new ButtonWidget(calculatePosX(this.width, entries),
-                calculatePosY(this.height, entries),
-                150, 20, getClientSideText(), this::onClickClientSide));
+        this.addDrawableChild(ButtonWidget
+                .builder(getClientSideText(), this::onClickClientSide)
+                .dimensions(calculatePosX(this.width, entries),
+                        calculatePosY(this.height, entries), 150, 20)
+                .build());
         entries++;
 
-        this.addDrawableChild(new ButtonWidget(calculatePosX(this.width, entries),
-                calculatePosY(this.height, entries),
-                150, 20, getHideViaButtonText(), this::onHideViaButton));
+        this.addDrawableChild(ButtonWidget
+                .builder(getHideViaButtonText(), this::onHideViaButton)
+                .dimensions(calculatePosX(this.width, entries),
+                        calculatePosY(this.height, entries), 150, 20)
+                .build());
         entries++;
 
         protocolVersion = new TextFieldWidget(this.textRenderer,
@@ -54,7 +58,10 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
 
         this.addDrawableChild(protocolVersion);
 
-        this.addDrawableChild(new ButtonWidget(this.width / 2 - 100, this.height - 40, 200, 20, ScreenTexts.DONE, (buttonWidget) -> this.client.setScreen(this.parent)));
+        this.addDrawableChild(ButtonWidget
+                .builder(ScreenTexts.DONE, (it) -> close())
+                .dimensions(this.width / 2 - 100, this.height - 40, 200, 20)
+                .build());
     }
 
     private void onChangeVersionField(String text) {

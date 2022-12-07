@@ -50,8 +50,7 @@
     "mixins.viafabric119.address.json",
     "mixins.viafabric119.gui.json",
     "mixins.viafabric119.debug.json",
-    "mixins.viafabric119.pipeline.json",
-    "mixins.viafabric119.signatures.json"
+    "mixins.viafabric119.pipeline.json"
   ],
   "custom": {
     "modmenu": {

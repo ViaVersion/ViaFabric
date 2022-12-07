@@ -12,8 +12,8 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class VRHandItemProvider extends HandItemProvider {
     public Item clientItem = null;
@@ -50,7 +50,7 @@ public class VRHandItemProvider extends HandItemProvider {
     }
 
     private Item fromNative(ItemStack original) {
-        Identifier iid = Registry.ITEM.getId(original.getItem());
+        Identifier iid = Registries.ITEM.getId(original.getItem());
         int id = RemappingUtil.swordId(iid.toString());
         return new DataItem(id, (byte) original.getCount(), (short) original.getDamage(), null);
     }
