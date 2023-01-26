@@ -220,6 +220,7 @@ modrinth {
 
     dependencies {
         optional.project "P7dR8mSH" // fabric api
+        optional.project "9CJED7xi" // legacy fabric api
     }
 }
 
