@@ -6,24 +6,28 @@ import com.viaversion.fabric.mc119.mixin.debug.client.MixinClientConnectionAcces
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.listener.ClientQueryPacketListener;
+import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(targets = "net.minecraft.client.network.MultiplayerServerListPinger$1")
 public abstract class MixinMultiplayerServerListPingerListener implements ClientQueryPacketListener {
-    @Shadow
-    public abstract ClientConnection getConnection();
+    @Accessor
+    abstract ClientConnection getField_3774(); // Synthetic
 
-    @Redirect(method = "onResponse(Lnet/minecraft/network/packet/s2c/query/QueryResponseS2CPacket;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ServerInfo;getIcon()Ljava/lang/String;"))
-    private String onResponseCaptureServerInfo(ServerInfo serverInfo) {
-        FabricDecodeHandler decoder = ((MixinClientConnectionAccessor) this.getConnection()).getChannel()
+    @Accessor
+    abstract ServerInfo getField_3776(); // Synthetic
+
+    @Inject(method = "onResponse(Lnet/minecraft/network/packet/s2c/query/QueryResponseS2CPacket;)V", at = @At(value = "HEAD"))
+    private void onResponseCaptureServerInfo(QueryResponseS2CPacket packet, CallbackInfo ci) {
+        FabricDecodeHandler decoder = ((MixinClientConnectionAccessor) this.getField_3774()).getChannel()
                 .pipeline().get(FabricDecodeHandler.class);
         if (decoder != null) {
-            ((ViaServerInfo) serverInfo).setViaTranslating(decoder.getInfo().isActive());
-            ((ViaServerInfo) serverInfo).setViaServerVer(decoder.getInfo().getProtocolInfo().getServerProtocolVersion());
+            ((ViaServerInfo) getField_3776()).setViaTranslating(decoder.getInfo().isActive());
+            ((ViaServerInfo) getField_3776()).setViaServerVer(decoder.getInfo().getProtocolInfo().getServerProtocolVersion());
         }
-        return serverInfo.getIcon();
     }
 }
