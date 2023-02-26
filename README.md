@@ -72,8 +72,9 @@ registry synchronization (fabric-registry-sync mod).
 - [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): Fabric mod for connecting to older
   versions: down to 1.11 (stable) and 1.8 (experimental).
 - [ViaForge](https://www.curseforge.com/minecraft/mc-mods/viaforge): Fork of ViaFabric porting it to Forge.
+- [ViaFabricPlus](https://www.curseforge.com/minecraft/mc-mods/viafabricplus): Fabric ViaVersion/ViaLegacy/ViaAprilFools implementation with clientside fixes  
 
-### Server-side
+### Server-side:
 
 - [ProtocolSupport](https://protocol.support/): Bukkit plugin for older client versions (down to 1.4.7).
 - [ViaVersion](https://viaversion.com): Plugin for BungeeCord, CraftBukkit, SpongeCommon and Velocity servers.
