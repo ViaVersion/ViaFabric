@@ -12,7 +12,6 @@ import com.viaversion.fabric.mc18.platform.FabricPlatform;
 import com.viaversion.fabric.mc18.platform.VFLoader;
 import com.viaversion.viaversion.ViaManagerImpl;
 import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.data.MappingDataLoader;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.netty.channel.EventLoop;
 import io.netty.channel.local.LocalEventLoopGroup;
@@ -53,9 +52,8 @@ public class ViaFabric implements ModInitializer {
 
         platform.init();
 
-        FabricLoader.getInstance().getModContainer("viabackwards").ifPresent(mod -> MappingDataLoader.enableMappingsCache());
-
-        ((ViaManagerImpl) Via.getManager()).init();
+        ViaManagerImpl manager = (ViaManagerImpl) Via.getManager();
+        manager.init();
 
         Via.getManager().getProtocolManager().registerBaseProtocol(HostnameParserProtocol.INSTANCE, Range.lessThan(Integer.MIN_VALUE));
         ProtocolVersion.register(-2, "AUTO");
@@ -66,6 +64,8 @@ public class ViaFabric implements ModInitializer {
 
         config = new VFConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
                 .resolve("viafabric.yml").toFile());
+
+        manager.onServerLoaded();
 
         INIT_FUTURE.complete(null);
     }

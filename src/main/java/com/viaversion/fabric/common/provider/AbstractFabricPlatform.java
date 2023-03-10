@@ -77,6 +77,14 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
+    public FutureTaskId runRepeatingAsync(Runnable runnable, long ticks) {
+        return new FutureTaskId(eventLoop()
+                .scheduleAtFixedRate(() -> runAsync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS)
+                .addListener(errorLogger())
+        );
+    }
+
+    @Override
     public FutureTaskId runSync(Runnable runnable, long ticks) {
         // ViaVersion seems to not need to run delayed tasks on main thread
         return new FutureTaskId(eventLoop()
