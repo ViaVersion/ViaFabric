@@ -12,7 +12,7 @@ plugins {
     id "org.ajoberstar.grgit" version "3.1.1"
     id "com.matthewprenger.cursegradle" version "1.4.0"
     id "com.modrinth.minotaur" version "2.2.0"
-    id "fabric-loom" version "1.0-SNAPSHOT" apply false
+    id "fabric-loom" version "1.1-SNAPSHOT" apply false
     id "com.github.ben-manes.versions" version "0.42.0"
 }
 
@@ -162,7 +162,7 @@ processResources {
 }
 
 List<String> mcReleases = new ArrayList<>(
-        Arrays.asList("1.19.3", "1.18.2", "1.17.1", "1.16.5", "1.15.2", "1.14.4", "1.8.9"))
+        Arrays.asList("1.18.2", "1.17.1", "1.16.5", "1.15.2", "1.14.4", "1.8.9"))
 List<String> javaVersions = IntStream.rangeClosed(8, 18)
         .mapToObj { n -> (String) "Java $n" }
         .collect(Collectors.toList())
@@ -220,6 +220,7 @@ modrinth {
 
     dependencies {
         optional.project "P7dR8mSH" // fabric api
+        optional.project "9CJED7xi" // legacy fabric api
     }
 }
 

@@ -69,10 +69,10 @@ public class ProtocolAutoDetector {
                                 clientConnection.setPacketListener(new ClientQueryPacketListener() {
                                     @Override
                                     public void onResponse(QueryResponseS2CPacket packet) {
-                                        ServerMetadata meta = packet.getServerMetadata();
-                                        ServerMetadata.Version version;
-                                        if (meta != null && (version = meta.getVersion()) != null) {
-                                            ProtocolVersion ver = ProtocolVersion.getProtocol(version.getProtocolVersion());
+                                        ServerMetadata meta = packet.metadata();
+                                        if (meta != null && meta.version().isPresent()) {
+                                            ProtocolVersion ver = ProtocolVersion.getProtocol(meta.version().get()
+                                                    .protocolVersion());
                                             future.complete(ver);
                                             ViaFabric.JLOGGER.info("Auto-detected " + ver + " for " + address);
                                         } else {
@@ -92,8 +92,8 @@ public class ProtocolAutoDetector {
                                     }
 
                                     @Override
-                                    public ClientConnection getConnection() {
-                                        return clientConnection;
+                                    public boolean isConnectionOpen() {
+                                        return ch.channel().isOpen();
                                     }
                                 });
 
