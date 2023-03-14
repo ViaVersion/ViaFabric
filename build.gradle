@@ -25,16 +25,14 @@ logger.lifecycle("Building ViaFabric: $version")
 
 def getBranch() {
     def ENV = System.getenv()
+    def branch = "unknown"
+
     if (ENV.GITHUB_REF) {
-        def branch = ENV.GITHUB_REF
-        return branch.substring(branch.lastIndexOf("/") + 1)
+        branch = ENV.GITHUB_REF
+    } else if (grgit != null) {
+        branch = grgit.branch.current().name
     }
 
-    if (grgit == null) {
-        return "unknown"
-    }
-
-    def branch = grgit.branch.current().name
     return branch.substring(branch.lastIndexOf("/") + 1)
 }
 
@@ -87,7 +85,7 @@ allprojects {
 
 subprojects {
     dependencies {
-        implementation (rootProject) {
+        implementation(rootProject) {
             exclude group: "net.fabricmc", module: "fabric-loader" // prevent duplicate fabric-loader on run
         }
     }
@@ -161,8 +159,9 @@ processResources {
     }
 }
 
-List<String> mcReleases = new ArrayList<>(
-        Arrays.asList("1.18.2", "1.17.1", "1.16.5", "1.15.2", "1.14.4", "1.8.9"))
+List<String> mcReleases = Arrays.stream(rootProject.publish_mc_versions.toString().split(","))
+        .map({ it -> it.trim() })
+        .collect(Collectors.toList())
 List<String> javaVersions = IntStream.rangeClosed(8, 18)
         .mapToObj { n -> (String) "Java $n" }
         .collect(Collectors.toList())
@@ -214,7 +213,7 @@ modrinth {
     uploadFile.set(remapJar)
 
     List<String> mcs = new ArrayList<>(mcReleases)
-    if (!rootProject.modrinth_mc_snapshot.isEmpty()) mcs.add(rootProject.modrinth_mc_snapshot)
+    if (!rootProject.modrinth_mc_snapshot.isEmpty()) mcs.add(rootProject.modrinth_mc_snapshot.toString())
     gameVersions.set(mcs)
     loaders.set(["fabric"])
 
