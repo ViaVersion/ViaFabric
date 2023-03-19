@@ -176,7 +176,7 @@ curseforge {
     project {
         id = "391298"
         changelog = changelogMsg
-        releaseType = "alpha"
+        releaseType = "beta"
 
         mcReleases.forEach { ver -> addGameVersion(ver) }
         if (!rootProject.curseforge_mc_snapshot.isEmpty()) addGameVersion(rootProject.curseforge_mc_snapshot)
@@ -205,7 +205,7 @@ curseforge {
 modrinth {
     token.set(ENV.MODRINTH_TOKEN)
     projectId.set("YlKdE5VK")
-    versionType.set("alpha")
+    versionType.set("beta")
     versionNumber.set(rootProject.version)
     versionName.set(versionNameMsg)
     changelog.set(changelogMsg)
