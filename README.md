@@ -145,7 +145,7 @@ registry synchronization (fabric-registry-sync mod).
 | How does it work?      | modifying packets at network code | modifying client code more deeply             |
 | Triggering anti-cheats | very likely                       | less likely                                   |
 
-## WARNING
+## Disclaimer
 
-**I cannot guarantee that this mod is allowed on every (or even any) server. This mod may cause problems with anti cheat
-plugins. USE AT OWN RISK**
+It cannot be guaranteed that this mod is allowed on specific servers as it can possibly cause problems with anti-cheat plugins.\
+***(USE ONLY WITH CAUTION!)***
