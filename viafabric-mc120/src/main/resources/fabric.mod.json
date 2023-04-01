@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "viafabric-mc120",
+  "name": "ViaFabric for 1.20",
+  "version": "${version}",
+  "description": "${description}",
+  "license": "GPL-3.0",
+  "contact": {
+    "homepage": "https://viaversion.com/fabric",
+    "issues": "https://github.com/ViaVersion/ViaFabric/issues",
+    "sources": "https://github.com/ViaVersion/ViaFabric"
+  },
+  "environment": "*",
+  "authors": [
+    {
+      "name": "creeper123123321",
+      "contact": {
+        "homepage": "https://creeper123123321.github.io/"
+      }
+    }
+  ],
+  "contributors": [
+    {
+      "name": "GitHub contributors",
+      "contact": {
+        "homepage": "https://github.com/ViaVersion/ViaFabric/graphs/contributors"
+      }
+    }
+  ],
+  "entrypoints": {
+    "main": [
+      "com.viaversion.fabric.mc120.ViaFabric"
+    ],
+    "client": [
+      "com.viaversion.fabric.mc120.ViaFabricClient"
+    ],
+    "modmenu": [
+      "com.viaversion.fabric.mc120.gui.ModMenuConfig"
+    ]
+  },
+  "depends": {
+    "fabric-resource-loader-v0": "*",
+    "minecraft": "1.20.x",
+    "viafabric": "*"
+  },
+  "recommends": {
+    "fabric-command-api-v2": "*"
+  },
+  "mixins": [
+    "mixins.viafabric120.address.json",
+    "mixins.viafabric120.gui.json",
+    "mixins.viafabric120.debug.json",
+    "mixins.viafabric120.pipeline.json"
+  ],
+  "custom": {
+    "modmenu": {
+      "parent": "viafabric"
+    }
+  }
+}
