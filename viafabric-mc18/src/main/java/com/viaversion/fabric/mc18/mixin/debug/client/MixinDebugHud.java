@@ -3,6 +3,7 @@ package com.viaversion.fabric.mc18.mixin.debug.client;
 import com.viaversion.fabric.common.handler.CommonTransformer;
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
+import com.viaversion.viaversion.api.connection.UserConnection;
 import io.netty.channel.ChannelHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.DebugHud;
@@ -24,11 +25,12 @@ public class MixinDebugHud {
         ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) MinecraftClient.getInstance().getNetworkHandler()
                 .getClientConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
         if (viaDecoder instanceof FabricDecodeHandler) {
-            ProtocolInfo protocol = ((FabricDecodeHandler) viaDecoder).getInfo().getProtocolInfo();
+            UserConnection user = ((FabricDecodeHandler) viaDecoder).getInfo();
+            ProtocolInfo protocol = user.getProtocolInfo();
             if (protocol != null) {
                 ProtocolVersion serverVer = ProtocolVersion.getProtocol(protocol.getServerProtocolVersion());
                 ProtocolVersion clientVer = ProtocolVersion.getProtocol(protocol.getProtocolVersion());
-                line += " / C: " + clientVer + " S: " + serverVer + " A: " + protocol.getUser().isActive();
+                line += " / C: " + clientVer + " S: " + serverVer + " A: " + user.isActive();
             }
         }
 

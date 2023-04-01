@@ -32,7 +32,7 @@ public class ViaButton extends ButtonWidget {
         // Modified copy-paste from LockButtonWidget
         if (this.visible) {
             client.getTextureManager().bindTexture(texturePath);
-            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             boolean hover = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             int v = startV;
             if (hover) {

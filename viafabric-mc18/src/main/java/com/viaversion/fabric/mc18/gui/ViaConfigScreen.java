@@ -61,7 +61,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
         //this.children.add(protocolVersion);
 
         buttons.add(new ListeneableButton("done".hashCode(), this.width / 2 - 100, this.height - 40, 200, 20, new TranslatableText("gui.done").asUnformattedString(),
-                (buttonWidget) -> MinecraftClient.getInstance().openScreen(this.parent)));
+                (buttonWidget) -> MinecraftClient.getInstance().setScreen(this.parent)));
     }
 
     private void onChangeVersionField(String text) {
@@ -88,7 +88,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
 
     private void onClickClientSide(ButtonWidget widget) {
         if (!ViaFabric.config.isClientSideEnabled()) {
-            MinecraftClient.getInstance().openScreen(new ConfirmScreen(
+            MinecraftClient.getInstance().setScreen(new ConfirmScreen(
                     (answer, id) -> {
                         if (answer) {
                             ViaFabric.config.setClientSideEnabled(true);
@@ -96,7 +96,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
                             ViaFabric.config.saveConfig();
                             widget.message = getClientSideText().asUnformattedString();
                         }
-                        MinecraftClient.getInstance().openScreen(this);
+                        MinecraftClient.getInstance().setScreen(this);
                     },
                     new TranslatableText("gui.enable_client_side.question").asUnformattedString(),
                     new TranslatableText("gui.enable_client_side.warning").asUnformattedString(),
