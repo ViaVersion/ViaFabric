@@ -11,6 +11,7 @@ import net.minecraft.server.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class NMSCommandSender implements ViaCommandSender {
@@ -47,7 +48,7 @@ public class NMSCommandSender implements ViaCommandSender {
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && source instanceof ClientCommandSource) {
             return MinecraftClient.getInstance().player.getUuid();
         }
-        return UUID.fromString(getName());
+        return UUID.nameUUIDFromBytes(getName().getBytes(StandardCharsets.UTF_8));
     }
 
     @Override

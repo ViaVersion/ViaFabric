@@ -6,6 +6,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class NMSCommandSender implements ViaCommandSender {
@@ -31,7 +32,7 @@ public class NMSCommandSender implements ViaCommandSender {
         if (source instanceof Entity) {
             return ((Entity) source).getUuid();
         }
-        return UUID.fromString(getName());
+        return UUID.nameUUIDFromBytes(getName().getBytes(StandardCharsets.UTF_8));
     }
 
     @Override

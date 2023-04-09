@@ -9,6 +9,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class NMSCommandSender implements ViaCommandSender {
@@ -45,7 +46,7 @@ public class NMSCommandSender implements ViaCommandSender {
         } else if (source instanceof FabricClientCommandSource) {
             return ((FabricClientCommandSource) source).getPlayer().getUuid();
         }
-        return UUID.fromString(getName());
+        return UUID.nameUUIDFromBytes(getName().getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
