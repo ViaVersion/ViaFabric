@@ -24,6 +24,16 @@ public class MixinServerEntry {
     @Final
     private ServerInfo server;
 
+    @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0,
+    target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIFFIIII)V"))
+    private void redirectPingIcon(DrawContext instance, Identifier texture, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
+        if (texture.equals(GUI_ICONS_TEXTURES) && ((ViaServerInfo) this.server).isViaTranslating()) {
+            instance.drawTexture(new Identifier("textures/gui/icons.png"), x, y, u, v, width, height, textureWidth, textureHeight);
+            return;
+        }
+        instance.drawTexture(texture, x, y, u, v, width, height, textureWidth, textureHeight);
+    }
+
     private static final Identifier GUI_ICONS_TEXTURES = new Identifier("textures/gui/icons.png");
 
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setMultiplayerScreenTooltip(Ljava/util/List;)V"))
