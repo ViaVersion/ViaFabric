@@ -71,8 +71,8 @@ registry synchronization (fabric-registry-sync mod).
 - [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): Discontinued 5zig plugin.
 - [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): Fabric mod for connecting to older
   versions: down to 1.11 (stable) and 1.8 (experimental).
-- [ViaForge](https://www.curseforge.com/minecraft/mc-mods/viaforge): Fork of ViaFabric porting it to Forge.
-- [ViaFabricPlus](https://www.curseforge.com/minecraft/mc-mods/viafabricplus): Fabric ViaVersion/ViaLegacy/ViaAprilFools implementation with client-side fixes.  
+- [ViaForge](https://www.modrinth.com/mod/viaforge): Fork of ViaFabric porting it to Forge.
+- [ViaFabricPlus](https://www.modrinth.com/mod/viafabricplus): Fabric ViaVersion/ViaLegacy/ViaAprilFools implementation with client-side fixes.  
 
 ### Server-side:
 
