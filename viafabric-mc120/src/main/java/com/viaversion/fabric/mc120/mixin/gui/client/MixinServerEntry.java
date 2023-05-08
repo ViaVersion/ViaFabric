@@ -3,7 +3,7 @@ package com.viaversion.fabric.mc120.mixin.gui.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.viaversion.fabric.common.gui.ViaServerInfo;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.network.ServerInfo;
@@ -25,14 +25,16 @@ public class MixinServerEntry {
     private ServerInfo server;
 
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0,
-            target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V"))
-    private void redirectPingIcon(int i, Identifier identifier) {
-        if (identifier.equals(DrawableHelper.GUI_ICONS_TEXTURE) && ((ViaServerInfo) this.server).isViaTranslating()) {
-            RenderSystem.setShaderTexture(i, new Identifier("viafabric:textures/gui/icons.png"));
+    target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIFFIIII)V"))
+    private void redirectPingIcon(DrawContext instance, Identifier texture, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
+        if (texture.equals(GUI_ICONS_TEXTURES) && ((ViaServerInfo) this.server).isViaTranslating()) {
+            instance.drawTexture(new Identifier("textures/gui/icons.png"), x, y, u, v, width, height, textureWidth, textureHeight);
             return;
         }
-        RenderSystem.setShaderTexture(i, identifier);
+        instance.drawTexture(texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
+
+    private static final Identifier GUI_ICONS_TEXTURES = new Identifier("textures/gui/icons.png");
 
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setMultiplayerScreenTooltip(Ljava/util/List;)V"))
     private void addServerVer(MultiplayerScreen multiplayerScreen, List<Text> tooltipText) {
