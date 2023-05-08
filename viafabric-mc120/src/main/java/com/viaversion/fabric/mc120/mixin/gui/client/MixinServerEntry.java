@@ -3,7 +3,7 @@ package com.viaversion.fabric.mc120.mixin.gui.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.viaversion.fabric.common.gui.ViaServerInfo;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.network.ServerInfo;
@@ -24,15 +24,7 @@ public class MixinServerEntry {
     @Final
     private ServerInfo server;
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0,
-            target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V"))
-    private void redirectPingIcon(int i, Identifier identifier) {
-        if (identifier.equals(DrawableHelper.GUI_ICONS_TEXTURE) && ((ViaServerInfo) this.server).isViaTranslating()) {
-            RenderSystem.setShaderTexture(i, new Identifier("viafabric:textures/gui/icons.png"));
-            return;
-        }
-        RenderSystem.setShaderTexture(i, identifier);
-    }
+    private static final Identifier GUI_ICONS_TEXTURES = new Identifier("textures/gui/icons.png");
 
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setMultiplayerScreenTooltip(Ljava/util/List;)V"))
     private void addServerVer(MultiplayerScreen multiplayerScreen, List<Text> tooltipText) {
