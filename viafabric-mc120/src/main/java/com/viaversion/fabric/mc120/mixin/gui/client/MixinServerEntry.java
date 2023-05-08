@@ -34,7 +34,7 @@ public class MixinServerEntry {
         instance.drawTexture(texture, x, y, u, v, width, height, textureWidth, textureHeight);
     }
 
-    private static final Identifier GUI_ICONS_TEXTURES = new Identifier("textures/gui/icons.png");
+    private static final Identifier GUI_ICONS_TEXTURES = new Identifier("viafabric:textures/gui/icons.png");
 
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setMultiplayerScreenTooltip(Ljava/util/List;)V"))
     private void addServerVer(MultiplayerScreen multiplayerScreen, List<Text> tooltipText) {
