@@ -28,7 +28,7 @@ public class MixinServerEntry {
     target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIFFIIII)V"))
     private void redirectPingIcon(DrawContext instance, Identifier texture, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
         if (texture.equals(GUI_ICONS_TEXTURES) && ((ViaServerInfo) this.server).isViaTranslating()) {
-            instance.drawTexture(new Identifier("textures/gui/icons.png"), x, y, u, v, width, height, textureWidth, textureHeight);
+            instance.drawTexture(new Identifier("viafabric:textures/gui/icons.png"), x, y, u, v, width, height, textureWidth, textureHeight);
             return;
         }
         instance.drawTexture(texture, x, y, u, v, width, height, textureWidth, textureHeight);
