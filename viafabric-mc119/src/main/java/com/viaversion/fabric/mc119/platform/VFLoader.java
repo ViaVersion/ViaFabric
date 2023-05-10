@@ -28,8 +28,10 @@ public class VFLoader implements ViaPlatformLoader {
             }
             Via.getManager().getProviders().use(HandItemProvider.class, handProvider);
         }
-        Via.getManager().getProviders().use(PlayerAbilitiesProvider.class, new VRPlayerAbilitiesProvider());
-        Via.getManager().getProviders().use(PlayerLookTargetProvider.class, new VRPlayerLookTargetProvider());
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            Via.getManager().getProviders().use(PlayerAbilitiesProvider.class, new VRPlayerAbilitiesProvider());
+            Via.getManager().getProviders().use(PlayerLookTargetProvider.class, new VRPlayerLookTargetProvider());
+        }
     }
 
     @Override
