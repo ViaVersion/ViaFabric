@@ -49,15 +49,15 @@ public class FabricDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
         int decoderIndex = ctx.pipeline().names().indexOf("decompress");
         if (decoderIndex == -1) return;
 
-        if (decoderIndex > ctx.pipeline().names().indexOf("via-decoder")) {
-            ChannelHandler encoder = ctx.pipeline().get("via-encoder");
-            ChannelHandler decoder = ctx.pipeline().get("via-decoder");
+        if (decoderIndex > ctx.pipeline().names().indexOf(CommonTransformer.HANDLER_DECODER_NAME)) {
+            ChannelHandler encoder = ctx.pipeline().get(CommonTransformer.HANDLER_ENCODER_NAME);
+            ChannelHandler decoder = ctx.pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
 
             ctx.pipeline().remove(encoder);
             ctx.pipeline().remove(decoder);
 
-            ctx.pipeline().addAfter("compress", "via-encoder", encoder);
-            ctx.pipeline().addAfter("decompress", "via-decoder", decoder);
+            ctx.pipeline().addAfter("compress", CommonTransformer.HANDLER_ENCODER_NAME, encoder);
+            ctx.pipeline().addAfter("decompress", CommonTransformer.HANDLER_DECODER_NAME, decoder);
         }
     }
 
