@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class VRHandItemProvider extends HandItemProvider {
+public class VFHandItemProvider extends HandItemProvider {
     public final Map<UUID, Item> serverPlayers = new ConcurrentHashMap<>();
     public Item clientItem = null;
 

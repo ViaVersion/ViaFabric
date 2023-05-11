@@ -1,7 +1,7 @@
-package com.viaversion.fabric.mc120.providers;
+package com.viaversion.fabric.mc118.providers;
 
 import com.viaversion.fabric.common.util.RemappingUtil;
-import com.viaversion.fabric.mc120.ViaFabric;
+import com.viaversion.fabric.mc118.ViaFabric;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.minecraft.item.Item;
@@ -12,10 +12,10 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
-public class VRHandItemProvider extends HandItemProvider {
+public class VFHandItemProvider extends HandItemProvider {
     public Item clientItem = null;
 
     @Override
@@ -50,7 +50,7 @@ public class VRHandItemProvider extends HandItemProvider {
     }
 
     private Item fromNative(ItemStack original) {
-        Identifier iid = Registries.ITEM.getId(original.getItem());
+        Identifier iid = Registry.ITEM.getId(original.getItem());
         int id = RemappingUtil.swordId(iid.toString());
         return new DataItem(id, (byte) original.getCount(), (short) original.getDamage(), null);
     }

@@ -1,7 +1,7 @@
-package com.viaversion.fabric.mc117.providers;
+package com.viaversion.fabric.mc115.providers;
 
 import com.viaversion.fabric.common.util.RemappingUtil;
-import com.viaversion.fabric.mc117.ViaFabric;
+import com.viaversion.fabric.mc115.ViaFabric;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.minecraft.item.Item;
@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-public class VRHandItemProvider extends HandItemProvider {
+public class VFHandItemProvider extends HandItemProvider {
     public Item clientItem = null;
 
     @Override
@@ -45,7 +45,7 @@ public class VRHandItemProvider extends HandItemProvider {
     private void tickClient() {
         ClientPlayerEntity p = MinecraftClient.getInstance().player;
         if (p != null) {
-            clientItem = fromNative(p.getInventory().getMainHandStack());
+            clientItem = fromNative(p.inventory.getMainHandStack());
         }
     }
 

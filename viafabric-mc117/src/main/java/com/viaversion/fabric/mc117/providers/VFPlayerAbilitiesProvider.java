@@ -4,7 +4,7 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.protocols.protocol1_16to1_15_2.provider.PlayerAbilitiesProvider;
 import net.minecraft.client.MinecraftClient;
 
-public class VRPlayerAbilitiesProvider extends PlayerAbilitiesProvider {
+public class VFPlayerAbilitiesProvider extends PlayerAbilitiesProvider {
 
     @Override
     public float getFlyingSpeed(UserConnection connection) {
