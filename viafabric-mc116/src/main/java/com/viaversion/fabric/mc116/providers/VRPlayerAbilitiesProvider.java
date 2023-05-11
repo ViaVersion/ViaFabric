@@ -8,11 +8,15 @@ public class VRPlayerAbilitiesProvider extends PlayerAbilitiesProvider {
 
     @Override
     public float getFlyingSpeed(UserConnection connection) {
+        if (!connection.isClientSide()) return super.getFlyingSpeed(connection);
+
         return MinecraftClient.getInstance().player.abilities.getFlySpeed();
     }
 
     @Override
     public float getWalkingSpeed(UserConnection connection) {
+        if (!connection.isClientSide()) return super.getWalkingSpeed(connection);
+
         return MinecraftClient.getInstance().player.abilities.getWalkSpeed();
     }
 }

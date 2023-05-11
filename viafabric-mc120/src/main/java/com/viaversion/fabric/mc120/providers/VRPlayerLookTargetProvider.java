@@ -11,6 +11,8 @@ public class VRPlayerLookTargetProvider extends PlayerLookTargetProvider {
 
     @Override
     public Position getPlayerLookTarget(UserConnection info) {
+        if (!info.isClientSide()) return null;
+
         if (MinecraftClient.getInstance().crosshairTarget instanceof BlockHitResult blockHitResult) {
             final BlockPos pos = blockHitResult.getBlockPos();
             return new Position(pos.getX(), pos.getY(), pos.getZ());
