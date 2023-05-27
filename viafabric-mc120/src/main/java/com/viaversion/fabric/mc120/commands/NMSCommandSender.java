@@ -32,7 +32,7 @@ public class NMSCommandSender implements ViaCommandSender {
     @Override
     public void sendMessage(String s) {
         if (source instanceof ServerCommandSource) {
-            ((ServerCommandSource) source).sendFeedback(fromLegacy(s), false);
+            ((ServerCommandSource) source).sendFeedback(() -> fromLegacy(s), false);
         } else if (source instanceof FabricClientCommandSource) {
             ((FabricClientCommandSource) source).sendFeedback(fromLegacy(s));
         }
