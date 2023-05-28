@@ -1,6 +1,6 @@
 package com.viaversion.fabric.mc18.platform;
 
-import com.viaversion.fabric.mc18.providers.VRHandItemProvider;
+import com.viaversion.fabric.mc18.providers.VFHandItemProvider;
 import com.viaversion.fabric.mc18.providers.FabricVersionProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -18,7 +18,7 @@ public class VFLoader implements ViaPlatformLoader {
         Via.getManager().getProviders().use(VersionProvider.class, new FabricVersionProvider());
 
         if (Via.getPlatform().getConf().isItemCache()) {
-            VRHandItemProvider handProvider = new VRHandItemProvider();
+            VFHandItemProvider handProvider = new VFHandItemProvider();
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 handProvider.registerClientTick();
             }

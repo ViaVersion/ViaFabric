@@ -1,8 +1,8 @@
 package com.viaversion.fabric.mc115.platform;
 
-import com.viaversion.fabric.mc115.providers.VRHandItemProvider;
+import com.viaversion.fabric.mc115.providers.VFHandItemProvider;
 import com.viaversion.fabric.mc115.providers.FabricVersionProvider;
-import com.viaversion.fabric.mc115.providers.VRPlayerLookTargetProvider;
+import com.viaversion.fabric.mc115.providers.VFPlayerLookTargetProvider;
 import com.viaversion.viaversion.protocols.protocol1_13to1_12_2.providers.PlayerLookTargetProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -20,15 +20,14 @@ public class VFLoader implements ViaPlatformLoader {
         Via.getManager().getProviders().use(VersionProvider.class, new FabricVersionProvider());
 
         if (Via.getPlatform().getConf().isItemCache()) {
-            VRHandItemProvider handProvider = new VRHandItemProvider();
+            VFHandItemProvider handProvider = new VFHandItemProvider();
             if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
                 handProvider.registerClientTick();
             }
             Via.getManager().getProviders().use(HandItemProvider.class, handProvider);
         }
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            Via.getManager().getProviders().use(PlayerLookTargetProvider.class, new VRPlayerLookTargetProvider());
-        }
+
+        Via.getManager().getProviders().use(PlayerLookTargetProvider.class, new VFPlayerLookTargetProvider());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.viaversion.fabric.mc119.commands;
+package com.viaversion.fabric.mc117.commands;
 
 import com.viaversion.fabric.common.commands.subs.LeakDetectSubCommand;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -10,7 +10,7 @@ import com.viaversion.viaversion.commands.ViaCommandHandler;
 
 import java.util.concurrent.CompletableFuture;
 
-public class VRCommandHandler extends ViaCommandHandler {
+public class VFCommandHandler extends ViaCommandHandler {
     {
         try {
             registerSubCommand(new LeakDetectSubCommand());

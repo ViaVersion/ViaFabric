@@ -1,4 +1,4 @@
-package com.viaversion.fabric.mc117.providers;
+package com.viaversion.fabric.mc116.providers;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.Position;
@@ -8,7 +8,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 
-public class VRPlayerLookTargetProvider extends PlayerLookTargetProvider {
+public class VFPlayerLookTargetProvider extends PlayerLookTargetProvider {
 
     @Override
     public Position getPlayerLookTarget(UserConnection info) {
