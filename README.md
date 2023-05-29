@@ -10,7 +10,7 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod can be installed on 1.8.9, 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4 with Fabric Loader.
+This mod can be installed on 1.8.9, 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20 with Fabric Loader.
 
 ## Dependencies
 
@@ -47,15 +47,16 @@ registry synchronization (fabric-registry-sync mod).
 
 - Client-side:
 
-|               | 1.8.x | 1.9.x | 1.10-1.14.4 | 1.15.x | 1.16.x | 1.17.x | 1.18.x | 1.19.x |
-|---------------|-------|-------|-------------|--------|--------|--------|--------|--------|
-| 1.8.9 client  | ✓     | ⏪     | ⏪           | ⏪      | ⏪      | ⏪      | ⏪      | ⏪ |
-| 1.14.x client | ✓     | ✓     | ✓           | ⟲      | ⟲      | ⟲      | ⟲      | ⟲ |
-| 1.15.x client | ✓     | ✓     | ✓           | ✓      | ⟲      | ⟲      | ⟲      | ⟲ |
-| 1.16.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ⟲      | ⟲      | ⟲ |
-| 1.17.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ⟲      | ⟲ |
-| 1.18.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ✓      | ⟲ |
-| 1.19.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ✓      | ✓ |
+|               | 1.8.x | 1.9.x | 1.10-1.14.4 | 1.15.x | 1.16.x | 1.17.x | 1.18.x | 1.19.x | 1.20.x |
+|---------------|-------|-------|-------------|--------|--------|--------|--------|--------|--------|
+| 1.8.9 client  | ✓     | ⏪     | ⏪           | ⏪      | ⏪      | ⏪      | ⏪      | ⏪ | ⏪ |
+| 1.14.x client | ✓     | ✓     | ✓           | ⟲      | ⟲      | ⟲      | ⟲      | ⟲ | ⟲ |
+| 1.15.x client | ✓     | ✓     | ✓           | ✓      | ⟲      | ⟲      | ⟲      | ⟲ | ⟲ |
+| 1.16.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ⟲      | ⟲      | ⟲ | ⟲ |
+| 1.17.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ⟲      | ⟲ | ⟲ |
+| 1.18.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ✓      | ⟲ | ⟲ |
+| 1.19.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ✓      | ✓ | ⟲ |
+| 1.20.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ✓      | ✓ | ✓ |
 
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪
 = [ViaRewind](https://viaversion.com/rewind)
