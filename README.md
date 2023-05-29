@@ -128,22 +128,20 @@ registry synchronization (fabric-registry-sync mod).
 - Examples: ``minigame.example.com._v1_8.viafabric``, ``native.example.com._v-1.viafabric``
   , ``auto.example.com._v-2.viafabric``
 
-## multiconnect
+## ViaFabricPlus
 
-### Does it work with multiconnect at same time on client?:
+### Does it work with ViaFabric:
 
-- Yes, ViaFabric can be used with multiconnect. ViaFabric will send to its version auto detector the closest non-beta
-  supported version. (multiconnect beta-supported versions are currently < 1.11))
+- No, ViaFabric cannot be used with ViaFabricPlus.
 
-### Differences with multiconnect:
+### Differences with ViaFabricPlus:
 
-|                        | ViaVersion                        | multiconnect                                  |
-|------------------------|-----------------------------------|-----------------------------------------------|
-| Designed for           | servers                           | clients                                       |
-| Can be installed on    | multiple client/server versions   | latest client version                         |
-| Objectives             | simply implement ViaVersion       | version support with fixes to version changes |
-| How does it work?      | modifying packets at network code | modifying client code more deeply             |
-| Triggering anti-cheats | very likely                       | less likely                                   |
+|                                  | ViaFabric                                       | ViaFabricPlus                                                   |
+|----------------------------------|-------------------------------------------------|-----------------------------------------------------------------|
+| Can be installed on              | Multiple client/server versions with fabric     | Latest client-side version with fabric                          |
+| Objectives                       | Simply implement ViaVersion                     | Implements ViaVersion with client-side fixes to version changes |
+| How does it work?                | Modifying packets at network code               | Modifying client code more deeply                               |
+| Triggering anti-cheats           | Very likely                                     | Mostly not                                                      |
 
 ## Disclaimer
 
