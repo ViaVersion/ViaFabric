@@ -40,7 +40,8 @@ public class MixinServerEntry {
     private void addServerVer(MultiplayerScreen multiplayerScreen, List<Text> tooltipText) {
         ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerInfo) this.server).getViaServerVer());
         List<Text> lines = new ArrayList<>(tooltipText);
-        lines.add(new TranslatableText("gui.ping_version.translated", proto.getName()));
+        lines.add(new TranslatableText("gui.ping_version.translated", proto.getName(), proto.getVersion()));
+        lines.add(this.server.version.copy());
         multiplayerScreen.setTooltip(lines);
     }
 }

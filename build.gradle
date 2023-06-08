@@ -9,18 +9,18 @@ import java.util.stream.IntStream
 plugins {
     id "java"
     id "maven-publish"
-    id "org.ajoberstar.grgit" version "3.1.1"
+    id "org.ajoberstar.grgit" version "5.2.0"
     id "com.matthewprenger.cursegradle" version "1.4.0"
-    id "com.modrinth.minotaur" version "2.2.0"
-    id "fabric-loom" version "1.1-SNAPSHOT" apply false
-    id "com.github.ben-manes.versions" version "0.42.0"
+    id "com.modrinth.minotaur" version "2.7.5"
+    id "fabric-loom" version "1.2-SNAPSHOT" apply false
+    id "com.github.ben-manes.versions" version "0.46.0"
 }
 
 def ENV = System.getenv()
 
 group = "com.viaversion.fabric"
 description = "Client-side and server-side ViaVersion implementation for Fabric"
-version = "0.4.9+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
+version = "0.4.10+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
 logger.lifecycle("Building ViaFabric: $version")
 
 def getBranch() {

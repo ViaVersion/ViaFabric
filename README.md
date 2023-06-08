@@ -2,15 +2,15 @@
 
 [![ViaVersion Discord](https://img.shields.io/badge/chat-on%20discord-blue.svg)](https://viaversion.com/discord)
 [![CurseForge Downloads](http://cf.way2muchnoise.eu/full_viafabric_downloads.svg)](https://viaversion.com/fabric)
+[![Modrinth Downloads](https://img.shields.io/modrinth/dt/ViaFabric?label=Modrinth&logo=Modrinth&style=flat-square)](https://modrinth.com/mod/ViaFabric)
 [![CurseForge Versions](http://cf.way2muchnoise.eu/versions/viafabric.svg)](https://viaversion.com/fabric)
-[![Download on Modrinth](https://img.shields.io/badge/download-modrinth-green)](https://modrinth.com/mod/viafabric)
 <!-- ^ GitHub seems to not like this https -->
 
 ### Client-side and server-side ViaVersion implementation for Fabric
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod can be installed on 1.8.9, 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2 with Fabric Loader.
+This mod can be installed on 1.8.9, 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20 with Fabric Loader.
 
 ## Dependencies
 
@@ -18,8 +18,8 @@ This mod can be installed on 1.8.9, 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2 with 
 |-----------------------------------------------|----------------------------------------------------------------|
 | (Bundled) ViaVersion                          | https://viaversion.com/                                        |
 | (Bundled) Cotton Client Commands (MC 1.14-15) | https://jitpack.io/#TinfoilMC/ClientCommands                   |
-| Fabric API (MC 1.14+)                         | https://www.curseforge.com/minecraft/mc-mods/fabric-api        |
-| Legacy Fabric API (MC 1.8.9)                  | https://www.curseforge.com/minecraft/mc-mods/legacy-fabric-api |
+| Fabric API (MC 1.14+)                         | https://modrinth.com/mod/fabric-api                            |
+| Legacy Fabric API (MC 1.8.9)                  | https://modrinth.com/mod/legacy-fabric-api                     |
 
 Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not work with modded registry entries or
 registry synchronization (fabric-registry-sync mod).
@@ -47,15 +47,16 @@ registry synchronization (fabric-registry-sync mod).
 
 - Client-side:
 
-|               | 1.8.x | 1.9.x | 1.10-1.14.4 | 1.15.x | 1.16.x | 1.17.x | 1.18.x | 1.19.x |
-|---------------|-------|-------|-------------|--------|--------|--------|--------|--------|
-| 1.8.9 client  | ✓     | ⏪     | ⏪           | ⏪      | ⏪      | ⏪      | ⏪      | ⏪ |
-| 1.14.x client | ✓     | ✓     | ✓           | ⟲      | ⟲      | ⟲      | ⟲      | ⟲ |
-| 1.15.x client | ✓     | ✓     | ✓           | ✓      | ⟲      | ⟲      | ⟲      | ⟲ |
-| 1.16.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ⟲      | ⟲      | ⟲ |
-| 1.17.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ⟲      | ⟲ |
-| 1.18.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ✓      | ⟲ |
-| 1.19.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ✓      | ✓ |
+|               | 1.8.x | 1.9.x | 1.10-1.14.4 | 1.15.x | 1.16.x | 1.17.x | 1.18.x | 1.19.x | 1.20.x |
+|---------------|-------|-------|-------------|--------|--------|--------|--------|--------|--------|
+| 1.8.9 client  | ✓     | ⏪     | ⏪           | ⏪      | ⏪      | ⏪      | ⏪      | ⏪ | ⏪ |
+| 1.14.x client | ✓     | ✓     | ✓           | ⟲      | ⟲      | ⟲      | ⟲      | ⟲ | ⟲ |
+| 1.15.x client | ✓     | ✓     | ✓           | ✓      | ⟲      | ⟲      | ⟲      | ⟲ | ⟲ |
+| 1.16.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ⟲      | ⟲      | ⟲ | ⟲ |
+| 1.17.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ⟲      | ⟲ | ⟲ |
+| 1.18.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ✓      | ⟲ | ⟲ |
+| 1.19.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ✓      | ✓ | ⟲ |
+| 1.20.x client | ✓     | ✓     | ✓           | ✓      | ✓      | ✓      | ✓      | ✓ | ✓ |
 
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪
 = [ViaRewind](https://viaversion.com/rewind)
@@ -71,8 +72,8 @@ registry synchronization (fabric-registry-sync mod).
 - [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): Discontinued 5zig plugin.
 - [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): Fabric mod for connecting to older
   versions: down to 1.11 (stable) and 1.8 (experimental).
-- [ViaForge](https://www.curseforge.com/minecraft/mc-mods/viaforge): Fork of ViaFabric porting it to Forge.
-- [ViaFabricPlus](https://www.curseforge.com/minecraft/mc-mods/viafabricplus): Fabric ViaVersion/ViaLegacy/ViaAprilFools implementation with clientside fixes  
+- [ViaForge](https://www.modrinth.com/mod/viaforge): Fork of ViaFabric porting it to Forge.
+- [ViaFabricPlus](https://www.modrinth.com/mod/viafabricplus): Fabric ViaVersion/ViaLegacy/ViaAprilFools implementation with client-side fixes.  
 
 ### Server-side:
 
@@ -128,22 +129,20 @@ registry synchronization (fabric-registry-sync mod).
 - Examples: ``minigame.example.com._v1_8.viafabric``, ``native.example.com._v-1.viafabric``
   , ``auto.example.com._v-2.viafabric``
 
-## multiconnect
+## ViaFabricPlus
 
-### Does it work with multiconnect at same time on client?:
+### Does it work with ViaFabric:
 
-- Yes, ViaFabric can be used with multiconnect. ViaFabric will send to its version auto detector the closest non-beta
-  supported version. (multiconnect beta-supported versions are currently < 1.11))
+- No, ViaFabric cannot be used with ViaFabricPlus.
 
-### Differences with multiconnect:
+### Differences with ViaFabricPlus:
 
-|                        | ViaVersion                        | multiconnect                                  |
-|------------------------|-----------------------------------|-----------------------------------------------|
-| Designed for           | servers                           | clients                                       |
-| Can be installed on    | multiple client/server versions   | latest client version                         |
-| Objectives             | simply implement ViaVersion       | version support with fixes to version changes |
-| How does it work?      | modifying packets at network code | modifying client code more deeply             |
-| Triggering anti-cheats | very likely                       | less likely                                   |
+|                                  | ViaFabric                                       | ViaFabricPlus                                                   |
+|----------------------------------|-------------------------------------------------|-----------------------------------------------------------------|
+| Can be installed on              | Multiple client/server versions with fabric     | Latest client-side version with fabric                          |
+| Objectives                       | Simply implement ViaVersion                     | Implements ViaVersion with client-side fixes to version changes |
+| How does it work?                | Modifying packets at network code               | Modifying client code more deeply                               |
+| Triggering anti-cheats           | Very likely                                     | Mostly not                                                      |
 
 ## Disclaimer
 

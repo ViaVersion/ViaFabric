@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_16",
+  "package": "com.viaversion.fabric.mc120.mixin.debug",
+  "mixins": [
+  ],
+  "client": [
+    "client.MixinClientConnectionAccessor",
+    "client.MixinDebugHud"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

@@ -7,7 +7,7 @@
   "gui.viafabric_config.title": "ViaFabric Configurations",
   "gui.client_side.enable": "Enable client-side",
   "gui.client_side.disable": "Disable client-side",
-  "gui.ping_version.translated": "VIA: %s",
+  "gui.ping_version.translated": "VIA: %s (%s)",
   "gui.hide_via_button.enable": "Hide VIA button",
   "gui.hide_via_button.disable": "Show VIA button",
   "gui.via_button": "VIA"

@@ -9,7 +9,7 @@ import com.viaversion.fabric.common.config.VFConfig;
 import com.viaversion.fabric.common.platform.FabricInjector;
 import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
-import com.viaversion.fabric.mc116.commands.VRCommandHandler;
+import com.viaversion.fabric.mc116.commands.VFCommandHandler;
 import com.viaversion.fabric.mc116.platform.FabricPlatform;
 import com.viaversion.fabric.mc116.platform.VFLoader;
 import com.viaversion.viaversion.ViaManagerImpl;
@@ -50,10 +50,10 @@ public class ViaFabric implements ModInitializer {
                 .then(
                         RequiredArgumentBuilder
                                 .<S, String>argument("args", StringArgumentType.greedyString())
-                                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute)
-                                .suggests(((VRCommandHandler) Via.getManager().getCommandHandler())::suggestion)
+                                .executes(((VFCommandHandler) Via.getManager().getCommandHandler())::execute)
+                                .suggests(((VFCommandHandler) Via.getManager().getCommandHandler())::suggestion)
                 )
-                .executes(((VRCommandHandler) Via.getManager().getCommandHandler())::execute);
+                .executes(((VFCommandHandler) Via.getManager().getCommandHandler())::execute);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class ViaFabric implements ModInitializer {
         Via.init(ViaManagerImpl.builder()
                 .injector(new FabricInjector())
                 .loader(new VFLoader())
-                .commandHandler(new VRCommandHandler())
+                .commandHandler(new VFCommandHandler())
                 .platform(platform).build());
 
         platform.init();

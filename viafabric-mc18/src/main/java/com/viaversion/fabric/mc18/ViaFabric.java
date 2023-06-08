@@ -7,7 +7,7 @@ import com.viaversion.fabric.common.platform.FabricInjector;
 import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
 import com.viaversion.fabric.mc18.commands.NMSCommandImpl;
-import com.viaversion.fabric.mc18.commands.VRCommandHandler;
+import com.viaversion.fabric.mc18.commands.VFCommandHandler;
 import com.viaversion.fabric.mc18.platform.FabricPlatform;
 import com.viaversion.fabric.mc18.platform.VFLoader;
 import com.viaversion.viaversion.ViaManagerImpl;
@@ -47,7 +47,7 @@ public class ViaFabric implements ModInitializer {
         Via.init(ViaManagerImpl.builder()
                 .injector(new FabricInjector())
                 .loader(new VFLoader())
-                .commandHandler(new VRCommandHandler())
+                .commandHandler(new VFCommandHandler())
                 .platform(platform).build());
 
         platform.init();
