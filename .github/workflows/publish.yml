@@ -1,8 +1,3 @@
-# Automatically build the project and run any configured tests for every push
-# and submitted pull request. This can help catch issues that only occur on
-# certain platforms or Java versions, and provides a first line of defence
-# against bad commits.
-
 name: publish
 on: [workflow_dispatch] # Manual trigger
 
@@ -10,18 +5,22 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: gradle/wrapper-validation-action@v1
-      - uses: actions/setup-java@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
          distribution: 'temurin'
          java-version: 17
-      - name: build and publish
+      - name: Build and Publish
         env:
           CURSEFORGE_API_KEY: ${{ secrets.CREEPER_CF }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         run: ./gradlew curseforge modrinth
-      - uses: actions/upload-artifact@v3
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: Artifacts
           path: build/libs/
