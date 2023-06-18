@@ -45,7 +45,7 @@ public class FabricInjector implements ViaInjector {
         }
         // On client-side we can connect to any server version
         IntSortedSet versions = new IntLinkedOpenHashSet();
-        versions.add(ProtocolVersion.v1_7_1.getOriginalVersion());
+        versions.add(ProtocolVersion.v1_8.getOriginalVersion());
         versions.add(ProtocolVersion.getProtocols()
                 .stream()
                 .mapToInt(ProtocolVersion::getOriginalVersion)
