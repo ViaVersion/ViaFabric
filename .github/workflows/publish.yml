@@ -2,7 +2,8 @@ name: publish
 on: [workflow_dispatch] # Manual trigger
 
 jobs:
-  build:
+  publish:
+    if: github.repository_owner == 'ViaVersion'
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout Repository
