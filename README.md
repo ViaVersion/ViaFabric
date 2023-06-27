@@ -61,7 +61,7 @@ registry synchronization (fabric-registry-sync mod).
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪
 = [ViaRewind](https://viaversion.com/rewind)
 
-*Note: 1.7.x is not supported in ViaFabric - 1.9.x, 1.10.x, 1.11.x, and 1.13.x may cause problems when visiting such servers in client-side.*
+*Note: 1.7.x is not supported in ViaFabric - 1.9.x, 1.10.x, 1.11.x, and 1.13.x may cause problems when visiting such servers in client-side mode.*
 
 ### Can ViaVersion, ViaBackwards and ViaRewind support snapshots?:
 
