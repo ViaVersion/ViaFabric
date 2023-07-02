@@ -75,7 +75,13 @@ public class FabricDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (evt instanceof PipelineReorderEvent) {
+        boolean kryptonReorder = false;
+        switch (evt.toString()) {
+            case "COMPRESSION_THRESHOLD_UPDATED":
+            case "COMPRESSION_ENABLED":
+                kryptonReorder = true;
+        }
+        if (evt instanceof PipelineReorderEvent || kryptonReorder) {
             reorder(ctx);
         }
         super.userEventTriggered(ctx, evt);
