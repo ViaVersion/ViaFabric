@@ -1,4 +1,5 @@
 {
+  "modmenu.summaryTranslation.viafabric": "Fabric өчен клиентлы һәм серверлы ViaVersion тормышка ашыру.",
   "gui.protocol_version_field.name": "Протокол версиясе",
   "gui.enable_client_side_button": "ViaVersion кушу",
   "gui.enable_client_side.question": "Сез чыннан да «клиент тарафында» шартын кушырга телисезме?",
