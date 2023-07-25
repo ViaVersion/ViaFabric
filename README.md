@@ -88,7 +88,7 @@ registry synchronization (fabric-registry-sync mod).
   newer Minecraft client versions.
 - [VIAaaS](https://github.com/ViaVersion/VIAaaS): Standalone ViaVersion proxy with ViaBackwards and ViaRewind, allowing
   you to connect without a mod installed on your client. Supports online mode.
-- [ViaProxy](https://github.com/RaphiMC/ViaProxy): Standalone ViaVersion proxy with ViaBackward, ViaRewind and ViaLegacy,
+- [ViaProxy](https://github.com/ViaVersion/ViaProxy): Standalone ViaVersion proxy with ViaBackward, ViaRewind and ViaLegacy,
   allowing you to connect to a wide range of versions (down to classic versions) with your modern client (1.7.2+). Supports online mode.
 
 ### Cool things to try:
