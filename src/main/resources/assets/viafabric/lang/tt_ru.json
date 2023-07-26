@@ -1,0 +1,15 @@
+{
+  "modmenu.summaryTranslation.viafabric": "Fabric өчен клиентлы һәм серверлы ViaVersion тормышка ашыру.",
+  "gui.protocol_version_field.name": "Протокол версиясе",
+  "gui.enable_client_side_button": "ViaVersion кушу",
+  "gui.enable_client_side.question": "Сез чыннан да «клиент тарафында» шартын кушырга телисезме?",
+  "gui.enable_client_side.warning": "Бу мод билгеле бер серверларда рөхсәт ителгән дип гарантияләргә ярамый, чөнки ул античит-плагиннар белән проблемалар китереп чыгара ала. (САК БУЛЫГЫЗ!)",
+  "gui.enable_client_side.enable": "Кушу",
+  "gui.viafabric_config.title": "ViaFabric көйләүләре",
+  "gui.client_side.enable": "Клиент тарафында кушу",
+  "gui.client_side.disable": "Клиент тарафында сүндерү",
+  "gui.ping_version.translated": "VIA: %s (%s)",
+  "gui.hide_via_button.enable": "VIA төймәсен яшерү",
+  "gui.hide_via_button.disable": "VIA төймәсен күрсәтү",
+  "gui.via_button": "VIA"
+}
