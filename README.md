@@ -30,9 +30,6 @@ registry synchronization (fabric-registry-sync mod).
 
 - Just drop them into mods folder. Make sure you are using versions compatible with the ViaVersion version you are
   using.
-- CurseForge links:
-  [ViaBackwards](https://www.curseforge.com/minecraft/mc-mods/viabackwards)
-  [ViaRewind](https://www.curseforge.com/minecraft/mc-mods/viarewind)
 
 ### What versions can ViaVersion, ViaBackwards and ViaRewind translate?:
 
@@ -72,10 +69,10 @@ registry synchronization (fabric-registry-sync mod).
 ### Client-side:
 
 - [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): Discontinued 5zig plugin.
-- [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): Fabric mod for connecting to older
+- [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): Discontinued Fabric mod for connecting to older
   versions: down to 1.11 (stable) and 1.8 (experimental).
 - [ViaForge](https://www.modrinth.com/mod/viaforge): Fork of ViaFabric porting it to Forge.
-- [ViaFabricPlus](https://www.modrinth.com/mod/viafabricplus): Fabric ViaVersion/ViaLegacy/ViaAprilFools implementation with client-side fixes.  
+- [ViaFabricPlus](https://www.modrinth.com/mod/viafabricplus): Fabric ViaVersion/ViaLegacy/ViaAprilFools/ViaBedrock implementation with client-side fixes.  
 
 ### Server-side:
 
