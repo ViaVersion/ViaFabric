@@ -1,5 +1,5 @@
 # Deploys the latest stable JDK available and sets it to default without having to manually specify it here,
-# This includes choosing temurin aswell as the default option.
+# Which includes using temurin as the distribution.
 before_install:
    - curl -s "https://get.sdkman.io" | bash
    - source ~/.sdkman/bin/sdkman-init.sh
