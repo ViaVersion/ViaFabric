@@ -20,7 +20,7 @@ def ENV = System.getenv()
 
 group = "com.viaversion.fabric"
 description = "Client-side and server-side ViaVersion implementation for Fabric"
-version = "0.4.10+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
+version = "0.4.11+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
 logger.lifecycle("Building ViaFabric: $version")
 
 def getBranch() {
@@ -176,7 +176,7 @@ curseforge {
     project {
         id = "391298"
         changelog = changelogMsg
-        releaseType = "beta"
+        releaseType = "alpha"
 
         mcReleases.forEach { ver -> addGameVersion(ver) }
         if (!rootProject.curseforge_mc_snapshot.isEmpty()) addGameVersion(rootProject.curseforge_mc_snapshot)
@@ -205,7 +205,7 @@ curseforge {
 modrinth {
     token.set(ENV.MODRINTH_TOKEN)
     projectId.set("YlKdE5VK")
-    versionType.set("beta")
+    versionType.set("alpha")
     versionNumber.set(rootProject.version)
     versionName.set(versionNameMsg)
     changelog.set(changelogMsg)

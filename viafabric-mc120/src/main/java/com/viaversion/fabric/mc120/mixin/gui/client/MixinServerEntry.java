@@ -1,8 +1,9 @@
 package com.viaversion.fabric.mc120.mixin.gui.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.viaversion.fabric.common.gui.ViaServerInfo;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
@@ -15,17 +16,14 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Mixin(MultiplayerServerListWidget.ServerEntry.class)
 public class MixinServerEntry {
     @Shadow
     @Final
     private ServerInfo server;
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0,
-    target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIFFIIII)V"))
+    @Redirect(method = "draw", at = @At(value = "INVOKE", ordinal = 0,
+            target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIFFIIII)V"))
     private void redirectPingIcon(DrawContext instance, Identifier texture, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
         if (texture.equals(GUI_ICONS_TEXTURES) && ((ViaServerInfo) this.server).isViaTranslating()) {
             instance.drawTexture(new Identifier("viafabric:textures/gui/icons.png"), x, y, u, v, width, height, textureWidth, textureHeight);

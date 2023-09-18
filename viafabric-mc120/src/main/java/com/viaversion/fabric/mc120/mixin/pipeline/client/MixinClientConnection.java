@@ -2,6 +2,7 @@ package com.viaversion.fabric.mc120.mixin.pipeline.client;
 
 import com.viaversion.fabric.mc120.ViaFabric;
 import com.viaversion.fabric.mc120.service.ProtocolAutoDetector;
+import io.netty.channel.ChannelFuture;
 import net.minecraft.network.ClientConnection;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,8 +15,8 @@ import java.util.logging.Level;
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
-    @Inject(method = "connect", at = @At("HEAD"))
-    private static void onConnect(InetSocketAddress address, boolean useEpoll, CallbackInfoReturnable<ClientConnection> cir) {
+    @Inject(method = "connect(Ljava/net/InetSocketAddress;ZLnet/minecraft/network/ClientConnection;)Lio/netty/channel/ChannelFuture;", at = @At("HEAD"))
+    private static void onConnect(InetSocketAddress address, boolean useEpoll, ClientConnection connection, CallbackInfoReturnable<ChannelFuture> cir) {
         try {
             if (!ViaFabric.config.isClientSideEnabled()) return;
             ProtocolAutoDetector.detectVersion(address).get(10, TimeUnit.SECONDS);

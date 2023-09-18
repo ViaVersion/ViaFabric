@@ -11,11 +11,17 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.SharedConstants;
 import net.minecraft.network.*;
+import net.minecraft.network.handler.DecoderHandler;
+import net.minecraft.network.handler.PacketEncoder;
+import net.minecraft.network.handler.SizePrepender;
+import net.minecraft.network.handler.SplitterHandler;
 import net.minecraft.network.listener.ClientQueryPacketListener;
+import net.minecraft.network.packet.c2s.handshake.ConnectionIntent;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
-import net.minecraft.network.packet.s2c.query.QueryPongS2CPacket;
+import net.minecraft.network.packet.s2c.query.PingResultS2CPacket;
 import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.server.ServerMetadata;
 import net.minecraft.text.Text;
@@ -28,6 +34,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class ProtocolAutoDetector {
@@ -42,8 +49,13 @@ public class ProtocolAutoDetector {
                     ChannelFuture ch = new Bootstrap()
                             .group(ClientConnection.CLIENT_IO_GROUP.get())
                             .channel(NioSocketChannel.class)
-                            .handler(new ChannelInitializer<Channel>() {
-                                protected void initChannel(Channel channel) {
+                            .handler(new ChannelInitializer<>() {
+                                @Override
+                                protected void initChannel(@NotNull Channel channel) {
+                                    channel.attr(ClientConnection.CLIENTBOUND_PROTOCOL_KEY)
+                                            .set(NetworkState.STATUS.getHandler(NetworkSide.CLIENTBOUND));
+                                    channel.attr(ClientConnection.SERVERBOUND_PROTOCOL_KEY)
+                                            .set(NetworkState.STATUS.getHandler(NetworkSide.SERVERBOUND));
                                     try {
                                         channel.config().setOption(ChannelOption.TCP_NODELAY, true);
                                         channel.config().setOption(ChannelOption.IP_TOS, 0x18); // Stolen from Velocity, low delay, high reliability
@@ -52,10 +64,10 @@ public class ProtocolAutoDetector {
 
                                     channel.pipeline()
                                             .addLast("timeout", new ReadTimeoutHandler(30))
-                                            .addLast("splitter", new SplitterHandler())
-                                            .addLast("decoder", new DecoderHandler(NetworkSide.CLIENTBOUND))
+                                            .addLast("splitter", new SplitterHandler(null))
+                                            .addLast("decoder", new DecoderHandler(ClientConnection.CLIENTBOUND_PROTOCOL_KEY))
                                             .addLast("prepender", new SizePrepender())
-                                            .addLast("encoder", new PacketEncoder(NetworkSide.SERVERBOUND))
+                                            .addLast("encoder", new PacketEncoder(ClientConnection.SERVERBOUND_PROTOCOL_KEY))
                                             .addLast("packet_handler", clientConnection);
                                 }
                             })
@@ -82,7 +94,7 @@ public class ProtocolAutoDetector {
                                     }
 
                                     @Override
-                                    public void onPong(QueryPongS2CPacket packet) {
+                                    public void onPingResult(PingResultS2CPacket packet) {
                                         clientConnection.disconnect(Text.literal("Pong not requested!"));
                                     }
 
@@ -97,8 +109,12 @@ public class ProtocolAutoDetector {
                                     }
                                 });
 
-                                clientConnection.send(new HandshakeC2SPacket(address.getHostString(),
-                                        address.getPort(), NetworkState.STATUS));
+                                clientConnection.send(new HandshakeC2SPacket(
+                                        SharedConstants.getGameVersion().getProtocolVersion(),
+                                        address.getHostString(),
+                                        address.getPort(),
+                                        ConnectionIntent.STATUS
+                                ));
                                 clientConnection.send(new QueryRequestC2SPacket());
                             });
                         }
