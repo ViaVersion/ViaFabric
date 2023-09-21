@@ -52,10 +52,10 @@ public class ProtocolAutoDetector {
                             .handler(new ChannelInitializer<>() {
                                 @Override
                                 protected void initChannel(@NotNull Channel channel) {
+                                    channel.attr(ClientConnection.SERVERBOUND_PROTOCOL_KEY)
+                                            .set(NetworkState.HANDSHAKING.getHandler(NetworkSide.SERVERBOUND));
                                     channel.attr(ClientConnection.CLIENTBOUND_PROTOCOL_KEY)
                                             .set(NetworkState.STATUS.getHandler(NetworkSide.CLIENTBOUND));
-                                    channel.attr(ClientConnection.SERVERBOUND_PROTOCOL_KEY)
-                                            .set(NetworkState.STATUS.getHandler(NetworkSide.SERVERBOUND));
                                     try {
                                         channel.config().setOption(ChannelOption.TCP_NODELAY, true);
                                         channel.config().setOption(ChannelOption.IP_TOS, 0x18); // Stolen from Velocity, low delay, high reliability
@@ -115,6 +115,9 @@ public class ProtocolAutoDetector {
                                         address.getPort(),
                                         ConnectionIntent.STATUS
                                 ));
+
+                                ch.channel().attr(ClientConnection.SERVERBOUND_PROTOCOL_KEY)
+                                        .set(NetworkState.STATUS.getHandler(NetworkSide.SERVERBOUND));
                                 clientConnection.send(new QueryRequestC2SPacket());
                             });
                         }
