@@ -1,8 +1,8 @@
 dependencies {
     minecraft("com.mojang:minecraft:1.8.9")
-    mappings("net.legacyfabric:yarn:1.8.9+build.458:v2")
+    mappings("net.legacyfabric:yarn:1.8.9+build.532:v2")
 
-    modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:1.9.0+1.8.9")
+    modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:1.9.1+1.8.9")
     modImplementation("io.github.boogiemonster1o1:rewoven-modmenu:1.0.0+1.8.9") {
         isTransitive = false
     }

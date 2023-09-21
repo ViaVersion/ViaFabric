@@ -23,7 +23,7 @@ body:
     attributes:
       label: Console Error
       description: |
-        If you encounter warnings/errors in your console, **paste them with https://paste.gg/ and put the paste link here**.
+        If you encounter warnings/errors in your console, **paste them with https://mclo.gs/ and put the paste link here**.
         If the error is small/less than 10 lines, you may put it directly into this field.
         Please use Not Enough Crashes if possible, making the stacktrace easier to understand.
       value: |
