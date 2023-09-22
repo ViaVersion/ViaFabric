@@ -22,11 +22,9 @@ public class ViaFabricClient implements ClientModInitializer {
         try {
             ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
                 if (!(screen instanceof MultiplayerScreen)) return;
-                // TODO This is broken
-                Identifier widgetIdentifier = new Identifier("viafabric:textures/gui/widgets.png");
                 ButtonWidget enableClientSideViaVersion = new TexturedButtonWidget(scaledWidth / 2 + 113, 10,
                         40, 20, // Size
-                        new ButtonTextures(widgetIdentifier, widgetIdentifier),
+                        new ButtonTextures(new Identifier("viafabric", "widget_unfocused"), new Identifier("viafabric", "widget_focused")),
                         it -> MinecraftClient.getInstance().setScreen(new ViaConfigScreen(screen)),
                         Text.translatable("gui.via_button"));
                 if (ViaFabric.config.isHideButton()) enableClientSideViaVersion.visible = false;
