@@ -4,7 +4,6 @@ import com.viaversion.fabric.common.gui.ViaServerInfo;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
 import net.minecraft.client.network.ServerInfo;
@@ -14,6 +13,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(MultiplayerServerListWidget.ServerEntry.class)
@@ -22,17 +22,14 @@ public class MixinServerEntry {
     @Final
     private ServerInfo server;
 
-    @Redirect(method = "draw", at = @At(value = "INVOKE", ordinal = 0,
-            target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIFFIIII)V"))
-    private void redirectPingIcon(DrawContext instance, Identifier texture, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
-        if (texture.equals(GUI_ICONS_TEXTURES) && ((ViaServerInfo) this.server).isViaTranslating()) {
-            instance.drawTexture(new Identifier("viafabric:textures/gui/icons.png"), x, y, u, v, width, height, textureWidth, textureHeight);
-            return;
+    @ModifyArg(method = "render", at = @At(value = "INVOKE", ordinal = 0,
+            target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"))
+    private Identifier redirectPingIcon(Identifier texture) {
+        if (((ViaServerInfo) this.server).isViaTranslating() && texture.getPath().startsWith("server_list/ping")) {
+            return new Identifier("viafabric", texture.getPath());
         }
-        instance.drawTexture(texture, x, y, u, v, width, height, textureWidth, textureHeight);
+        return texture;
     }
-
-    private static final Identifier GUI_ICONS_TEXTURES = new Identifier("textures/gui/icons.png");
 
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setMultiplayerScreenTooltip(Ljava/util/List;)V"))
     private void addServerVer(MultiplayerScreen multiplayerScreen, List<Text> tooltipText) {
