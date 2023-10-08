@@ -163,11 +163,6 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
-    public ConfigurationProvider getConfigurationProvider() {
-        return config;
-    }
-
-    @Override
     public boolean isOldClientsAllowed() {
         return true;
     }

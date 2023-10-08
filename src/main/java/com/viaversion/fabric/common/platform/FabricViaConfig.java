@@ -18,7 +18,7 @@ public class FabricViaConfig extends AbstractViaConfig {
     public FabricViaConfig(File configFile) {
         super(configFile);
         // Load config
-        reloadConfig();
+        reload();
     }
 
     @Override

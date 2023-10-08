@@ -17,7 +17,7 @@ public class VFConfig extends Config {
 
     public VFConfig(File configFile) {
         super(configFile);
-        reloadConfig();
+        reload();
     }
 
     @Override
