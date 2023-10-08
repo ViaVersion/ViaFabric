@@ -81,7 +81,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
         int finalNewVersion = newVersion;
         if (latestProtocolSave == null) latestProtocolSave = CompletableFuture.completedFuture(null);
         ViaFabric.config.setClientSideVersion(finalNewVersion);
-        latestProtocolSave = latestProtocolSave.thenRunAsync(ViaFabric.config::saveConfig, ViaFabric.ASYNC_EXECUTOR);
+        latestProtocolSave = latestProtocolSave.thenRunAsync(ViaFabric.config::save, ViaFabric.ASYNC_EXECUTOR);
     }
 
     private void onClickClientSide(ButtonWidget widget) {
@@ -91,7 +91,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
                         if (answer) {
                             ViaFabric.config.setClientSideEnabled(true);
                             ViaFabric.config.setClientSideVersion(-2); // AUTO
-                            ViaFabric.config.saveConfig();
+                            ViaFabric.config.save();
                             widget.setMessage(getClientSideText().asString());
                         }
                         MinecraftClient.getInstance().openScreen(this);
@@ -103,14 +103,14 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
             ));
         } else {
             ViaFabric.config.setClientSideEnabled(false);
-            ViaFabric.config.saveConfig();
+            ViaFabric.config.save();
         }
         widget.setMessage(getClientSideText().asString());
     }
 
     @Override
     public void removed() {
-        ViaFabric.config.saveConfig();
+        ViaFabric.config.save();
     }
 
     @Override
@@ -131,7 +131,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
 
     private void onHideViaButton(ButtonWidget widget) {
         ViaFabric.config.setHideButton(!ViaFabric.config.isHideButton());
-        ViaFabric.config.saveConfig();
+        ViaFabric.config.save();
         widget.setMessage(getHideViaButtonText().asString());
     }
 
