@@ -6,7 +6,8 @@
   ],
   "client": [
     "client.MixinClientConnectionAccessor",
-    "client.MixinDebugHud"
+    "client.MixinDebugHud",
+    "client.MixinClientConnection"
   ],
   "injectors": {
     "defaultRequire": 0
