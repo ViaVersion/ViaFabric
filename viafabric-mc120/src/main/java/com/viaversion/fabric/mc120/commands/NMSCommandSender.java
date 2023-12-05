@@ -26,7 +26,7 @@ public class NMSCommandSender implements ViaCommandSender {
     }
 
     public static MutableText fromLegacy(String legacy) {
-        return Text.Serializer.fromJson(RemappingUtil.legacyToJson(legacy));
+        return Text.Serialization.fromJson(RemappingUtil.legacyToJson(legacy));
     }
 
     @Override
@@ -54,7 +54,7 @@ public class NMSCommandSender implements ViaCommandSender {
         if (source instanceof ServerCommandSource) {
             return ((ServerCommandSource) source).getName();
         } else if (source instanceof FabricClientCommandSource) {
-            return ((FabricClientCommandSource) source).getPlayer().getEntityName();
+            return ((FabricClientCommandSource) source).getPlayer().getName().getString();
         }
         return "?";
     }
