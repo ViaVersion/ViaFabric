@@ -26,6 +26,24 @@
       "contact": {
         "homepage": "https://creeper123123321.github.io/"
       }
+    },
+    {
+      "name": "FlorianMichael/EnZaXD",
+      "contact": {
+        "homepage": "https://github.com/FlorianMichael"
+      }
+    },
+    {
+      "name": "kennytv",
+      "contact": {
+        "homepage": "https://kennytv.eu"
+      }
+    },
+    {
+      "name": "Kichura",
+      "contact": {
+        "homepage": "https://github.com/Kichura"
+      }
     }
   ],
   "entrypoints": {
