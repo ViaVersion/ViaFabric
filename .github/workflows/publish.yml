@@ -21,8 +21,3 @@ jobs:
           CURSEFORGE_API_KEY: ${{ secrets.CREEPER_CF }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         run: ./gradlew curseforge modrinth
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Artifacts
-          path: build/libs/
