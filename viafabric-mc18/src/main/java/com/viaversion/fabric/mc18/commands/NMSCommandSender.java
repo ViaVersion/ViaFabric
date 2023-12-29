@@ -1,7 +1,7 @@
 package com.viaversion.fabric.mc18.commands;
 
-import com.viaversion.fabric.common.util.RemappingUtil;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
+import com.viaversion.viaversion.util.ComponentUtil;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.Text;
@@ -24,7 +24,7 @@ public class NMSCommandSender implements ViaCommandSender {
 
     @Override
     public void sendMessage(String s) {
-        source.sendMessage(Text.Serializer.deserialize(RemappingUtil.legacyToJson(s)));
+        source.sendMessage(Text.Serializer.deserialize(ComponentUtil.legacyToJsonString(s)));
     }
 
     @Override

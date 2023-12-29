@@ -1,6 +1,6 @@
 package com.viaversion.fabric.mc119.commands;
 
-import com.viaversion.fabric.common.util.RemappingUtil;
+import com.viaversion.viaversion.util.ComponentUtil;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
@@ -26,7 +26,7 @@ public class NMSCommandSender implements ViaCommandSender {
     }
 
     public static MutableText fromLegacy(String legacy) {
-        return Text.Serializer.fromJson(RemappingUtil.legacyToJson(legacy));
+        return Text.Serializer.fromJson(ComponentUtil.legacyToJsonString(legacy));
     }
 
     @Override
