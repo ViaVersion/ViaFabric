@@ -71,7 +71,7 @@ registry synchronization (fabric-registry-sync mod).
 - [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): Discontinued 5zig plugin.
 - [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): Discontinued Fabric mod for connecting to older
   versions: down to 1.11 (stable) and 1.8 (experimental).
-- [ViaForge](https://www.modrinth.com/mod/viaforge): Fork of ViaFabric porting it to Forge.
+- [ViaForge](https://www.modrinth.com/mod/viaforge): Clientside Implementation of ViaVersion for Forge.
 - [ViaFabricPlus](https://www.modrinth.com/mod/viafabricplus): Fabric ViaVersion/ViaLegacy/ViaAprilFools/ViaBedrock implementation with client-side fixes.  
 
 ### Server-side:
@@ -85,7 +85,7 @@ registry synchronization (fabric-registry-sync mod).
   newer Minecraft client versions.
 - [VIAaaS](https://github.com/ViaVersion/VIAaaS): Standalone ViaVersion proxy with ViaBackwards and ViaRewind, allowing
   you to connect without a mod installed on your client. Supports online mode.
-- [ViaProxy](https://github.com/ViaVersion/ViaProxy): Standalone ViaVersion proxy with ViaBackward, ViaRewind and ViaLegacy,
+- [ViaProxy](https://github.com/ViaVersion/ViaProxy): Standalone ViaVersion proxy with ViaBackwards, ViaRewind and ViaLegacy,
   allowing you to connect to a wide range of versions (down to classic versions) with your modern client (1.7.2+). Supports online mode.
 
 ### Cool things to try:
