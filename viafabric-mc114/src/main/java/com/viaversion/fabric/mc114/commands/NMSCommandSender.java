@@ -1,7 +1,7 @@
 package com.viaversion.fabric.mc114.commands;
 
-import com.viaversion.fabric.common.util.RemappingUtil;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
+import com.viaversion.viaversion.util.ComponentUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
@@ -28,7 +28,7 @@ public class NMSCommandSender implements ViaCommandSender {
     }
 
     public static Text fromLegacy(String legacy) {
-        return Text.Serializer.fromJson(RemappingUtil.legacyToJson(legacy));
+        return Text.Serializer.fromJson(ComponentUtil.legacyToJsonString(legacy));
     }
 
     @Override

@@ -4,11 +4,11 @@ import com.viaversion.fabric.common.commands.UserCommandSender;
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.common.provider.AbstractFabricPlatform;
 import com.viaversion.fabric.common.util.FutureTaskId;
-import com.viaversion.fabric.common.util.RemappingUtil;
 import com.viaversion.fabric.mc18.ViaFabric;
 import com.viaversion.fabric.mc18.commands.NMSCommandSender;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
+import com.viaversion.viaversion.util.ComponentUtil;
 import io.netty.channel.EventLoop;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
@@ -106,7 +106,7 @@ public class FabricPlatform extends AbstractFabricPlatform {
         runServerSync(() -> {
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
             if (player == null) return;
-            player.sendMessage(Text.Serializer.deserialize(RemappingUtil.legacyToJson(s)));
+            player.sendMessage(Text.Serializer.deserialize(ComponentUtil.legacyToJsonString(s)));
         });
     }
 
