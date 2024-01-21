@@ -140,10 +140,10 @@ subprojects.each {
 }
 
 remapJar {
-	afterEvaluate {
-		subprojects.each {
-			nestedJars.from project("${it.path}").tasks.getByName("remapJar")
-		}
+    afterEvaluate {
+        subprojects.each {
+            nestedJars.from project("${it.path}").tasks.getByName("remapJar")
+        }
     }
 }
 
