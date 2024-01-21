@@ -15,7 +15,3 @@ dependencies {
 loom {
     intermediaryUrl.set("https://maven.legacyfabric.net/net/legacyfabric/intermediary/%1\$s/intermediary-%1\$s-v2.jar")
 }
-
-tasks.compileJava {
-    options.release.set(8)
-}
