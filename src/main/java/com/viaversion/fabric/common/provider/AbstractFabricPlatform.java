@@ -203,21 +203,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
-    public final Collection<UnsupportedSoftware> getUnsupportedSoftwareClasses() {
-        List<UnsupportedSoftware> list = new ArrayList<>(ViaPlatform.super.getUnsupportedSoftwareClasses());
-        list.add(new UnsupportedPlugin.Builder().name("gaslight/guardian").reason(UnsupportedSoftwareReasons.SELF_INCRIMINATION)
-                .addPlugin("guardian").addPlugin("gaslight").build());
-        return Collections.unmodifiableList(list);
-    }
-
-    @Override
     public final boolean hasPlugin(String name) {
         return FabricLoader.getInstance().isModLoaded(name);
-    }
-
-    private static final class UnsupportedSoftwareReasons {
-        private static final String SELF_INCRIMINATION = "By using these proof-of-concept TESTING mods, " +
-                "at best you create fishy context or silly reports, " +
-                "at worst you end up incriminating yourself when writing messages or reporting another player.";
     }
 }
