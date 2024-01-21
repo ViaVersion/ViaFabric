@@ -17,5 +17,5 @@ include("viafabric-mc119")
 include("viafabric-mc120")
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.7.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }

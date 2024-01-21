@@ -6,3 +6,7 @@ dependencies {
     modImplementation("io.github.prospector:modmenu:1.7.17+build.1")
     modImplementation("com.github.TinfoilMC:ClientCommands:1.1.0")
 }
+
+tasks.compileJava {
+    options.release.set(8)
+}
