@@ -125,10 +125,6 @@ static void setupRepositories(RepositoryHandler repositories) {
     }
 }
 
-subprojects.each {
-    remapJar.dependsOn("${it.path}:remapJar")
-}
-
 dependencies {
     // dummy version
     minecraft("com.mojang:minecraft:1.14.4")
@@ -137,9 +133,17 @@ dependencies {
     include("com.viaversion:viaversion:${rootProject.viaver_version}")
     include("org.yaml:snakeyaml:${rootProject.yaml_version}")
     include("com.github.TinfoilMC:ClientCommands:1.1.0")
+}
 
-    subprojects.each {
-        include project("${it.name}:")
+subprojects.each {
+	remapJar.dependsOn("${it.path}:remapJar")
+}
+
+remapJar {
+    afterEvaluate {
+        subprojects.each {
+            nestedJars.from project("${it.path}").tasks.getByName("remapJar")
+        }
     }
 }
 
