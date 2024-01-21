@@ -25,7 +25,7 @@ public class MixinServerEntry {
     @ModifyArg(method = "render", at = @At(value = "INVOKE", ordinal = 0,
             target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"))
     private Identifier redirectPingIcon(Identifier texture) {
-        if (((ViaServerInfo) this.server).isViaTranslating() && texture.getPath().startsWith("server_list/ping")) {
+        if (((ViaServerInfo) this.server).viaFabric$translating() && texture.getPath().startsWith("server_list/ping")) {
             return new Identifier("viafabric", texture.getPath());
         }
         return texture;
@@ -33,7 +33,7 @@ public class MixinServerEntry {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setMultiplayerScreenTooltip(Ljava/util/List;)V"))
     private void addServerVer(MultiplayerScreen multiplayerScreen, List<Text> tooltipText) {
-        ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerInfo) this.server).getViaServerVer());
+        ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerInfo) this.server).viaFabric$getServerVer());
         List<Text> lines = new ArrayList<>(tooltipText);
         lines.add(Text.translatable("gui.ping_version.translated", proto.getName(), proto.getVersion()));
         multiplayerScreen.setMultiplayerScreenTooltip(lines);

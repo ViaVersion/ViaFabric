@@ -6,6 +6,7 @@ import net.minecraft.client.network.AllowedAddressResolver;
 import net.minecraft.client.network.ServerAddress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -29,10 +30,11 @@ public abstract class MixinAllowedAddressResolver {
 
         ServerAddress realAddress = new ServerAddress(viaAddr.serverAddress, address.getPort());
 
-        cir.setReturnValue(resolve(realAddress).map(it -> viaFabricAddSuffix(it, viaAddr.getSuffixWithOptions())));
+        cir.setReturnValue(resolve(realAddress).map(it -> viaFabric$addSuffix(it, viaAddr.getSuffixWithOptions())));
     }
 
-    private Address viaFabricAddSuffix(Address it, String viaSuffix) {
+    @Unique
+    private Address viaFabric$addSuffix(Address it, String viaSuffix) {
         try {
             return Address.create(new InetSocketAddress(
                     InetAddress.getByAddress(it.getHostName() + "." + viaSuffix,

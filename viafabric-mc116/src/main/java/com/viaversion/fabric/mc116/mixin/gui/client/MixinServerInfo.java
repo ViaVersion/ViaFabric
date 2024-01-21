@@ -1,30 +1,35 @@
 package com.viaversion.fabric.mc116.mixin.gui.client;
 
-
 import com.viaversion.fabric.common.gui.ViaServerInfo;
 import net.minecraft.client.network.ServerInfo;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(ServerInfo.class)
 public class MixinServerInfo implements ViaServerInfo {
-    private boolean viaTranslating;
-    private int viaServerVer;
+    @Unique
+    private boolean viaFabric$translating;
 
-    public int getViaServerVer() {
-        return viaServerVer;
-    }
+    @Unique
+    private int viaFabric$serverVer;
 
-    public void setViaServerVer(int viaServerVer) {
-        this.viaServerVer = viaServerVer;
+    @Override
+    public int viaFabric$getServerVer() {
+        return viaFabric$serverVer;
     }
 
     @Override
-    public boolean isViaTranslating() {
-        return viaTranslating;
+    public void viaFabric$setServerVer(int ver) {
+        this.viaFabric$serverVer = ver;
     }
 
     @Override
-    public void setViaTranslating(boolean via) {
-        this.viaTranslating = via;
+    public boolean viaFabric$translating() {
+        return viaFabric$translating;
+    }
+
+    @Override
+    public void viaFabric$setTranslating(boolean via) {
+        this.viaFabric$translating = via;
     }
 }

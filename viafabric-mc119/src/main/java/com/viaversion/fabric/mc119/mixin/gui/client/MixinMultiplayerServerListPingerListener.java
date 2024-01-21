@@ -26,8 +26,8 @@ public abstract class MixinMultiplayerServerListPingerListener implements Client
         FabricDecodeHandler decoder = ((MixinClientConnectionAccessor) this.getField_3774()).getChannel()
                 .pipeline().get(FabricDecodeHandler.class);
         if (decoder != null) {
-            ((ViaServerInfo) getField_3776()).setViaTranslating(decoder.getInfo().isActive());
-            ((ViaServerInfo) getField_3776()).setViaServerVer(decoder.getInfo().getProtocolInfo().getServerProtocolVersion());
+            ((ViaServerInfo) getField_3776()).viaFabric$setTranslating(decoder.getInfo().isActive());
+            ((ViaServerInfo) getField_3776()).viaFabric$setServerVer(decoder.getInfo().getProtocolInfo().getServerProtocolVersion());
         }
     }
 }

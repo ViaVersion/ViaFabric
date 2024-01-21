@@ -1,11 +1,11 @@
 package com.viaversion.fabric.common.gui;
 
 public interface ViaServerInfo {
-    boolean isViaTranslating();
+    boolean viaFabric$translating();
 
-    void setViaTranslating(boolean via);
+    void viaFabric$setTranslating(boolean via);
 
-    int getViaServerVer();
+    int viaFabric$getServerVer();
 
-    void setViaServerVer(int ver);
+    void viaFabric$setServerVer(int ver);
 }
