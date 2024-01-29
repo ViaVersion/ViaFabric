@@ -16,7 +16,7 @@ jobs:
          java-version: 17
          check-latest: true
       - name: Cache Dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches

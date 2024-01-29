@@ -1,3 +1,20 @@
+/*
+ * This file is part of ViaFabric - https://github.com/ViaVersion/ViaFabric
+ * Copyright (C) 2018-2024 ViaVersion and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.viaversion.fabric.common.provider;
 
 import com.viaversion.fabric.common.platform.FabricViaAPI;
@@ -203,21 +220,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
-    public final Collection<UnsupportedSoftware> getUnsupportedSoftwareClasses() {
-        List<UnsupportedSoftware> list = new ArrayList<>(ViaPlatform.super.getUnsupportedSoftwareClasses());
-        list.add(new UnsupportedPlugin.Builder().name("gaslight/guardian").reason(UnsupportedSoftwareReasons.SELF_INCRIMINATION)
-                .addPlugin("guardian").addPlugin("gaslight").build());
-        return Collections.unmodifiableList(list);
-    }
-
-    @Override
     public final boolean hasPlugin(String name) {
         return FabricLoader.getInstance().isModLoaded(name);
-    }
-
-    private static final class UnsupportedSoftwareReasons {
-        private static final String SELF_INCRIMINATION = "By using these proof-of-concept TESTING mods, " +
-                "at best you create fishy context or silly reports, " +
-                "at worst you end up incriminating yourself when writing messages or reporting another player.";
     }
 }

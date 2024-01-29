@@ -1,3 +1,20 @@
+/*
+ * This file is part of ViaFabric - https://github.com/ViaVersion/ViaFabric
+ * Copyright (C) 2018-2024 ViaVersion and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.viaversion.fabric.mc119.mixin.gui.client;
 
 import com.viaversion.fabric.common.gui.ViaServerInfo;
@@ -26,8 +43,8 @@ public abstract class MixinMultiplayerServerListPingerListener implements Client
         FabricDecodeHandler decoder = ((MixinClientConnectionAccessor) this.getField_3774()).getChannel()
                 .pipeline().get(FabricDecodeHandler.class);
         if (decoder != null) {
-            ((ViaServerInfo) getField_3776()).setViaTranslating(decoder.getInfo().isActive());
-            ((ViaServerInfo) getField_3776()).setViaServerVer(decoder.getInfo().getProtocolInfo().getServerProtocolVersion());
+            ((ViaServerInfo) getField_3776()).viaFabric$setTranslating(decoder.getInfo().isActive());
+            ((ViaServerInfo) getField_3776()).viaFabric$setServerVer(decoder.getInfo().getProtocolInfo().getServerProtocolVersion());
         }
     }
 }

@@ -1,3 +1,20 @@
+/*
+ * This file is part of ViaFabric - https://github.com/ViaVersion/ViaFabric
+ * Copyright (C) 2018-2024 ViaVersion and contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.viaversion.fabric.mc116.mixin.gui.client;
 
 import com.viaversion.fabric.common.gui.ViaServerInfo;
@@ -27,7 +44,7 @@ public class MixinServerEntry {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/texture/TextureManager;bindTexture(Lnet/minecraft/util/Identifier;)V"))
     private void redirectPingIcon(TextureManager textureManager, Identifier identifier) {
-        if (identifier.equals(DrawableHelper.GUI_ICONS_TEXTURE) && ((ViaServerInfo) this.server).isViaTranslating()) {
+        if (identifier.equals(DrawableHelper.GUI_ICONS_TEXTURE) && ((ViaServerInfo) this.server).viaFabric$translating()) {
             textureManager.bindTexture(new Identifier("viafabric:textures/gui/icons.png"));
             return;
         }
@@ -36,7 +53,7 @@ public class MixinServerEntry {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setTooltip(Ljava/util/List;)V"))
     private void addServerVer(MultiplayerScreen multiplayerScreen, List<Text> tooltipText) {
-        ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerInfo) this.server).getViaServerVer());
+        ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerInfo) this.server).viaFabric$getServerVer());
         List<Text> lines = new ArrayList<>(tooltipText);
         lines.add(new TranslatableText("gui.ping_version.translated", proto.getName(), proto.getVersion()));
         lines.add(this.server.version.copy());
