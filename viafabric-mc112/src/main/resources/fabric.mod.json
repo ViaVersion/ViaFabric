@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "id": "viafabric-mc112",
+  "name": "ViaFabric for 1.12",
+  "version": "${version}",
+  "description": "${description}",
+  "license": "GPL-3.0",
+  "contact": {
+    "homepage": "https://viaversion.com/fabric",
+    "issues": "https://github.com/ViaVersion/ViaFabric/issues",
+    "sources": "https://github.com/ViaVersion/ViaFabric"
+  },
+  "environment": "*",
+  "authors": [
+    {
+      "name": "creeper123123321",
+      "contact": {
+        "homepage": "https://creeper123123321.github.io/"
+      }
+    },
+    {
+      "name": "FlorianMichael/EnZaXD",
+      "contact": {
+        "homepage": "https://github.com/FlorianMichael"
+      }
+    },
+    {
+      "name": "kennytv",
+      "contact": {
+        "homepage": "https://kennytv.eu"
+      }
+    },
+    {
+      "name": "Kichura",
+      "contact": {
+        "homepage": "https://github.com/Kichura"
+      }
+    }
+  ],
+  "entrypoints": {
+    "main": [
+      "com.viaversion.fabric.mc112.ViaFabric"
+    ]
+  },
+  "depends": {
+    "legacy-fabric-resource-loader-v1": "*",
+    "minecraft": "1.12.2",
+    "viafabric": "*"
+  },
+  "recommends": {
+    "legacy-fabric-command-api-v1": "*"
+  },
+  "mixins": [
+    "mixins.viafabric112.address.json",
+    "mixins.viafabric112.gui.json",
+    "mixins.viafabric112.debug.json",
+    "mixins.viafabric112.pipeline.json"
+  ]
+}

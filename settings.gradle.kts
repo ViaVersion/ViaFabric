@@ -8,6 +8,7 @@ pluginManagement {
 rootProject.name = "ViaFabric"
 
 include("viafabric-mc18")
+include("viafabric-mc112")
 include("viafabric-mc114")
 include("viafabric-mc115")
 include("viafabric-mc116")
