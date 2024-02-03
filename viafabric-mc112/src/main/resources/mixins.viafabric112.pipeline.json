@@ -4,12 +4,12 @@
   "package": "com.viaversion.fabric.mc112.mixin.pipeline",
   "mixins": [
     "MixinClientConnection",
-    "MixinServerNetworkIoChInit",
-    "client.MixinHandshakeC2SPacket"
+    "MixinServerNetworkIoChInit"
   ],
   "client": [
     "client.MixinClientConnection",
-    "client.MixinClientConnectionChInit"
+    "client.MixinClientConnectionChInit",
+    "client.MixinHandshakeC2SPacket"
   ],
   "injectors": {
     "defaultRequire": 1
