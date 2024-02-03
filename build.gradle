@@ -13,14 +13,14 @@ plugins {
     id "com.matthewprenger.cursegradle" version "1.4.0"
     id "com.modrinth.minotaur" version "2.8.7"
     id "fabric-loom" version "1.5-SNAPSHOT" apply false
-    id "com.github.ben-manes.versions" version "0.50.0"
+    id "com.github.ben-manes.versions" version "0.51.0"
 }
 
 def ENV = System.getenv()
 
 group = "com.viaversion.fabric"
 description = "Client-side and server-side ViaVersion implementation for Fabric"
-version = "0.4.12+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
+version = "0.4.13+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
 logger.lifecycle("Building ViaFabric: $version")
 
 def getBranch() {
@@ -166,7 +166,7 @@ processResources {
 List<String> mcReleases = Arrays.stream(rootProject.publish_mc_versions.toString().split(","))
         .map({ it -> it.trim() })
         .collect(Collectors.toList())
-List<String> javaVersions = IntStream.rangeClosed(8, 18)
+List<String> javaVersions = IntStream.rangeClosed(8, 17)
         .mapToObj { n -> (String) "Java $n" }
         .collect(Collectors.toList())
 String changelogMsg = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
