@@ -35,7 +35,7 @@ public class FabricNativeVersionProvider implements NativeVersionProvider {
         }
 
         ServerMetadata.Version version = MinecraftClient.getInstance().getServer().getServerMetadata().getVersion();
-        if (version == null) return ProtocolVersion.v1_8.getVersion();
+        if (version == null) return ProtocolVersion.v1_12_2.getVersion();
         return version.getProtocolVersion();
     }
 
@@ -46,6 +46,6 @@ public class FabricNativeVersionProvider implements NativeVersionProvider {
         } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
         }
-        return ProtocolVersion.v1_8.getVersion(); // fallback
+        return ProtocolVersion.v1_12_2.getVersion(); // fallback
     }
 }

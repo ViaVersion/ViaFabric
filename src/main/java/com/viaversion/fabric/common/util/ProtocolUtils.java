@@ -25,19 +25,23 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class ProtocolUtils {
-    public static boolean isSupportedClientSide(int server) {
+    public static boolean isSupportedClientSide(ProtocolVersion server) {
         return isSupported(server, Via.getManager().getProviders()
                 .get(NativeVersionProvider.class)
-                .getNativeServerVersion());
+                .getNativeServerProtocolVersion());
     }
 
-    public static boolean isSupported(int server, int client) {
-        return server == client || Via.getManager().getProtocolManager().getProtocolPath(client, server) != null;
+    public static boolean isSupported(ProtocolVersion server, ProtocolVersion client) {
+        return server.equals(client) || Via.getManager().getProtocolManager().getProtocolPath(client, server) != null;
     }
 
     public static String getProtocolName(int id) {
         if (!ProtocolVersion.isRegistered(id)) return Integer.toString(id);
         return ProtocolVersion.getProtocol(id).getName();
+    }
+
+    public static boolean isValid(final ProtocolVersion version) {
+        return version.isKnown() && version.getVersion() != -2;
     }
 
     public static boolean isStartOfProtocolText(String s) {

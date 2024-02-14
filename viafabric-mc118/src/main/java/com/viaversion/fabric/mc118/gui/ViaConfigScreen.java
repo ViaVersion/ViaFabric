@@ -20,6 +20,7 @@ package com.viaversion.fabric.mc118.gui;
 import com.viaversion.fabric.common.config.AbstractViaConfigScreen;
 import com.viaversion.fabric.mc118.ViaFabric;
 import com.viaversion.fabric.common.util.ProtocolUtils;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -95,7 +96,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
             }
         }
 
-        protocolVersion.setEditableColor(getProtocolTextColor(newVersion, validProtocol));
+        protocolVersion.setEditableColor(getProtocolTextColor(ProtocolVersion.getProtocol(newVersion), validProtocol));
 
         int finalNewVersion = newVersion;
         if (latestProtocolSave == null) latestProtocolSave = CompletableFuture.completedFuture(null);

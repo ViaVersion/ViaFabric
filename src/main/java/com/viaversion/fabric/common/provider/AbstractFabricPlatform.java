@@ -26,6 +26,7 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 import com.viaversion.viaversion.api.configuration.ConfigurationProvider;
 import com.viaversion.viaversion.api.configuration.ViaVersionConfig;
+import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.platform.UnsupportedSoftware;
 import com.viaversion.viaversion.api.platform.ViaPlatform;
 import com.viaversion.viaversion.libs.gson.JsonArray;
@@ -54,11 +55,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
+public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnection> {
     private final Logger logger = new JLoggerToLog4j(LogManager.getLogger("ViaVersion"));
     private FabricViaConfig config;
     private File dataFolder;
-    private final ViaAPI<UUID> api;
+    private final ViaAPI<UserConnection> api;
 
     {
         api = new FabricViaAPI();
@@ -148,7 +149,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
     }
 
     @Override
-    public ViaAPI<UUID> getApi() {
+    public ViaAPI<UserConnection> getApi() {
         return api;
     }
 
@@ -214,7 +215,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UUID> {
         platformSpecific.add("mods", mods);
         NativeVersionProvider ver = Via.getManager().getProviders().get(NativeVersionProvider.class);
         if (ver != null) {
-            platformSpecific.addProperty("native version", ver.getNativeServerVersion());
+            platformSpecific.addProperty("native version", ver.getNativeServerProtocolVersion().getVersion());
         }
         return platformSpecific;
     }

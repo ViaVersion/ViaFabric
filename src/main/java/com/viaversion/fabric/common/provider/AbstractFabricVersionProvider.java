@@ -82,11 +82,11 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
     }
 
     @Override
-    public int getClosestServerProtocol(UserConnection connection) throws Exception {
+    public ProtocolVersion getClosestServerProtocol(UserConnection connection) throws Exception {
         if (connection.isClientSide()) {
             ProtocolInfo info = Objects.requireNonNull(connection.getProtocolInfo());
 
-            if (!getConfig().isClientSideEnabled()) return info.getProtocolVersion();
+            if (!getConfig().isClientSideEnabled()) return info.protocolVersion();
 
             int serverVer = getConfig().getClientSideVersion();
             SocketAddress addr = connection.getChannel().remoteAddress();
@@ -112,18 +112,20 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
                 }
             }
 
-            boolean blocked = checkAddressBlocked(addr);
-            boolean supported = ProtocolUtils.isSupported(serverVer, info.getProtocolVersion());
+            ProtocolVersion serverVersion = ProtocolVersion.getProtocol(serverVer);
 
-            handleMulticonnectPing(connection, info, blocked, serverVer);
+            boolean blocked = checkAddressBlocked(addr);
+            boolean supported = ProtocolUtils.isSupported(serverVersion, info.protocolVersion());
+
+            handleMulticonnectPing(connection, info, blocked, serverVersion);
 
             if (blocked || !supported) serverVer = info.getProtocolVersion();
 
-            return serverVer;
+            return ProtocolVersion.getProtocol(serverVer);
         }
         NativeVersionProvider natProvider = Via.getManager().getProviders().get(NativeVersionProvider.class);
         if (natProvider != null) {
-            return ProtocolVersion.getProtocol(natProvider.getNativeServerVersion()).getVersion();
+            return natProvider.getNativeServerProtocolVersion();
         }
         return super.getClosestServerProtocol(connection);
     }
@@ -135,15 +137,15 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
                         || isDisabled(((InetSocketAddress) addr).getAddress().getHostName()))));
     }
 
-    private void handleMulticonnectPing(UserConnection connection, ProtocolInfo info, boolean blocked, int serverVer) throws Exception {
+    private void handleMulticonnectPing(UserConnection connection, ProtocolInfo info, boolean blocked, ProtocolVersion serverVer) throws Exception {
         if (info.getState() == State.STATUS
                 && info.getProtocolVersion() == -1
                 && isMulticonnectHandler(connection.getChannel().pipeline())
                 && (blocked || ProtocolUtils.isSupported(serverVer, getVersionForMulticonnect(serverVer)))) { // Intercept the connection
-            int multiconnectSuggestion = blocked ? -1 : getVersionForMulticonnect(serverVer);
-            getLogger().info("Sending " + ProtocolVersion.getProtocol(multiconnectSuggestion) + " for multiconnect version detector");
+            ProtocolVersion multiconnectSuggestion = blocked ? ProtocolVersion.unknown : getVersionForMulticonnect(serverVer);
+            getLogger().info("Sending " + multiconnectSuggestion + " for multiconnect version detector");
             PacketWrapper newAnswer = PacketWrapper.create(ClientboundStatusPackets.STATUS_RESPONSE, null, connection);
-            newAnswer.write(Type.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion + "}}");
+            newAnswer.write(Type.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion.getVersion() + "}}");
             newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class);
             throw CancelException.generate();
         }
@@ -153,23 +155,23 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
         return false;
     }
 
-    private int getVersionForMulticonnect(int clientSideVersion) {
+    private ProtocolVersion getVersionForMulticonnect(ProtocolVersion clientSideVersion) {
         // https://github.com/ViaVersion/ViaVersion/blob/master/velocity/src/main/java/us/myles/ViaVersion/velocity/providers/VelocityVersionProvider.java
         int[] compatibleProtocols = multiconnectSupportedVersions;
 
-        if (Arrays.binarySearch(compatibleProtocols, clientSideVersion) >= 0) {
+        if (Arrays.binarySearch(compatibleProtocols, clientSideVersion.getVersion()) >= 0) {
             return clientSideVersion;
         }
 
-        if (clientSideVersion < compatibleProtocols[0]) {
-            return compatibleProtocols[0];
+        if (clientSideVersion.getVersion() < compatibleProtocols[0]) {
+            return ProtocolVersion.getProtocol(compatibleProtocols[0]);
         }
 
         // TODO: This needs a better fix, i.e checking ProtocolRegistry to see if it would work.
         for (int i = compatibleProtocols.length - 1; i >= 0; i--) {
             int protocol = compatibleProtocols[i];
-            if (clientSideVersion > protocol && ProtocolVersion.isRegistered(protocol)) {
-                return protocol;
+            if (clientSideVersion.getVersion() > protocol && ProtocolVersion.isRegistered(protocol)) {
+                return ProtocolVersion.getProtocol(protocol);
             }
         }
 

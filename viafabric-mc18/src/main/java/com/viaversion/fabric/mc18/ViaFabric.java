@@ -72,7 +72,8 @@ public class ViaFabric implements ModInitializer {
         ViaManagerImpl manager = (ViaManagerImpl) Via.getManager();
         manager.init();
 
-        Via.getManager().getProtocolManager().registerBaseProtocol(HostnameParserProtocol.INSTANCE, Range.lessThan(Integer.MIN_VALUE));
+        HostnameParserProtocol.INSTANCE.initialize();
+        HostnameParserProtocol.INSTANCE.register(Via.getManager().getProviders());
         ProtocolVersion.register(-2, "AUTO");
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);

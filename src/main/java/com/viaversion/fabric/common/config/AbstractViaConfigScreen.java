@@ -18,14 +18,15 @@
 package com.viaversion.fabric.common.config;
 
 import com.viaversion.fabric.common.util.ProtocolUtils;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 public interface AbstractViaConfigScreen {
     String TITLE_TRANSLATE_ID = "gui.viafabric_config.title";
     String VERSION_TRANSLATE_ID = "gui.protocol_version_field.name";
 
-    default int getProtocolTextColor(int version, boolean parsedValid) {
+    default int getProtocolTextColor(ProtocolVersion version, boolean parsedValid) {
         if (!parsedValid) return 0xff0000; // Red
-        if (version == -1 || version == -2) return 0x5555FF; // Blue
+        if (!ProtocolUtils.isValid(version)) return 0x5555FF; // Blue
         if (!ProtocolUtils.isSupportedClientSide(version)) return 0xFFA500; // Orange
         return 0xE0E0E0; // Default
     }
