@@ -68,7 +68,7 @@ public class VFConfig extends Config {
     }
 
     public Collection<?> getClientSideForceDisable() {
-        return (List<?>) get(CLIENT_SIDE_FORCE_DISABLE, List.class, Collections.emptyList());
+        return get(CLIENT_SIDE_FORCE_DISABLE, Collections.emptyList());
     }
 
     public void setHideButton(boolean val) {
