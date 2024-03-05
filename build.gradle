@@ -180,7 +180,7 @@ curseforge {
     project {
         id = "391298"
         changelog = changelogMsg
-        releaseType = "alpha"
+        releaseType = "beta" // alpha is hidden by default
 
         mcReleases.forEach { ver -> addGameVersion(ver) }
         if (!rootProject.curseforge_mc_snapshot.isEmpty()) addGameVersion(rootProject.curseforge_mc_snapshot)
