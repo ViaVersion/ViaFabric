@@ -1,4 +1,4 @@
-name: publish
+name: Publish to CurseForge and Modrinth
 on: [workflow_dispatch] # Manual trigger
 
 jobs:
