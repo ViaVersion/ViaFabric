@@ -60,7 +60,7 @@ public class MixinClientConnection {
             }
 
             pipeline.addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new FabricEncodeHandler(user));
-            pipeline.addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new FabricDecodeHandler(user));
+            pipeline.addBefore("inbound_config", CommonTransformer.HANDLER_DECODER_NAME, new FabricDecodeHandler(user));
         }
     }
 }

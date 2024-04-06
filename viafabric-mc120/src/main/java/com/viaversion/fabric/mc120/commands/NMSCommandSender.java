@@ -43,7 +43,8 @@ public class NMSCommandSender implements ViaCommandSender {
     }
 
     public static MutableText fromLegacy(String legacy) {
-        return Text.Serialization.fromJson(ComponentUtil.legacyToJsonString(legacy));
+        //return Text.Serialization.fromJson(ComponentUtil.legacyToJsonString(legacy));
+        return Text.literal(legacy); // TODO
     }
 
     @Override

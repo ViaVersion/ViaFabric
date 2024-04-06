@@ -48,11 +48,11 @@ public class MixinServerEntry {
         return texture;
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setMultiplayerScreenTooltip(Ljava/util/List;)V"))
+    /*@Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setMultiplayerScreenTooltip(Ljava/util/List;)V"))
     private void addServerVer(MultiplayerScreen multiplayerScreen, List<Text> tooltipText) {
         ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerInfo) this.server).viaFabric$getServerVer());
         List<Text> lines = new ArrayList<>(tooltipText);
         lines.add(Text.translatable("gui.ping_version.translated", proto.getName(), proto.getVersion()));
         multiplayerScreen.setMultiplayerScreenTooltip(lines);
-    }
+    }*/
 }

@@ -1,11 +1,11 @@
 dependencies {
-    minecraft("com.mojang:minecraft:1.20.4")
-    mappings("net.fabricmc:yarn:1.20.4+build.3:v2")
+    minecraft("com.mojang:minecraft:24w14a")
+    mappings("net.fabricmc:yarn:24w14a+build.5:v2")
 
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.96.1+1.20.4")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.96.14+1.20.5")
     modImplementation("com.terraformersmc:modmenu:9.0.0")
 }
 
 tasks.compileJava {
-    options.release.set(17)
+    options.release.set(21)
 }

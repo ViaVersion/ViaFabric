@@ -30,8 +30,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.SharedConstants;
 import net.minecraft.network.*;
-import net.minecraft.network.handler.DecoderHandler;
-import net.minecraft.network.handler.PacketEncoder;
+import net.minecraft.network.handler.EncoderHandler;
+import net.minecraft.network.handler.NetworkStateTransitions;
 import net.minecraft.network.handler.SizePrepender;
 import net.minecraft.network.handler.SplitterHandler;
 import net.minecraft.network.listener.ClientQueryPacketListener;
@@ -40,6 +40,8 @@ import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
 import net.minecraft.network.packet.s2c.query.PingResultS2CPacket;
 import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
+import net.minecraft.network.state.HandshakeStates;
+import net.minecraft.network.state.QueryStates;
 import net.minecraft.server.ServerMetadata;
 import net.minecraft.text.Text;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
@@ -69,10 +71,6 @@ public class ProtocolAutoDetector {
                             .handler(new ChannelInitializer<>() {
                                 @Override
                                 protected void initChannel(@NotNull Channel channel) {
-                                    channel.attr(ClientConnection.SERVERBOUND_PROTOCOL_KEY)
-                                            .set(NetworkState.HANDSHAKING.getHandler(NetworkSide.SERVERBOUND));
-                                    channel.attr(ClientConnection.CLIENTBOUND_PROTOCOL_KEY)
-                                            .set(NetworkState.STATUS.getHandler(NetworkSide.CLIENTBOUND));
                                     try {
                                         channel.config().setOption(ChannelOption.TCP_NODELAY, true);
                                         channel.config().setOption(ChannelOption.IP_TOS, 0x18); // Stolen from Velocity, low delay, high reliability
@@ -82,9 +80,9 @@ public class ProtocolAutoDetector {
                                     channel.pipeline()
                                             .addLast("timeout", new ReadTimeoutHandler(30))
                                             .addLast("splitter", new SplitterHandler(null))
-                                            .addLast("decoder", new DecoderHandler(ClientConnection.CLIENTBOUND_PROTOCOL_KEY))
+                                            .addLast("inbound_config", new NetworkStateTransitions.InboundConfigurer())
                                             .addLast("prepender", new SizePrepender())
-                                            .addLast("encoder", new PacketEncoder(ClientConnection.SERVERBOUND_PROTOCOL_KEY))
+                                            .addLast("encoder", new EncoderHandler<>(HandshakeStates.C2S))
                                             .addLast("packet_handler", clientConnection);
                                 }
                             })
@@ -94,8 +92,8 @@ public class ProtocolAutoDetector {
                         if (!future1.isSuccess()) {
                             future.completeExceptionally(future1.cause());
                         } else {
-                            ch.channel().eventLoop().execute(() -> { // needs to execute after channel init
-                                clientConnection.setPacketListener(new ClientQueryPacketListener() {
+                            ch.channel().eventLoop().submit(() -> { // needs to execute after channel init
+                                clientConnection.transitionInbound(QueryStates.S2C, new ClientQueryPacketListener() {
                                     @Override
                                     public void onResponse(QueryResponseS2CPacket packet) {
                                         ServerMetadata meta = packet.metadata();
@@ -126,6 +124,7 @@ public class ProtocolAutoDetector {
                                     }
                                 });
 
+                                //noinspection deprecation
                                 clientConnection.send(new HandshakeC2SPacket(
                                         SharedConstants.getGameVersion().getProtocolVersion(),
                                         address.getHostString(),
@@ -133,9 +132,8 @@ public class ProtocolAutoDetector {
                                         ConnectionIntent.STATUS
                                 ));
 
-                                ch.channel().attr(ClientConnection.SERVERBOUND_PROTOCOL_KEY)
-                                        .set(NetworkState.STATUS.getHandler(NetworkSide.SERVERBOUND));
-                                clientConnection.send(new QueryRequestC2SPacket());
+                                clientConnection.transitionOutbound(QueryStates.C2S);
+                                clientConnection.send(QueryRequestC2SPacket.INSTANCE);
                             });
                         }
                     });
