@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "viafabric-mc114",
+  "id": "viafabric-mc1144",
   "name": "ViaFabric for 1.14",
   "version": "${version}",
   "description": "${description}",
@@ -47,13 +47,13 @@
   ],
   "entrypoints": {
     "main": [
-      "com.viaversion.fabric.mc114.ViaFabric"
+      "com.viaversion.fabric.mc1144.ViaFabric"
     ],
     "cotton-client-commands": [
-      "com.viaversion.fabric.mc114.commands.VFClientCommands"
+      "com.viaversion.fabric.mc1144.commands.VFClientCommands"
     ],
     "modmenu": [
-      "com.viaversion.fabric.mc114.gui.ModMenuConfig"
+      "com.viaversion.fabric.mc1144.gui.ModMenuConfig"
     ]
   },
   "depends": {
@@ -66,10 +66,10 @@
     "cotton-client-commands": "*"
   },
   "mixins": [
-    "mixins.viafabric114.address.json",
-    "mixins.viafabric114.gui.json",
-    "mixins.viafabric114.debug.json",
-    "mixins.viafabric114.pipeline.json"
+    "mixins.viafabric1144.address.json",
+    "mixins.viafabric1144.gui.json",
+    "mixins.viafabric1144.debug.json",
+    "mixins.viafabric1144.pipeline.json"
   ],
   "custom": {
     "modmenu": {

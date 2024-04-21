@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "viafabric-mc117",
+  "id": "viafabric-mc1171",
   "name": "ViaFabric for 1.17",
   "version": "${version}",
   "description": "${description}",
@@ -47,13 +47,13 @@
   ],
   "entrypoints": {
     "main": [
-      "com.viaversion.fabric.mc117.ViaFabric"
+      "com.viaversion.fabric.mc1171.ViaFabric"
     ],
     "client": [
-      "com.viaversion.fabric.mc117.ViaFabricClient"
+      "com.viaversion.fabric.mc1171.ViaFabricClient"
     ],
     "modmenu": [
-      "com.viaversion.fabric.mc117.gui.ModMenuConfig"
+      "com.viaversion.fabric.mc1171.gui.ModMenuConfig"
     ]
   },
   "depends": {
@@ -65,10 +65,10 @@
     "fabric-command-api-v1": "*"
   },
   "mixins": [
-    "mixins.viafabric117.address.json",
-    "mixins.viafabric117.gui.json",
-    "mixins.viafabric117.debug.json",
-    "mixins.viafabric117.pipeline.json"
+    "mixins.viafabric1171.address.json",
+    "mixins.viafabric1171.gui.json",
+    "mixins.viafabric1171.debug.json",
+    "mixins.viafabric1171.pipeline.json"
   ],
   "custom": {
     "modmenu": {

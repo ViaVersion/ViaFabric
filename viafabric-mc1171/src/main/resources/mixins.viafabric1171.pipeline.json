@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_16",
+  "package": "com.viaversion.fabric.mc1171.mixin.pipeline",
+  "mixins": [
+    "MixinClientConnection",
+    "MixinServerNetworkIoChInit"
+  ],
+  "client": [
+    "client.MixinClientConnection",
+    "client.MixinClientConnectionChInit"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

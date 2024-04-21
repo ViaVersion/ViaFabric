@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "viafabric-mc116",
+  "id": "viafabric-mc1165",
   "name": "ViaFabric for 1.16",
   "version": "${version}",
   "description": "${description}",
@@ -47,10 +47,10 @@
   ],
   "entrypoints": {
     "main": [
-      "com.viaversion.fabric.mc116.ViaFabric"
+      "com.viaversion.fabric.mc1165.ViaFabric"
     ],
     "modmenu": [
-      "com.viaversion.fabric.mc116.gui.ModMenuConfig"
+      "com.viaversion.fabric.mc1165.gui.ModMenuConfig"
     ]
   },
   "depends": {
@@ -62,10 +62,10 @@
     "fabric-command-api-v1": "*"
   },
   "mixins": [
-    "mixins.viafabric116.address.json",
-    "mixins.viafabric116.gui.json",
-    "mixins.viafabric116.debug.json",
-    "mixins.viafabric116.pipeline.json"
+    "mixins.viafabric1165.address.json",
+    "mixins.viafabric1165.gui.json",
+    "mixins.viafabric1165.debug.json",
+    "mixins.viafabric1165.pipeline.json"
   ],
   "custom": {
     "modmenu": {

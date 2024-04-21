@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "viafabric-mc115",
+  "id": "viafabric-mc1152",
   "name": "ViaFabric for 1.15",
   "version": "${version}",
   "description": "${description}",
@@ -47,13 +47,13 @@
   ],
   "entrypoints": {
     "main": [
-      "com.viaversion.fabric.mc115.ViaFabric"
+      "com.viaversion.fabric.mc1152.ViaFabric"
     ],
     "cotton-client-commands": [
-      "com.viaversion.fabric.mc115.commands.VFClientCommands"
+      "com.viaversion.fabric.mc1152.commands.VFClientCommands"
     ],
     "modmenu": [
-      "com.viaversion.fabric.mc115.gui.ModMenuConfig"
+      "com.viaversion.fabric.mc1152.gui.ModMenuConfig"
     ]
   },
   "depends": {
@@ -66,10 +66,10 @@
     "cotton-client-commands": "*"
   },
   "mixins": [
-    "mixins.viafabric115.address.json",
-    "mixins.viafabric115.gui.json",
-    "mixins.viafabric115.debug.json",
-    "mixins.viafabric115.pipeline.json"
+    "mixins.viafabric1152.address.json",
+    "mixins.viafabric1152.gui.json",
+    "mixins.viafabric1152.debug.json",
+    "mixins.viafabric1152.pipeline.json"
   ],
   "custom": {
     "modmenu": {

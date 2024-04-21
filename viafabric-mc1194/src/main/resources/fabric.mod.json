@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "viafabric-mc119",
+  "id": "viafabric-mc1194",
   "name": "ViaFabric for 1.19",
   "version": "${version}",
   "description": "${description}",
@@ -47,13 +47,13 @@
   ],
   "entrypoints": {
     "main": [
-      "com.viaversion.fabric.mc119.ViaFabric"
+      "com.viaversion.fabric.mc1194.ViaFabric"
     ],
     "client": [
-      "com.viaversion.fabric.mc119.ViaFabricClient"
+      "com.viaversion.fabric.mc1194.ViaFabricClient"
     ],
     "modmenu": [
-      "com.viaversion.fabric.mc119.gui.ModMenuConfig"
+      "com.viaversion.fabric.mc1194.gui.ModMenuConfig"
     ]
   },
   "depends": {
@@ -65,10 +65,10 @@
     "fabric-command-api-v2": "*"
   },
   "mixins": [
-    "mixins.viafabric119.address.json",
-    "mixins.viafabric119.gui.json",
-    "mixins.viafabric119.debug.json",
-    "mixins.viafabric119.pipeline.json"
+    "mixins.viafabric1194.address.json",
+    "mixins.viafabric1194.gui.json",
+    "mixins.viafabric1194.debug.json",
+    "mixins.viafabric1194.pipeline.json"
   ],
   "custom": {
     "modmenu": {
