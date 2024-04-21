@@ -113,7 +113,7 @@ public class ProtocolAutoDetector {
 
                                 HandshakeC2SPacket handshakeC2SPacket = new HandshakeC2SPacket(address.getHostString(),
                                         address.getPort(), NetworkState.STATUS);
-                                ((IHandshakeC2SPacket) handshakeC2SPacket).viaFabric$setProtocolVersion(
+                                ((HandshakeInterceptor) handshakeC2SPacket).viaFabric$setProtocolVersion(
                                         Via.getAPI().getServerVersion().lowestSupportedVersion());
                                 clientConnection.send(handshakeC2SPacket);
                                 clientConnection.send(new QueryRequestC2SPacket());
@@ -137,10 +137,5 @@ public class ProtocolAutoDetector {
             ViaFabric.JLOGGER.log(Level.WARNING, "Protocol auto detector error: ", e);
             return CompletableFuture.completedFuture(null);
         }
-    }
-
-    public interface IHandshakeC2SPacket {
-
-        void viaFabric$setProtocolVersion(final int version);
     }
 }
