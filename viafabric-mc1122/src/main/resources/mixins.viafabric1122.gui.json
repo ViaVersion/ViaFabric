@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "com.viaversion.fabric.mc1122.mixin.gui",
+  "mixins": [
+  ],
+  "client": [
+    "client.MixinMultiplayerScreen"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

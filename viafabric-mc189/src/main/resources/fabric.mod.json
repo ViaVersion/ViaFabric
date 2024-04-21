@@ -47,10 +47,10 @@
   ],
   "entrypoints": {
     "main": [
-      "com.viaversion.fabric.mc18.ViaFabric"
+      "com.viaversion.fabric.mc189.ViaFabric"
     ],
     "modmenu": [
-      "com.viaversion.fabric.mc18.gui.ModMenuConfig"
+      "com.viaversion.fabric.mc189.gui.ModMenuConfig"
     ]
   },
   "depends": {
@@ -62,10 +62,10 @@
     "legacy-fabric-command-api-v1": "*"
   },
   "mixins": [
-    "mixins.viafabric18.address.json",
-    "mixins.viafabric18.gui.json",
-    "mixins.viafabric18.debug.json",
-    "mixins.viafabric18.pipeline.json"
+    "mixins.viafabric189.address.json",
+    "mixins.viafabric189.gui.json",
+    "mixins.viafabric189.debug.json",
+    "mixins.viafabric189.pipeline.json"
   ],
   "custom": {
     "modmenu": {

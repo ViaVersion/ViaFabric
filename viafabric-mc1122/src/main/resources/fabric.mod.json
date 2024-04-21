@@ -39,7 +39,7 @@
   ],
   "entrypoints": {
     "main": [
-      "com.viaversion.fabric.mc112.ViaFabric"
+      "com.viaversion.fabric.mc1122.ViaFabric"
     ]
   },
   "depends": {
@@ -51,9 +51,9 @@
     "legacy-fabric-command-api-v1": "*"
   },
   "mixins": [
-    "mixins.viafabric112.address.json",
-    "mixins.viafabric112.gui.json",
-    "mixins.viafabric112.debug.json",
-    "mixins.viafabric112.pipeline.json"
+    "mixins.viafabric1122.address.json",
+    "mixins.viafabric1122.gui.json",
+    "mixins.viafabric1122.debug.json",
+    "mixins.viafabric1122.pipeline.json"
   ]
 }
