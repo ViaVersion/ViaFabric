@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "viafabric-mc1205",
-  "name": "ViaFabric for 1.20",
+  "name": "ViaFabric for 1.20.5",
   "version": "${version}",
   "description": "${description}",
   "license": "GPL-3.0",
