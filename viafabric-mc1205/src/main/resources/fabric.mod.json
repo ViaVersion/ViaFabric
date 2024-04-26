@@ -58,7 +58,7 @@
   },
   "depends": {
     "fabric-resource-loader-v0": "*",
-    "minecraft": ["1.20.5-rc.2"],
+    "minecraft": ["1.20.5"],
     "viafabric": "*"
   },
   "recommends": {
