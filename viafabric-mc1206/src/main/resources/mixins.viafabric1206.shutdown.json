@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_21",
+  "package": "com.viaversion.fabric.mc1206.mixin.shutdown",
+  "mixins": [
+  ],
+  "server": [
+    "server.MixinMinecraftServer"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}
