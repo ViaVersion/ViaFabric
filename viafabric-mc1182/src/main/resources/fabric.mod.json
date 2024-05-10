@@ -68,7 +68,8 @@
     "mixins.viafabric1182.address.json",
     "mixins.viafabric1182.gui.json",
     "mixins.viafabric1182.debug.json",
-    "mixins.viafabric1182.pipeline.json"
+    "mixins.viafabric1182.pipeline.json",
+    "mixins.viafabric1182.shutdown.json"
   ],
   "custom": {
     "modmenu": {

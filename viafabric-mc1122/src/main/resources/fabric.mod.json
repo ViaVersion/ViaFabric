@@ -54,6 +54,7 @@
     "mixins.viafabric1122.address.json",
     "mixins.viafabric1122.gui.json",
     "mixins.viafabric1122.debug.json",
-    "mixins.viafabric1122.pipeline.json"
+    "mixins.viafabric1122.pipeline.json",
+    "mixins.viafabric1122.shutdown.json"
   ]
 }
