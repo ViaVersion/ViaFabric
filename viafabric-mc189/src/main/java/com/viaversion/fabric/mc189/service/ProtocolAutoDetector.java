@@ -34,11 +34,11 @@ import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
 import net.minecraft.network.packet.s2c.query.QueryPongS2CPacket;
 import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
+import net.minecraft.realms.RealmsSharedConstants;
 import net.minecraft.server.ServerMetadata;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import com.viaversion.viaversion.api.Via;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
@@ -110,7 +110,7 @@ public class ProtocolAutoDetector {
                                     }
                                 });
 
-                                clientConnection.send(new HandshakeC2SPacket(Via.getAPI().getServerVersion().lowestSupportedVersion(), address.getHostString(),
+                                clientConnection.send(new HandshakeC2SPacket(RealmsSharedConstants.NETWORK_PROTOCOL_VERSION, address.getHostString(),
                                         address.getPort(), NetworkState.STATUS));
                                 clientConnection.send(new QueryRequestC2SPacket());
                             });

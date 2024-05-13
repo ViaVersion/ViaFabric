@@ -9,7 +9,7 @@
   "client": [
     "client.MixinClientConnection",
     "client.MixinClientConnectionChInit",
-    "client.MixinHandshakeC2SPacket"
+    "client.MixinHandshakeC2SPacketAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

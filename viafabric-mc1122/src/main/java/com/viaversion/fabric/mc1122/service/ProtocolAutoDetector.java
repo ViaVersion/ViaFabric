@@ -22,6 +22,7 @@ import com.viaversion.fabric.common.AddressParser;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.viaversion.fabric.mc1122.mixin.pipeline.client.MixinHandshakeC2SPacketAccessor;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -34,6 +35,7 @@ import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
 import net.minecraft.network.packet.s2c.query.QueryPongS2CPacket;
 import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
+import net.minecraft.realms.RealmsSharedConstants;
 import net.minecraft.server.ServerMetadata;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
@@ -113,8 +115,8 @@ public class ProtocolAutoDetector {
 
                                 HandshakeC2SPacket handshakeC2SPacket = new HandshakeC2SPacket(address.getHostString(),
                                         address.getPort(), NetworkState.STATUS);
-                                ((HandshakeInterceptor) handshakeC2SPacket).viaFabric$setProtocolVersion(
-                                        Via.getAPI().getServerVersion().lowestSupportedVersion());
+                                ((MixinHandshakeC2SPacketAccessor) handshakeC2SPacket).setProtocolVersion(
+                                        RealmsSharedConstants.NETWORK_PROTOCOL_VERSION);
                                 clientConnection.send(handshakeC2SPacket);
                                 clientConnection.send(new QueryRequestC2SPacket());
                             });
