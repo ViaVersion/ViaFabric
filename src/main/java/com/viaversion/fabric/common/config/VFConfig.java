@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class VFConfig extends Config {
     public static final String ENABLE_CLIENT_SIDE = "enable-client-side";
@@ -32,8 +33,8 @@ public class VFConfig extends Config {
     public static final String CLIENT_SIDE_FORCE_DISABLE = "client-side-force-disable";
     public static final String HIDE_BUTTON = "hide-button";
 
-    public VFConfig(File configFile) {
-        super(configFile);
+    public VFConfig(File configFile, Logger logger) {
+        super(configFile, logger);
         reload();
     }
 

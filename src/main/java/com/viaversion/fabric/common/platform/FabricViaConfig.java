@@ -24,6 +24,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class FabricViaConfig extends AbstractViaConfig {
     // Based on Sponge ViaVersion
@@ -32,8 +33,8 @@ public class FabricViaConfig extends AbstractViaConfig {
             "velocity-ping-interval", "velocity-ping-save", "velocity-servers",
             "blockconnection-method", "change-1_9-hitbox", "change-1_14-hitbox");
 
-    public FabricViaConfig(File configFile) {
-        super(configFile);
+    public FabricViaConfig(File configFile, Logger logger) {
+        super(configFile, logger);
         // Load config
         reload();
     }

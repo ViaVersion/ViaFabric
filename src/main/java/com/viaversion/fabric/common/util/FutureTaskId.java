@@ -29,11 +29,6 @@ public class FutureTaskId implements PlatformTask<Future<?>> {
     }
 
     @Override
-    public Future<?> getObject() {
-        return object;
-    }
-
-    @Override
     public void cancel() {
         object.cancel(false);
     }

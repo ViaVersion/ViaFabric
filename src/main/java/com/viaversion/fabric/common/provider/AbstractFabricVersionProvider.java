@@ -29,10 +29,11 @@ import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Type;
+import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.exception.CancelException;
+import com.viaversion.viaversion.protocol.version.BaseVersionProvider;
 import com.viaversion.viaversion.protocols.base.BaseProtocol1_16;
 import com.viaversion.viaversion.protocols.base.BaseProtocol1_7;
-import com.viaversion.viaversion.protocols.base.BaseVersionProvider;
 import com.viaversion.viaversion.protocols.base.ClientboundStatusPackets;
 import io.netty.channel.ChannelPipeline;
 import net.fabricmc.loader.api.FabricLoader;
@@ -138,14 +139,14 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
     }
 
     private void handleMulticonnectPing(UserConnection connection, ProtocolInfo info, boolean blocked, ProtocolVersion serverVer) throws Exception {
-        if (info.getState() == State.STATUS
+        if (info.getServerState() == State.STATUS
                 && info.getProtocolVersion() == -1
                 && isMulticonnectHandler(connection.getChannel().pipeline())
                 && (blocked || ProtocolUtils.isSupported(serverVer, getVersionForMulticonnect(serverVer)))) { // Intercept the connection
             ProtocolVersion multiconnectSuggestion = blocked ? ProtocolVersion.unknown : getVersionForMulticonnect(serverVer);
             getLogger().info("Sending " + multiconnectSuggestion + " for multiconnect version detector");
             PacketWrapper newAnswer = PacketWrapper.create(ClientboundStatusPackets.STATUS_RESPONSE, null, connection);
-            newAnswer.write(Type.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion.getVersion() + "}}");
+            newAnswer.write(Types.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion.getVersion() + "}}");
             newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class);
             throw CancelException.generate();
         }
