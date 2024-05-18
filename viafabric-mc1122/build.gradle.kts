@@ -2,7 +2,7 @@ dependencies {
     minecraft("com.mojang:minecraft:1.12.2")
     mappings("net.legacyfabric:yarn:1.12.2+build.541:v2")
 
-    modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:1.9.3+1.12.2")
+    modImplementation("net.legacyfabric.legacy-fabric-api:legacy-fabric-api:1.9.4+1.12.2")
 
     // fix newer java
     @Suppress("GradlePackageUpdate", "RedundantSuppression")
