@@ -45,7 +45,7 @@ public class VFHandItemProvider extends HandItemProvider {
         if (info.isClientSide()) {
             return getClientItem();
         } else if ((serverItem = serverPlayers.get(info.getProtocolInfo().getUuid())) != null) {
-            return new DataItem(serverItem);
+            return serverItem.copy();
         }
         return super.getHandItem(info);
     }
@@ -54,7 +54,7 @@ public class VFHandItemProvider extends HandItemProvider {
         if (clientItem == null) {
             return new DataItem(0, (byte) 0, (short) 0, null);
         }
-        return new DataItem(clientItem);
+        return clientItem.copy();
     }
 
     @Environment(EnvType.CLIENT)

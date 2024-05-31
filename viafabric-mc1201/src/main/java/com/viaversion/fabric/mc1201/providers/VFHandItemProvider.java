@@ -45,9 +45,9 @@ public class VFHandItemProvider extends HandItemProvider {
 
     private Item getClientItem() {
         if (clientItem == null) {
-            return new DataItem(0, (byte) 0, (short) 0, null);
+            return new DataItem(0, (byte) 0, null);
         }
-        return new DataItem(clientItem);
+        return clientItem.copy();
     }
 
     @Environment(EnvType.CLIENT)
