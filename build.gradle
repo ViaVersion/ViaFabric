@@ -174,7 +174,7 @@ processResources {
 List<String> mcReleases = Arrays.stream(rootProject.publish_mc_versions.toString().split(","))
         .map({ it -> it.trim() })
         .collect(Collectors.toList())
-List<String> javaVersions = IntStream.rangeClosed(8, 21)
+List<String> javaVersions = IntStream.rangeClosed(8, 22)
         .mapToObj { n -> (String) "Java $n" }
         .collect(Collectors.toList())
 String changelogMsg = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
