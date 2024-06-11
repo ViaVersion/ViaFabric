@@ -31,13 +31,13 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.NetworkSide;
+import net.minecraft.network.handler.HandlerNames;
 import net.minecraft.network.handler.PacketSizeLogger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 
 @Mixin(ClientConnection.class)
 public class MixinClientConnection {
@@ -61,8 +61,8 @@ public class MixinClientConnection {
                 protocolPipeline.add(HostnameParserProtocol.INSTANCE);
             }
 
-            pipeline.addBefore(clientSide ? "encoder" : "outbound_config", CommonTransformer.HANDLER_ENCODER_NAME, new FabricEncodeHandler(user));
-            pipeline.addBefore(clientSide ? "inbound_config" : "decoder", CommonTransformer.HANDLER_DECODER_NAME, new FabricDecodeHandler(user));
+            pipeline.addBefore(clientSide ? HandlerNames.ENCODER : HandlerNames.OUTBOUND_CONFIG, CommonTransformer.HANDLER_ENCODER_NAME, new FabricEncodeHandler(user));
+            pipeline.addBefore(clientSide ? HandlerNames.INBOUND_CONFIG : HandlerNames.DECODER, CommonTransformer.HANDLER_DECODER_NAME, new FabricDecodeHandler(user));
         }
     }
 }
