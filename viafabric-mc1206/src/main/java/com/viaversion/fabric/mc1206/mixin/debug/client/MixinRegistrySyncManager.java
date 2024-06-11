@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
 
-@Mixin(RegistrySyncManager.class)
+@Mixin(value = RegistrySyncManager.class, remap = false)
 public class MixinRegistrySyncManager {
 
     @Shadow
