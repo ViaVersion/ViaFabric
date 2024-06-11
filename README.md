@@ -40,6 +40,8 @@ registry synchronization (fabric-registry-sync mod).
   optionally [ViaRewind](https://viaversion.com/rewind))**:
   Your server can accept older versions. Your client can connect to newer versions.
 
+  Note: When using ViaFabric for versions older than 1.17, you need [Java 8 builds](https://ci.viaversion.com/)
+
 - Server-side: See https://viaversion.com/
 
 - Client-side:
