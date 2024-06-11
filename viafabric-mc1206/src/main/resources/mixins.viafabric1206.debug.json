@@ -3,10 +3,12 @@
   "compatibilityLevel": "JAVA_21",
   "package": "com.viaversion.fabric.mc1206.mixin.debug",
   "mixins": [
+    "MixinRegistrySyncManager"
   ],
   "client": [
-    "client.MixinClientConnectionAccessor",
+    "client.MixinRegistrySyncManager",
     "client.MixinClientConnection",
+    "client.MixinClientConnectionAccessor",
     "client.MixinDebugHud"
   ],
   "injectors": {
