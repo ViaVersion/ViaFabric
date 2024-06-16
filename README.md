@@ -10,7 +10,7 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod can be installed on 1.8.9, 1.12.2, 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.1, 1.20.4, 1.20.6 with Fabric Loader.
+This mod can be installed on 1.8.9, 1.12.2, 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.1, 1.20.4, 1.20.6, 1.21 with Fabric Loader.
 
 ## Dependencies
 
@@ -39,6 +39,8 @@ registry synchronization (fabric-registry-sync mod).
 - **Adding [ViaBackwards](https://viaversion.com/backwards) (and
   optionally [ViaRewind](https://viaversion.com/rewind))**:
   Your server can accept older versions. Your client can connect to newer versions.
+
+  Note: When using ViaFabric for versions older than 1.17, you need [Java 8 builds](https://ci.viaversion.com/)
 
 - Server-side: See https://viaversion.com/
 

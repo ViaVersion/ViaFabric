@@ -21,7 +21,7 @@ import com.viaversion.fabric.mc189.ViaFabric;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.minecraft.item.Item;
-import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider;
+import com.viaversion.viaversion.protocols.v1_8to1_9.provider.HandItemProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.legacyfabric.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -45,7 +45,7 @@ public class VFHandItemProvider extends HandItemProvider {
         if (info.isClientSide()) {
             return getClientItem();
         } else if ((serverItem = serverPlayers.get(info.getProtocolInfo().getUuid())) != null) {
-            return new DataItem(serverItem);
+            return serverItem.copy();
         }
         return super.getHandItem(info);
     }
@@ -54,7 +54,7 @@ public class VFHandItemProvider extends HandItemProvider {
         if (clientItem == null) {
             return new DataItem(0, (byte) 0, (short) 0, null);
         }
-        return new DataItem(clientItem);
+        return clientItem.copy();
     }
 
     @Environment(EnvType.CLIENT)

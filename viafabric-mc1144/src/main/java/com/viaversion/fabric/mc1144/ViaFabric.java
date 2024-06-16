@@ -94,7 +94,7 @@ public class ViaFabric implements ModInitializer {
         registerCommandsV1();
 
         config = new VFConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
-                .resolve("viafabric.yml").toFile());
+                .resolve("viafabric.yml").toFile(), JLOGGER);
 
         manager.onServerLoaded();
 

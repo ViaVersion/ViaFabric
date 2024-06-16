@@ -25,15 +25,17 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class VFConfig extends Config {
     public static final String ENABLE_CLIENT_SIDE = "enable-client-side";
     public static final String CLIENT_SIDE_VERSION = "client-side-version";
     public static final String CLIENT_SIDE_FORCE_DISABLE = "client-side-force-disable";
     public static final String HIDE_BUTTON = "hide-button";
+    public static final String IGNORE_REGISTRY_SYNC_ERRORS = "ignore-registry-sync-errors";
 
-    public VFConfig(File configFile) {
-        super(configFile);
+    public VFConfig(File configFile, Logger logger) {
+        super(configFile, logger);
         reload();
     }
 
@@ -81,5 +83,9 @@ public class VFConfig extends Config {
 
     public boolean isForcedDisable(String line) {
         return getClientSideForceDisable().contains(line);
+    }
+
+    public boolean isIgnoreRegistrySyncErrors() {
+        return getBoolean(IGNORE_REGISTRY_SYNC_ERRORS, false);
     }
 }

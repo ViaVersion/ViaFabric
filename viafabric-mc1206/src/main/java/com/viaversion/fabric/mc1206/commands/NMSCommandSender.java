@@ -17,6 +17,7 @@
  */
 package com.viaversion.fabric.mc1206.commands;
 
+import com.viaversion.viaversion.util.ComponentUtil;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.command.CommandSource;
 import net.minecraft.entity.Entity;
@@ -43,7 +44,7 @@ public class NMSCommandSender implements ViaCommandSender {
     }
 
     public static MutableText fromLegacy(String legacy) {
-        return Text.Serialization.fromJson(legacy, DynamicRegistryManager.EMPTY);
+        return Text.Serialization.fromJson(ComponentUtil.legacyToJsonString(legacy), DynamicRegistryManager.EMPTY);
     }
 
     @Override

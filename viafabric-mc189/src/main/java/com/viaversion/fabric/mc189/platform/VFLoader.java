@@ -19,12 +19,12 @@ package com.viaversion.fabric.mc189.platform;
 
 import com.viaversion.fabric.mc189.providers.VFHandItemProvider;
 import com.viaversion.fabric.mc189.providers.FabricVersionProvider;
+import com.viaversion.viaversion.protocols.v1_8to1_9.provider.HandItemProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.platform.ViaPlatformLoader;
 import com.viaversion.viaversion.api.protocol.version.VersionProvider;
-import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider;
 
 public class VFLoader implements ViaPlatformLoader {
     @Override

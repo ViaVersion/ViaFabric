@@ -19,6 +19,7 @@ package com.viaversion.fabric.mc1144.providers;
 
 import com.viaversion.fabric.common.util.RemappingUtil;
 import com.viaversion.fabric.mc1144.ViaFabric;
+import com.viaversion.viaversion.protocols.v1_8to1_9.provider.HandItemProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -30,9 +31,9 @@ import net.minecraft.util.Identifier;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.item.DataItem;
 import com.viaversion.viaversion.api.minecraft.item.Item;
-import com.viaversion.viaversion.protocols.protocol1_9to1_8.providers.HandItemProvider;
 
-public class VFHandItemProvider extends HandItemProvider {
+public class VFHandItemProvider extends HandItemProvider
+{
     public Item clientItem = null;
 
     @Override
@@ -45,9 +46,9 @@ public class VFHandItemProvider extends HandItemProvider {
 
     private Item getClientItem() {
         if (clientItem == null) {
-            return new DataItem(0, (byte) 0, (short) 0, null);
+            return new DataItem(0, (byte) 0, null);
         }
-        return new DataItem(clientItem);
+        return clientItem.copy();
     }
 
     @Environment(EnvType.CLIENT)

@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LeakDetectSubCommand extends ViaSubCommand {
+public class LeakDetectSubCommand implements ViaSubCommand {
     @Override
     public String name() {
         return "leakdetect";
@@ -60,6 +60,6 @@ public class LeakDetectSubCommand extends ViaSubCommand {
                     .filter(it -> it.startsWith(args[0]))
                     .collect(Collectors.toList());
         }
-        return super.onTabComplete(sender, args);
+        return ViaSubCommand.super.onTabComplete(sender, args);
     }
 }

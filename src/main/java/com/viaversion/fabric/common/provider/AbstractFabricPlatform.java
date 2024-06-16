@@ -70,7 +70,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
         installNativeVersionProvider();
         Path configDir = FabricLoader.getInstance().getConfigDir().resolve("ViaFabric");
         dataFolder = configDir.toFile();
-        config = new FabricViaConfig(configDir.resolve("viaversion.yml").toFile());
+        config = new FabricViaConfig(configDir.resolve("viaversion.yml").toFile(), logger);
     }
 
     protected abstract void installNativeVersionProvider();
@@ -177,11 +177,6 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
 
     @Override
     public boolean isPluginEnabled() {
-        return true;
-    }
-
-    @Override
-    public boolean isOldClientsAllowed() {
         return true;
     }
 
