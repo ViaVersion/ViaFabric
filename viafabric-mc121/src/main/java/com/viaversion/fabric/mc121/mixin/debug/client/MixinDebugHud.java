@@ -17,14 +17,11 @@
  */
 package com.viaversion.fabric.mc121.mixin.debug.client;
 
-import com.viaversion.fabric.common.handler.CommonTransformer;
-import com.viaversion.fabric.common.handler.FabricDecodeHandler;
+import com.viaversion.fabric.mc121.ViaFabricClient;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import io.netty.channel.ChannelHandler;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.DebugHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,10 +36,8 @@ public class MixinDebugHud {
     protected void getLeftText(CallbackInfoReturnable<List<String>> info) {
         String line = "[ViaFabric] I: " + Via.getManager().getConnectionManager().getConnections().size() + " (F: "
                 + Via.getManager().getConnectionManager().getConnectedClients().size() + ")";
-        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) MinecraftClient.getInstance().getNetworkHandler()
-                .getConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
-        if (viaDecoder instanceof FabricDecodeHandler) {
-            UserConnection connection = ((FabricDecodeHandler) viaDecoder).getInfo();
+        UserConnection connection = ViaFabricClient.getUserConnection();
+        if (connection != null) {
             ProtocolInfo protocol = connection.getProtocolInfo();
             if (protocol != null) {
                 ProtocolVersion serverVer = protocol.serverProtocolVersion();

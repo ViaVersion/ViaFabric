@@ -15,3 +15,5 @@ client-side-force-disable: ["hypixel.net", "*.hypixel.net", "minemen.club", "*.m
 # Fabric registry synchronization will be disabled when installed server-side and validation errors are ignored when installed on client-side.
 # Note: this setting only works on 1.20.4+ ViaFabric versions, and it might cause issues, use with caution.
 ignore-registry-sync-errors: false
+# Shows the armor hud on 1.8 servers when enabled. Only works on the client-side.
+show-armor-hud: true

@@ -33,6 +33,7 @@ public class VFConfig extends Config {
     public static final String CLIENT_SIDE_FORCE_DISABLE = "client-side-force-disable";
     public static final String HIDE_BUTTON = "hide-button";
     public static final String IGNORE_REGISTRY_SYNC_ERRORS = "ignore-registry-sync-errors";
+    public static final String SHOW_ARMOR_HUD = "show-armor-hud";
 
     public VFConfig(File configFile, Logger logger) {
         super(configFile, logger);
@@ -87,5 +88,9 @@ public class VFConfig extends Config {
 
     public boolean isIgnoreRegistrySyncErrors() {
         return getBoolean(IGNORE_REGISTRY_SYNC_ERRORS, false);
+    }
+
+    public boolean isShowArmorHud() {
+        return getBoolean(SHOW_ARMOR_HUD, false);
     }
 }
