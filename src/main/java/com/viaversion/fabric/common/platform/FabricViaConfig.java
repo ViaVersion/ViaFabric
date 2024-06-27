@@ -20,27 +20,22 @@ package com.viaversion.fabric.common.platform;
 import com.viaversion.viaversion.configuration.AbstractViaConfig;
 
 import java.io.File;
-import java.net.URL;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 public class FabricViaConfig extends AbstractViaConfig {
-    // Based on Sponge ViaVersion
-    private static final List<String> UNSUPPORTED = Arrays.asList("anti-xray-patch", "quick-move-action-fix",
-            "nms-player-ticking", "velocity-ping-interval", "velocity-ping-save", "velocity-servers",
-            "blockconnection-method", "change-1_9-hitbox", "change-1_14-hitbox");
+
+    protected final List<String> UNSUPPORTED = new ArrayList<>();
 
     public FabricViaConfig(File configFile, Logger logger) {
         super(configFile, logger);
+        UNSUPPORTED.addAll(BUKKIT_ONLY_OPTIONS);
+        UNSUPPORTED.addAll(VELOCITY_ONLY_OPTIONS);
+
         // Load config
         reload();
-    }
-
-    @Override
-    public URL getDefaultConfigURL() {
-        return getClass().getClassLoader().getResource("assets/viaversion/config.yml");
     }
 
     @Override
