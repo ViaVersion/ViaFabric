@@ -50,7 +50,6 @@
       "com.viaversion.fabric.mc189.ViaFabric"
     ],
     "modmenu": [
-      "com.viaversion.fabric.mc189.gui.ModMenuConfig"
     ]
   },
   "depends": {
