@@ -143,7 +143,7 @@ dependencies {
 
     includeJ8("com.viaversion:viaversion:${rootProject.viaver_version}")
     include("org.yaml:snakeyaml:${rootProject.yaml_version}")
-    include("com.github.TinfoilMC:ClientCommands:1.1.0")
+    //include("com.github.TinfoilMC:ClientCommands:1.1.0")
 }
 
 remapJar {
@@ -198,9 +198,9 @@ curseforge {
         mainArtifact(remapJar) {
             displayName = versionNameMsg
             relations {
-                optionalDependency("fabric-api")
+                //optionalDependency("fabric-api")
                 optionalDependency("legacy-fabric-api")
-                embeddedLibrary("cotton-client-commands")
+                //embeddedLibrary("cotton-client-commands")
             }
         }
 
@@ -230,9 +230,9 @@ modrinth {
     loaders.set(["fabric"])
 
     dependencies {
-        optional.project "P7dR8mSH" // fabric api
+        //optional.project "P7dR8mSH" // fabric api
         optional.project "9CJED7xi" // legacy fabric api
-        embedded.project "P1OZGk5p" // viaversion
+        //embedded.project "P1OZGk5p" // viaversion
     }
 }
 
