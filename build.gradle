@@ -145,7 +145,6 @@ dependencies {
 
     includeJ8("com.viaversion:viaversion:${rootProject.viaver_version}")
     include("org.yaml:snakeyaml:${rootProject.yaml_version}")
-    implementation("it.unimi.dsi:fastutil:8.5.13")
 }
 
 remapJar {
