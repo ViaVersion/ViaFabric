@@ -199,7 +199,6 @@ curseforge {
             displayName = versionNameMsg
             relations {
                 optionalDependency("fabric-api")
-                optionalDependency("legacy-fabric-api")
                 embeddedLibrary("cotton-client-commands")
             }
         }
@@ -231,7 +230,6 @@ modrinth {
 
     dependencies {
         optional.project "P7dR8mSH" // fabric api
-        optional.project "9CJED7xi" // legacy fabric api
         embedded.project "P1OZGk5p" // viaversion
     }
 }
