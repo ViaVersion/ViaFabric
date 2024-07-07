@@ -11,7 +11,3 @@ dependencies {
     @Suppress("GradlePackageUpdate", "RedundantSuppression")
     implementation("io.netty:netty-all:4.0.56.Final")
 }
-
-loom {
-    intermediaryUrl.set("https://maven.legacyfabric.net/net/legacyfabric/intermediary/%1\$s/intermediary-%1\$s-v2.jar")
-}
