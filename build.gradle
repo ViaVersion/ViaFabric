@@ -140,8 +140,8 @@ jvmdg.dg(configurations.includeJ8)
 
 dependencies {
     // dummy version
-    minecraft("com.mojang:minecraft:1.14.4")
-    mappings("net.fabricmc:yarn:1.14.4+build.18:v2")
+    minecraft("com.mojang:minecraft:1.13.2")
+    mappings("net.legacyfabric:yarn:1.13.2+build.541:v2")
 
     includeJ8("com.viaversion:viaversion:${rootProject.viaver_version}")
     include("org.yaml:snakeyaml:${rootProject.yaml_version}")
