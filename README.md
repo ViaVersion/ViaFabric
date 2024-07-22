@@ -66,25 +66,25 @@ registry synchronization (fabric-registry-sync mod).
 
 ### Client-side:
 
+- [ViaForge](https://www.modrinth.com/mod/viaforge): Clientside Implementation of ViaVersion for Forge.
+- [ViaFabricPlus](https://www.modrinth.com/mod/viafabricplus): Fabric mod for the latest Minecraft version with QoL fixes and enhancements to the gameplay.
 - [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): Discontinued 5zig plugin.
 - [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): Discontinued Fabric mod for connecting to older
   versions: down to 1.11 (stable) and 1.8 (experimental).
-- [ViaForge](https://www.modrinth.com/mod/viaforge): Clientside Implementation of ViaVersion for Forge.
-- [ViaFabricPlus](https://www.modrinth.com/mod/viafabricplus): Fabric ViaVersion/ViaLegacy/ViaAprilFools/ViaBedrock implementation with client-side fixes.  
 
 ### Server-side:
 
-- [ProtocolSupport](https://protocol.support/): Bukkit plugin for older client versions (down to 1.4.7).
-- [ViaVersion](https://viaversion.com): Plugin for BungeeCord, CraftBukkit, SpongeCommon and Velocity servers.
+- [ViaVersion](https://viaversion.com): Plugin for Velocity and Paper/Bukkit (and optionally also Sponge/BungeeCord). 
+- [ProtocolSupport](https://github.com/ProtocolSupport/ProtocolSupport): Discontinued Bukkit plugin for older client versions (down to 1.4.7).
 
 ### Standalone proxy:
 
-- [DirtMultiversion](https://github.com/DirtPowered/DirtMultiversion): Proxy allowing to connect down to Beta 1.3 with
-  newer Minecraft client versions.
-- [VIAaaS](https://github.com/ViaVersion/VIAaaS): Standalone ViaVersion proxy with ViaBackwards and ViaRewind, allowing
-  you to connect without a mod installed on your client. Supports online mode.
 - [ViaProxy](https://github.com/ViaVersion/ViaProxy): Standalone ViaVersion proxy with ViaBackwards, ViaRewind and ViaLegacy,
   allowing you to connect to a wide range of versions (down to classic versions) with your modern client (1.7.2+). Supports online mode.
+- [VIAaaS](https://github.com/ViaVersion/VIAaaS): Standalone ViaVersion proxy with ViaBackwards and ViaRewind, allowing
+  you to connect without a mod installed on your client. Supports online mode.
+- [DirtMultiversion](https://github.com/DirtPowered/DirtMultiversion): Discontinued Proxy allowing to connect down to Beta 1.3 with
+  newer Minecraft client versions.
 
 ### Cool things to try:
 
