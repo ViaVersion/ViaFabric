@@ -59,7 +59,8 @@ registry synchronization (fabric-registry-sync mod).
 
 ### Can ViaVersion, ViaBackwards and ViaRewind support snapshots?:
 
-- Check https://ci.viaversion.com/ for development builds with snapshot support
+- Check https://viaversion.com/donate for getting early access to snapshots. You can use the preview ViaVersion builds with ViaFabric by 
+  putting them in the mods' folder. During Minecraft updates there will be usual a branch on this repository with the updated ViaFabric.
 
 ## Alternatives
 
