@@ -14,6 +14,9 @@ This mod can be installed on 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.2
 
 The `legacy` branch also supports Legacy Fabric 1.8.9 and 1.12.2 versions.
 
+If you are using the latest Minecraft version and care about the gameplay being more enjoyable/functional, you may want to 
+check [ViaFabricPlus](https://www.modrinth.com/mod/viafabricplus) out. See the [differences](#viafabricplus) between ViaFabric and ViaFabricPlus.
+
 ## Dependencies
 
 | Dependency                                    | Download                                                       |
@@ -27,12 +30,12 @@ registry synchronization (fabric-registry-sync mod).
 
 ## ViaVersion
 
-### How can I install ViaBackwards/ViaRewind?:
+### How can I install ViaBackwards/ViaRewind/ViaAprilFools?:
 
 - Just drop them into mods folder. Make sure you are using versions compatible with the ViaVersion version you are
   using.
 
-### What versions can ViaVersion, ViaBackwards and ViaRewind translate?:
+### What versions can ViaVersion, ViaBackwards, ViaRewind and ViaAprilFools translate?:
 
 - **With [ViaVersion](https://viaversion.com)**:
   Your server can accept newer versions. Your client can connect to older versions.
@@ -41,16 +44,18 @@ registry synchronization (fabric-registry-sync mod).
   optionally [ViaRewind](https://viaversion.com/rewind))**:
   Your server can accept older versions. Your client can connect to newer versions.
 
+- **Adding [ViaAprilFools](https://viaversion.com/aprilfools)**: Your server can accept April Fools versions.
+
   Note: When using ViaFabric for versions older than 1.17, you need [Java 8 builds](https://ci.viaversion.com/)
 
 - Server-side: See https://viaversion.com/
 
 - Client-side:
 
-|               | 1.8.x | 1.9.x | 1.10-1.20.x | 1.21.x |
-|---------------|-------|-------|-------------|--------|
-| 1.14.4-1.20.6 clients | ✓ | ✓ | ✓ | ⟲ | ⟲   ⟲ | ⟲ | ⟲ | ⟲ | ⟲ |
-| 1.21 client | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+|                       | 1.8.x | 1.9.x | 1.10-1.20.x | 1.21.x |
+|-----------------------|-------|-------|-------------|--------|
+| 1.14.4-1.20.6 clients | ✓     | ✓     | ✓           | ⟲      | ⟲   ⟲ | ⟲ | ⟲ | ⟲ | ⟲ |
+| 1.21 client           | ✓     | ✓     | ✓           | ✓      | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪
 = [ViaRewind](https://viaversion.com/rewind)
