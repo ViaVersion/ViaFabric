@@ -1,9 +1,9 @@
 # ViaFabric
 
 [![ViaVersion Discord](https://img.shields.io/badge/chat-on%20discord-blue.svg)](https://viaversion.com/discord)
-[![CurseForge Downloads](http://cf.way2muchnoise.eu/full_viafabric_downloads.svg)](https://viaversion.com/fabric)
-[![Modrinth Downloads](https://img.shields.io/modrinth/dt/ViaFabric?label=Modrinth&logo=Modrinth&style=flat-square)](https://modrinth.com/mod/ViaFabric)
-[![CurseForge Versions](http://cf.way2muchnoise.eu/versions/viafabric.svg)](https://viaversion.com/fabric)
+[![CurseForge Downloads](http://cf.way2muchnoise.eu/full_viafabric_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/viafabric)
+[![Modrinth Downloads](https://img.shields.io/modrinth/dt/ViaFabric?label=Modrinth&logo=Modrinth&style=flat-square)](https://viaversion.com/fabric)
+[![CurseForge Versions](http://cf.way2muchnoise.eu/versions/viafabric.svg)](https://www.curseforge.com/minecraft/mc-mods/viafabric)
 <!-- ^ GitHub seems to not like this https -->
 
 ### Client-side and server-side ViaVersion implementation for Fabric
