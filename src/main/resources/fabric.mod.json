@@ -17,7 +17,8 @@
     "viaversion": ">=5.0.0"
   },
   "breaks": {
-    "viafabricplus": "*"
+    "viafabricplus": "*",
+    "replaymod": "*"
   },
   "environment": "*",
   "authors": [
