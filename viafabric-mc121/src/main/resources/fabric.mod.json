@@ -64,6 +64,9 @@
   "recommends": {
     "fabric-command-api-v2": "*"
   },
+  "breaks": {
+    "replaymod": "<=1.21-2.6.15"
+  },
   "mixins": [
     "mixins.viafabric121.address.json",
     "mixins.viafabric121.gui.json",

@@ -65,6 +65,9 @@
     "fabric-command-api-v1": "*",
     "cotton-client-commands": "*"
   },
+  "breaks": {
+    "replaymod": "<=1.15.2-2.6.15"
+  },
   "mixins": [
     "mixins.viafabric1152.address.json",
     "mixins.viafabric1152.gui.json",
