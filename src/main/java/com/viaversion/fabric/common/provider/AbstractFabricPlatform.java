@@ -219,4 +219,9 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     public final boolean hasPlugin(String name) {
         return FabricLoader.getInstance().isModLoaded(name);
     }
+
+    @Override
+    public boolean couldBeReloading() {
+        return false;
+    }
 }
