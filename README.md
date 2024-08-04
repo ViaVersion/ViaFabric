@@ -15,7 +15,7 @@ This mod can be installed on 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.2
 The `legacy` branch also supports Legacy Fabric 1.8.9 and 1.12.2 versions.
 
 If you are using the latest Minecraft version and care about the gameplay being more enjoyable/functional, you may want to 
-check [ViaFabricPlus](https://www.modrinth.com/mod/viafabricplus) out. See the [differences](#viafabricplus) between ViaFabric and ViaFabricPlus.
+check [ViaFabricPlus](https://modrinth.com/mod/viafabricplus) out. See the [differences](#viafabricplus) between ViaFabric and ViaFabricPlus.
 
 ## Dependencies
 
@@ -71,8 +71,8 @@ registry synchronization (fabric-registry-sync mod).
 
 ### Client-side:
 
-- [ViaForge](https://www.modrinth.com/mod/viaforge): Clientside Implementation of ViaVersion for Forge.
-- [ViaFabricPlus](https://www.modrinth.com/mod/viafabricplus): Fabric mod for the latest Minecraft version with QoL fixes and enhancements to the gameplay.
+- [ViaForge](https://modrinth.com/mod/viaforge): Clientside Implementation of ViaVersion for Forge.
+- [ViaFabricPlus](https://modrinth.com/mod/viafabricplus): Fabric mod for the latest Minecraft version with QoL fixes and enhancements to the gameplay.
 - [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): Discontinued 5zig plugin.
 - [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): Discontinued Fabric mod for connecting to older
   versions: down to 1.11 (stable) and 1.8 (experimental).
