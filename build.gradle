@@ -22,7 +22,7 @@ def ENV = System.getenv()
 
 group = "com.viaversion.fabric"
 description = "Client-side and server-side ViaVersion implementation for Fabric"
-version = "0.4.14+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
+version = "0.4.15+" + ENV.GITHUB_RUN_NUMBER + "-" + getBranch()
 logger.lifecycle("Building ViaFabric: $version")
 
 def getBranch() {
@@ -74,7 +74,6 @@ allprojects {
     dependencies {
         // transitive = false because Guava is conflicting on runClient
         implementation("com.viaversion:viaversion:${rootProject.viaver_version}") { transitive = false }
-        implementation("org.yaml:snakeyaml:${rootProject.yaml_version}")
 
         modImplementation("net.fabricmc:fabric-loader:${rootProject.loader_version}")
     }
@@ -144,7 +143,6 @@ dependencies {
     mappings("net.legacyfabric:yarn:1.13.2+build.541:v2")
 
     includeJ8("com.viaversion:viaversion:${rootProject.viaver_version}")
-    include("org.yaml:snakeyaml:${rootProject.yaml_version}")
 }
 
 remapJar {
