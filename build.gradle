@@ -72,7 +72,6 @@ allprojects {
     dependencies {
         // transitive = false because Guava is conflicting on runClient
         implementation("com.viaversion:viaversion:${rootProject.viaver_version}") { transitive = false }
-        implementation("org.yaml:snakeyaml:${rootProject.yaml_version}")
 
         modImplementation("net.fabricmc:fabric-loader:${rootProject.loader_version}")
     }
@@ -142,7 +141,6 @@ dependencies {
     mappings("net.fabricmc:yarn:1.14.4+build.18:v2")
 
     includeJ8("com.viaversion:viaversion:${rootProject.viaver_version}")
-    include("org.yaml:snakeyaml:${rootProject.yaml_version}")
     include("com.github.TinfoilMC:ClientCommands:1.1.0")
 }
 
