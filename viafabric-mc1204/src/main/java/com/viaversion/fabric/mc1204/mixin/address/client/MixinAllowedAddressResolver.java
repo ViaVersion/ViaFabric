@@ -28,8 +28,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.Optional;
 
@@ -40,22 +38,20 @@ public abstract class MixinAllowedAddressResolver {
 
     @Inject(method = "resolve", at = @At(value = "HEAD"), cancellable = true)
     private void resolveVF(ServerAddress address, CallbackInfoReturnable<Optional<Address>> cir) {
-        AddressParser viaAddr = new AddressParser().parse(address.getAddress());
-        if (viaAddr.viaSuffix == null) {
+        AddressParser viaAddr = AddressParser.parse(address.getAddress());
+        if (!viaAddr.hasViaMetadata()) {
             return;
         }
 
-        ServerAddress realAddress = new ServerAddress(viaAddr.serverAddress, address.getPort());
+        ServerAddress realAddress = new ServerAddress(viaAddr.serverAddress(), address.getPort());
 
-        cir.setReturnValue(resolve(realAddress).map(it -> viaFabric$addSuffix(it, viaAddr.getSuffixWithOptions())));
+        cir.setReturnValue(resolve(realAddress).map(it -> viaFabric$addSuffix(it, viaAddr)));
     }
 
     @Unique
-    private Address viaFabric$addSuffix(Address it, String viaSuffix) {
+    private static Address viaFabric$addSuffix(Address it, AddressParser viaAddr) {
         try {
-            return Address.create(new InetSocketAddress(
-                    InetAddress.getByAddress(it.getHostName() + "." + viaSuffix,
-                            it.getInetSocketAddress().getAddress().getAddress()), it.getPort()));
+            return Address.create(viaAddr.addAddressSuffix(it.getInetSocketAddress()));
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }

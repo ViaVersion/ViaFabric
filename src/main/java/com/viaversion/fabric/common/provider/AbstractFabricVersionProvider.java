@@ -28,7 +28,6 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.exception.CancelException;
 import com.viaversion.viaversion.protocol.version.BaseVersionProvider;
@@ -42,7 +41,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
@@ -93,8 +96,8 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
             SocketAddress addr = connection.getChannel().remoteAddress();
 
             if (addr instanceof InetSocketAddress) {
-                AddressParser parser = new AddressParser();
-                Integer addrVersion = parser.parse(((InetSocketAddress) addr).getHostName()).protocol;
+                AddressParser parser = AddressParser.parse(((InetSocketAddress) addr).getHostName());
+                Integer addrVersion = parser.protocol();
                 if (addrVersion != null) {
                     serverVer = addrVersion;
                 }

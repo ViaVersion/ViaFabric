@@ -17,18 +17,29 @@
  */
 package com.viaversion.fabric.mc1171.service;
 
-import com.viaversion.fabric.common.AddressParser;
-import com.viaversion.fabric.mc1171.ViaFabric;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.viaversion.fabric.common.AddressParser;
+import com.viaversion.fabric.mc1171.ViaFabric;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelException;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.*;
+import net.minecraft.network.ClientConnection;
+import net.minecraft.network.DecoderHandler;
+import net.minecraft.network.NetworkSide;
+import net.minecraft.network.NetworkState;
+import net.minecraft.network.PacketEncoder;
+import net.minecraft.network.SizePrepender;
+import net.minecraft.network.SplitterHandler;
 import net.minecraft.network.listener.ClientQueryPacketListener;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
 import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
@@ -37,7 +48,6 @@ import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
 import net.minecraft.server.ServerMetadata;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -131,7 +141,7 @@ public class ProtocolAutoDetector {
     public static CompletableFuture<ProtocolVersion> detectVersion(InetSocketAddress address) {
         try {
             InetSocketAddress real = new InetSocketAddress(InetAddress.getByAddress
-                    (new AddressParser().parse(address.getHostString()).serverAddress,
+                    (AddressParser.parse(address.getHostString()).serverAddress(),
                             address.getAddress().getAddress()), address.getPort());
             return SERVER_VER.get(real);
         } catch (UnknownHostException | ExecutionException e) {

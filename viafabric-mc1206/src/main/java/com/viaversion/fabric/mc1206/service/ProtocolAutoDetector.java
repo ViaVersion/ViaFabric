@@ -17,20 +17,29 @@
  */
 package com.viaversion.fabric.mc1206.service;
 
-import com.viaversion.fabric.common.AddressParser;
-import com.viaversion.fabric.mc1206.ViaFabric;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.viaversion.fabric.common.AddressParser;
+import com.viaversion.fabric.mc1206.ViaFabric;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelException;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.SharedConstants;
-import net.minecraft.network.*;
-import net.minecraft.network.handler.*;
+import net.minecraft.network.ClientConnection;
+import net.minecraft.network.NetworkSide;
+import net.minecraft.network.handler.EncoderHandler;
+import net.minecraft.network.handler.NetworkStateTransitions;
+import net.minecraft.network.handler.SizePrepender;
+import net.minecraft.network.handler.SplitterHandler;
 import net.minecraft.network.listener.ClientQueryPacketListener;
 import net.minecraft.network.packet.c2s.handshake.ConnectionIntent;
 import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
@@ -41,7 +50,7 @@ import net.minecraft.network.state.HandshakeStates;
 import net.minecraft.network.state.QueryStates;
 import net.minecraft.server.ServerMetadata;
 import net.minecraft.text.Text;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -50,7 +59,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class ProtocolAutoDetector {
@@ -144,7 +152,7 @@ public class ProtocolAutoDetector {
     public static CompletableFuture<ProtocolVersion> detectVersion(InetSocketAddress address) {
         try {
             InetSocketAddress real = new InetSocketAddress(InetAddress.getByAddress
-                    (new AddressParser().parse(address.getHostString()).serverAddress,
+                    (AddressParser.parse(address.getHostString()).serverAddress(),
                             address.getAddress().getAddress()), address.getPort());
             return SERVER_VER.get(real);
         } catch (UnknownHostException | ExecutionException e) {

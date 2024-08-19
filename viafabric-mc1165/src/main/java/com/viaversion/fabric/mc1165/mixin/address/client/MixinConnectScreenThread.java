@@ -29,13 +29,12 @@ import java.net.UnknownHostException;
 public class MixinConnectScreenThread {
     @Redirect(method = "run()V", at = @At(value = "INVOKE",
             target = "Ljava/net/InetAddress;getByName(Ljava/lang/String;)Ljava/net/InetAddress;"))
-    private InetAddress resolveViaFabricAddr(String address) throws UnknownHostException {
-        AddressParser viaAddr = new AddressParser().parse(address);
-        if (viaAddr.viaSuffix == null) {
+    private static InetAddress resolveViaFabricAddr(String address) throws UnknownHostException {
+        AddressParser viaAddr = AddressParser.parse(address);
+        if (!viaAddr.hasViaMetadata()) {
             return InetAddress.getByName(address);
         }
 
-        InetAddress resolved = InetAddress.getByName(viaAddr.serverAddress);
-        return InetAddress.getByAddress(resolved.getHostName() + "." + viaAddr.getSuffixWithOptions(), resolved.getAddress());
+        return viaAddr.resolve();
     }
 }

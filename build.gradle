@@ -142,6 +142,8 @@ dependencies {
 
     includeJ8("com.viaversion:viaversion:${rootProject.viaver_version}")
     include("com.github.TinfoilMC:ClientCommands:1.1.0")
+
+    testImplementation("org.testng:testng:6.13.1")
 }
 
 remapJar {
@@ -167,6 +169,11 @@ processResources {
                 })
         it.expand(langMap)
     }
+}
+
+test {
+    // Minimal insurance to make sure we get expected results.
+    useTestNG()
 }
 
 List<String> mcReleases = Arrays.stream(rootProject.publish_mc_versions.toString().split(","))
