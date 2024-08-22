@@ -17,22 +17,22 @@
  */
 package com.viaversion.fabric.mc1201.mixin.pipeline.client;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.viaversion.fabric.mc1201.ViaFabric;
 import com.viaversion.fabric.mc1201.service.ProtocolAutoDetector;
-import net.minecraft.network.ClientConnection;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-@Mixin(ClientConnection.class)
-public class MixinClientConnection {
-    @Inject(method = "connect", at = @At("HEAD"))
-    private static void onConnect(InetSocketAddress address, boolean useEpoll, CallbackInfoReturnable<ClientConnection> cir) {
+@Mixin(targets = "net/minecraft/client/gui/screen/multiplayer/ConnectScreen$1")
+public class MixinClientConnectionThread {
+    @Inject(method = "run", at = @At(value = "INVOKE_ASSIGN", args = "fuzz=2", target = "Ljava/util/Optional;get()Ljava/lang/Object;"))
+    private static void onConnect(CallbackInfo ci, @Local InetSocketAddress address) {
         try {
             if (!ViaFabric.config.isClientSideEnabled()) return;
             ProtocolAutoDetector.detectVersion(address).get(10, TimeUnit.SECONDS);

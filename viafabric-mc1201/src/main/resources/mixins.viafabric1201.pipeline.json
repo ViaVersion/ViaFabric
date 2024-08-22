@@ -7,8 +7,8 @@
     "MixinServerNetworkIoChInit"
   ],
   "client": [
-    "client.MixinClientConnection",
-    "client.MixinClientConnectionChInit"
+    "client.MixinClientConnectionChInit",
+    "client.MixinClientConnectionThread"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -6,7 +6,7 @@
     "MixinClientConnection"
   ],
   "client": [
-    "client.MixinClientConnection"
+    "client.MixinClientConnectionThread"
   ],
   "injectors": {
     "defaultRequire": 1
