@@ -29,7 +29,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-@Mixin(targets = "net/minecraft/client/gui/screen/multiplayer/ConnectScreen$1")
+@Mixin(targets = "net/minecraft/client/gui/screen/ConnectScreen$1")
 public class MixinClientConnectionThread {
     @Inject(method = "run", at = @At(value = "INVOKE_ASSIGN", args = "fuzz=2", target = "Ljava/util/Optional;get()Ljava/lang/Object;"))
     private static void onConnect(CallbackInfo ci, @Local InetSocketAddress address) {
