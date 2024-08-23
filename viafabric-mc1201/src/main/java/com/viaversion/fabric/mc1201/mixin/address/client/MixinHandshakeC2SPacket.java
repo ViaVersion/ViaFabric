@@ -25,8 +25,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 /**
  * Minimally invasive address sanitiser.
- *
- * @author Ampflower
  **/
 @Mixin(HandshakeC2SPacket.class)
 public class MixinHandshakeC2SPacket {

@@ -38,8 +38,6 @@ import static org.testng.Assert.assertTrue;
  * <p>
  * Test cases include seemingly malformed data that previous versions of ViaFabric
  * would accept as valid, and asserting that it would parse and treat it the same way.
- *
- * @author Ampflower
  **/
 public class AddressParserTest {
 

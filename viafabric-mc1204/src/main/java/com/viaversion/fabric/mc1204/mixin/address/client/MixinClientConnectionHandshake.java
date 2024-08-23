@@ -27,8 +27,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
  * Minimally invasive address sanitizer.
  * <p>
  * Placed in ClientConnection to prevent sanitizing input from LAN clients.
- *
- * @author Ampflower
  **/
 @Mixin(ClientConnection.class)
 public class MixinClientConnectionHandshake {
