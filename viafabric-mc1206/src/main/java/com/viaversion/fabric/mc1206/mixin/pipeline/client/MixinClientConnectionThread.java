@@ -32,7 +32,7 @@ import java.util.logging.Level;
 @Mixin(targets = "net/minecraft/client/gui/screen/multiplayer/ConnectScreen$1")
 public class MixinClientConnectionThread {
     @Inject(method = "run", at = @At(value = "INVOKE_ASSIGN", args = "fuzz=2", target = "Ljava/util/Optional;get()Ljava/lang/Object;"))
-    private static void onConnect(CallbackInfo ci, @Local InetSocketAddress address) {
+    private void onConnect(CallbackInfo ci, @Local InetSocketAddress address) {
         try {
             if (!ViaFabric.config.isClientSideEnabled()) return;
             ProtocolAutoDetector.detectVersion(address).get(10, TimeUnit.SECONDS);
