@@ -22,7 +22,6 @@ import com.viaversion.viaversion.api.protocol.AbstractSimpleProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.protocol.remapper.ValueTransformer;
-import com.viaversion.viaversion.api.type.Type;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.protocols.base.ServerboundHandshakePackets;
@@ -32,7 +31,7 @@ public class HostnameParserProtocol extends AbstractSimpleProtocol {
 
     @Override
     protected void registerPackets() {
-        registerServerbound(State.HANDSHAKE, ServerboundHandshakePackets.CLIENT_INTENTION.getId(), ServerboundHandshakePackets.CLIENT_INTENTION.getId(), new PacketHandlers() {
+        registerServerbound(State.HANDSHAKE, ServerboundHandshakePackets.CLIENT_INTENTION, new PacketHandlers() {
             @Override
             protected void register() {
                 map(Types.VAR_INT); // Protocol version
