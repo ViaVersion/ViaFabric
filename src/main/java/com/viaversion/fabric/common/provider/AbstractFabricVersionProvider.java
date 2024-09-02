@@ -31,9 +31,8 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.exception.CancelException;
 import com.viaversion.viaversion.protocol.version.BaseVersionProvider;
-import com.viaversion.viaversion.protocols.base.BaseProtocol1_16;
-import com.viaversion.viaversion.protocols.base.BaseProtocol1_7;
 import com.viaversion.viaversion.protocols.base.ClientboundStatusPackets;
+import com.viaversion.viaversion.protocols.base.v1_7.ClientboundBaseProtocol1_7;
 import io.netty.channel.ChannelPipeline;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -150,7 +149,7 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
             getLogger().info("Sending " + multiconnectSuggestion + " for multiconnect version detector");
             PacketWrapper newAnswer = PacketWrapper.create(ClientboundStatusPackets.STATUS_RESPONSE, null, connection);
             newAnswer.write(Types.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion.getVersion() + "}}");
-            newAnswer.send(info.getPipeline().contains(BaseProtocol1_16.class) ? BaseProtocol1_16.class : BaseProtocol1_7.class);
+            newAnswer.send(ClientboundBaseProtocol1_7.class);
             throw CancelException.generate();
         }
     }

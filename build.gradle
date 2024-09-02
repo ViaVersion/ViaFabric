@@ -84,8 +84,23 @@ allprojects {
 }
 
 subprojects {
+    loom {
+        runs {
+            named("client") {
+                client()
+                ideConfigGenerated(true)
+                runDir("run")
+            }
+            named("server") {
+                server()
+                ideConfigGenerated(true)
+                runDir("run")
+            }
+        }
+    }
+
     dependencies {
-        implementation(rootProject) {
+        implementation(project(path: ":", configuration: "namedElements")) {
             exclude group: "net.fabricmc", module: "fabric-loader" // prevent duplicate fabric-loader on run
         }
     }
@@ -126,7 +141,7 @@ static void setupRepositories(RepositoryHandler repositories) {
 }
 
 subprojects.each {
-    remapJar.dependsOn("${it.path}:remapJar")
+    rootProject.remapJar.dependsOn("${it.path}:remapJar")
 }
 
 configurations {

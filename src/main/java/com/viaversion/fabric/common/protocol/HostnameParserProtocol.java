@@ -31,7 +31,7 @@ public class HostnameParserProtocol extends AbstractSimpleProtocol {
 
     @Override
     protected void registerPackets() {
-        registerServerbound(State.HANDSHAKE, ServerboundHandshakePackets.CLIENT_INTENTION.getId(), ServerboundHandshakePackets.CLIENT_INTENTION.getId(), new PacketHandlers() {
+        registerServerbound(State.HANDSHAKE, ServerboundHandshakePackets.CLIENT_INTENTION, new PacketHandlers() {
             @Override
             protected void register() {
                 map(Types.VAR_INT); // Protocol version
