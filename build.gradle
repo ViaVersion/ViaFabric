@@ -158,6 +158,8 @@ dependencies {
     mappings("net.legacyfabric:yarn:1.13.2+build.541:v2")
 
     includeJ8("com.viaversion:viaversion:${rootProject.viaver_version}")
+    includeJ8("com.viaversion:viabackwards:${rootProject.viaback_version}")
+    includeJ8("com.viaversion:viarewind:${rootProject.viarewind_version}")
 }
 
 remapJar {
