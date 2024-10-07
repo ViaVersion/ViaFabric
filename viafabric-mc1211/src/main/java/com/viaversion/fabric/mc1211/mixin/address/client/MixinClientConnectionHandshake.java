@@ -15,26 +15,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.viaversion.fabric.mc1165.mixin.address.client;
+package com.viaversion.fabric.mc121.mixin.address.client;
 
 import com.viaversion.fabric.common.AddressParser;
+import net.minecraft.network.ClientConnection;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
-@Mixin(targets = "net.minecraft.client.gui.screen.ConnectScreen$1")
-public class MixinConnectScreenThread {
-    @Redirect(method = "run()V", at = @At(value = "INVOKE",
-            target = "Ljava/net/InetAddress;getByName(Ljava/lang/String;)Ljava/net/InetAddress;"))
-    private static InetAddress resolveViaFabricAddr(String address) throws UnknownHostException {
-        AddressParser viaAddr = AddressParser.parse(address);
-        if (!viaAddr.hasViaMetadata()) {
-            return InetAddress.getByName(address);
-        }
-
-        return viaAddr.resolve();
+/**
+ * Minimally invasive address sanitizer.
+ * <p>
+ * Placed in ClientConnection to prevent sanitizing input from LAN clients.
+ **/
+@Mixin(ClientConnection.class)
+public class MixinClientConnectionHandshake {
+    @ModifyArg(method = "method_52900", at = @At(value = "INVOKE", target = "net/minecraft/network/packet/c2s/handshake/HandshakeC2SPacket.<init>(ILjava/lang/String;ILnet/minecraft/network/packet/c2s/handshake/ConnectionIntent;)V"))
+    private static String removeViaMetadataFromAddress(String address) {
+        return AddressParser.parse(address).toAddress();
     }
 }
