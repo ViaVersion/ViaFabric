@@ -17,27 +17,29 @@
  */
 package com.viaversion.fabric.mc1206.mixin.pipeline.client;
 
-import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.viaversion.fabric.mc1206.ViaFabric;
 import com.viaversion.fabric.mc1206.service.ProtocolAutoDetector;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.net.InetSocketAddress;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 @Mixin(targets = "net/minecraft/client/gui/screen/multiplayer/ConnectScreen$1")
 public class MixinClientConnectionThread {
-    @Inject(method = "run", at = @At(value = "INVOKE_ASSIGN", args = "fuzz=2", target = "Ljava/util/Optional;get()Ljava/lang/Object;"))
-    private void onConnect(CallbackInfo ci, @Local InetSocketAddress address) {
+    @WrapOperation(method = "run", at = @At(value = "INVOKE", target = "Ljava/util/Optional;get()Ljava/lang/Object;"))
+    private Object onConnect(Optional instance, Operation<InetSocketAddress> original) {
+        InetSocketAddress address = original.call(instance);
         try {
-            if (!ViaFabric.config.isClientSideEnabled()) return;
+            if (!ViaFabric.config.isClientSideEnabled()) return address;
             ProtocolAutoDetector.detectVersion(address).get(10, TimeUnit.SECONDS);
         } catch (Exception e) {
             ViaFabric.JLOGGER.log(Level.WARNING, "Could not auto-detect protocol for " + address + " " + e);
         }
+        return address;
     }
 }
