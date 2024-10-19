@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_21",
+  "package": "com.viaversion.fabric.mc1212.mixin.pipeline",
+  "mixins": [
+    "MixinClientConnection"
+  ],
+  "client": [
+    "client.MixinClientConnectionThread"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
