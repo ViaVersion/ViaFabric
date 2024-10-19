@@ -127,9 +127,22 @@ registry synchronization (fabric-registry-sync mod).
 
 ### How can I set the version for specific servers?:
 
-- Append ._v(VERSION).viafabric.
-- Examples: ``minigame.example.com._v1_8.viafabric``, ``native.example.com._v-1.viafabric``
-  , ``auto.example.com._v-2.viafabric``
+#### Suffix Style
+
+- Append ``._v(VERSION).viafabric`` after the host, before any port.
+  - All dots (``.``) in a given version must be replaced with underscores (``_``).
+- Examples:
+  - ``minigame.example.com._v1_8.viafabric``
+  - ``native.example.com._v-1.viafabric``
+  - ``auto.example.com._v-2.viafabric``
+
+#### Prefix Style
+
+- Add ``viafabric.v(VERSION);`` before the address.
+- Examples:
+  - ``viafabric.v1.8;minigame.example.com``
+  - ``viafabric.v-1;native.example.com``
+  - ``viafabric.v-2;auto.example.com``
 
 ## ViaFabricPlus
 

@@ -5,7 +5,9 @@
   "mixins": [
   ],
   "client": [
-    "client.MixinAllowedAddressResolver"
+    "client.MixinAllowedAddressResolver",
+    "client.MixinClientConnectionHandshake",
+    "client.MixinServerAddress"
   ],
   "injectors": {
     "defaultRequire": 0

@@ -24,7 +24,11 @@ import com.viaversion.fabric.common.AddressParser;
 import com.viaversion.fabric.mc1211.ViaFabric;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelException;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import net.fabricmc.api.EnvType;
@@ -149,7 +153,7 @@ public class ProtocolAutoDetector {
     public static CompletableFuture<ProtocolVersion> detectVersion(InetSocketAddress address) {
         try {
             InetSocketAddress real = new InetSocketAddress(InetAddress.getByAddress
-                    (new AddressParser().parse(address.getHostString()).serverAddress,
+                    (AddressParser.parse(address.getHostString()).serverAddress(),
                             address.getAddress().getAddress()), address.getPort());
             return SERVER_VER.get(real);
         } catch (UnknownHostException | ExecutionException e) {
