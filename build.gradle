@@ -12,7 +12,7 @@ plugins {
     id "org.ajoberstar.grgit" version "5.2.2"
     id "com.matthewprenger.cursegradle" version "1.4.0" // This repository is archived on GH
     id "com.modrinth.minotaur" version "2.8.7"
-    id "fabric-loom" version "1.6-SNAPSHOT" apply false
+    id "fabric-loom" version "1.8-SNAPSHOT" apply false
     id "com.github.ben-manes.versions" version "0.51.0"
     id "xyz.wagyourtail.jvmdowngrader" version "0.7.1"
 }
