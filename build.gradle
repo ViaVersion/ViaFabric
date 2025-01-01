@@ -67,7 +67,6 @@ allprojects {
         maven { url = "https://maven.legacyfabric.net/" }
         maven { url = "https://maven.terraformersmc.com/releases/" }
         maven { url = "https://maven.nucleoid.xyz/" }
-        maven { url = "https://jitpack.io/" }
     }
 
     dependencies {
@@ -157,7 +156,7 @@ dependencies {
     mappings("net.fabricmc:yarn:1.14.4+build.18:v2")
 
     includeJ8("com.viaversion:viaversion:${rootProject.viaver_version}")
-    include("com.github.TinfoilMC:ClientCommands:1.1.0")
+    include("io.github.cottonmc:cotton-client-commands:1.1.0+1.15.2")
 }
 
 remapJar {
