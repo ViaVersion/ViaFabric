@@ -176,11 +176,6 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     }
 
     @Override
-    public boolean isPluginEnabled() {
-        return true;
-    }
-
-    @Override
     public JsonObject getDump() {
         JsonObject platformSpecific = new JsonObject();
         JsonArray mods = new JsonArray();
