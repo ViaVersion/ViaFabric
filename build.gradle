@@ -106,8 +106,6 @@ subprojects {
                 from components.java
             }
         }
-
-        setupRepositories(repositories)
     }
 }
 
@@ -115,22 +113,6 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-        }
-    }
-
-    setupRepositories(repositories)
-}
-
-static void setupRepositories(RepositoryHandler repositories) {
-    //repositories.mavenLocal() // uncomment for testing
-    def ENV = System.getenv()
-    if (ENV.MAVEN_URL) {
-        repositories.maven {
-            url ENV.MAVEN_URL
-            credentials {
-                username ENV.MAVEN_USERNAME
-                password ENV.MAVEN_PASSWORD
-            }
         }
     }
 }
