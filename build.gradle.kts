@@ -151,9 +151,6 @@ publishMods {
                 (8..22).map { JavaVersion.toVersion(it) }
         )
         minecraftVersions.addAll(mcReleases)
-        rootProject.extra["curseforge_mc_snapshot"]?.let {
-            minecraftVersions.add(it.toString())
-        }
         optional("fabric-api")
         embeds("cotton-client-commands")
     }
@@ -162,9 +159,6 @@ publishMods {
         projectId = "YlKdE5VK"
         type = ALPHA
         minecraftVersions.addAll(mcReleases)
-        rootProject.extra["modrinth_mc_snapshot"]?.let {
-            minecraftVersions.add(it.toString())
-        }
         optional("fabric-api")
         embeds("viaversion")
     }
