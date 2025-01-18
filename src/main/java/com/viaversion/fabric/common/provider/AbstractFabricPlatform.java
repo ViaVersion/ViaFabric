@@ -1,6 +1,6 @@
 /*
  * This file is part of ViaFabric - https://github.com/ViaVersion/ViaFabric
- * Copyright (C) 2018-2024 ViaVersion and contributors
+ * Copyright (C) 2018-2025 ViaVersion and contributors
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -173,11 +173,6 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     public String getPlatformVersion() {
         return FabricLoader.getInstance().getModContainer("viafabric")
                 .get().getMetadata().getVersion().getFriendlyString();
-    }
-
-    @Override
-    public boolean isPluginEnabled() {
-        return true;
     }
 
     @Override

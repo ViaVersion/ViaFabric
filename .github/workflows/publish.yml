@@ -8,8 +8,10 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@v4
+        with:
+          persist-credentials: false
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -18,6 +20,6 @@ jobs:
           check-latest: true
       - name: Build and Publish
         env:
-          CURSEFORGE_API_KEY: ${{ secrets.CREEPER_CF }}
+          CURSEFORGE_TOKEN: ${{ secrets.CREEPER_CF }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-        run: ./gradlew curseforge modrinth
+        run: ./gradlew publishMods
