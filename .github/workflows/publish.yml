@@ -20,6 +20,6 @@ jobs:
          check-latest: true
       - name: Build and Publish
         env:
-          CURSEFORGE_API_KEY: ${{ secrets.CREEPER_CF }}
+          CURSEFORGE_TOKEN: ${{ secrets.CREEPER_CF }}
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-        run: ./gradlew curseforge modrinth
+        run: ./gradlew publishMods
