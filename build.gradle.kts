@@ -140,7 +140,7 @@ val mcReleases = rootProject.extra["publish_mc_versions"].toString().split(",")
         .map { it.trim() }
 
 publishMods {
-    file = tasks.remapJar.get().archiveFile.get().asFile
+    file = tasks.remapJar.get().archiveFile
     changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
     version = rootProject.version.toString()
     displayName = "[${getBranch()}] ViaFabric $version"
