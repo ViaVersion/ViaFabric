@@ -64,7 +64,6 @@ allprojects {
         mavenCentral()
         maven { url = "https://repo.viaversion.com/" }
         maven { url = "https://maven.fabricmc.net/" }
-        maven { url = "https://maven.legacyfabric.net/" }
         maven { url = "https://maven.terraformersmc.com/releases/" }
         maven { url = "https://maven.nucleoid.xyz/" }
     }
