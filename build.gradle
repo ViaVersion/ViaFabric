@@ -1,7 +1,4 @@
 // todo migrate this code to kotlin
-import com.google.gson.JsonParser
-
-import java.nio.file.Files
 import java.util.stream.Collectors
 import java.util.stream.IntStream
 
@@ -163,22 +160,6 @@ remapJar {
         subprojects.each {
             nestedJars.from project("${it.path}").tasks.named("remapJar")
         }
-    }
-}
-
-processResources {
-    filesMatching("assets/*/lang/*.lang") {
-        HashMap<String, String> langMap = new HashMap<>()
-        Files.list(rootProject.file("src/main/resources/assets/viafabric/lang").toPath())
-                .filter(path -> path.toString().endsWith(".json"))
-                .forEach(path -> {
-                    String legacyFile = "\n" + String.join("\n", JsonParser
-                            .parseReader(Files.newBufferedReader(path)).asJsonObject.entrySet().stream()
-                            .map(entry -> entry.key + "=" + entry.value.asString)
-                            .toArray(String[]::new))
-                    langMap.put(path.getFileName().toString().replace(".json", ""), legacyFile)
-                })
-        it.expand(langMap)
     }
 }
 
