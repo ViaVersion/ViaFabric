@@ -138,7 +138,7 @@ publishMods {
     file = tasks.remapJar.get().archiveFile
     changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
     version = rootProject.version.toString()
-    displayName = "[${getBranch()}] ViaFabric $version"
+    displayName = "[${getBranch()}] ViaFabric ${version.get()}"
     modLoaders.add("fabric")
     dryRun = providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
 
