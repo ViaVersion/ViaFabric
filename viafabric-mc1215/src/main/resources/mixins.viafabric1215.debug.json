@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_21",
+  "package": "com.viaversion.fabric.mc1215.mixin.debug",
+  "mixins": [
+    "MixinRegistrySyncManager"
+  ],
+  "client": [
+    "client.MixinRegistrySyncManager",
+    "client.MixinClientConnection",
+    "client.MixinClientConnectionAccessor",
+    "client.MixinDebugHud"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

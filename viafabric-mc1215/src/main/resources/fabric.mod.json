@@ -1,22 +1,14 @@
 {
   "schemaVersion": 1,
-  "id": "viafabric",
-  "name": "ViaFabric",
+  "id": "viafabric-mc1215",
+  "name": "ViaFabric for 1.21.5",
   "version": "${version}",
   "description": "${description}",
   "license": "GPL-3.0",
   "contact": {
     "homepage": "https://viaversion.com/fabric",
     "issues": "https://github.com/ViaVersion/ViaFabric/issues",
-    "sources": "https://github.com/ViaVersion/ViaFabric",
-    "discord": "https://discord.gg/viaversion"
-  },
-  "depends": {
-    "minecraft": ["1.14.4", "1.15.2", "1.16.4", "1.16.5", "1.17.1", "1.18.2", "1.19.4", "1.20", "1.20.1", "1.20.3", "1.20.5", "1.20.6", "1.21.5-alpha.25.9.b"],
-    "viaversion": ">=5.0.0"
-  },
-  "breaks": {
-    "viafabricplus": "*"
+    "sources": "https://github.com/ViaVersion/ViaFabric"
   },
   "environment": "*",
   "authors": [
@@ -45,11 +37,6 @@
       }
     }
   ],
-  "entrypoints": {
-    "main": [
-      "com.viaversion.fabric.common.ViaFabric"
-    ]
-  },
   "contributors": [
     {
       "name": "GitHub contributors",
@@ -58,5 +45,38 @@
       }
     }
   ],
-  "icon": "assets/viafabric/textures/logo.png"
+  "entrypoints": {
+    "main": [
+      "com.viaversion.fabric.mc1215.ViaFabric"
+    ],
+    "client": [
+      "com.viaversion.fabric.mc1215.ViaFabricClient"
+    ],
+    "modmenu": [
+      "com.viaversion.fabric.mc1215.gui.ModMenuConfig"
+    ]
+  },
+  "depends": {
+    "fabric-resource-loader-v0": "*",
+    "minecraft": "1.21.5-alpha.25.9.b",
+    "viafabric": "*"
+  },
+  "recommends": {
+    "fabric-command-api-v2": "*"
+  },
+  "breaks": {
+    "replaymod": "<=1.21-2.6.15"
+  },
+  "mixins": [
+    "mixins.viafabric1215.address.json",
+    "mixins.viafabric1215.gui.json",
+    "mixins.viafabric1215.debug.json",
+    "mixins.viafabric1215.pipeline.json",
+    "mixins.viafabric1215.shutdown.json"
+  ],
+  "custom": {
+    "modmenu": {
+      "parent": "viafabric"
+    }
+  }
 }
