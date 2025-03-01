@@ -114,7 +114,6 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
                     answer -> {
                         if (answer) {
                             ViaFabric.config.setClientSideEnabled(true);
-                            ViaFabric.config.setClientSideVersion(-2); // AUTO
                             ViaFabric.config.save();
                             widget.setMessage(getClientSideText());
                         }
