@@ -6,10 +6,11 @@
     "MixinRegistrySyncManager"
   ],
   "client": [
-    "client.MixinRegistrySyncManager",
     "client.MixinClientConnection",
     "client.MixinClientConnectionAccessor",
-    "client.MixinDebugHud"
+    "client.MixinClientPlayNetworkHandler",
+    "client.MixinDebugHud",
+    "client.MixinRegistrySyncManager"
   ],
   "injectors": {
     "defaultRequire": 0

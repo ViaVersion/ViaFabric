@@ -22,16 +22,17 @@ import com.viaversion.fabric.common.platform.FabricViaConfig;
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.common.util.FutureTaskId;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
+import com.viaversion.fabric.common.util.ProtocolUtils;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
-import com.viaversion.viaversion.api.configuration.ConfigurationProvider;
 import com.viaversion.viaversion.api.configuration.ViaVersionConfig;
 import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.api.platform.UnsupportedSoftware;
 import com.viaversion.viaversion.api.platform.ViaPlatform;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.libs.gson.JsonArray;
 import com.viaversion.viaversion.libs.gson.JsonObject;
-import com.viaversion.viaversion.unsupported.UnsupportedPlugin;
+import com.viaversion.viaversion.protocols.base.InitialBaseProtocol;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
@@ -44,10 +45,6 @@ import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
@@ -135,10 +132,6 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     }
 
     @Override
-    public void onReload() {
-    }
-
-    @Override
     public Logger getLogger() {
         return logger;
     }
@@ -173,6 +166,24 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     public String getPlatformVersion() {
         return FabricLoader.getInstance().getModContainer("viafabric")
                 .get().getMetadata().getVersion().getFriendlyString();
+    }
+
+    // Stolen from https://github.com/ViaVersion/ViaLoader/blob/main/src/main/java/com/viaversion/vialoader/impl/platform/ViaVersionPlatformImpl.java
+    @Override
+    public void sendCustomPayload(UUID uuid, String channel, String message) {
+        UserConnection connection = Via.getManager().getConnectionManager().getConnectedClient(uuid);
+        if (connection == null) {
+            // The connection field will always be null on clientside platforms, get the first connection instead
+            connection = Via.getManager().getConnectionManager().getConnections().stream().findFirst().orElse(null);
+        }
+
+        if (connection != null) {
+            final PacketWrapper packet = PacketWrapper.create(ProtocolUtils.getServerboundPacketType("CUSTOM_PAYLOAD", connection), connection);
+            packet.write(Types.STRING, channel);
+            packet.write(Types.REMAINING_BYTES, message.getBytes());
+
+            packet.sendToServer(InitialBaseProtocol.class);
+        }
     }
 
     @Override
