@@ -168,22 +168,12 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
                 .get().getMetadata().getVersion().getFriendlyString();
     }
 
-    // Stolen from https://github.com/ViaVersion/ViaLoader/blob/main/src/main/java/com/viaversion/vialoader/impl/platform/ViaVersionPlatformImpl.java
     @Override
-    public void sendCustomPayload(UUID uuid, String channel, String message) {
-        UserConnection connection = Via.getManager().getConnectionManager().getConnectedClient(uuid);
-        if (connection == null) {
-            // The connection field will always be null on clientside platforms, get the first connection instead
-            connection = Via.getManager().getConnectionManager().getConnections().stream().findFirst().orElse(null);
-        }
-
-        if (connection != null) {
-            final PacketWrapper packet = PacketWrapper.create(ProtocolUtils.getServerboundPacketType("CUSTOM_PAYLOAD", connection), connection);
-            packet.write(Types.STRING, channel);
-            packet.write(Types.REMAINING_BYTES, message.getBytes());
-
-            packet.sendToServer(InitialBaseProtocol.class);
-        }
+    public void sendCustomPayload(UserConnection connection, String channel, byte[] message) {
+        final PacketWrapper customPayload = PacketWrapper.create(ProtocolUtils.getServerboundPacketType("CUSTOM_PAYLOAD", connection), connection);
+        customPayload.write(Types.STRING, channel);
+        customPayload.write(Types.REMAINING_BYTES, message);
+        customPayload.sendToServer(InitialBaseProtocol.class);
     }
 
     @Override
