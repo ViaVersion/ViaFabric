@@ -11,7 +11,7 @@ plugins {
 private val env = System.getenv()
 group = "com.viaversion.fabric"
 description = "Client-side and server-side ViaVersion implementation for Fabric"
-version = "0.4.17+" + env["GITHUB_RUN_NUMBER"] + "-" + getBranch()
+version = "0.4.18+" + env["GITHUB_RUN_NUMBER"] + "-" + getBranch()
 
 fun getBranch(): String {
     val branch = env["GITHUB_REF"] ?: grgit.branch.current().name ?: "unknown"
