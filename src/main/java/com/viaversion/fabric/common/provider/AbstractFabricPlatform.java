@@ -22,6 +22,7 @@ import com.viaversion.fabric.common.platform.FabricViaConfig;
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.common.util.FutureTaskId;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
+import com.viaversion.fabric.common.util.ProtocolUtils;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 import com.viaversion.viaversion.api.configuration.ConfigurationProvider;
@@ -29,8 +30,11 @@ import com.viaversion.viaversion.api.configuration.ViaVersionConfig;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.platform.UnsupportedSoftware;
 import com.viaversion.viaversion.api.platform.ViaPlatform;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.libs.gson.JsonArray;
 import com.viaversion.viaversion.libs.gson.JsonObject;
+import com.viaversion.viaversion.protocols.base.InitialBaseProtocol;
 import com.viaversion.viaversion.unsupported.UnsupportedPlugin;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.Future;
@@ -135,10 +139,6 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     }
 
     @Override
-    public void onReload() {
-    }
-
-    @Override
     public Logger getLogger() {
         return logger;
     }
@@ -173,6 +173,14 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     public String getPlatformVersion() {
         return FabricLoader.getInstance().getModContainer("viafabric")
                 .get().getMetadata().getVersion().getFriendlyString();
+    }
+
+    @Override
+    public void sendCustomPayload(UserConnection connection, String channel, byte[] message) {
+        final PacketWrapper customPayload = PacketWrapper.create(ProtocolUtils.getServerboundPacketType("CUSTOM_PAYLOAD", connection), connection);
+        customPayload.write(Types.STRING, channel);
+        customPayload.write(Types.REMAINING_BYTES, message);
+        customPayload.sendToServer(InitialBaseProtocol.class);
     }
 
     @Override

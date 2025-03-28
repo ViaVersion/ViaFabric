@@ -25,6 +25,7 @@ import com.viaversion.fabric.mc1122.ViaFabric;
 import com.viaversion.fabric.mc1122.commands.NMSCommandSender;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
+import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.util.ComponentUtil;
 import io.netty.channel.EventLoop;
 import net.fabricmc.api.EnvType;
@@ -96,24 +97,8 @@ public class FabricPlatform extends AbstractFabricPlatform {
     }
 
     @Override
-    public ViaCommandSender[] getOnlinePlayers() {
-        MinecraftServer server = getServer();
-        if (server != null && server.isOnThread()) {
-            return getServerPlayers();
-        }
-        return Via.getManager().getConnectionManager().getConnectedClients().values().stream()
-                .map(UserCommandSender::new)
-                .toArray(ViaCommandSender[]::new);
-    }
-
-    private ViaCommandSender[] getServerPlayers() {
-        return getServer().getPlayerManager().getPlayers().stream()
-                .map(NMSCommandSender::new)
-                .toArray(ViaCommandSender[]::new);
-    }
-
-    @Override
-    public void sendMessage(UUID uuid, String s) {
+    public void sendMessage(UserConnection connection, String s) {
+        UUID uuid = connection.getProtocolInfo().getUuid();
         sendMessageServer(uuid, s);
     }
 
@@ -128,7 +113,8 @@ public class FabricPlatform extends AbstractFabricPlatform {
     }
 
     @Override
-    public boolean kickPlayer(UUID uuid, String s) {
+    public boolean kickPlayer(UserConnection connection, String s) {
+        UUID uuid = connection.getProtocolInfo().getUuid();
         return kickServer(uuid, s);
     }
 

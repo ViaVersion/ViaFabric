@@ -17,6 +17,11 @@ The `legacy` branch also supports Legacy Fabric 1.8.9 and 1.12.2 versions.
 If you are using the latest Minecraft version and care about the gameplay being more enjoyable/functional, you may want to
 check [ViaFabricPlus](https://modrinth.com/mod/viafabricplus) out. See the [differences](#viafabricplus) between ViaFabric and ViaFabricPlus.
 
+## Anti cheat integration
+
+ViaFabric now supports custom payload sending to transmit player protocol version data to the server when installed on the client side. This allows servers to retrieve a player's protocol version via plugin messages, which can be useful for anti-cheat checks and version-dependent logic.
+For more details on how to use this feature, see the [Player Details Protocol wiki](https://github.com/ViaVersion/ViaVersion/wiki/Player-Details-Protocol).
+
 ## Dependencies
 
 | Dependency                                    | Download                                                       |
