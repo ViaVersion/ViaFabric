@@ -29,6 +29,7 @@ import com.viaversion.viaversion.api.configuration.ViaVersionConfig;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.platform.ViaPlatform;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
 import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.libs.gson.JsonArray;
 import com.viaversion.viaversion.libs.gson.JsonObject;
@@ -170,7 +171,12 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
 
     @Override
     public void sendCustomPayload(UserConnection connection, String channel, byte[] message) {
-        final PacketWrapper customPayload = PacketWrapper.create(ProtocolUtils.getServerboundPacketType("CUSTOM_PAYLOAD", connection), connection);
+        final ServerboundPacketType packetType = ProtocolUtils.getServerboundPacketType("CUSTOM_PAYLOAD", connection);
+        final PacketWrapper customPayload = PacketWrapper.create(packetType, connection);
+        if (packetType == null) {
+            return;
+        }
+
         customPayload.write(Types.STRING, channel);
         customPayload.write(Types.REMAINING_BYTES, message);
         customPayload.sendToServer(InitialBaseProtocol.class);
