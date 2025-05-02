@@ -40,16 +40,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Connection.class)
-public class MixinClientConnection {
-	@Shadow
-	private Channel channel;
+public class MixinConnection {
+    @Shadow
+    private Channel channel;
 
-	@Inject(method = "setCompressionThreshold", at = @At("RETURN"))
-	private void reorderCompression(int compressionThreshold, boolean rejectBad, CallbackInfo ci) {
-		channel.pipeline().fireUserEventTriggered(new PipelineReorderEvent());
-	}
+    @Inject(method = "setupCompression", at = @At("RETURN"))
+    private void reorderCompression(int compressionThreshold, boolean validateDecompressed, CallbackInfo ci) {
+        channel.pipeline().fireUserEventTriggered(new PipelineReorderEvent());
+    }
 
-    @Inject(method = "addHandlers", at = @At("RETURN"))
+    @Inject(method = "configureSerialization", at = @At("RETURN"))
     private static void onAddHandlers(ChannelPipeline pipeline, PacketFlow side, boolean local, BandwidthDebugMonitor packetSizeLogger, CallbackInfo ci) {
         final Channel channel = pipeline.channel();
         if (channel instanceof SocketChannel) {

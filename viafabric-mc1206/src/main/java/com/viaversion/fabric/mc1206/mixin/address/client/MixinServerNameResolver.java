@@ -34,11 +34,12 @@ import net.minecraft.client.multiplayer.resolver.ServerAddress;
 import net.minecraft.client.multiplayer.resolver.ServerNameResolver;
 
 @Mixin(ServerNameResolver.class)
-public abstract class MixinAllowedAddressResolver {
-    @Shadow
-    public abstract Optional<ResolvedServerAddress> resolve(ServerAddress address);
+public abstract class MixinServerNameResolver {
 
-    @Inject(method = "resolve", at = @At(value = "HEAD"), cancellable = true)
+    @Shadow
+    public abstract Optional<ResolvedServerAddress> resolveAddress(final ServerAddress serverAddress);
+
+    @Inject(method = "resolveAddress", at = @At(value = "HEAD"), cancellable = true)
     private void resolveVF(ServerAddress address, CallbackInfoReturnable<Optional<ResolvedServerAddress>> cir) {
         AddressParser viaAddr = new AddressParser().parse(address.getHost());
         if (viaAddr.viaSuffix == null) {
@@ -47,7 +48,7 @@ public abstract class MixinAllowedAddressResolver {
 
         ServerAddress realAddress = new ServerAddress(viaAddr.serverAddress, address.getPort());
 
-        cir.setReturnValue(resolve(realAddress).map(it -> viaFabric$addSuffix(it, viaAddr.getSuffixWithOptions())));
+        cir.setReturnValue(resolveAddress(realAddress).map(it -> viaFabric$addSuffix(it, viaAddr.getSuffixWithOptions())));
     }
 
     @Unique

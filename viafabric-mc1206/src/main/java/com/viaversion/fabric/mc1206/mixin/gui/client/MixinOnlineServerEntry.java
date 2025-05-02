@@ -35,25 +35,26 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ServerSelectionList.OnlineServerEntry.class)
-public class MixinServerEntry {
+public class MixinOnlineServerEntry {
+
     @Shadow
     @Final
-    private ServerData server;
+    private ServerData serverData;
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", ordinal = 0,
-            target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"))
+        target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V"))
     private ResourceLocation redirectPingIcon(ResourceLocation texture) {
-        if (((ViaServerData) this.server).viaFabric$translating() && texture.getPath().startsWith("server_list/ping")) {
+        if (((ViaServerData) this.serverData).viaFabric$translating() && texture.getPath().startsWith("server_list/ping")) {
             return new ResourceLocation("viafabric", texture.getPath());
         }
         return texture;
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setTooltip(Lnet/minecraft/text/Text;)V"))
-    private void addServerVer(JoinMultiplayerScreen instance, Component text) {
-        ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerData) this.server).viaFabric$getServerVer());
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/multiplayer/JoinMultiplayerScreen;setTooltipForNextRenderPass(Lnet/minecraft/network/chat/Component;)V"))
+    private void addServerVer(JoinMultiplayerScreen instance, Component component) {
+        ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerData) this.serverData).viaFabric$getServerVer());
         List<Component> lines = new ArrayList<>();
-        lines.add(text);
+        lines.add(component);
         lines.add(Component.translatable("gui.ping_version.translated", proto.getName(), proto.getVersion()));
         instance.setTooltipForNextRenderPass(Lists.transform(lines, Component::getVisualOrderText));
     }
