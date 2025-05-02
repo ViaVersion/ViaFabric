@@ -47,6 +47,7 @@ allprojects {
         maven("https://maven.fabricmc.net/")
         maven("https://maven.terraformersmc.com/releases/")
         maven("https://maven.nucleoid.xyz/")
+        maven("https://maven.parchmentmc.org")
     }
 
     dependencies {
@@ -116,7 +117,7 @@ jvmdg.dg(includeJ8)
 dependencies {
     // dummy version
     minecraft("com.mojang:minecraft:1.14.4")
-    mappings("net.fabricmc:yarn:1.14.4+build.18:v2")
+    mappings(loom.officialMojangMappings())
 
     includeJ8("com.viaversion:viaversion:${rootProject.extra["viaver_version"]}")
     include("io.github.cottonmc:cotton-client-commands:1.1.0+1.15.2")
