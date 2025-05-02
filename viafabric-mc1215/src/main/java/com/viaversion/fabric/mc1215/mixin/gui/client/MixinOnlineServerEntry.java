@@ -41,8 +41,8 @@ public class MixinOnlineServerEntry {
     @Final
     private ServerData serverData;
 
-    @ModifyArg(method = "render", at = @At(value = "INVOKE", ordinal = 0,
-        target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V"))
+    @ModifyArg(method = "render", at = @At(value = "INVOKE",
+        target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Ljava/util/function/Function;Lnet/minecraft/resources/ResourceLocation;IIII)V"))
     private ResourceLocation redirectPingIcon(ResourceLocation texture) {
         if (((ViaServerData) this.serverData).viaFabric$translating() && texture.getPath().startsWith("server_list/ping")) {
             return ResourceLocation.tryBuild("viafabric", texture.getPath());
