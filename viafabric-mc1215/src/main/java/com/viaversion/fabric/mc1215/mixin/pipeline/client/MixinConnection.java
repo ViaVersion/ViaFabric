@@ -17,29 +17,28 @@
  */
 package com.viaversion.fabric.mc1215.mixin.pipeline.client;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.viaversion.fabric.mc1215.ViaFabric;
 import com.viaversion.fabric.mc1215.service.ProtocolAutoDetector;
+import net.minecraft.util.debugchart.LocalSampleLogger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.net.InetSocketAddress;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
+import net.minecraft.network.Connection;
 
-@Mixin(targets = "net/minecraft/client/gui/screen/multiplayer/ConnectScreen$1")
-public class MixinClientConnectionThread {
-    @WrapOperation(method = "run", at = @At(value = "INVOKE", target = "Ljava/util/Optional;get()Ljava/lang/Object;"))
-    private Object onConnect(Optional instance, Operation<InetSocketAddress> original) {
-        InetSocketAddress address = original.call(instance);
+@Mixin(Connection.class)
+public class MixinConnection {
+    @Inject(method = "connectToServer", at = @At("HEAD"))
+    private static void onConnectToServer(InetSocketAddress address, boolean useEpollIfAvailable, LocalSampleLogger sampleLogger, CallbackInfoReturnable<Connection> cir) {
         try {
-            if (!ViaFabric.config.isClientSideEnabled()) return address;
+            if (!ViaFabric.config.isClientSideEnabled()) return;
             ProtocolAutoDetector.detectVersion(address).get(10, TimeUnit.SECONDS);
         } catch (Exception e) {
             ViaFabric.JLOGGER.log(Level.WARNING, "Could not auto-detect protocol for " + address + " " + e);
         }
-        return address;
     }
 }

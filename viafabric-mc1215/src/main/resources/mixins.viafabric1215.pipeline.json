@@ -3,10 +3,10 @@
   "compatibilityLevel": "JAVA_21",
   "package": "com.viaversion.fabric.mc1215.mixin.pipeline",
   "mixins": [
-    "MixinClientConnection"
+    "MixinConnection"
   ],
   "client": [
-    "client.MixinClientConnectionThread"
+    "client.MixinConnection"
   ],
   "injectors": {
     "defaultRequire": 1
