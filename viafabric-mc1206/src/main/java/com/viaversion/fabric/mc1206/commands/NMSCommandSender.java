@@ -31,16 +31,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class NMSCommandSender implements ViaCommandSender {
-    private final SharedSuggestionProvider source;
+    private final SharedSuggestionProvider provider;
 
-    public NMSCommandSender(SharedSuggestionProvider source) {
-        this.source = source;
+    public NMSCommandSender(SharedSuggestionProvider provider) {
+        this.provider = provider;
     }
 
     @Override
     public boolean hasPermission(String s) {
         // https://gaming.stackexchange.com/questions/138602/what-does-op-permission-level-do
-        return source.hasPermission(3);
+        return provider.hasPermission(3);
     }
 
     public static MutableComponent fromLegacy(String legacy) {
@@ -49,30 +49,30 @@ public class NMSCommandSender implements ViaCommandSender {
 
     @Override
     public void sendMessage(String s) {
-        if (source instanceof CommandSourceStack) {
-            ((CommandSourceStack) source).sendSuccess(() -> fromLegacy(s), false);
-        } else if (source instanceof FabricClientCommandSource) {
-            ((FabricClientCommandSource) source).sendFeedback(fromLegacy(s));
+        if (provider instanceof CommandSourceStack) {
+            ((CommandSourceStack) provider).sendSuccess(() -> fromLegacy(s), false);
+        } else if (provider instanceof FabricClientCommandSource) {
+            ((FabricClientCommandSource) provider).sendFeedback(fromLegacy(s));
         }
     }
 
     @Override
     public UUID getUUID() {
-        if (source instanceof CommandSourceStack) {
-            Entity entity = ((CommandSourceStack) source).getEntity();
+        if (provider instanceof CommandSourceStack) {
+            Entity entity = ((CommandSourceStack) provider).getEntity();
             if (entity != null) return entity.getUUID();
-        } else if (source instanceof FabricClientCommandSource) {
-            return ((FabricClientCommandSource) source).getPlayer().getUUID();
+        } else if (provider instanceof FabricClientCommandSource) {
+            return ((FabricClientCommandSource) provider).getPlayer().getUUID();
         }
         return UUID.nameUUIDFromBytes(getName().getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
     public String getName() {
-        if (source instanceof CommandSourceStack) {
-            return ((CommandSourceStack) source).getTextName();
-        } else if (source instanceof FabricClientCommandSource) {
-            return ((FabricClientCommandSource) source).getPlayer().getName().getString();
+        if (provider instanceof CommandSourceStack) {
+            return ((CommandSourceStack) provider).getTextName();
+        } else if (provider instanceof FabricClientCommandSource) {
+            return ((FabricClientCommandSource) provider).getPlayer().getName().getString();
         }
         return "?";
     }
