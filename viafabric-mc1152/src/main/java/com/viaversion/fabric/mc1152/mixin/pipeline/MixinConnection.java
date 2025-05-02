@@ -26,13 +26,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-
 @Mixin(Connection.class)
-public class MixinClientConnection {
+public class MixinConnection {
     @Shadow
     private Channel channel;
 
-    @Inject(method = "setCompressionThreshold", at = @At("RETURN"))
+    @Inject(method = "setupCompression", at = @At("RETURN"))
     private void reorderCompression(int compressionThreshold, CallbackInfo ci) {
         channel.pipeline().fireUserEventTriggered(new PipelineReorderEvent());
     }

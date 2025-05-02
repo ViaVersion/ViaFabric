@@ -19,6 +19,8 @@ package com.viaversion.fabric.mc1152.commands;
 
 import com.viaversion.viaversion.api.command.ViaCommandSender;
 import com.viaversion.viaversion.util.ComponentUtil;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
@@ -27,20 +29,18 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 public class NMSCommandSender implements ViaCommandSender {
-    private final SharedSuggestionProvider source;
+    private final SharedSuggestionProvider provider;
 
-    public NMSCommandSender(SharedSuggestionProvider source) {
-        this.source = source;
+    public NMSCommandSender(SharedSuggestionProvider provider) {
+        this.provider = provider;
     }
 
     @Override
     public boolean hasPermission(String s) {
         // https://gaming.stackexchange.com/questions/138602/what-does-op-permission-level-do
-        return source.hasPermission(3);
+        return provider.hasPermission(3);
     }
 
     public static Component fromLegacy(String legacy) {
@@ -49,19 +49,21 @@ public class NMSCommandSender implements ViaCommandSender {
 
     @Override
     public void sendMessage(String s) {
-        if (source instanceof CommandSourceStack) {
-            ((CommandSourceStack) source).sendSuccess(fromLegacy(s), false);
-        } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && source instanceof ClientSuggestionProvider) {
+        if (provider instanceof CommandSourceStack) {
+            ((CommandSourceStack) provider).sendSuccess(fromLegacy(s), false);
+        } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
+                && provider instanceof ClientSuggestionProvider) {
             Minecraft.getInstance().player.displayClientMessage(fromLegacy(s), false);
         }
     }
 
     @Override
     public UUID getUUID() {
-        if (source instanceof CommandSourceStack) {
-            Entity entity = ((CommandSourceStack) source).getEntity();
+        if (provider instanceof CommandSourceStack) {
+            Entity entity = ((CommandSourceStack) provider).getEntity();
             if (entity != null) return entity.getUUID();
-        } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && source instanceof ClientSuggestionProvider) {
+        } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
+                && provider instanceof ClientSuggestionProvider) {
             return Minecraft.getInstance().player.getUUID();
         }
         return UUID.nameUUIDFromBytes(getName().getBytes(StandardCharsets.UTF_8));
@@ -69,9 +71,10 @@ public class NMSCommandSender implements ViaCommandSender {
 
     @Override
     public String getName() {
-        if (source instanceof CommandSourceStack) {
-            return ((CommandSourceStack) source).getTextName();
-        } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT && source instanceof ClientSuggestionProvider) {
+        if (provider instanceof CommandSourceStack) {
+            return ((CommandSourceStack) provider).getTextName();
+        } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
+                && provider instanceof ClientSuggestionProvider) {
             return Minecraft.getInstance().player.getScoreboardName();
         }
         return "?";

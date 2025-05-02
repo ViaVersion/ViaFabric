@@ -7,7 +7,7 @@
   ],
   "client": [
     "client.MixinJoinMultiplayerScreen",
-    "client.MixinServerEntry",
+    "client.MixinOnlineServerEntry",
     "client.MixinServerData"
   ],
   "injectors": {

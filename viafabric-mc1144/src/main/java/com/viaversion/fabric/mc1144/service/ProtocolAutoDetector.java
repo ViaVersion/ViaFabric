@@ -56,7 +56,7 @@ public class ProtocolAutoDetector {
                 CompletableFuture<ProtocolVersion> future = new CompletableFuture<>();
 
                 try {
-                    final Connection clientConnection = new Connection(PacketFlow.CLIENTBOUND);
+                    final Connection connection = new Connection(PacketFlow.CLIENTBOUND);
 
                     ChannelFuture ch = new Bootstrap()
                             .group(Connection.NETWORK_WORKER_GROUP.get())
@@ -75,7 +75,7 @@ public class ProtocolAutoDetector {
                                             .addLast("decoder", new PacketDecoder(PacketFlow.CLIENTBOUND))
                                             .addLast("prepender", new Varint21LengthFieldPrepender())
                                             .addLast("encoder", new PacketEncoder(PacketFlow.SERVERBOUND))
-                                            .addLast("packet_handler", clientConnection);
+                                            .addLast("packet_handler", connection);
                                 }
                             })
                             .connect(address);
@@ -85,24 +85,24 @@ public class ProtocolAutoDetector {
                             future.completeExceptionally(future1.cause());
                         } else {
                             ch.channel().eventLoop().execute(() -> { // needs to execute after channel init
-                                clientConnection.setListener(new ClientStatusPacketListener() {
+                                connection.setListener(new ClientStatusPacketListener() {
                                     @Override
-                                    public void handleStatusResponse(ClientboundStatusResponsePacket packet) {
-                                        ServerStatus meta = packet.getStatus();
+                                    public void handleStatusResponse(ClientboundStatusResponsePacket clientboundStatusResponsePacket) {
+                                        ServerStatus status = clientboundStatusResponsePacket.getStatus();
                                         ServerStatus.Version version;
-                                        if (meta != null && (version = meta.getVersion()) != null) {
+                                        if (status != null && (version = status.getVersion()) != null) {
                                             ProtocolVersion ver = ProtocolVersion.getProtocol(version.getProtocol());
                                             future.complete(ver);
                                             ViaFabric.JLOGGER.info("Auto-detected " + ver + " for " + address);
                                         } else {
                                             future.completeExceptionally(new IllegalArgumentException("Null version in query response"));
                                         }
-                                        clientConnection.disconnect(new TextComponent(""));
+                                        connection.disconnect(new TextComponent(""));
                                     }
 
                                     @Override
-                                    public void handlePongResponse(ClientboundPongResponsePacket packet) {
-                                        clientConnection.disconnect(new TextComponent("Pong not requested!"));
+                                    public void handlePongResponse(ClientboundPongResponsePacket clientboundPongResponsePacket) {
+                                        connection.disconnect(new TextComponent("Pong not requested!"));
                                     }
 
                                     @Override
@@ -112,13 +112,13 @@ public class ProtocolAutoDetector {
 
                                     @Override
                                     public Connection getConnection() {
-                                        return clientConnection;
+                                        return connection;
                                     }
                                 });
 
-                                clientConnection.send(new ClientIntentionPacket(address.getHostString(),
+                                connection.send(new ClientIntentionPacket(address.getHostString(),
                                         address.getPort(), ConnectionProtocol.STATUS));
-                                clientConnection.send(new ServerboundStatusRequestPacket());
+                                connection.send(new ServerboundStatusRequestPacket());
                             });
                         }
                     });

@@ -27,18 +27,18 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ServerAddress.class)
 public abstract class MixinServerAddress {
     @Shadow
-    private static String[] resolveSrv(String address) {
+    private static String[] lookupSrv(String address) {
         throw new AssertionError();
     }
 
-    @Redirect(method = "parse", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/ServerAddress;resolveSrv(Ljava/lang/String;)[Ljava/lang/String;"))
+    @Redirect(method = "parseString", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ServerAddress;lookupSrv(Ljava/lang/String;)[Ljava/lang/String;"))
     private static String[] modifySrvAddr(String address) {
         AddressParser viaAddr = new AddressParser().parse(address);
         if (viaAddr.viaSuffix == null) {
-            return resolveSrv(address);
+            return lookupSrv(address);
         }
 
-        String[] resolvedSrv = resolveSrv(viaAddr.serverAddress);
+        String[] resolvedSrv = lookupSrv(viaAddr.serverAddress);
         resolvedSrv[0] = resolvedSrv[0].replaceAll("\\.$", "") + "." + viaAddr.getSuffixWithOptions();
 
         return resolvedSrv;

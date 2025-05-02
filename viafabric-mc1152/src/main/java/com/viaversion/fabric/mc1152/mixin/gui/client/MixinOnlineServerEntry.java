@@ -33,28 +33,29 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ServerSelectionList.OnlineServerEntry.class)
-public class MixinServerEntry {
+public class MixinOnlineServerEntry {
+
     @Shadow
     @Final
-    private ServerData server;
+    private ServerData serverData;
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/texture/TextureManager;bindTexture(Lnet/minecraft/util/Identifier;)V"))
+    @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/renderer/texture/TextureManager;bind(Lnet/minecraft/resources/ResourceLocation;)V"))
     private void redirectPingIcon(TextureManager textureManager, ResourceLocation identifier) {
-        if (identifier.equals(GuiComponent.GUI_ICONS_LOCATION) && ((ViaServerData) this.server).viaFabric$translating()) {
+        if (identifier.equals(GuiComponent.GUI_ICONS_LOCATION) && ((ViaServerData) this.serverData).viaFabric$translating()) {
             textureManager.bind(new ResourceLocation("viafabric:textures/gui/icons.png"));
             return;
         }
         textureManager.bind(identifier);
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setTooltip(Ljava/lang/String;)V"))
+    @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screens/multiplayer/JoinMultiplayerScreen;setToolTip(Ljava/lang/String;)V"))
     private void addServerVer(JoinMultiplayerScreen multiplayerScreen, String text) {
-        ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerData) this.server).viaFabric$getServerVer());
+        ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerData) this.serverData).viaFabric$getServerVer());
         StringBuilder builder = new StringBuilder(text);
         builder.append("\n");
         builder.append((new TranslatableComponent("gui.ping_version.translated", proto.getName(), proto.getVersion())).getContents());
         builder.append("\n");
-        builder.append(this.server.version);
+        builder.append(this.serverData.version);
         multiplayerScreen.setToolTip(builder.toString());
     }
 }

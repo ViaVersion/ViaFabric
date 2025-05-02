@@ -34,12 +34,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
 
 @Mixin(DebugScreenOverlay.class)
-public class MixinDebugHud {
-    @Inject(at = @At("RETURN"), method = "getLeftText")
-    protected void getLeftText(CallbackInfoReturnable<List<String>> info) {
+public class MixinDebugScreenOverlay {
+    @Inject(at = @At("RETURN"), method = "getGameInformation")
+    protected void getGameInformation(CallbackInfoReturnable<List<String>> cir) {
         String line = "[ViaFabric] I: " + Via.getManager().getConnectionManager().getConnections().size() + " (F: "
                 + Via.getManager().getConnectionManager().getConnectedClients().size() + ")";
-        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) Minecraft.getInstance().getConnection()
+        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinConnectionAccessor) Minecraft.getInstance().getConnection()
                 .getConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
         if (viaDecoder instanceof FabricDecodeHandler) {
             UserConnection connection = ((FabricDecodeHandler) viaDecoder).getInfo();
@@ -51,6 +51,6 @@ public class MixinDebugHud {
             }
         }
 
-        info.getReturnValue().add(line);
+        cir.getReturnValue().add(line);
     }
 }
