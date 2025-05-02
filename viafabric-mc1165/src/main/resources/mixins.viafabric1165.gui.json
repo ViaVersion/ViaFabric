@@ -3,11 +3,11 @@
   "compatibilityLevel": "JAVA_8",
   "package": "com.viaversion.fabric.mc1165.mixin.gui",
   "mixins": [
-    "client.MixinMultiplayerServerListPingerListener"
+    "client.MixinServerStatusPingerListener"
   ],
   "client": [
-    "client.MixinMultiplayerScreen",
-    "client.MixinServerEntry",
+    "client.MixinJoinMultiplayerScreen",
+    "client.MixinOnlineServerEntry",
     "client.MixinServerData"
   ],
   "injectors": {
