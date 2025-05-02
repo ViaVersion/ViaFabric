@@ -15,25 +15,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.viaversion.fabric.mc1201.mixin.pipeline;
+package com.viaversion.fabric.mc1201.mixin.pipeline.client;
 
-import com.viaversion.fabric.common.handler.PipelineReorderEvent;
-import io.netty.channel.Channel;
-import net.minecraft.network.Connection;
+import com.viaversion.fabric.mc1201.ViaFabric;
+import com.viaversion.fabric.mc1201.service.ProtocolAutoDetector;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.net.InetSocketAddress;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import net.minecraft.network.Connection;
 
 @Mixin(Connection.class)
-public class MixinClientConnection {
-	@Shadow
-	private Channel channel;
-
-	@Inject(method = "setCompressionThreshold", at = @At("RETURN"))
-	private void reorderCompression(int compressionThreshold, boolean rejectBad, CallbackInfo ci) {
-		channel.pipeline().fireUserEventTriggered(new PipelineReorderEvent());
-	}
+public class MixinConnection {
+    @Inject(method = "connectToServer", at = @At("HEAD"))
+    private static void onConnectToServer(InetSocketAddress address, boolean useEpoll, CallbackInfoReturnable<Connection> cir) {
+        try {
+            if (!ViaFabric.config.isClientSideEnabled()) return;
+            ProtocolAutoDetector.detectVersion(address).get(10, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            ViaFabric.JLOGGER.log(Level.WARNING, "Could not auto-detect protocol for " + address + " " + e);
+        }
+    }
 }
