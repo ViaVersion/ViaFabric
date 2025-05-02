@@ -18,7 +18,7 @@
 package com.viaversion.fabric.mc1152.mixin.address.client;
 
 import com.viaversion.fabric.common.AddressParser;
-import net.minecraft.network.ServerAddress;
+import net.minecraft.client.multiplayer.ServerAddress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

@@ -26,11 +26,11 @@ import com.viaversion.viaversion.protocols.v1_8to1_9.provider.HandItemProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public class VFHandItemProvider extends HandItemProvider {
     public Item clientItem = null;
@@ -60,15 +60,15 @@ public class VFHandItemProvider extends HandItemProvider {
     }
 
     private void tickClient() {
-        ClientPlayerEntity p = MinecraftClient.getInstance().player;
+        LocalPlayer p = Minecraft.getInstance().player;
         if (p != null) {
-            clientItem = fromNative(p.getInventory().getMainHandStack());
+            clientItem = fromNative(p.getInventory().getSelected());
         }
     }
 
     private Item fromNative(ItemStack original) {
-        Identifier iid = Registries.ITEM.getId(original.getItem());
+        ResourceLocation iid = BuiltInRegistries.ITEM.getKey(original.getItem());
         int id = RemappingUtil.swordId(iid.toString());
-        return new DataItem(id, (byte) original.getCount(), (short) original.getDamage(), null);
+        return new DataItem(id, (byte) original.getCount(), (short) original.getDamageValue(), null);
     }
 }

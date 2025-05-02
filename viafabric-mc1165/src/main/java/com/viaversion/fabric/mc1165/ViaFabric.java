@@ -38,7 +38,7 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.command.CommandSource;
+import net.minecraft.commands.SharedSuggestionProvider;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.concurrent.CompletableFuture;
@@ -61,7 +61,7 @@ public class ViaFabric implements ModInitializer {
         EVENT_LOOP.submit(INIT_FUTURE::join); // https://github.com/ViaVersion/ViaFabric/issues/53 ugly workaround code but works tm
     }
 
-    public static <S extends CommandSource> LiteralArgumentBuilder<S> command(String commandName) {
+    public static <S extends SharedSuggestionProvider> LiteralArgumentBuilder<S> command(String commandName) {
         return LiteralArgumentBuilder.<S>literal(commandName)
                 .then(
                         RequiredArgumentBuilder

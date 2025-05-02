@@ -23,9 +23,9 @@ import com.viaversion.fabric.mc1144.ViaFabric;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.ConnectionDetails;
 import io.netty.channel.ChannelHandler;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.ClientConnection;
-import net.minecraft.network.packet.s2c.play.GameJoinS2CPacket;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundLoginPacket;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,20 +33,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ClientPlayNetworkHandler.class)
-public class MixinClientPlayNetworkHandler {
+@Mixin(ClientPacketListener.class)
+public class MixinClientPacketListener {
 
     @Shadow
     @Final
-    private ClientConnection connection;
+    private Connection connection;
 
-    @Inject(method = "onGameJoin", at = @At("RETURN"))
-    public void sendConnectionDetails(GameJoinS2CPacket packet, CallbackInfo ci) {
+    @Inject(method = "handleLogin", at = @At("RETURN"))
+    public void sendConnectionDetails(ClientboundLoginPacket clientboundLoginPacket, CallbackInfo ci) {
         if (!ViaFabric.config.isSendConnectionDetails()) {
             return;
         }
 
-        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) connection).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
+        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinConnectionAccessor) connection).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
         if (viaDecoder instanceof FabricDecodeHandler) {
             UserConnection connection = ((FabricDecodeHandler) viaDecoder).getInfo();
 

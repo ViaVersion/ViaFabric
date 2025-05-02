@@ -29,17 +29,17 @@ import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-import net.minecraft.network.ClientConnection;
-import net.minecraft.network.NetworkSide;
-import net.minecraft.network.handler.HandlerNames;
-import net.minecraft.network.handler.PacketSizeLogger;
+import net.minecraft.network.BandwidthDebugMonitor;
+import net.minecraft.network.Connection;
+import net.minecraft.network.HandlerNames;
+import net.minecraft.network.protocol.PacketFlow;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ClientConnection.class)
+@Mixin(Connection.class)
 public class MixinClientConnection {
 	@Shadow
 	private Channel channel;
@@ -50,10 +50,10 @@ public class MixinClientConnection {
 	}
 
     @Inject(method = "addHandlers", at = @At("RETURN"))
-    private static void onAddHandlers(ChannelPipeline pipeline, NetworkSide side, boolean local, PacketSizeLogger packetSizeLogger, CallbackInfo ci) {
+    private static void onAddHandlers(ChannelPipeline pipeline, PacketFlow side, boolean local, BandwidthDebugMonitor packetSizeLogger, CallbackInfo ci) {
         final Channel channel = pipeline.channel();
         if (channel instanceof SocketChannel) {
-            final UserConnection user = new UserConnectionImpl(channel, side == NetworkSide.CLIENTBOUND);
+            final UserConnection user = new UserConnectionImpl(channel, side == PacketFlow.CLIENTBOUND);
             final ProtocolPipeline protocolPipeline = new ProtocolPipelineImpl(user);
 
             final boolean clientSide = user.isClientSide();

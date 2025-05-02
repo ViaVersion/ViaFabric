@@ -15,24 +15,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.viaversion.fabric.mc1144.mixin.pipeline;
+package com.viaversion.fabric.mc1201.mixin.gui.client;
 
-import com.viaversion.fabric.common.handler.PipelineReorderEvent;
-import io.netty.channel.Channel;
-import net.minecraft.network.ClientConnection;
+import com.viaversion.fabric.common.gui.ViaServerData;
+import net.minecraft.client.multiplayer.ServerData;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(ClientConnection.class)
-public class MixinClientConnection {
-    @Shadow
-    private Channel channel;
+@Mixin(ServerData.class)
+public class MixinServerData implements ViaServerData {
+    @Unique
+    private boolean viaFabric$translating;
 
-    @Inject(method = "setCompressionThreshold", at = @At("RETURN"))
-    private void reorderCompression(int compressionThreshold, CallbackInfo ci) {
-        channel.pipeline().fireUserEventTriggered(new PipelineReorderEvent());
+    @Unique
+    private int viaFabric$serverVer;
+
+    @Override
+    public int viaFabric$getServerVer() {
+        return viaFabric$serverVer;
+    }
+
+    @Override
+    public void viaFabric$setServerVer(int ver) {
+        this.viaFabric$serverVer = ver;
+    }
+
+    @Override
+    public boolean viaFabric$translating() {
+        return viaFabric$translating;
+    }
+
+    @Override
+    public void viaFabric$setTranslating(boolean via) {
+        this.viaFabric$translating = via;
     }
 }

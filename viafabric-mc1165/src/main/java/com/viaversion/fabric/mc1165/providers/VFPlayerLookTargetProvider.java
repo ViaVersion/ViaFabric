@@ -20,10 +20,10 @@ package com.viaversion.fabric.mc1165.providers;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.minecraft.BlockPosition;
 import com.viaversion.viaversion.protocols.v1_12_2to1_13.provider.PlayerLookTargetProvider;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 public class VFPlayerLookTargetProvider extends PlayerLookTargetProvider {
 
@@ -31,7 +31,7 @@ public class VFPlayerLookTargetProvider extends PlayerLookTargetProvider {
     public BlockPosition getPlayerLookTarget(UserConnection info) {
         if (!info.isClientSide()) return null;
 
-        final HitResult crosshairTarget = MinecraftClient.getInstance().crosshairTarget;
+        final HitResult crosshairTarget = Minecraft.getInstance().hitResult;
         if (crosshairTarget instanceof BlockHitResult) {
             final BlockPos pos = ((BlockHitResult) crosshairTarget).getBlockPos();
             return new BlockPosition(pos.getX(), pos.getY(), pos.getZ());

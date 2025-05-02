@@ -18,15 +18,15 @@
 package com.viaversion.fabric.mc1152.mixin.address.client;
 
 import com.viaversion.fabric.common.AddressParser;
-import net.minecraft.client.network.MultiplayerServerListPinger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import net.minecraft.client.multiplayer.ServerStatusPinger;
 
-@Mixin(MultiplayerServerListPinger.class)
+@Mixin(ServerStatusPinger.class)
 public class MixinServerPinger {
     @Redirect(method = "add", at = @At(value = "INVOKE",
             target = "Ljava/net/InetAddress;getByName(Ljava/lang/String;)Ljava/net/InetAddress;"))
