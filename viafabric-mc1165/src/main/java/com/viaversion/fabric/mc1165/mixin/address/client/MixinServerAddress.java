@@ -28,17 +28,17 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ServerAddress.class)
 public abstract class MixinServerAddress {
     @Shadow
-    private static Pair<String, Integer> resolveServer(String address) {
+    private static Pair<String, Integer> lookupSrv(final String par1) {
         throw new AssertionError();
     }
 
-    @Redirect(method = "parse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ServerAddress;resolveServer(Ljava/lang/String;)Lcom/mojang/datafixers/util/Pair;"))
+    @Redirect(method = "parseString", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ServerAddress;lookupSrv(Ljava/lang/String;)Lcom/mojang/datafixers/util/Pair;"))
     private static Pair<String, Integer> modifySrvAddr(String address) {
         AddressParser viaAddr = new AddressParser().parse(address);
         if (viaAddr.viaSuffix == null) {
-            return resolveServer(address);
+            return lookupSrv(address);
         }
 
-        return resolveServer(viaAddr.serverAddress).mapFirst(it -> it.replaceAll("\\.$", "") + "." + viaAddr.getSuffixWithOptions());
+        return lookupSrv(viaAddr.serverAddress).mapFirst(it -> it.replaceAll("\\.$", "") + "." + viaAddr.getSuffixWithOptions());
     }
 }

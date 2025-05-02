@@ -7,7 +7,7 @@
   "client": [
     "client.MixinConnectScreenThread",
     "client.MixinServerAddress",
-    "client.MixinServerPinger"
+    "client.MixinServerStatusPinger"
   ],
   "injectors": {
     "defaultRequire": 0

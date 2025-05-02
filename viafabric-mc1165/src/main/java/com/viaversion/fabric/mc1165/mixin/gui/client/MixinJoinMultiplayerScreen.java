@@ -33,8 +33,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(JoinMultiplayerScreen.class)
-public abstract class MixinMultiplayerScreen extends Screen {
-    protected MixinMultiplayerScreen(Component title, UnsupportedOperationException e) {
+public abstract class MixinJoinMultiplayerScreen extends Screen {
+    protected MixinJoinMultiplayerScreen(Component title, UnsupportedOperationException e) {
         super(title);
         throw e;
     }

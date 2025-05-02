@@ -34,19 +34,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPacketListener.class)
-public class MixinClientPlayNetworkHandler {
+public class MixinClientPacketListener {
 
     @Shadow
     @Final
     private Connection connection;
 
-    @Inject(method = "onGameJoin", at = @At("RETURN"))
-    public void sendConnectionDetails(ClientboundLoginPacket packet, CallbackInfo ci) {
+    @Inject(method = "handleLogin", at = @At("RETURN"))
+    public void sendConnectionDetails(ClientboundLoginPacket clientboundLoginPacket, CallbackInfo ci) {
         if (!ViaFabric.config.isSendConnectionDetails()) {
             return;
         }
 
-        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) connection).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
+        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinConnectionAccessor) connection).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
         if (viaDecoder instanceof FabricDecodeHandler) {
             UserConnection connection = ((FabricDecodeHandler) viaDecoder).getInfo();
 
