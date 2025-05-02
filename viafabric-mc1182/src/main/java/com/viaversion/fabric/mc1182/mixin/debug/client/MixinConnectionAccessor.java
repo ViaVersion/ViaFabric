@@ -15,24 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.viaversion.fabric.mc1182.mixin.pipeline;
+package com.viaversion.fabric.mc1182.mixin.debug.client;
 
-import com.viaversion.fabric.common.handler.PipelineReorderEvent;
 import io.netty.channel.Channel;
 import net.minecraft.network.Connection;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(Connection.class)
-public class MixinClientConnection {
-    @Shadow
-    private Channel channel;
-
-    @Inject(method = "setCompressionThreshold", at = @At("RETURN"))
-    private void reorderCompression(int compressionThreshold, boolean rejectBad, CallbackInfo ci) {
-        channel.pipeline().fireUserEventTriggered(new PipelineReorderEvent());
-    }
+public interface MixinConnectionAccessor {
+    @Accessor
+    Channel getChannel();
 }

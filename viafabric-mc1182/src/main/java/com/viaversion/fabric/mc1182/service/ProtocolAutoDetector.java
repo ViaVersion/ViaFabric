@@ -17,11 +17,12 @@
  */
 package com.viaversion.fabric.mc1182.service;
 
-import com.viaversion.fabric.common.AddressParser;
-import com.viaversion.fabric.mc1182.ViaFabric;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.viaversion.fabric.common.AddressParser;
+import com.viaversion.fabric.mc1182.ViaFabric;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -33,13 +34,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
-import net.minecraft.network.protocol.status.ClientStatusPacketListener;
-import net.minecraft.network.protocol.status.ClientboundPongResponsePacket;
-import net.minecraft.network.protocol.status.ClientboundStatusResponsePacket;
-import net.minecraft.network.protocol.status.ServerStatus;
-import net.minecraft.network.protocol.status.ServerboundStatusRequestPacket;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-
+import net.minecraft.network.protocol.status.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;

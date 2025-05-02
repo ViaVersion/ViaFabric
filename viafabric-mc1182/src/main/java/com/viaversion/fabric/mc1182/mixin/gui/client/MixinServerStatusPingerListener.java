@@ -19,28 +19,36 @@ package com.viaversion.fabric.mc1182.mixin.gui.client;
 
 import com.viaversion.fabric.common.gui.ViaServerData;
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
-import com.viaversion.fabric.mc1182.mixin.debug.client.MixinClientConnectionAccessor;
+import com.viaversion.fabric.mc1182.mixin.debug.client.MixinConnectionAccessor;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.status.ClientStatusPacketListener;
 import net.minecraft.network.protocol.status.ClientboundStatusResponsePacket;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(targets = "net.minecraft.client.network.MultiplayerServerListPinger$1")
-public abstract class MixinMultiplayerServerListPingerListener implements ClientStatusPacketListener {
-    @Accessor
-    abstract ServerData getField_3776(); // synthetic
+@Mixin(targets = "net.minecraft.client.multiplayer.ServerStatusPinger$1")
+public abstract class MixinServerStatusPingerListener implements ClientStatusPacketListener {
 
-    @Inject(method = "onResponse(Lnet/minecraft/network/packet/s2c/query/QueryResponseS2CPacket;)V", at = @At(value = "HEAD"))
-    private void onResponseCaptureServerInfo(ClientboundStatusResponsePacket packet, CallbackInfo ci) {
-        FabricDecodeHandler decoder = ((MixinClientConnectionAccessor) this.getConnection()).getChannel()
+    @Shadow
+    @Final
+    ServerData val$data;
+
+    @Shadow
+    @Final
+    Connection val$connection;
+
+    @Inject(method = "handleStatusResponse", at = @At(value = "HEAD"))
+    private void onStatusResponseCaptureServerInfo(ClientboundStatusResponsePacket clientboundStatusResponsePacket, CallbackInfo ci) {
+        FabricDecodeHandler decoder = ((MixinConnectionAccessor) this.val$connection).getChannel()
                 .pipeline().get(FabricDecodeHandler.class);
         if (decoder != null) {
-            ((ViaServerData) getField_3776()).viaFabric$setTranslating(decoder.getInfo().isActive());
-            ((ViaServerData) getField_3776()).viaFabric$setServerVer(decoder.getInfo().getProtocolInfo().getServerProtocolVersion());
+            ((ViaServerData) this.val$data).viaFabric$setTranslating(decoder.getInfo().isActive());
+            ((ViaServerData) this.val$data).viaFabric$setServerVer(decoder.getInfo().getProtocolInfo().getServerProtocolVersion());
         }
     }
 }
