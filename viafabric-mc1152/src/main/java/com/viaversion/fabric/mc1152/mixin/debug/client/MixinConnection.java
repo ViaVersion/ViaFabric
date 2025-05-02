@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Connection.class)
-public abstract class MixinClientConnection {
+public abstract class MixinConnection {
 
     @Shadow
     @Final

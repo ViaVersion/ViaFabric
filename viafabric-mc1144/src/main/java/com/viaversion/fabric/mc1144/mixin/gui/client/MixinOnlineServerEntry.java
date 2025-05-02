@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ServerSelectionList.OnlineServerEntry.class)
-public class MixinServerEntry {
+public class MixinOnlineServerEntry {
 
     @Shadow
     @Final

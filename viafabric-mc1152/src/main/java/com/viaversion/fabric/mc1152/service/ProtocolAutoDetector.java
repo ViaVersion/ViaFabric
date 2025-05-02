@@ -18,10 +18,10 @@
 package com.viaversion.fabric.mc1152.service;
 
 import com.viaversion.fabric.common.AddressParser;
-import com.viaversion.fabric.mc1152.ViaFabric;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.viaversion.fabric.mc1152.ViaFabric;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -51,89 +51,89 @@ import java.util.logging.Level;
 @Environment(EnvType.CLIENT)
 public class ProtocolAutoDetector {
     private static final LoadingCache<InetSocketAddress, CompletableFuture<ProtocolVersion>> SERVER_VER = CacheBuilder.newBuilder()
-            .expireAfterWrite(30, TimeUnit.SECONDS)
-            .build(CacheLoader.from((address) -> {
-                CompletableFuture<ProtocolVersion> future = new CompletableFuture<>();
+        .expireAfterWrite(30, TimeUnit.SECONDS)
+        .build(CacheLoader.from((address) -> {
+            CompletableFuture<ProtocolVersion> future = new CompletableFuture<>();
 
-                try {
-                    final Connection clientConnection = new Connection(PacketFlow.CLIENTBOUND);
+            try {
+                final Connection connection = new Connection(PacketFlow.CLIENTBOUND);
 
-                    ChannelFuture ch = new Bootstrap()
-                            .group(Connection.NETWORK_WORKER_GROUP.get())
-                            .channel(NioSocketChannel.class)
-                            .handler(new ChannelInitializer<Channel>() {
-                                protected void initChannel(Channel channel) {
-                                    try {
-                                        channel.config().setOption(ChannelOption.TCP_NODELAY, true);
-                                        channel.config().setOption(ChannelOption.IP_TOS, 0x18); // Stolen from Velocity, low delay, high reliability
-                                    } catch (ChannelException ignored) {
-                                    }
+                ChannelFuture ch = new Bootstrap()
+                    .group(Connection.NETWORK_WORKER_GROUP.get())
+                    .channel(NioSocketChannel.class)
+                    .handler(new ChannelInitializer<Channel>() {
+                        protected void initChannel(Channel channel) {
+                            try {
+                                channel.config().setOption(ChannelOption.TCP_NODELAY, true);
+                                channel.config().setOption(ChannelOption.IP_TOS, 0x18); // Stolen from Velocity, low delay, high reliability
+                            } catch (ChannelException ignored) {
+                            }
 
-                                    channel.pipeline()
-                                            .addLast("timeout", new ReadTimeoutHandler(30))
-                                            .addLast("splitter", new Varint21FrameDecoder())
-                                            .addLast("decoder", new PacketDecoder(PacketFlow.CLIENTBOUND))
-                                            .addLast("prepender", new Varint21LengthFieldPrepender())
-                                            .addLast("encoder", new PacketEncoder(PacketFlow.SERVERBOUND))
-                                            .addLast("packet_handler", clientConnection);
-                                }
-                            })
-                            .connect(address);
-
-                    ch.addListener(future1 -> {
-                        if (!future1.isSuccess()) {
-                            future.completeExceptionally(future1.cause());
-                        } else {
-                            ch.channel().eventLoop().execute(() -> { // needs to execute after channel init
-                                clientConnection.setListener(new ClientStatusPacketListener() {
-                                    @Override
-                                    public void handleStatusResponse(ClientboundStatusResponsePacket packet) {
-                                        ServerStatus meta = packet.getStatus();
-                                        ServerStatus.Version version;
-                                        if (meta != null && (version = meta.getVersion()) != null) {
-                                            ProtocolVersion ver = ProtocolVersion.getProtocol(version.getProtocol());
-                                            future.complete(ver);
-                                            ViaFabric.JLOGGER.info("Auto-detected " + ver + " for " + address);
-                                        } else {
-                                            future.completeExceptionally(new IllegalArgumentException("Null version in query response"));
-                                        }
-                                        clientConnection.disconnect(new TextComponent(""));
-                                    }
-
-                                    @Override
-                                    public void handlePongResponse(ClientboundPongResponsePacket packet) {
-                                        clientConnection.disconnect(new TextComponent("Pong not requested!"));
-                                    }
-
-                                    @Override
-                                    public void onDisconnect(Component reason) {
-                                        future.completeExceptionally(new IllegalStateException(reason.getContents()));
-                                    }
-
-                                    @Override
-                                    public Connection getConnection() {
-                                        return clientConnection;
-                                    }
-                                });
-
-                                clientConnection.send(new ClientIntentionPacket(address.getHostString(),
-                                        address.getPort(), ConnectionProtocol.STATUS));
-                                clientConnection.send(new ServerboundStatusRequestPacket());
-                            });
+                            channel.pipeline()
+                                .addLast("timeout", new ReadTimeoutHandler(30))
+                                .addLast("splitter", new Varint21FrameDecoder())
+                                .addLast("decoder", new PacketDecoder(PacketFlow.CLIENTBOUND))
+                                .addLast("prepender", new Varint21LengthFieldPrepender())
+                                .addLast("encoder", new PacketEncoder(PacketFlow.SERVERBOUND))
+                                .addLast("packet_handler", connection);
                         }
-                    });
-                } catch (Throwable throwable) {
-                    future.completeExceptionally(throwable);
-                }
+                    })
+                    .connect(address);
 
-                return future;
-            }));
+                ch.addListener(future1 -> {
+                    if (!future1.isSuccess()) {
+                        future.completeExceptionally(future1.cause());
+                    } else {
+                        ch.channel().eventLoop().execute(() -> { // needs to execute after channel init
+                            connection.setListener(new ClientStatusPacketListener() {
+                                @Override
+                                public void handleStatusResponse(ClientboundStatusResponsePacket clientboundStatusResponsePacket) {
+                                    ServerStatus status = clientboundStatusResponsePacket.getStatus();
+                                    ServerStatus.Version version;
+                                    if (status != null && (version = status.getVersion()) != null) {
+                                        ProtocolVersion ver = ProtocolVersion.getProtocol(version.getProtocol());
+                                        future.complete(ver);
+                                        ViaFabric.JLOGGER.info("Auto-detected " + ver + " for " + address);
+                                    } else {
+                                        future.completeExceptionally(new IllegalArgumentException("Null version in query response"));
+                                    }
+                                    connection.disconnect(new TextComponent(""));
+                                }
+
+                                @Override
+                                public void handlePongResponse(ClientboundPongResponsePacket clientboundPongResponsePacket) {
+                                    connection.disconnect(new TextComponent("Pong not requested!"));
+                                }
+
+                                @Override
+                                public void onDisconnect(Component reason) {
+                                    future.completeExceptionally(new IllegalStateException(reason.getContents()));
+                                }
+
+                                @Override
+                                public Connection getConnection() {
+                                    return connection;
+                                }
+                            });
+
+                            connection.send(new ClientIntentionPacket(address.getHostString(),
+                                address.getPort(), ConnectionProtocol.STATUS));
+                            connection.send(new ServerboundStatusRequestPacket());
+                        });
+                    }
+                });
+            } catch (Throwable throwable) {
+                future.completeExceptionally(throwable);
+            }
+
+            return future;
+        }));
 
     public static CompletableFuture<ProtocolVersion> detectVersion(InetSocketAddress address) {
         try {
             InetSocketAddress real = new InetSocketAddress(InetAddress.getByAddress
-                    (new AddressParser().parse(address.getHostString()).serverAddress,
-                            address.getAddress().getAddress()), address.getPort());
+                (new AddressParser().parse(address.getHostString()).serverAddress,
+                    address.getAddress().getAddress()), address.getPort());
             return SERVER_VER.get(real);
         } catch (UnknownHostException | ExecutionException e) {
             ViaFabric.JLOGGER.log(Level.WARNING, "Protocol auto detector error: ", e);

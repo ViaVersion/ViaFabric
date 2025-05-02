@@ -17,13 +17,12 @@
  */
 package com.viaversion.fabric.mc1152.commands;
 
-import com.viaversion.fabric.common.commands.subs.LeakDetectSubCommand;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.viaversion.fabric.common.commands.subs.LeakDetectSubCommand;
 import com.viaversion.viaversion.commands.ViaCommandHandler;
-
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.commands.SharedSuggestionProvider;
 

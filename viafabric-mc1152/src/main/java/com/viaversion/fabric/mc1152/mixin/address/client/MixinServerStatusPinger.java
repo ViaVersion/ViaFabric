@@ -27,8 +27,8 @@ import java.net.UnknownHostException;
 import net.minecraft.client.multiplayer.ServerStatusPinger;
 
 @Mixin(ServerStatusPinger.class)
-public class MixinServerPinger {
-    @Redirect(method = "add", at = @At(value = "INVOKE",
+public class MixinServerStatusPinger {
+    @Redirect(method = "pingServer", at = @At(value = "INVOKE",
             target = "Ljava/net/InetAddress;getByName(Ljava/lang/String;)Ljava/net/InetAddress;"))
     private InetAddress resolveViaFabricAddr(String address) throws UnknownHostException {
         AddressParser viaAddr = new AddressParser().parse(address);
