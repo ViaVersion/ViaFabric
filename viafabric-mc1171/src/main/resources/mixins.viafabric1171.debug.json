@@ -5,10 +5,10 @@
   "mixins": [
   ],
   "client": [
-    "client.MixinClientConnection",
-    "client.MixinClientConnectionAccessor",
-    "client.MixinClientPlayNetworkHandler",
-    "client.MixinDebugHud"
+    "client.MixinClientPacketListener",
+    "client.MixinConnection",
+    "client.MixinConnectionAccessor",
+    "client.MixinDebugScreenOverlay"
   ],
   "injectors": {
     "defaultRequire": 0
