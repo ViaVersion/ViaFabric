@@ -5,8 +5,8 @@
   "mixins": [
   ],
   "client": [
-    "client.MixinMultiplayerServerListPingerListener",
-    "client.MixinServerEntry",
+    "client.MixinServerStatusPingerListener",
+    "client.MixinOnlineServerEntry",
     "client.MixinServerData"
   ],
   "injectors": {
