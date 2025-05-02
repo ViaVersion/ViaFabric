@@ -19,7 +19,7 @@ package com.viaversion.fabric.mc1165.mixin.address.client;
 
 import com.mojang.datafixers.util.Pair;
 import com.viaversion.fabric.common.AddressParser;
-import net.minecraft.client.network.ServerAddress;
+import net.minecraft.client.multiplayer.ServerAddress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

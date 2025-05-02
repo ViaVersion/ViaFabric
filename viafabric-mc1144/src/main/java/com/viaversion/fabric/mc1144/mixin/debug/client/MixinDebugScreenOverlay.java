@@ -22,8 +22,6 @@ import com.viaversion.fabric.common.handler.FabricDecodeHandler;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import io.netty.channel.ChannelHandler;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.DebugHud;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,14 +30,16 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.DebugScreenOverlay;
 
-@Mixin(DebugHud.class)
-public class MixinDebugHud {
-    @Inject(at = @At("RETURN"), method = "getLeftText")
-    protected void getLeftText(CallbackInfoReturnable<List<String>> info) {
+@Mixin(DebugScreenOverlay.class)
+public class MixinDebugScreenOverlay {
+    @Inject(at = @At("RETURN"), method = "getGameInformation")
+    protected void getGameInformation(CallbackInfoReturnable<List<String>> cir) {
         String line = "[ViaFabric] I: " + Via.getManager().getConnectionManager().getConnections().size() + " (F: "
                 + Via.getManager().getConnectionManager().getConnectedClients().size() + ")";
-        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinClientConnectionAccessor) MinecraftClient.getInstance().getNetworkHandler()
+        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinConnectionAccessor) Minecraft.getInstance().getConnection()
                 .getConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
         if (viaDecoder instanceof FabricDecodeHandler) {
             UserConnection connection = ((FabricDecodeHandler) viaDecoder).getInfo();
@@ -51,6 +51,6 @@ public class MixinDebugHud {
             }
         }
 
-        info.getReturnValue().add(line);
+        cir.getReturnValue().add(line);
     }
 }

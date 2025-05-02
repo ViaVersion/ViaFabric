@@ -28,10 +28,9 @@ import io.netty.channel.EventLoop;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-
+import net.minecraft.server.level.ServerPlayer;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -48,7 +47,7 @@ public class FabricPlatform extends AbstractFabricPlatform {
 
     @Environment(EnvType.CLIENT)
     private static MinecraftServer getIntegratedServer() {
-        return MinecraftClient.getInstance().getServer();
+        return Minecraft.getInstance().getSingleplayerServer();
     }
 
     @Override
@@ -75,9 +74,9 @@ public class FabricPlatform extends AbstractFabricPlatform {
         MinecraftServer server = getServer();
         if (server == null) return;
         runServerSync(() -> {
-            ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
+            ServerPlayer player = server.getPlayerList().getPlayer(uuid);
             if (player == null) return;
-            player.sendMessage(NMSCommandSender.fromLegacy(s), false);
+            player.displayClientMessage(NMSCommandSender.fromLegacy(s), false);
         });
     }
 
@@ -91,12 +90,12 @@ public class FabricPlatform extends AbstractFabricPlatform {
         MinecraftServer server = getServer();
         if (server == null) return false;
         Supplier<Boolean> kickTask = () -> {
-            ServerPlayerEntity player = server.getPlayerManager().getPlayer(uuid);
+            ServerPlayer player = server.getPlayerList().getPlayer(uuid);
             if (player == null) return false;
-            player.networkHandler.disconnect(NMSCommandSender.fromLegacy(s));
+            player.connection.disconnect(NMSCommandSender.fromLegacy(s));
             return true;
         };
-        if (server.isOnThread()) {
+        if (server.isSameThread()) {
             return kickTask.get();
         } else {
             ViaFabric.JLOGGER.log(Level.WARNING, "Weird!? Player kicking was called off-thread", new Throwable());

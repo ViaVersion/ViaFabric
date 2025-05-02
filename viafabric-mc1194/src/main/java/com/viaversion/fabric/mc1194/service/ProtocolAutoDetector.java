@@ -29,13 +29,14 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.*;
-import net.minecraft.network.listener.ClientQueryPacketListener;
-import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
-import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
-import net.minecraft.network.packet.s2c.query.QueryPongS2CPacket;
-import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
-import net.minecraft.server.ServerMetadata;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
+import net.minecraft.network.protocol.status.ClientStatusPacketListener;
+import net.minecraft.network.protocol.status.ClientboundPongResponsePacket;
+import net.minecraft.network.protocol.status.ClientboundStatusResponsePacket;
+import net.minecraft.network.protocol.status.ServerStatus;
+import net.minecraft.network.protocol.status.ServerboundStatusRequestPacket;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 import java.net.InetAddress;
@@ -54,10 +55,10 @@ public class ProtocolAutoDetector {
                 CompletableFuture<ProtocolVersion> future = new CompletableFuture<>();
 
                 try {
-                    final ClientConnection clientConnection = new ClientConnection(NetworkSide.CLIENTBOUND);
+                    final Connection clientConnection = new Connection(PacketFlow.CLIENTBOUND);
 
                     ChannelFuture ch = new Bootstrap()
-                            .group(ClientConnection.CLIENT_IO_GROUP.get())
+                            .group(Connection.NETWORK_WORKER_GROUP.get())
                             .channel(NioSocketChannel.class)
                             .handler(new ChannelInitializer<Channel>() {
                                 protected void initChannel(Channel channel) {
@@ -69,10 +70,10 @@ public class ProtocolAutoDetector {
 
                                     channel.pipeline()
                                             .addLast("timeout", new ReadTimeoutHandler(30))
-                                            .addLast("splitter", new SplitterHandler())
-                                            .addLast("decoder", new DecoderHandler(NetworkSide.CLIENTBOUND))
-                                            .addLast("prepender", new SizePrepender())
-                                            .addLast("encoder", new PacketEncoder(NetworkSide.SERVERBOUND))
+                                            .addLast("splitter", new Varint21FrameDecoder())
+                                            .addLast("decoder", new PacketDecoder(PacketFlow.CLIENTBOUND))
+                                            .addLast("prepender", new Varint21LengthFieldPrepender())
+                                            .addLast("encoder", new PacketEncoder(PacketFlow.SERVERBOUND))
                                             .addLast("packet_handler", clientConnection);
                                 }
                             })
@@ -83,40 +84,40 @@ public class ProtocolAutoDetector {
                             future.completeExceptionally(future1.cause());
                         } else {
                             ch.channel().eventLoop().execute(() -> { // needs to execute after channel init
-                                clientConnection.setPacketListener(new ClientQueryPacketListener() {
+                                clientConnection.setListener(new ClientStatusPacketListener() {
                                     @Override
-                                    public void onResponse(QueryResponseS2CPacket packet) {
-                                        ServerMetadata meta = packet.metadata();
+                                    public void handleStatusResponse(ClientboundStatusResponsePacket packet) {
+                                        ServerStatus meta = packet.status();
                                         if (meta != null && meta.version().isPresent()) {
                                             ProtocolVersion ver = ProtocolVersion.getProtocol(meta.version().get()
-                                                    .protocolVersion());
+                                                    .protocol());
                                             future.complete(ver);
                                             ViaFabric.JLOGGER.info("Auto-detected " + ver + " for " + address);
                                         } else {
                                             future.completeExceptionally(new IllegalArgumentException("Null version in query response"));
                                         }
-                                        clientConnection.disconnect(Text.empty());
+                                        clientConnection.disconnect(Component.empty());
                                     }
 
                                     @Override
-                                    public void onPong(QueryPongS2CPacket packet) {
-                                        clientConnection.disconnect(Text.literal("Pong not requested!"));
+                                    public void handlePongResponse(ClientboundPongResponsePacket packet) {
+                                        clientConnection.disconnect(Component.literal("Pong not requested!"));
                                     }
 
                                     @Override
-                                    public void onDisconnected(Text reason) {
+                                    public void onDisconnect(Component reason) {
                                         future.completeExceptionally(new IllegalStateException(reason.getString()));
                                     }
 
                                     @Override
-                                    public boolean isConnectionOpen() {
+                                    public boolean isAcceptingMessages() {
                                         return ch.channel().isOpen();
                                     }
                                 });
 
-                                clientConnection.send(new HandshakeC2SPacket(address.getHostString(),
-                                        address.getPort(), NetworkState.STATUS));
-                                clientConnection.send(new QueryRequestC2SPacket());
+                                clientConnection.send(new ClientIntentionPacket(address.getHostString(),
+                                        address.getPort(), ConnectionProtocol.STATUS));
+                                clientConnection.send(new ServerboundStatusRequestPacket());
                             });
                         }
                     });

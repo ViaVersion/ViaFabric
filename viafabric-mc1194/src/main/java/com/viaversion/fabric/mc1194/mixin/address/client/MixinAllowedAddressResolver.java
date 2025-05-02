@@ -18,9 +18,6 @@
 package com.viaversion.fabric.mc1194.mixin.address.client;
 
 import com.viaversion.fabric.common.AddressParser;
-import net.minecraft.client.network.Address;
-import net.minecraft.client.network.AllowedAddressResolver;
-import net.minecraft.client.network.ServerAddress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -32,15 +29,18 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.Optional;
+import net.minecraft.client.multiplayer.resolver.ResolvedServerAddress;
+import net.minecraft.client.multiplayer.resolver.ServerAddress;
+import net.minecraft.client.multiplayer.resolver.ServerNameResolver;
 
-@Mixin(AllowedAddressResolver.class)
+@Mixin(ServerNameResolver.class)
 public abstract class MixinAllowedAddressResolver {
     @Shadow
-    public abstract Optional<Address> resolve(ServerAddress address);
+    public abstract Optional<ResolvedServerAddress> resolve(ServerAddress address);
 
     @Inject(method = "resolve", at = @At(value = "HEAD"), cancellable = true)
-    private void resolveVF(ServerAddress address, CallbackInfoReturnable<Optional<Address>> cir) {
-        AddressParser viaAddr = new AddressParser().parse(address.getAddress());
+    private void resolveVF(ServerAddress address, CallbackInfoReturnable<Optional<ResolvedServerAddress>> cir) {
+        AddressParser viaAddr = new AddressParser().parse(address.getHost());
         if (viaAddr.viaSuffix == null) {
             return;
         }
@@ -51,11 +51,11 @@ public abstract class MixinAllowedAddressResolver {
     }
 
     @Unique
-    private Address viaFabric$addSuffix(Address it, String viaSuffix) {
+    private ResolvedServerAddress viaFabric$addSuffix(ResolvedServerAddress it, String viaSuffix) {
         try {
-            return Address.create(new InetSocketAddress(
+            return ResolvedServerAddress.from(new InetSocketAddress(
                     InetAddress.getByAddress(it.getHostName() + "." + viaSuffix,
-                            it.getInetSocketAddress().getAddress().getAddress()), it.getPort()));
+                            it.asInetSocketAddress().getAddress().getAddress()), it.getPort()));
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }

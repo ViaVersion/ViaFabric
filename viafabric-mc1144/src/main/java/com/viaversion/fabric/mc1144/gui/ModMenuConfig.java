@@ -18,9 +18,8 @@
 package com.viaversion.fabric.mc1144.gui;
 
 import io.github.prospector.modmenu.api.ModMenuApi;
-import net.minecraft.client.gui.screen.Screen;
-
 import java.util.function.Function;
+import net.minecraft.client.gui.screens.Screen;
 
 public class ModMenuConfig implements ModMenuApi {
     @Override

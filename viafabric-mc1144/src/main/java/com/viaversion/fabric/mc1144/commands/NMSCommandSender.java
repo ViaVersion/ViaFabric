@@ -21,62 +21,61 @@ import com.viaversion.viaversion.api.command.ViaCommandSender;
 import com.viaversion.viaversion.util.ComponentUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientCommandSource;
-import net.minecraft.entity.Entity;
-import net.minecraft.server.command.CommandSource;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientSuggestionProvider;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class NMSCommandSender implements ViaCommandSender {
-    private final CommandSource source;
+    private final SharedSuggestionProvider provider;
 
-    public NMSCommandSender(CommandSource source) {
-        this.source = source;
+    public NMSCommandSender(SharedSuggestionProvider provider) {
+        this.provider = provider;
     }
 
     @Override
     public boolean hasPermission(String s) {
         // https://gaming.stackexchange.com/questions/138602/what-does-op-permission-level-do
-        return source.hasPermissionLevel(3);
+        return provider.hasPermission(3);
     }
 
-    public static Text fromLegacy(String legacy) {
-        return Text.Serializer.fromJson(ComponentUtil.legacyToJsonString(legacy));
+    public static Component fromLegacy(String legacy) {
+        return Component.Serializer.fromJson(ComponentUtil.legacyToJsonString(legacy));
     }
 
     @Override
     public void sendMessage(String s) {
-        if (source instanceof ServerCommandSource) {
-            ((ServerCommandSource) source).sendFeedback(fromLegacy(s), false);
+        if (provider instanceof CommandSourceStack) {
+            ((CommandSourceStack) provider).sendSuccess(fromLegacy(s), false);
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
-                && source instanceof ClientCommandSource) {
-            MinecraftClient.getInstance().player.addChatMessage(fromLegacy(s), false);
+                && provider instanceof ClientSuggestionProvider) {
+            Minecraft.getInstance().player.displayClientMessage(fromLegacy(s), false);
         }
     }
 
     @Override
     public UUID getUUID() {
-        if (source instanceof ServerCommandSource) {
-            Entity entity = ((ServerCommandSource) source).getEntity();
-            if (entity != null) return entity.getUuid();
+        if (provider instanceof CommandSourceStack) {
+            Entity entity = ((CommandSourceStack) provider).getEntity();
+            if (entity != null) return entity.getUUID();
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
-                && source instanceof ClientCommandSource) {
-            return MinecraftClient.getInstance().player.getUuid();
+                && provider instanceof ClientSuggestionProvider) {
+            return Minecraft.getInstance().player.getUUID();
         }
         return UUID.nameUUIDFromBytes(getName().getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
     public String getName() {
-        if (source instanceof ServerCommandSource) {
-            return ((ServerCommandSource) source).getName();
+        if (provider instanceof CommandSourceStack) {
+            return ((CommandSourceStack) provider).getTextName();
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
-                && source instanceof ClientCommandSource) {
-            return MinecraftClient.getInstance().player.getEntityName();
+                && provider instanceof ClientSuggestionProvider) {
+            return Minecraft.getInstance().player.getScoreboardName();
         }
         return "?";
     }

@@ -15,38 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.viaversion.fabric.mc1194.mixin.gui.client;
+package com.viaversion.fabric.mc1144.mixin.debug.client;
 
-import com.viaversion.fabric.common.gui.ViaServerInfo;
-import net.minecraft.client.network.ServerInfo;
+import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.network.Connection;
+import org.apache.logging.log4j.Logger;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ServerInfo.class)
-public class MixinServerInfo implements ViaServerInfo {
-    @Unique
-    private boolean viaFabric$translating;
+@Mixin(Connection.class)
+public abstract class MixinConnection {
 
-    @Unique
-    private int viaFabric$serverVer;
+    @Shadow
+    @Final
+    private static Logger LOGGER;
 
-    @Override
-    public int viaFabric$getServerVer() {
-        return viaFabric$serverVer;
-    }
-
-    @Override
-    public void viaFabric$setServerVer(int ver) {
-        this.viaFabric$serverVer = ver;
-    }
-
-    @Override
-    public boolean viaFabric$translating() {
-        return viaFabric$translating;
-    }
-
-    @Override
-    public void viaFabric$setTranslating(boolean via) {
-        this.viaFabric$translating = via;
+    @Inject(method = "exceptionCaught", at = @At("TAIL"))
+    public void exceptionCaught(ChannelHandlerContext context, Throwable ex, CallbackInfo ci) {
+        LOGGER.error("Packet error", ex);
     }
 }

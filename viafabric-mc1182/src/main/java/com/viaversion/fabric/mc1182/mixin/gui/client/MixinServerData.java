@@ -15,15 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.viaversion.fabric.mc1171.mixin.gui.client;
+package com.viaversion.fabric.mc1182.mixin.gui.client;
 
-import com.viaversion.fabric.common.gui.ViaServerInfo;
-import net.minecraft.client.network.ServerInfo;
+import com.viaversion.fabric.common.gui.ViaServerData;
+import net.minecraft.client.multiplayer.ServerData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(ServerInfo.class)
-public class MixinServerInfo implements ViaServerInfo {
+@Mixin(ServerData.class)
+public class MixinServerData implements ViaServerData {
     @Unique
     private boolean viaFabric$translating;
 

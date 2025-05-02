@@ -19,7 +19,7 @@ package com.viaversion.fabric.mc1206.providers;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.protocols.v1_15_2to1_16.provider.PlayerAbilitiesProvider;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class VFPlayerAbilitiesProvider extends PlayerAbilitiesProvider {
 
@@ -27,13 +27,13 @@ public class VFPlayerAbilitiesProvider extends PlayerAbilitiesProvider {
     public float getFlyingSpeed(UserConnection connection) {
         if (!connection.isClientSide()) return super.getFlyingSpeed(connection);
 
-        return MinecraftClient.getInstance().player.getAbilities().getFlySpeed();
+        return Minecraft.getInstance().player.getAbilities().getFlyingSpeed();
     }
 
     @Override
     public float getWalkingSpeed(UserConnection connection) {
         if (!connection.isClientSide()) return super.getWalkingSpeed(connection);
 
-        return MinecraftClient.getInstance().player.getAbilities().getWalkSpeed();
+        return Minecraft.getInstance().player.getAbilities().getWalkingSpeed();
     }
 }

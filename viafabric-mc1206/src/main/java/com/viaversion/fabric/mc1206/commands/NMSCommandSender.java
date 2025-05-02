@@ -19,38 +19,38 @@ package com.viaversion.fabric.mc1206.commands;
 
 import com.viaversion.viaversion.util.ComponentUtil;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.command.CommandSource;
-import net.minecraft.entity.Entity;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.Entity;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class NMSCommandSender implements ViaCommandSender {
-    private final CommandSource source;
+    private final SharedSuggestionProvider source;
 
-    public NMSCommandSender(CommandSource source) {
+    public NMSCommandSender(SharedSuggestionProvider source) {
         this.source = source;
     }
 
     @Override
     public boolean hasPermission(String s) {
         // https://gaming.stackexchange.com/questions/138602/what-does-op-permission-level-do
-        return source.hasPermissionLevel(3);
+        return source.hasPermission(3);
     }
 
-    public static MutableText fromLegacy(String legacy) {
-        return Text.Serialization.fromJson(ComponentUtil.legacyToJsonString(legacy), DynamicRegistryManager.EMPTY);
+    public static MutableComponent fromLegacy(String legacy) {
+        return Component.Serializer.fromJson(ComponentUtil.legacyToJsonString(legacy), RegistryAccess.EMPTY);
     }
 
     @Override
     public void sendMessage(String s) {
-        if (source instanceof ServerCommandSource) {
-            ((ServerCommandSource) source).sendFeedback(() -> fromLegacy(s), false);
+        if (source instanceof CommandSourceStack) {
+            ((CommandSourceStack) source).sendSuccess(() -> fromLegacy(s), false);
         } else if (source instanceof FabricClientCommandSource) {
             ((FabricClientCommandSource) source).sendFeedback(fromLegacy(s));
         }
@@ -58,19 +58,19 @@ public class NMSCommandSender implements ViaCommandSender {
 
     @Override
     public UUID getUUID() {
-        if (source instanceof ServerCommandSource) {
-            Entity entity = ((ServerCommandSource) source).getEntity();
-            if (entity != null) return entity.getUuid();
+        if (source instanceof CommandSourceStack) {
+            Entity entity = ((CommandSourceStack) source).getEntity();
+            if (entity != null) return entity.getUUID();
         } else if (source instanceof FabricClientCommandSource) {
-            return ((FabricClientCommandSource) source).getPlayer().getUuid();
+            return ((FabricClientCommandSource) source).getPlayer().getUUID();
         }
         return UUID.nameUUIDFromBytes(getName().getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
     public String getName() {
-        if (source instanceof ServerCommandSource) {
-            return ((ServerCommandSource) source).getName();
+        if (source instanceof CommandSourceStack) {
+            return ((CommandSourceStack) source).getTextName();
         } else if (source instanceof FabricClientCommandSource) {
             return ((FabricClientCommandSource) source).getPlayer().getName().getString();
         }

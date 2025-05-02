@@ -30,23 +30,23 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.SharedConstants;
-import net.minecraft.network.ClientConnection;
-import net.minecraft.network.DisconnectionInfo;
-import net.minecraft.network.NetworkSide;
-import net.minecraft.network.handler.EncoderHandler;
-import net.minecraft.network.handler.NetworkStateTransitions;
-import net.minecraft.network.handler.SizePrepender;
-import net.minecraft.network.handler.SplitterHandler;
-import net.minecraft.network.listener.ClientQueryPacketListener;
-import net.minecraft.network.packet.c2s.handshake.ConnectionIntent;
-import net.minecraft.network.packet.c2s.handshake.HandshakeC2SPacket;
-import net.minecraft.network.packet.c2s.query.QueryRequestC2SPacket;
-import net.minecraft.network.packet.s2c.query.PingResultS2CPacket;
-import net.minecraft.network.packet.s2c.query.QueryResponseS2CPacket;
-import net.minecraft.network.state.HandshakeStates;
-import net.minecraft.network.state.QueryStates;
-import net.minecraft.server.ServerMetadata;
-import net.minecraft.text.Text;
+import net.minecraft.network.Connection;
+import net.minecraft.network.DisconnectionDetails;
+import net.minecraft.network.PacketEncoder;
+import net.minecraft.network.UnconfiguredPipelineHandler;
+import net.minecraft.network.Varint21FrameDecoder;
+import net.minecraft.network.Varint21LengthFieldPrepender;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.handshake.ClientIntent;
+import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
+import net.minecraft.network.protocol.handshake.HandshakeProtocols;
+import net.minecraft.network.protocol.ping.ClientboundPongResponsePacket;
+import net.minecraft.network.protocol.status.ClientStatusPacketListener;
+import net.minecraft.network.protocol.status.ClientboundStatusResponsePacket;
+import net.minecraft.network.protocol.status.ServerStatus;
+import net.minecraft.network.protocol.status.ServerboundStatusRequestPacket;
+import net.minecraft.network.protocol.status.StatusProtocols;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetAddress;
@@ -65,10 +65,10 @@ public class ProtocolAutoDetector {
                 CompletableFuture<ProtocolVersion> future = new CompletableFuture<>();
 
                 try {
-                    final ClientConnection clientConnection = new ClientConnection(NetworkSide.CLIENTBOUND);
+                    final Connection clientConnection = new Connection(PacketFlow.CLIENTBOUND);
 
                     ChannelFuture ch = new Bootstrap()
-                            .group(ClientConnection.CLIENT_IO_GROUP.get())
+                            .group(Connection.NETWORK_WORKER_GROUP.get())
                             .channel(NioSocketChannel.class)
                             .handler(new ChannelInitializer<>() {
                                 @Override
@@ -81,10 +81,10 @@ public class ProtocolAutoDetector {
 
                                     channel.pipeline()
                                             .addLast("timeout", new ReadTimeoutHandler(30))
-                                            .addLast("splitter", new SplitterHandler(null))
-                                            .addLast("inbound_config", new NetworkStateTransitions.InboundConfigurer())
-                                            .addLast("prepender", new SizePrepender())
-                                            .addLast("encoder", new EncoderHandler<>(HandshakeStates.C2S))
+                                            .addLast("splitter", new Varint21FrameDecoder(null))
+                                            .addLast("inbound_config", new UnconfiguredPipelineHandler.Inbound())
+                                            .addLast("prepender", new Varint21LengthFieldPrepender())
+                                            .addLast("encoder", new PacketEncoder<>(HandshakeProtocols.SERVERBOUND))
                                             .addLast("packet_handler", clientConnection);
                                 }
                             })
@@ -95,47 +95,47 @@ public class ProtocolAutoDetector {
                             future.completeExceptionally(future1.cause());
                         } else {
                             ch.channel().eventLoop().submit(() -> { // needs to execute after channel init
-                                clientConnection.transitionInbound(QueryStates.S2C, new ClientQueryPacketListener() {
+                                clientConnection.setupInboundProtocol(StatusProtocols.CLIENTBOUND, new ClientStatusPacketListener() {
                                     @Override
-                                    public void onResponse(QueryResponseS2CPacket packet) {
-                                        ServerMetadata meta = packet.metadata();
+                                    public void handleStatusResponse(ClientboundStatusResponsePacket packet) {
+                                        ServerStatus meta = packet.status();
                                         if (meta != null && meta.version().isPresent()) {
                                             ProtocolVersion ver = ProtocolVersion.getProtocol(meta.version().get()
-                                                    .protocolVersion());
+                                                    .protocol());
                                             future.complete(ver);
                                             ViaFabric.JLOGGER.info("Auto-detected " + ver + " for " + address);
                                         } else {
                                             future.completeExceptionally(new IllegalArgumentException("Null version in query response"));
                                         }
-                                        clientConnection.disconnect(Text.empty());
+                                        clientConnection.disconnect(Component.empty());
                                     }
 
                                     @Override
-                                    public void onPingResult(PingResultS2CPacket packet) {
-                                        clientConnection.disconnect(Text.literal("Pong not requested!"));
+                                    public void handlePongResponse(ClientboundPongResponsePacket packet) {
+                                        clientConnection.disconnect(Component.literal("Pong not requested!"));
                                     }
 
                                     @Override
-                                    public void onDisconnected(DisconnectionInfo info) {
+                                    public void onDisconnect(DisconnectionDetails info) {
                                         future.completeExceptionally(new IllegalStateException(info.reason().getString()));
                                     }
 
                                     @Override
-                                    public boolean isConnectionOpen() {
+                                    public boolean isAcceptingMessages() {
                                         return ch.channel().isOpen();
                                     }
                                 });
 
                                 //noinspection deprecation
-                                clientConnection.send(new HandshakeC2SPacket(
-                                        SharedConstants.getGameVersion().getProtocolVersion(),
+                                clientConnection.send(new ClientIntentionPacket(
+                                        SharedConstants.getCurrentVersion().getProtocolVersion(),
                                         address.getHostString(),
                                         address.getPort(),
-                                        ConnectionIntent.STATUS
+                                        ClientIntent.STATUS
                                 ));
 
-                                clientConnection.transitionOutbound(QueryStates.C2S);
-                                clientConnection.send(QueryRequestC2SPacket.INSTANCE);
+                                clientConnection.setupOutboundProtocol(StatusProtocols.SERVERBOUND);
+                                clientConnection.send(ServerboundStatusRequestPacket.INSTANCE);
                             });
                         }
                     });

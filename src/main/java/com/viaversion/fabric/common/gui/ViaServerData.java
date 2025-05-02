@@ -15,15 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.viaversion.fabric.mc1144.mixin.debug.client;
+package com.viaversion.fabric.common.gui;
 
-import io.netty.channel.Channel;
-import net.minecraft.network.ClientConnection;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+public interface ViaServerData {
+    boolean viaFabric$translating();
 
-@Mixin(ClientConnection.class)
-public interface MixinClientConnectionAccessor {
-    @Accessor
-    Channel getChannel();
+    void viaFabric$setTranslating(boolean via);
+
+    int viaFabric$getServerVer();
+
+    void viaFabric$setServerVer(int ver);
 }

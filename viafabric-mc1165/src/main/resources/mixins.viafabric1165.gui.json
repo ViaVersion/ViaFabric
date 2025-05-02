@@ -8,7 +8,7 @@
   "client": [
     "client.MixinMultiplayerScreen",
     "client.MixinServerEntry",
-    "client.MixinServerInfo"
+    "client.MixinServerData"
   ],
   "injectors": {
     "defaultRequire": 0

@@ -22,10 +22,10 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.server.command.CommandSource;
 import com.viaversion.viaversion.commands.ViaCommandHandler;
 
 import java.util.concurrent.CompletableFuture;
+import net.minecraft.commands.SharedSuggestionProvider;
 
 public class VFCommandHandler extends ViaCommandHandler {
     {
@@ -36,7 +36,7 @@ public class VFCommandHandler extends ViaCommandHandler {
         }
     }
 
-    public int execute(CommandContext<? extends CommandSource> ctx) {
+    public int execute(CommandContext<? extends SharedSuggestionProvider> ctx) {
         String[] args = new String[0];
         try {
             args = StringArgumentType.getString(ctx, "args").split(" ");
@@ -49,7 +49,7 @@ public class VFCommandHandler extends ViaCommandHandler {
         return 1;
     }
 
-    public CompletableFuture<Suggestions> suggestion(CommandContext<? extends CommandSource> ctx, SuggestionsBuilder builder) {
+    public CompletableFuture<Suggestions> suggestion(CommandContext<? extends SharedSuggestionProvider> ctx, SuggestionsBuilder builder) {
         String[] args;
         try {
             args = StringArgumentType.getString(ctx, "args").split(" ", -1);

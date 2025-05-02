@@ -17,16 +17,8 @@
  */
 package com.viaversion.fabric.mc1165.mixin.gui.client;
 
-import com.viaversion.fabric.common.gui.ViaServerInfo;
+import com.viaversion.fabric.common.gui.ViaServerData;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,28 +27,36 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 
-@Mixin(MultiplayerServerListWidget.ServerEntry.class)
+@Mixin(ServerSelectionList.OnlineServerEntry.class)
 public class MixinServerEntry {
     @Shadow
     @Final
-    private ServerInfo server;
+    private ServerData server;
 
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/texture/TextureManager;bindTexture(Lnet/minecraft/util/Identifier;)V"))
-    private void redirectPingIcon(TextureManager textureManager, Identifier identifier) {
-        if (identifier.equals(DrawableHelper.GUI_ICONS_TEXTURE) && ((ViaServerInfo) this.server).viaFabric$translating()) {
-            textureManager.bindTexture(new Identifier("viafabric:textures/gui/icons.png"));
+    private void redirectPingIcon(TextureManager textureManager, ResourceLocation identifier) {
+        if (identifier.equals(GuiComponent.GUI_ICONS_LOCATION) && ((ViaServerData) this.server).viaFabric$translating()) {
+            textureManager.bind(new ResourceLocation("viafabric:textures/gui/icons.png"));
             return;
         }
-        textureManager.bindTexture(identifier);
+        textureManager.bind(identifier);
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setTooltip(Ljava/util/List;)V"))
-    private void addServerVer(MultiplayerScreen multiplayerScreen, List<Text> tooltipText) {
-        ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerInfo) this.server).viaFabric$getServerVer());
-        List<Text> lines = new ArrayList<>(tooltipText);
-        lines.add(new TranslatableText("gui.ping_version.translated", proto.getName(), proto.getVersion()));
-        lines.add(this.server.version.copy());
-        multiplayerScreen.setTooltip(lines);
+    private void addServerVer(JoinMultiplayerScreen multiplayerScreen, List<Component> tooltipText) {
+        ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerData) this.server).viaFabric$getServerVer());
+        List<Component> lines = new ArrayList<>(tooltipText);
+        lines.add(new TranslatableComponent("gui.ping_version.translated", proto.getName(), proto.getVersion()));
+        lines.add(this.server.version.plainCopy());
+        multiplayerScreen.setToolTip(lines);
     }
 }

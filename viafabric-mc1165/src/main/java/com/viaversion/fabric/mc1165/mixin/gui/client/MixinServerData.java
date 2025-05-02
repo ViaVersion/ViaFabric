@@ -15,25 +15,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.viaversion.fabric.mc1171.providers;
+package com.viaversion.fabric.mc1165.mixin.gui.client;
 
-import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.protocols.v1_15_2to1_16.provider.PlayerAbilitiesProvider;
-import net.minecraft.client.Minecraft;
+import com.viaversion.fabric.common.gui.ViaServerData;
+import net.minecraft.client.multiplayer.ServerData;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 
-public class VFPlayerAbilitiesProvider extends PlayerAbilitiesProvider {
+@Mixin(ServerData.class)
+public class MixinServerData implements ViaServerData {
+    @Unique
+    private boolean viaFabric$translating;
+
+    @Unique
+    private int viaFabric$serverVer;
 
     @Override
-    public float getFlyingSpeed(UserConnection connection) {
-        if (!connection.isClientSide()) return super.getFlyingSpeed(connection);
-
-        return Minecraft.getInstance().player.getAbilities().getFlyingSpeed();
+    public int viaFabric$getServerVer() {
+        return viaFabric$serverVer;
     }
 
     @Override
-    public float getWalkingSpeed(UserConnection connection) {
-        if (!connection.isClientSide()) return super.getWalkingSpeed(connection);
+    public void viaFabric$setServerVer(int ver) {
+        this.viaFabric$serverVer = ver;
+    }
 
-        return Minecraft.getInstance().player.getAbilities().getWalkingSpeed();
+    @Override
+    public boolean viaFabric$translating() {
+        return viaFabric$translating;
+    }
+
+    @Override
+    public void viaFabric$setTranslating(boolean via) {
+        this.viaFabric$translating = via;
     }
 }

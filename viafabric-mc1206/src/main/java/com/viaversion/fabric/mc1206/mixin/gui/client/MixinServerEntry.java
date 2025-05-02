@@ -18,15 +18,15 @@
 package com.viaversion.fabric.mc1206.mixin.gui.client;
 
 import com.google.common.collect.Lists;
-import com.viaversion.fabric.common.gui.ViaServerInfo;
+import com.viaversion.fabric.common.gui.ViaServerData;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-import net.minecraft.client.gui.screen.multiplayer.MultiplayerServerListWidget;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,27 +34,27 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(MultiplayerServerListWidget.ServerEntry.class)
+@Mixin(ServerSelectionList.OnlineServerEntry.class)
 public class MixinServerEntry {
     @Shadow
     @Final
-    private ServerInfo server;
+    private ServerData server;
 
     @ModifyArg(method = "render", at = @At(value = "INVOKE", ordinal = 0,
             target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"))
-    private Identifier redirectPingIcon(Identifier texture) {
-        if (((ViaServerInfo) this.server).viaFabric$translating() && texture.getPath().startsWith("server_list/ping")) {
-            return new Identifier("viafabric", texture.getPath());
+    private ResourceLocation redirectPingIcon(ResourceLocation texture) {
+        if (((ViaServerData) this.server).viaFabric$translating() && texture.getPath().startsWith("server_list/ping")) {
+            return new ResourceLocation("viafabric", texture.getPath());
         }
         return texture;
     }
 
     @Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/screen/multiplayer/MultiplayerScreen;setTooltip(Lnet/minecraft/text/Text;)V"))
-    private void addServerVer(MultiplayerScreen instance, Text text) {
-        ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerInfo) this.server).viaFabric$getServerVer());
-        List<Text> lines = new ArrayList<>();
+    private void addServerVer(JoinMultiplayerScreen instance, Component text) {
+        ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerData) this.server).viaFabric$getServerVer());
+        List<Component> lines = new ArrayList<>();
         lines.add(text);
-        lines.add(Text.translatable("gui.ping_version.translated", proto.getName(), proto.getVersion()));
-        instance.setTooltip(Lists.transform(lines, Text::asOrderedText));
+        lines.add(Component.translatable("gui.ping_version.translated", proto.getName(), proto.getVersion()));
+        instance.setTooltipForNextRenderPass(Lists.transform(lines, Component::getVisualOrderText));
     }
 }
