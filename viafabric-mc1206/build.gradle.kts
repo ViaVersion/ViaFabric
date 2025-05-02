@@ -1,6 +1,9 @@
 dependencies {
     minecraft("com.mojang:minecraft:1.20.6")
-    mappings("net.fabricmc:yarn:1.20.6+build.3:v2")
+    mappings(loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-1.20.6:2024.06.16@zip")
+    })
 
     modImplementation(fabricApi.module("fabric-api-base", "0.100.8+1.20.6"))
     modImplementation(fabricApi.module("fabric-resource-loader-v0", "0.100.8+1.20.6"))

@@ -1,6 +1,6 @@
 dependencies {
     minecraft("com.mojang:minecraft:1.14.4")
-    mappings("net.fabricmc:yarn:1.14.4+build.18:v2")
+    mappings(loom.officialMojangMappings())
 
     modImplementation(fabricApi.module("fabric-api-base", "0.28.5+1.14"))
     modImplementation(fabricApi.module("fabric-resource-loader-v0", "0.28.5+1.14"))
