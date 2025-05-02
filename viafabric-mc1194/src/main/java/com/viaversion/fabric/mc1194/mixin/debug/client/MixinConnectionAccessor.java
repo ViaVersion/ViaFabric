@@ -17,25 +17,13 @@
  */
 package com.viaversion.fabric.mc1194.mixin.debug.client;
 
-import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.Channel;
 import net.minecraft.network.Connection;
-import org.slf4j.Logger;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(Connection.class)
-public abstract class MixinClientConnection {
-
-    @Shadow
-    @Final
-    private static Logger LOGGER;
-
-    @Inject(method = "exceptionCaught", at = @At("TAIL"))
-    public void exceptionCaught(ChannelHandlerContext context, Throwable ex, CallbackInfo ci) {
-        LOGGER.error("Packet error", ex);
-    }
+public interface MixinConnectionAccessor {
+    @Accessor
+    Channel getChannel();
 }
