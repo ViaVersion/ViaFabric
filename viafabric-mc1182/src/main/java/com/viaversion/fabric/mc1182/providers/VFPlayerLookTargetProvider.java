@@ -31,9 +31,9 @@ public class VFPlayerLookTargetProvider extends PlayerLookTargetProvider {
     public BlockPosition getPlayerLookTarget(UserConnection info) {
         if (!info.isClientSide()) return null;
 
-        final HitResult crosshairTarget = Minecraft.getInstance().hitResult;
-        if (crosshairTarget instanceof BlockHitResult) {
-            final BlockPos pos = ((BlockHitResult) crosshairTarget).getBlockPos();
+        final HitResult hitResult = Minecraft.getInstance().hitResult;
+        if (hitResult instanceof BlockHitResult) {
+            final BlockPos pos = ((BlockHitResult) hitResult).getBlockPos();
             return new BlockPosition(pos.getX(), pos.getY(), pos.getZ());
         }
         return null;

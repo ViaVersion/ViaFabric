@@ -30,9 +30,9 @@ import java.util.logging.Level;
 import net.minecraft.network.Connection;
 
 @Mixin(Connection.class)
-public class MixinClientConnection {
-    @Inject(method = "connect", at = @At("HEAD"))
-    private static void onConnect(InetSocketAddress address, boolean useEpoll, CallbackInfoReturnable<Connection> cir) {
+public class MixinConnection {
+    @Inject(method = "connectToServer", at = @At("HEAD"))
+    private static void onConnectToServer(InetSocketAddress address, boolean useEpoll, CallbackInfoReturnable<Connection> cir) {
         try {
             if (!ViaFabric.config.isClientSideEnabled()) return;
             ProtocolAutoDetector.detectVersion(address).get(10, TimeUnit.SECONDS);
