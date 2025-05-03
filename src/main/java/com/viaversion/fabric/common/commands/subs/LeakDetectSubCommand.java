@@ -17,10 +17,9 @@
  */
 package com.viaversion.fabric.common.commands.subs;
 
-import io.netty.util.ResourceLeakDetector;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
 import com.viaversion.viaversion.api.command.ViaSubCommand;
-
+import io.netty.util.ResourceLeakDetector;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,9 +55,9 @@ public class LeakDetectSubCommand implements ViaSubCommand {
     public List<String> onTabComplete(ViaCommandSender sender, String[] args) {
         if (args.length == 1) {
             return Arrays.stream(ResourceLeakDetector.Level.values())
-                    .map(Enum::name)
-                    .filter(it -> it.startsWith(args[0]))
-                    .collect(Collectors.toList());
+                .map(Enum::name)
+                .filter(it -> it.startsWith(args[0]))
+                .collect(Collectors.toList());
         }
         return ViaSubCommand.super.onTabComplete(sender, args);
     }

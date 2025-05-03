@@ -28,7 +28,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
-
 import java.util.List;
 
 @ChannelHandler.Sharable
@@ -84,8 +83,8 @@ public class FabricDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
         super.exceptionCaught(ctx, cause);
 
         if ((PipelineUtil.containsCause(cause, InformativeException.class)
-                && info.getProtocolInfo().getServerState() != State.HANDSHAKE)
-                || Via.getManager().debugHandler().enabled()) {
+            && info.getProtocolInfo().getServerState() != State.HANDSHAKE)
+            || Via.getManager().debugHandler().enabled()) {
             cause.printStackTrace();
         }
     }

@@ -22,8 +22,6 @@ import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import io.netty.buffer.ByteBuf;
 
-import java.util.UUID;
-
 public class FabricViaAPI extends ViaAPIBase<UserConnection> {
     @Override
     public ProtocolVersion getPlayerProtocolVersion(UserConnection player) {

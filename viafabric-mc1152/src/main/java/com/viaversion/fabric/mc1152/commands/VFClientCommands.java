@@ -17,8 +17,8 @@
  */
 package com.viaversion.fabric.mc1152.commands;
 
-import com.viaversion.fabric.mc1152.ViaFabric;
 import com.mojang.brigadier.CommandDispatcher;
+import com.viaversion.fabric.mc1152.ViaFabric;
 import io.github.cottonmc.clientcommands.ClientCommandPlugin;
 import io.github.cottonmc.clientcommands.CottonClientCommandSource;
 

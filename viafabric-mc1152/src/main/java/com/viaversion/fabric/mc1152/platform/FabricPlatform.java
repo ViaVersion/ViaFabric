@@ -17,16 +17,19 @@
  */
 package com.viaversion.fabric.mc1152.platform;
 
-import com.viaversion.fabric.common.commands.UserCommandSender;
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.common.provider.AbstractFabricPlatform;
 import com.viaversion.fabric.common.util.FutureTaskId;
 import com.viaversion.fabric.mc1152.ViaFabric;
 import com.viaversion.fabric.mc1152.commands.NMSCommandSender;
 import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.command.ViaCommandSender;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import io.netty.channel.EventLoop;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.function.Supplier;
+import java.util.logging.Level;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -34,11 +37,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.function.Supplier;
-import java.util.logging.Level;
 
 public class FabricPlatform extends AbstractFabricPlatform {
     public static MinecraftServer getServer() {
@@ -84,7 +82,7 @@ public class FabricPlatform extends AbstractFabricPlatform {
 
     @Override
     public void sendMessage(UserConnection connection, String s) {
-        UUID uuid = connection.getProtocolInfo().getUuid();     
+        UUID uuid = connection.getProtocolInfo().getUuid();
         sendMessageServer(uuid, s);
     }
 
@@ -100,7 +98,7 @@ public class FabricPlatform extends AbstractFabricPlatform {
 
     @Override
     public boolean kickPlayer(UserConnection connection, String s) {
-        UUID uuid = connection.getProtocolInfo().getUuid();     
+        UUID uuid = connection.getProtocolInfo().getUuid();
         return kickServer(uuid, s);
     }
 

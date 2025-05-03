@@ -6,9 +6,9 @@
     "MixinRegistrySyncManager"
   ],
   "client": [
+    "client.MixinClientPacketListener",
     "client.MixinConnection",
     "client.MixinConnectionAccessor",
-    "client.MixinClientPacketListener",
     "client.MixinDebugScreenOverlay",
     "client.MixinRegistrySyncManager"
   ],

@@ -5,9 +5,9 @@
   "mixins": [
   ],
   "client": [
+    "client.MixinClientPacketListener",
     "client.MixinConnection",
     "client.MixinConnectionAccessor",
-    "client.MixinClientPacketListener",
     "client.MixinDebugScreenOverlay"
   ],
   "injectors": {

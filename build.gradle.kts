@@ -133,7 +133,7 @@ tasks.remapJar.configure {
 }
 
 val mcReleases = rootProject.extra["publish_mc_versions"].toString().split(",")
-        .map { it.trim() }
+    .map { it.trim() }
 
 publishMods {
     file = tasks.remapJar.get().archiveFile
@@ -149,7 +149,7 @@ publishMods {
         type = BETA // alpha is hidden by default
 
         javaVersions.addAll(
-                (8..22).map { JavaVersion.toVersion(it) }
+            (8..22).map { JavaVersion.toVersion(it) }
         )
         minecraftVersions.addAll(mcReleases)
         optional("fabric-api")

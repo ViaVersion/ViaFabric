@@ -25,10 +25,9 @@ import com.viaversion.viaversion.libs.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSortedSet;
 import it.unimi.dsi.fastutil.objects.ObjectSortedSets;
+import java.util.OptionalInt;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
-
-import java.util.OptionalInt;
 
 public class FabricInjector implements ViaInjector {
     @Override

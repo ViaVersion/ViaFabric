@@ -20,9 +20,9 @@ package com.viaversion.fabric.common.protocol;
 import com.viaversion.fabric.common.AddressParser;
 import com.viaversion.viaversion.api.protocol.AbstractSimpleProtocol;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.remapper.PacketHandlers;
 import com.viaversion.viaversion.api.protocol.remapper.ValueTransformer;
-import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.protocols.base.ServerboundHandshakePackets;
 

@@ -20,12 +20,11 @@ package com.viaversion.fabric.common;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.StringUtils;
 
 // Based on VIAaaS parser
 public class AddressParser {

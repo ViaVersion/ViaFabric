@@ -19,6 +19,8 @@ package com.viaversion.fabric.mc1144.commands;
 
 import com.viaversion.viaversion.api.command.ViaCommandSender;
 import com.viaversion.viaversion.util.ComponentUtil;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
@@ -27,8 +29,6 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 public class NMSCommandSender implements ViaCommandSender {
     private final SharedSuggestionProvider provider;
@@ -52,7 +52,7 @@ public class NMSCommandSender implements ViaCommandSender {
         if (provider instanceof CommandSourceStack) {
             ((CommandSourceStack) provider).sendSuccess(fromLegacy(s), false);
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
-                && provider instanceof ClientSuggestionProvider) {
+            && provider instanceof ClientSuggestionProvider) {
             Minecraft.getInstance().player.displayClientMessage(fromLegacy(s), false);
         }
     }
@@ -63,7 +63,7 @@ public class NMSCommandSender implements ViaCommandSender {
             Entity entity = ((CommandSourceStack) provider).getEntity();
             if (entity != null) return entity.getUUID();
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
-                && provider instanceof ClientSuggestionProvider) {
+            && provider instanceof ClientSuggestionProvider) {
             return Minecraft.getInstance().player.getUUID();
         }
         return UUID.nameUUIDFromBytes(getName().getBytes(StandardCharsets.UTF_8));
@@ -74,7 +74,7 @@ public class NMSCommandSender implements ViaCommandSender {
         if (provider instanceof CommandSourceStack) {
             return ((CommandSourceStack) provider).getTextName();
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
-                && provider instanceof ClientSuggestionProvider) {
+            && provider instanceof ClientSuggestionProvider) {
             return Minecraft.getInstance().player.getScoreboardName();
         }
         return "?";

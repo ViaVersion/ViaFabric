@@ -17,13 +17,12 @@
  */
 package com.viaversion.fabric.mc1171.commands;
 
-import com.viaversion.fabric.common.commands.subs.LeakDetectSubCommand;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import com.viaversion.fabric.common.commands.subs.LeakDetectSubCommand;
 import com.viaversion.viaversion.commands.ViaCommandHandler;
-
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.commands.SharedSuggestionProvider;
 
@@ -43,8 +42,8 @@ public class VFCommandHandler extends ViaCommandHandler {
         } catch (IllegalArgumentException ignored) {
         }
         onCommand(
-                new NMSCommandSender(ctx.getSource()),
-                args
+            new NMSCommandSender(ctx.getSource()),
+            args
         );
         return 1;
     }
@@ -60,13 +59,13 @@ public class VFCommandHandler extends ViaCommandHandler {
         pref[pref.length - 1] = "";
         String prefix = String.join(" ", pref);
         onTabComplete(new NMSCommandSender(ctx.getSource()), args)
-                .stream()
-                .map(it -> {
-                    SuggestionsBuilder b = new SuggestionsBuilder(builder.getInput(), prefix.length() + builder.getStart());
-                    b.suggest(it);
-                    return b;
-                })
-                .forEach(builder::add);
+            .stream()
+            .map(it -> {
+                SuggestionsBuilder b = new SuggestionsBuilder(builder.getInput(), prefix.length() + builder.getStart());
+                b.suggest(it);
+                return b;
+            })
+            .forEach(builder::add);
         return builder.buildFuture();
     }
 }

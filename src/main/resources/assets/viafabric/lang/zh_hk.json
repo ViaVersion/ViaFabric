@@ -1,14 +1,14 @@
 {
-    "gui.protocol_version_field.name": "協議版本",
-    "gui.enable_client_side_button": "啟用 ViaVersion",
-    "gui.enable_client_side.question": "你確定要啟用客戶端模式？",
-    "gui.enable_client_side.warning": "作者唔保證所有嘅服務器都允許你使用這個模組。這個模組可能使你被反作弊插件誤判。使用後果自負！",
-    "gui.enable_client_side.enable": "啟用",
-    "gui.viafabric_config.title": "ViaFabric 配置",
-    "gui.client_side.enable": "啟用客戶端模式",
-    "gui.client_side.disable": "禁用客戶端模式",
-    "gui.ping_version.translated": "轉換為：%s（%s）",
-    "gui.hide_via_button.enable": "隱藏 VIA 按鈕",
-    "gui.hide_via_button.disable": "顯示 VIA 按鈕",
-    "gui.via_button": "VIA"
+  "gui.protocol_version_field.name": "協議版本",
+  "gui.enable_client_side_button": "啟用 ViaVersion",
+  "gui.enable_client_side.question": "你確定要啟用客戶端模式？",
+  "gui.enable_client_side.warning": "作者唔保證所有嘅服務器都允許你使用這個模組。這個模組可能使你被反作弊插件誤判。使用後果自負！",
+  "gui.enable_client_side.enable": "啟用",
+  "gui.viafabric_config.title": "ViaFabric 配置",
+  "gui.client_side.enable": "啟用客戶端模式",
+  "gui.client_side.disable": "禁用客戶端模式",
+  "gui.ping_version.translated": "轉換為：%s（%s）",
+  "gui.hide_via_button.enable": "隱藏 VIA 按鈕",
+  "gui.hide_via_button.disable": "顯示 VIA 按鈕",
+  "gui.via_button": "VIA"
 }

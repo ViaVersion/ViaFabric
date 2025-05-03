@@ -19,6 +19,7 @@ package com.viaversion.fabric.mc1215.mixin.debug.client;
 
 import com.viaversion.fabric.mc1215.ViaFabric;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import java.util.Map;
 import net.fabricmc.fabric.impl.registry.sync.RegistrySyncManager;
 import net.minecraft.resources.ResourceLocation;
 import org.slf4j.Logger;
@@ -28,8 +29,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Map;
 
 @Mixin(value = RegistrySyncManager.class, remap = false)
 public class MixinRegistrySyncManager {

@@ -5,9 +5,9 @@
   "mixins": [
   ],
   "client": [
-    "client.MixinServerStatusPingerListener",
     "client.MixinOnlineServerEntry",
-    "client.MixinServerData"
+    "client.MixinServerData",
+    "client.MixinServerStatusPingerListener"
   ],
   "injectors": {
     "defaultRequire": 0

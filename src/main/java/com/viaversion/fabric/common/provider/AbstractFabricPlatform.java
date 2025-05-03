@@ -37,21 +37,19 @@ import com.viaversion.viaversion.protocols.base.InitialBaseProtocol;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import java.io.File;
+import java.nio.file.Path;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import org.apache.logging.log4j.LogManager;
-
-import java.io.File;
-import java.nio.file.Path;
-import java.util.UUID;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnection> {
     private final Logger logger = new JLoggerToLog4j(LogManager.getLogger("ViaVersion"));
@@ -84,19 +82,19 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     @Override
     public FutureTaskId runAsync(Runnable runnable) {
         return new FutureTaskId(CompletableFuture.runAsync(runnable, asyncService())
-                .exceptionally(throwable -> {
-                    if (!(throwable instanceof CancellationException)) {
-                        throwable.printStackTrace();
-                    }
-                    return null;
-                }));
+            .exceptionally(throwable -> {
+                if (!(throwable instanceof CancellationException)) {
+                    throwable.printStackTrace();
+                }
+                return null;
+            }));
     }
 
     @Override
     public FutureTaskId runRepeatingAsync(Runnable runnable, long ticks) {
         return new FutureTaskId(eventLoop()
-                .scheduleAtFixedRate(() -> runAsync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS)
-                .addListener(errorLogger())
+            .scheduleAtFixedRate(() -> runAsync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS)
+            .addListener(errorLogger())
         );
     }
 
@@ -104,8 +102,8 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     public FutureTaskId runSync(Runnable runnable, long ticks) {
         // ViaVersion seems to not need to run delayed tasks on main thread
         return new FutureTaskId(eventLoop()
-                .schedule(() -> runSync(runnable), ticks * 50, TimeUnit.MILLISECONDS)
-                .addListener(errorLogger())
+            .schedule(() -> runSync(runnable), ticks * 50, TimeUnit.MILLISECONDS)
+            .addListener(errorLogger())
         );
     }
 
@@ -113,8 +111,8 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     public FutureTaskId runRepeatingSync(Runnable runnable, long ticks) {
         // ViaVersion seems to not need to run repeating tasks on main thread
         return new FutureTaskId(eventLoop()
-                .scheduleAtFixedRate(() -> runSync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS)
-                .addListener(errorLogger())
+            .scheduleAtFixedRate(() -> runSync(runnable), 0, ticks * 50, TimeUnit.MILLISECONDS)
+            .addListener(errorLogger())
         );
     }
 
@@ -155,7 +153,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     @Override
     public String getPluginVersion() {
         return FabricLoader.getInstance().getModContainer("viaversion").map(ModContainer::getMetadata)
-                .map(ModMetadata::getVersion).map(Version::getFriendlyString).orElse("UNKNOWN");
+            .map(ModMetadata::getVersion).map(Version::getFriendlyString).orElse("UNKNOWN");
     }
 
     @Override
@@ -166,7 +164,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     @Override
     public String getPlatformVersion() {
         return FabricLoader.getInstance().getModContainer("viafabric")
-                .get().getMetadata().getVersion().getFriendlyString();
+            .get().getMetadata().getVersion().getFriendlyString();
     }
 
     @Override
@@ -196,7 +194,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
                 JsonObject info = new JsonObject();
                 JsonObject contact = new JsonObject();
                 it.getContact().asMap().entrySet()
-                        .forEach(c -> contact.addProperty(c.getKey(), c.getValue()));
+                    .forEach(c -> contact.addProperty(c.getKey(), c.getValue()));
                 if (contact.size() != 0) {
                     info.add("contact", contact);
                 }

@@ -52,7 +52,7 @@ public class NMSCommandSender implements ViaCommandSender {
         if (provider instanceof CommandSourceStack) {
             ((CommandSourceStack) provider).sendSuccess(fromLegacy(s), false);
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
-                && provider instanceof ClientSuggestionProvider) {
+            && provider instanceof ClientSuggestionProvider) {
             Minecraft.getInstance().player.displayClientMessage(fromLegacy(s), false);
         }
     }
@@ -63,7 +63,7 @@ public class NMSCommandSender implements ViaCommandSender {
             Entity entity = ((CommandSourceStack) provider).getEntity();
             if (entity != null) return entity.getUUID();
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
-                && provider instanceof ClientSuggestionProvider) {
+            && provider instanceof ClientSuggestionProvider) {
             return Minecraft.getInstance().player.getUUID();
         }
         return UUID.nameUUIDFromBytes(getName().getBytes(StandardCharsets.UTF_8));
@@ -74,7 +74,7 @@ public class NMSCommandSender implements ViaCommandSender {
         if (provider instanceof CommandSourceStack) {
             return ((CommandSourceStack) provider).getTextName();
         } else if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
-                && provider instanceof ClientSuggestionProvider) {
+            && provider instanceof ClientSuggestionProvider) {
             return Minecraft.getInstance().player.getScoreboardName();
         }
         return "?";

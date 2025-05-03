@@ -20,7 +20,6 @@ package com.viaversion.fabric.mc1215.gui;
 import com.google.common.collect.ImmutableMap;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-
 import java.util.Map;
 
 public class ModMenuConfig implements ModMenuApi {

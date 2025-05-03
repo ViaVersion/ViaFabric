@@ -23,9 +23,13 @@ import com.viaversion.fabric.common.util.FutureTaskId;
 import com.viaversion.fabric.mc1144.ViaFabric;
 import com.viaversion.fabric.mc1144.commands.NMSCommandSender;
 import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.command.ViaCommandSender;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import io.netty.channel.EventLoop;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.function.Supplier;
+import java.util.logging.Level;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -33,11 +37,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ChatType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.function.Supplier;
-import java.util.logging.Level;
 
 public class FabricPlatform extends AbstractFabricPlatform {
     public static MinecraftServer getServer() {

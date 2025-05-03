@@ -18,7 +18,6 @@
 package com.viaversion.fabric.common.platform;
 
 import com.viaversion.viaversion.configuration.AbstractViaConfig;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

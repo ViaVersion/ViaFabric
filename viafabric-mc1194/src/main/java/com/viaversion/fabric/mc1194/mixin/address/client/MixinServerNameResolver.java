@@ -18,13 +18,6 @@
 package com.viaversion.fabric.mc1194.mixin.address.client;
 
 import com.viaversion.fabric.common.AddressParser;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
@@ -32,6 +25,12 @@ import java.util.Optional;
 import net.minecraft.client.multiplayer.resolver.ResolvedServerAddress;
 import net.minecraft.client.multiplayer.resolver.ServerAddress;
 import net.minecraft.client.multiplayer.resolver.ServerNameResolver;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ServerNameResolver.class)
 public abstract class MixinServerNameResolver {
@@ -55,8 +54,8 @@ public abstract class MixinServerNameResolver {
     private ResolvedServerAddress viaFabric$addSuffix(ResolvedServerAddress it, String viaSuffix) {
         try {
             return ResolvedServerAddress.from(new InetSocketAddress(
-                    InetAddress.getByAddress(it.getHostName() + "." + viaSuffix,
-                            it.asInetSocketAddress().getAddress().getAddress()), it.getPort()));
+                InetAddress.getByAddress(it.getHostName() + "." + viaSuffix,
+                    it.asInetSocketAddress().getAddress().getAddress()), it.getPort()));
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }

@@ -24,8 +24,8 @@ public class ViaFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         if (FabricLoader.getInstance().getAllMods()
-                .stream()
-                .noneMatch(it -> it.getMetadata().getId().startsWith("viafabric-mc"))) {
+            .stream()
+            .noneMatch(it -> it.getMetadata().getId().startsWith("viafabric-mc"))) {
             throw new IllegalStateException("ViaFabric sub-mod didn't load correctly. Check if required dependencies are installed");
         }
     }

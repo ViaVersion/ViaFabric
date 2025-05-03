@@ -19,16 +19,15 @@ package com.viaversion.fabric.mc1144.mixin.pipeline.client;
 
 import com.viaversion.fabric.mc1144.ViaFabric;
 import com.viaversion.fabric.mc1144.service.ProtocolAutoDetector;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import net.minecraft.network.Connection;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Connection.class)
 public class MixinConnection {

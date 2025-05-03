@@ -18,7 +18,6 @@
 package com.viaversion.fabric.common.config;
 
 import com.viaversion.viaversion.util.Config;
-
 import java.io.File;
 import java.net.URL;
 import java.util.Collection;

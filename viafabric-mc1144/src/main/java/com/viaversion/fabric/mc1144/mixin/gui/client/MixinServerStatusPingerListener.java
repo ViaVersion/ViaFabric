@@ -27,7 +27,6 @@ import net.minecraft.network.protocol.status.ClientboundStatusResponsePacket;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -46,7 +45,7 @@ public abstract class MixinServerStatusPingerListener implements ClientStatusPac
     @Inject(method = "handleStatusResponse", at = @At(value = "HEAD"))
     private void onStatusResponseCaptureServerInfo(ClientboundStatusResponsePacket clientboundStatusResponsePacket, CallbackInfo ci) {
         FabricDecodeHandler decoder = ((MixinConnectionAccessor) this.val$connection).getChannel()
-                .pipeline().get(FabricDecodeHandler.class);
+            .pipeline().get(FabricDecodeHandler.class);
         if (decoder != null) {
             ((ViaServerData) this.val$data).viaFabric$setTranslating(decoder.getInfo().isActive());
             ((ViaServerData) this.val$data).viaFabric$setServerVer(decoder.getInfo().getProtocolInfo().getServerProtocolVersion());

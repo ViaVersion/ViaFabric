@@ -42,13 +42,13 @@ public abstract class MixinJoinMultiplayerScreen extends Screen {
     @Inject(method = "init", at = @At("TAIL"))
     private void onInit(CallbackInfo ci) {
         Button enableClientSideViaVersion = new ImageButton(this.width / 2 + 113, 10,
-                40, 20, // Size
-                0, 0, // Start pos of texture
-                20, // v Hover offset
-                new ResourceLocation("viafabric:textures/gui/widgets.png"),
-                256, 256, // Texture size
-                it -> Minecraft.getInstance().setScreen(new ViaConfigScreen(this)),
-                new TranslatableComponent("gui.via_button"));
+            40, 20, // Size
+            0, 0, // Start pos of texture
+            20, // v Hover offset
+            new ResourceLocation("viafabric:textures/gui/widgets.png"),
+            256, 256, // Texture size
+            it -> Minecraft.getInstance().setScreen(new ViaConfigScreen(this)),
+            new TranslatableComponent("gui.via_button"));
         if (ViaFabric.config.isHideButton()) enableClientSideViaVersion.visible = false;
         addButton(enableClientSideViaVersion);
     }

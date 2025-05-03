@@ -40,10 +40,10 @@ public class ViaFabricClient implements ClientModInitializer {
             ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
                 if (!(screen instanceof JoinMultiplayerScreen)) return;
                 Button enableClientSideViaVersion = new ImageButton(scaledWidth / 2 + 113, 10,
-                        40, 20, // Size
-                        new WidgetSprites(new ResourceLocation("viafabric", "widget_unfocused"), new ResourceLocation("viafabric", "widget_focused")),
-                        it -> Minecraft.getInstance().setScreen(new ViaConfigScreen(screen)),
-                        Component.translatable("gui.via_button"));
+                    40, 20, // Size
+                    new WidgetSprites(new ResourceLocation("viafabric", "widget_unfocused"), new ResourceLocation("viafabric", "widget_focused")),
+                    it -> Minecraft.getInstance().setScreen(new ViaConfigScreen(screen)),
+                    Component.translatable("gui.via_button"));
                 if (ViaFabric.config.isHideButton()) enableClientSideViaVersion.visible = false;
                 Screens.getButtons(screen).add(enableClientSideViaVersion);
             });

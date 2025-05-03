@@ -34,16 +34,19 @@ import com.viaversion.viaversion.protocol.version.BaseVersionProvider;
 import com.viaversion.viaversion.protocols.base.ClientboundStatusPackets;
 import com.viaversion.viaversion.protocols.base.v1_7.ClientboundBaseProtocol1_7;
 import io.netty.channel.ChannelPipeline;
-import net.fabricmc.loader.api.FabricLoader;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
+import net.fabricmc.loader.api.FabricLoader;
 
 public abstract class AbstractFabricVersionProvider extends BaseVersionProvider {
     private int[] multiconnectSupportedVersions = null;
@@ -76,7 +79,7 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
             multiconnectSupportedVersions = vers.stream().mapToInt(Integer::intValue).toArray();
             getLogger().info("ViaFabric will integrate with multiconnect");
         } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
-                | ClassCastException ignored) {
+                 | ClassCastException ignored) {
         }
     }
 
@@ -101,7 +104,7 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
                     if (serverVer == -2) {
                         // Hope protocol was autodetected
                         ProtocolVersion autoVer =
-                                detectVersion((InetSocketAddress) addr).getNow(null);
+                            detectVersion((InetSocketAddress) addr).getNow(null);
                         if (autoVer != null) {
                             serverVer = autoVer.getVersion();
                         }
@@ -131,16 +134,16 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
 
     private boolean checkAddressBlocked(SocketAddress addr) {
         return addr instanceof InetSocketAddress && (isDisabled(((InetSocketAddress) addr).getHostString())
-                || ((((InetSocketAddress) addr).getAddress() != null) &&
-                (isDisabled(((InetSocketAddress) addr).getAddress().getHostAddress())
-                        || isDisabled(((InetSocketAddress) addr).getAddress().getHostName()))));
+            || ((((InetSocketAddress) addr).getAddress() != null) &&
+            (isDisabled(((InetSocketAddress) addr).getAddress().getHostAddress())
+                || isDisabled(((InetSocketAddress) addr).getAddress().getHostName()))));
     }
 
     private void handleMulticonnectPing(UserConnection connection, ProtocolInfo info, boolean blocked, ProtocolVersion serverVer) throws Exception {
         if (info.getServerState() == State.STATUS
-                && info.getProtocolVersion() == -1
-                && isMulticonnectHandler(connection.getChannel().pipeline())
-                && (blocked || ProtocolUtils.isSupported(serverVer, getVersionForMulticonnect(serverVer)))) { // Intercept the connection
+            && info.getProtocolVersion() == -1
+            && isMulticonnectHandler(connection.getChannel().pipeline())
+            && (blocked || ProtocolUtils.isSupported(serverVer, getVersionForMulticonnect(serverVer)))) { // Intercept the connection
             ProtocolVersion multiconnectSuggestion = blocked ? ProtocolVersion.unknown : getVersionForMulticonnect(serverVer);
             getLogger().info("Sending " + multiconnectSuggestion + " for multiconnect version detector");
             PacketWrapper newAnswer = PacketWrapper.create(ClientboundStatusPackets.STATUS_RESPONSE, null, connection);
@@ -185,10 +188,10 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
             String query;
             if (isNumericIp) {
                 query = String.join(".", Arrays.stream(parts, 0, i + 1)
-                        .toArray(String[]::new)) + ((i != 3) ? ".*" : "");
+                    .toArray(String[]::new)) + ((i != 3) ? ".*" : "");
             } else {
                 query = ((i != 0) ? "*." : "") + String.join(".", Arrays.stream(parts, i, parts.length)
-                        .toArray(String[]::new));
+                    .toArray(String[]::new));
             }
             if (getConfig().isForcedDisable(query)) {
                 getLogger().info(addr + " is force-disabled. (Matches " + query + ")");

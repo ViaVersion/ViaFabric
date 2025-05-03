@@ -20,7 +20,6 @@ package com.viaversion.fabric.mc1152.gui;
 import com.google.common.collect.ImmutableMap;
 import io.github.prospector.modmenu.api.ConfigScreenFactory;
 import io.github.prospector.modmenu.api.ModMenuApi;
-
 import java.util.Map;
 
 public class ModMenuConfig implements ModMenuApi {

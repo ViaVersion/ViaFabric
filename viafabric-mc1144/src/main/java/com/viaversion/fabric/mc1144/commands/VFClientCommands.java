@@ -17,8 +17,8 @@
  */
 package com.viaversion.fabric.mc1144.commands;
 
-import com.viaversion.fabric.mc1144.ViaFabric;
 import com.mojang.brigadier.CommandDispatcher;
+import com.viaversion.fabric.mc1144.ViaFabric;
 import io.github.cottonmc.clientcommands.ClientCommandPlugin;
 import io.github.cottonmc.clientcommands.CottonClientCommandSource;
 

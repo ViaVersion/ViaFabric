@@ -18,7 +18,6 @@
 package com.viaversion.fabric.common.util;
 
 import com.viaversion.viaversion.api.platform.PlatformTask;
-
 import java.util.concurrent.Future;
 
 public class FutureTaskId implements PlatformTask<Future<?>> {

@@ -20,7 +20,6 @@ package com.viaversion.fabric.common.commands;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
 import com.viaversion.viaversion.api.connection.UserConnection;
-
 import java.util.UUID;
 
 public class UserCommandSender implements ViaCommandSender {

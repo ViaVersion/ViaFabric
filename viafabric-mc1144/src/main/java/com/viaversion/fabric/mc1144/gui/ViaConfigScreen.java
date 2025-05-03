@@ -18,9 +18,10 @@
 package com.viaversion.fabric.mc1144.gui;
 
 import com.viaversion.fabric.common.config.AbstractViaConfigScreen;
-import com.viaversion.fabric.mc1144.ViaFabric;
 import com.viaversion.fabric.common.util.ProtocolUtils;
+import com.viaversion.fabric.mc1144.ViaFabric;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import java.util.concurrent.CompletableFuture;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -29,7 +30,6 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TranslatableComponent;
-import java.util.concurrent.CompletableFuture;
 
 @Environment(EnvType.CLIENT)
 public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
@@ -47,22 +47,22 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
         int entries = 0;
 
         this.addButton(new Button(calculatePosX(this.width, entries),
-                calculatePosY(this.height, entries),
-                150,
-                20, getClientSideText().getContents(), this::onClickClientSide));
+            calculatePosY(this.height, entries),
+            150,
+            20, getClientSideText().getContents(), this::onClickClientSide));
         entries++;
 
         this.addButton(new Button(calculatePosX(this.width, entries),
-                calculatePosY(this.height, entries),
-                150,
-                20, getHideViaButtonText().getContents(), this::onHideViaButton));
+            calculatePosY(this.height, entries),
+            150,
+            20, getHideViaButtonText().getContents(), this::onHideViaButton));
         entries++;
 
         protocolVersion = new EditBox(this.font,
-                calculatePosX(this.width, entries),
-                calculatePosY(this.height, entries),
-                150,
-                20, new TranslatableComponent(VERSION_TRANSLATE_ID).getContents());
+            calculatePosX(this.width, entries),
+            calculatePosY(this.height, entries),
+            150,
+            20, new TranslatableComponent(VERSION_TRANSLATE_ID).getContents());
         entries++;
 
         protocolVersion.setFilter(ProtocolUtils::isStartOfProtocolText);
@@ -104,18 +104,18 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
     private void onClickClientSide(Button widget) {
         if (!ViaFabric.config.isClientSideEnabled()) {
             Minecraft.getInstance().setScreen(new ConfirmScreen(
-                    answer -> {
-                        if (answer) {
-                            ViaFabric.config.setClientSideEnabled(true);
-                            ViaFabric.config.save();
-                            widget.setMessage(getClientSideText().getContents());
-                        }
-                        Minecraft.getInstance().setScreen(this);
-                    },
-                    new TranslatableComponent("gui.enable_client_side.question"),
-                    new TranslatableComponent("gui.enable_client_side.warning"),
-                    new TranslatableComponent("gui.enable_client_side.enable").getContents(),
-                    new TranslatableComponent("gui.cancel").getContents()
+                answer -> {
+                    if (answer) {
+                        ViaFabric.config.setClientSideEnabled(true);
+                        ViaFabric.config.save();
+                        widget.setMessage(getClientSideText().getContents());
+                    }
+                    Minecraft.getInstance().setScreen(this);
+                },
+                new TranslatableComponent("gui.enable_client_side.question"),
+                new TranslatableComponent("gui.enable_client_side.warning"),
+                new TranslatableComponent("gui.enable_client_side.enable").getContents(),
+                new TranslatableComponent("gui.cancel").getContents()
             ));
         } else {
             ViaFabric.config.setClientSideEnabled(false);
@@ -136,13 +136,13 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
 
     private TranslatableComponent getClientSideText() {
         return ViaFabric.config.isClientSideEnabled() ?
-                new TranslatableComponent("gui.client_side.disable")
-                : new TranslatableComponent("gui.client_side.enable");
+            new TranslatableComponent("gui.client_side.disable")
+            : new TranslatableComponent("gui.client_side.enable");
     }
 
     private TranslatableComponent getHideViaButtonText() {
         return ViaFabric.config.isHideButton() ?
-                new TranslatableComponent("gui.hide_via_button.disable") : new TranslatableComponent("gui.hide_via_button.enable");
+            new TranslatableComponent("gui.hide_via_button.disable") : new TranslatableComponent("gui.hide_via_button.enable");
     }
 
     private void onHideViaButton(Button widget) {

@@ -19,14 +19,12 @@ package com.viaversion.fabric.common.util;
 
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.ProtocolPathEntry;
 import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
 import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.packet.provider.PacketTypeMap;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -34,8 +32,8 @@ import java.util.stream.Stream;
 public class ProtocolUtils {
     public static boolean isSupportedClientSide(ProtocolVersion server) {
         return isSupported(server, Via.getManager().getProviders()
-                .get(NativeVersionProvider.class)
-                .getNativeServerProtocolVersion());
+            .get(NativeVersionProvider.class)
+            .getNativeServerProtocolVersion());
     }
 
     public static boolean isSupported(ProtocolVersion server, ProtocolVersion client) {
@@ -62,12 +60,12 @@ public class ProtocolUtils {
             } catch (NumberFormatException e2) {
                 if (ProtocolVersion.getClosest(s) != null) return true;
                 return ProtocolVersion.getProtocols().stream()
-                        .map(ProtocolVersion::getName)
-                        .flatMap(str -> Stream.concat(
-                                Arrays.stream(str.split("-")),
-                                Arrays.stream(new String[]{str})
-                        ))
-                        .anyMatch(ver -> ver.startsWith(s));
+                    .map(ProtocolVersion::getName)
+                    .flatMap(str -> Stream.concat(
+                        Arrays.stream(str.split("-")),
+                        Arrays.stream(new String[]{str})
+                    ))
+                    .anyMatch(ver -> ver.startsWith(s));
             }
         }
     }
@@ -84,14 +82,14 @@ public class ProtocolUtils {
 
     public static String[] getProtocolSuggestions(String text) {
         return ProtocolVersion.getProtocols().stream()
-                .map(ProtocolVersion::getName)
-                .flatMap(str -> Stream.concat(
-                        Arrays.stream(str.split("-")),
-                        Arrays.stream(new String[]{str})
-                ))
-                .distinct()
-                .filter(ver -> ver.startsWith(text))
-                .toArray(String[]::new);
+            .map(ProtocolVersion::getName)
+            .flatMap(str -> Stream.concat(
+                Arrays.stream(str.split("-")),
+                Arrays.stream(new String[]{str})
+            ))
+            .distinct()
+            .filter(ver -> ver.startsWith(text))
+            .toArray(String[]::new);
     }
 
     // Stolen from https://github.com/ViaVersion/ViaLoader/blob/main/src/main/java/com/viaversion/vialoader/util/PacketTypeUtil.java

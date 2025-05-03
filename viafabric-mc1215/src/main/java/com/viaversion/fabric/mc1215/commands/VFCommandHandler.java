@@ -42,8 +42,8 @@ public class VFCommandHandler extends ViaCommandHandler {
         } catch (IllegalArgumentException ignored) {
         }
         onCommand(
-                new NMSCommandSender(ctx.getSource()),
-                args
+            new NMSCommandSender(ctx.getSource()),
+            args
         );
         return 1;
     }
@@ -59,13 +59,13 @@ public class VFCommandHandler extends ViaCommandHandler {
         pref[pref.length - 1] = "";
         String prefix = String.join(" ", pref);
         onTabComplete(new NMSCommandSender(ctx.getSource()), args)
-                .stream()
-                .map(it -> {
-                    SuggestionsBuilder b = new SuggestionsBuilder(builder.getInput(), prefix.length() + builder.getStart());
-                    b.suggest(it);
-                    return b;
-                })
-                .forEach(builder::add);
+            .stream()
+            .map(it -> {
+                SuggestionsBuilder b = new SuggestionsBuilder(builder.getInput(), prefix.length() + builder.getStart());
+                b.suggest(it);
+                return b;
+            })
+            .forEach(builder::add);
         return builder.buildFuture();
     }
 }

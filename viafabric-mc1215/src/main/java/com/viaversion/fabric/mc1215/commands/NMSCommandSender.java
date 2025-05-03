@@ -19,6 +19,8 @@ package com.viaversion.fabric.mc1215.commands;
 
 import com.viaversion.viaversion.api.command.ViaCommandSender;
 import com.viaversion.viaversion.util.ComponentUtil;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -26,8 +28,6 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 public class NMSCommandSender implements ViaCommandSender {
     private final SharedSuggestionProvider provider;

@@ -48,6 +48,6 @@ public class FabricVersionProvider extends AbstractFabricVersionProvider {
     @Override
     protected boolean isMulticonnectHandler(ChannelPipeline pipe) {
         return pipe.get(Connection.class).getPacketListener()
-                .getClass().getName().startsWith("net.earthcomputer.multiconnect");
+            .getClass().getName().startsWith("net.earthcomputer.multiconnect");
     }
 }

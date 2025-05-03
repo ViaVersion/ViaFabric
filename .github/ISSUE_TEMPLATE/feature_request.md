@@ -12,7 +12,9 @@ A clear and concise description of what the problem is. Ex. I'm always frustrate
 
 **Is this related specifically to ViaFabric?**
 (Optional)
-- [ ] It seems to not apply for ViaVersion/ViaBackwards/ViaRewind installed on Bukkit/BungeeCord/Sponge/Velocity servers.
+
+- [ ] It seems to not apply for ViaVersion/ViaBackwards/ViaRewind installed on Bukkit/BungeeCord/Sponge/Velocity
+  servers.
 
 **Describe the solution you'd like**
 A clear and concise description of what you want to happen.

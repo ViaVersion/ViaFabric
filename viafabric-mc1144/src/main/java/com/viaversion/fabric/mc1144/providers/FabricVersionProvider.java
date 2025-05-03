@@ -22,7 +22,6 @@ import com.viaversion.fabric.common.provider.AbstractFabricVersionProvider;
 import com.viaversion.fabric.mc1144.ViaFabric;
 import com.viaversion.fabric.mc1144.service.ProtocolAutoDetector;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-
 import java.net.InetSocketAddress;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
