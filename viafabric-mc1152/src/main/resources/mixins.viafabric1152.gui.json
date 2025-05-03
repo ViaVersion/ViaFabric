@@ -3,9 +3,9 @@
   "compatibilityLevel": "JAVA_8",
   "package": "com.viaversion.fabric.mc1152.mixin.gui",
   "mixins": [
-    "client.MixinServerStatusPingerListener"
   ],
   "client": [
+    "client.MixinServerStatusPingerListener",
     "client.MixinJoinMultiplayerScreen",
     "client.MixinOnlineServerEntry",
     "client.MixinServerData"

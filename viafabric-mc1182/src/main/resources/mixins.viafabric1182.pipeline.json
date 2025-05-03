@@ -4,9 +4,7 @@
   "package": "com.viaversion.fabric.mc1182.mixin.pipeline",
   "mixins": [
     "MixinConnection",
-    "MixinServerConnectionListenerChInit",
-    "client.MixinConnection",
-    "client.MixinConnectionChInit"
+    "MixinServerConnectionListenerChInit"
   ],
   "client": [
     "client.MixinConnection",
