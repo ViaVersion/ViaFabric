@@ -7,7 +7,7 @@
   "gui.viafabric_config.title": "ViaFabricu seadistused",
   "gui.client_side.enable": "Luba kliendipoolne",
   "gui.client_side.disable": "Keela kliendipoolne",
-  "gui.ping_version.translated": "VIA: %s",
+  "gui.ping_version.translated": "VIA: %s (%s)",
   "gui.hide_via_button.enable": "Peida VIA nupp",
   "gui.hide_via_button.disable": "Kuva VIA nuppu",
   "gui.via_button": "VIA"

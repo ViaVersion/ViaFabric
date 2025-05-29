@@ -7,7 +7,7 @@
   "gui.viafabric_config.title": "ViaFabric Konfigürasyonu",
   "gui.client_side.enable": "Alıcı-tarafı aktive et",
   "gui.client_side.disable": "Alıcı-tarafı devre dışı bırak",
-  "gui.ping_version.translated": "VIA: %s",
+  "gui.ping_version.translated": "VIA: %s (%s)",
   "gui.hide_via_button.enable": "VIA tuşunu gizle",
   "gui.hide_via_button.disable": "VIA tuşunu göster",
   "gui.via_button": "VIA"
