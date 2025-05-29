@@ -7,7 +7,7 @@
   "gui.viafabric_config.title": "ViaFabric-configuraties",
   "gui.client_side.enable": "Klantenservice inschakelen",
   "gui.client_side.disable": "Cliëntenservice uitschakelen",
-  "gui.ping_version.translated": "VIA: %s",
+  "gui.ping_version.translated": "VIA: %s (%s)",
   "gui.hide_via_button.enable": "VIA-knop verbergen",
   "gui.hide_via_button.disable": "Toon VIA-knop",
   "gui.via_button": "VIA"

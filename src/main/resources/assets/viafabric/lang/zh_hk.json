@@ -7,7 +7,7 @@
   "gui.viafabric_config.title": "ViaFabric 配置",
   "gui.client_side.enable": "啟用客戶端模式",
   "gui.client_side.disable": "禁用客戶端模式",
-  "gui.ping_version.translated": "轉換為：%s（%s）",
+  "gui.ping_version.translated": "VIA: %s (%s)",
   "gui.hide_via_button.enable": "隱藏 VIA 按鈕",
   "gui.hide_via_button.disable": "顯示 VIA 按鈕",
   "gui.via_button": "VIA"
