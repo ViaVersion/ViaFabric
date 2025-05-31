@@ -2,7 +2,7 @@
   "gui.protocol_version_field.name": "協議版本",
   "gui.enable_client_side_button": "啟用 ViaVersion",
   "gui.enable_client_side.question": "你確定要啟用客戶端模式？",
-  "gui.enable_client_side.warning": "作者唔保證所有嘅服務器都允許你使用這個模組。這個模組可能使你被反作弊插件誤判。使用後果自負！",
+  "gui.enable_client_side.warning": "我哋唔能夠保證某啲伺服器會允許呢個模組，因為呢個模組可能會誤觸反作弊插件。(請謹慎地使用！)",
   "gui.enable_client_side.enable": "啟用",
   "gui.viafabric_config.title": "ViaFabric 配置",
   "gui.client_side.enable": "啟用客戶端模式",
