@@ -193,9 +193,8 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
             mod.getMetadata().getAuthors().stream().map(it -> {
                 JsonObject info = new JsonObject();
                 JsonObject contact = new JsonObject();
-                it.getContact().asMap().entrySet()
-                    .forEach(c -> contact.addProperty(c.getKey(), c.getValue()));
-                if (contact.size() != 0) {
+                it.getContact().asMap().forEach(contact::addProperty);
+                if (!contact.isEmpty()) {
                     info.add("contact", contact);
                 }
                 info.addProperty("name", it.getName());
@@ -212,6 +211,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
         if (ver != null) {
             platformSpecific.addProperty("native version", ver.getNativeServerProtocolVersion().getVersion());
         }
+        platformSpecific.addProperty("environment", FabricLoader.getInstance().getEnvironmentType().name());
         return platformSpecific;
     }
 
