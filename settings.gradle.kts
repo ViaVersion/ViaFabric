@@ -16,7 +16,7 @@ include("viafabric-mc1182")
 include("viafabric-mc1194")
 include("viafabric-mc1201")
 include("viafabric-mc1206")
-include("viafabric-mc1215")
+include("viafabric-mc1216")
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
