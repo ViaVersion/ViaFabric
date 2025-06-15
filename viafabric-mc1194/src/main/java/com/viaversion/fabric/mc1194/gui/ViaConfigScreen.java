@@ -160,7 +160,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
     @Override
     public void render(PoseStack matrices, int mouseX, int mouseY, float delta) {
         this.renderBackground(matrices);
-        drawCenteredString(matrices, this.font, this.title, this.width / 2, 20, 16777215);
+        drawCenteredString(matrices, this.font, this.title, this.width / 2, 20, 0xFFFFFFFF);
         super.render(matrices, mouseX, mouseY, delta);
     }
 

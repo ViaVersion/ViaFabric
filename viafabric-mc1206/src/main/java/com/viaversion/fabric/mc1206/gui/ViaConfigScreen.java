@@ -160,7 +160,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
     @Override
     public void render(GuiGraphics drawContext, int mouseX, int mouseY, float delta) {
         super.render(drawContext, mouseX, mouseY, delta);
-        drawContext.drawCenteredString(this.font, this.title, this.width / 2, 20, 16777215);
+        drawContext.drawCenteredString(this.font, this.title, this.width / 2, 20, 0xFFFFFFFF);
     }
 
     @Override

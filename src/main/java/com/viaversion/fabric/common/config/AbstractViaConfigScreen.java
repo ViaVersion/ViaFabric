@@ -25,10 +25,10 @@ public interface AbstractViaConfigScreen {
     String VERSION_TRANSLATE_ID = "gui.protocol_version_field.name";
 
     default int getProtocolTextColor(ProtocolVersion version, boolean parsedValid) {
-        if (!parsedValid) return 0xff0000; // Red
-        if (!ProtocolUtils.isValid(version)) return 0x5555FF; // Blue
-        if (!ProtocolUtils.isSupportedClientSide(version)) return 0xFFA500; // Orange
-        return 0xE0E0E0; // Default
+        if (!parsedValid) return 0xFFFF0000; // Red
+        if (!ProtocolUtils.isValid(version)) return 0xFF5555FF; // Blue
+        if (!ProtocolUtils.isSupportedClientSide(version)) return 0xFFFFA500; // Orange
+        return 0xFFE0E0E0; // Default
     }
 
     default int calculatePosX(int width, int entryNumber) {
