@@ -57,12 +57,8 @@
     ]
   },
   "depends": {
-    "fabric-resource-loader-v0": "*",
     "minecraft": "1.18.2",
     "viafabric": "*"
-  },
-  "recommends": {
-    "fabric-command-api-v1": "*"
   },
   "breaks": {
     "replaymod": "<=1.18.2-2.6.15"
