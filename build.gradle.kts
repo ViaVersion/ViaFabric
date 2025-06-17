@@ -1,7 +1,7 @@
 plugins {
     id("java")
     id("maven-publish")
-    id("org.ajoberstar.grgit") version "5.3.0"
+    id("org.ajoberstar.grgit") version "5.3.2"
     id("fabric-loom") version "1.10-SNAPSHOT"
     id("com.github.ben-manes.versions") version "0.52.0"
     id("xyz.wagyourtail.jvmdowngrader") version "0.7.1"
