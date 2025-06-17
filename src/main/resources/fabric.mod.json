@@ -12,11 +12,7 @@
     "discord": "https://discord.gg/viaversion"
   },
   "depends": {
-    "fabric-command-api-v1": "*",
-    "fabric-networking-sync-v1": "*",
-    "fabric-registry-sync-v0": "*",
-    "fabric-resource-loader-v0": "*",
-    "fabric-screen-api-v1": "*",
+    "fabric": "*",
     "minecraft": [
       "1.14.4",
       "1.15.2",
