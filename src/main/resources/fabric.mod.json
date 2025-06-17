@@ -12,6 +12,7 @@
     "discord": "https://discord.gg/viaversion"
   },
   "depends": {
+    "fabric": "*",
     "minecraft": [
       "1.14.4",
       "1.15.2",
