@@ -26,7 +26,7 @@ public class ViaFabric implements ModInitializer {
         if (FabricLoader.getInstance().getAllMods()
                 .stream()
                 .noneMatch(it -> it.getMetadata().getId().startsWith("viafabric-mc"))) {
-            throw new IllegalStateException("ViaFabric sub-mod didn't load correctly. Check if required dependencies are installed");
+            throw new IllegalStateException("ViaFabric sub-mod didn't load correctly. Please ensure you have Fabric API installed from here: https://modrinth.com/mod/fabric-api/versions");
         }
     }
 }

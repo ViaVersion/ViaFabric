@@ -1,7 +1,10 @@
+import com.google.gson.JsonParser
+import java.nio.file.Files
+
 plugins {
     id("java")
     id("maven-publish")
-    id("org.ajoberstar.grgit") version "5.3.0"
+    id("org.ajoberstar.grgit") version "5.3.2"
     id("fabric-loom") version "1.10-SNAPSHOT"
     id("legacy-looming") version "1.10-SNAPSHOT" apply false // Version = fabric-loom
     id("com.github.ben-manes.versions") version "0.52.0"
@@ -12,7 +15,7 @@ plugins {
 private val env = System.getenv()
 group = "com.viaversion.fabric"
 description = "Client-side and server-side ViaVersion implementation for Fabric"
-version = "0.4.18+" + env["GITHUB_RUN_NUMBER"] + "-" + getBranch()
+version = "0.4.19+" + env["GITHUB_RUN_NUMBER"] + "-" + getBranch()
 
 fun getBranch(): String {
     val branch = env["GITHUB_REF"] ?: grgit.branch.current().name ?: "unknown"
@@ -133,6 +136,29 @@ tasks.remapJar.configure {
         subproject.tasks.matching { it.name == "remapJar" }.configureEach {
             nestedJars.from(this)
         }
+    }
+}
+
+tasks.processResources {
+    filesMatching("assets/*/lang/*.lang") {
+        val langMap = mutableMapOf<String, String>()
+        val langDir = rootProject.file("src/main/resources/assets/viafabric/lang").toPath()
+
+        Files.list(langDir)
+            .filter { it.toString().endsWith(".json") }
+            .forEach { path ->
+                val json = JsonParser.parseReader(Files.newBufferedReader(path)).asJsonObject
+                val legacyFile = buildString {
+                    appendLine()
+                    json.entrySet().forEach { entry ->
+                        appendLine("${entry.key}=${entry.value.asString}")
+                    }
+                }
+                val langKey = path.fileName.toString().removeSuffix(".json")
+                langMap[langKey] = legacyFile
+            }
+
+        expand(langMap)
     }
 }
 
