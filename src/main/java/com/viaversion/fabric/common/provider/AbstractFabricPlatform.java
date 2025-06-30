@@ -178,7 +178,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
 
         customPayload.write(Types.STRING, channel);
         customPayload.write(Types.REMAINING_BYTES, message);
-        customPayload.scheduleSendToServer(InitialBaseProtocol.class);
+        customPayload.scheduleSendToServerRaw();
     }
 
     @Override
