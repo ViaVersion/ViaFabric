@@ -33,7 +33,6 @@ import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
 import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.libs.gson.JsonArray;
 import com.viaversion.viaversion.libs.gson.JsonObject;
-import com.viaversion.viaversion.protocols.base.InitialBaseProtocol;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
@@ -177,7 +176,7 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
 
         customPayload.write(Types.STRING, channel);
         customPayload.write(Types.REMAINING_BYTES, message);
-        customPayload.sendToServer(InitialBaseProtocol.class);
+        customPayload.scheduleSendToServerRaw();
     }
 
     @Override
