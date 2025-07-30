@@ -1,3 +1,4 @@
+# If you need help, you can join our Discord - https://viaversion.com/discord
 # Disclaimer:
 #
 # It cannot be guaranteed that this mod is allowed on specific servers as it can possibly cause problems with anti-cheat plugins, (USE ONLY WITH CAUTION!)
@@ -10,7 +11,7 @@ hide-button: false
 # List of servers which ViaFabric will force disable transforming on client-side. It can be overwritten by setting per-server version.
 #
 # This isn't always the address in multiplayer menu; It will use the SRV record pointer when present, Check the game log for the address.
-# Uses https://wiki.vg/Mojang_API#Blocked_Servers format (mc.example.com, *.example.com, 192.168.0.1, 192.168.*)
+# Uses the following format: mc.example.com, *.example.com, 192.168.0.1, 192.168.*
 client-side-force-disable: [ "hypixel.net", "*.hypixel.net", "minemen.club", "*.minemen.club", "icantjoinlmfao.club" ]
 # Fabric registry synchronization will be disabled when installed server-side and validation errors are ignored when installed on client-side.
 # Note: this setting only works on 1.20.4+ ViaFabric versions, and it might cause issues, use with caution.

@@ -2,8 +2,7 @@
 
 ## Language Files
 
-Language files are under ``src/main/resources/assets/viafabric/lang/``. Please edit ``.json`` files. Create a ``.lang``
-with ``${nameofjson}``, so the build script can convert automatically to the old format.
+Language files are under ``src/main/resources/assets/viafabric/lang/``. Please edit ``.json`` files.
 
 Use capitalization rules from your language. Try to be consistent with Minecraft language files.
 
@@ -14,4 +13,4 @@ language: https://www.un.org/en/gender-inclusive-language/guidelines.shtml
 
 ## Source Code
 
-Use 4 spaces, run code cleanup and ``optipng`` on new png files.
+Apply the .editorconfig file to your IDE, run code cleanup and ``optipng`` on new png files.

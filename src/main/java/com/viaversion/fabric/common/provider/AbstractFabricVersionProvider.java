@@ -158,7 +158,7 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
     }
 
     private ProtocolVersion getVersionForMulticonnect(ProtocolVersion clientSideVersion) {
-        // https://github.com/ViaVersion/ViaVersion/blob/master/velocity/src/main/java/us/myles/ViaVersion/velocity/providers/VelocityVersionProvider.java
+        // https://github.com/ViaVersion/ViaVersion/blob/master/velocity/src/main/java/com/viaversion/viaversion/velocity/providers/VelocityVersionProvider.java
         int[] compatibleProtocols = multiconnectSupportedVersions;
 
         if (Arrays.binarySearch(compatibleProtocols, clientSideVersion.getVersion()) >= 0) {

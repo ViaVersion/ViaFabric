@@ -19,7 +19,7 @@ package com.viaversion.fabric.common.util;
 
 public class RemappingUtil {
     public static int swordId(String id) {
-        // https://github.com/ViaVersion/ViaVersion/blob/8de26a0ad33f5b739f5394ed80f69d14197fddc7/common/src/main/java/us/myles/ViaVersion/protocols/protocol1_9to1_8/Protocol1_9To1_8.java#L86
+        // https://github.com/ViaVersion/ViaVersion/blob/fd5dadbe01b4e522def2b0509ef6e831c1ce881d/common/src/main/java/com/viaversion/viaversion/protocols/v1_8to1_9/Protocol1_8To1_9.java#L68
         switch (id) {
             case "minecraft:iron_sword":
                 return 267;
