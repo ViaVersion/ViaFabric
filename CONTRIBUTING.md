@@ -14,4 +14,4 @@ language: https://www.un.org/en/gender-inclusive-language/guidelines.shtml
 
 ## Source Code
 
-Use 4 spaces, run code cleanup and ``optipng`` on new png files.
+Apply the .editorconfig file to your IDE, run code cleanup and ``optipng`` on new png files.
