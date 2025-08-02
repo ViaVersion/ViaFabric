@@ -1,29 +1,36 @@
-# eclipse
-eclipse
-bin
+# Gradle
+
+.gradle/
+build/
+out/
+classes/
+.kotlin/
+
+# Eclipse
+
 *.launch
-.settings
-.metadata
+
+# Idea
+
+.idea/
+!.idea/copyright/*
+!.idea/scopes/*
+*.iml
+*.ipr
+*.iws
+
+# VSCode
+
+.settings/
+.vscode/
+bin/
 .classpath
 .project
 
-# idea
-out
-classes
-*.ipr
-*.iws
-*.iml
-.idea
+# macOS
 
-# gradle
-build
-.gradle
+DS_Store
 
-#Netbeans
-.nb-gradle
-.nb-gradle-properties
+# Misc
 
-# other
-run
-.DS_Store
-Thumbs.db
+run/
