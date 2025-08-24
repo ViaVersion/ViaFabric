@@ -1,0 +1,15 @@
+{
+  "gui.protocol_version_field.name": "Протокол версії",
+  "gui.enable_client_side_button": "Увімкнути ViaVersion",
+  "gui.enable_client_side.question": "Ви впевнені, що бажаєте ввімкнути режим клієнта?",
+  "gui.enable_client_side.warning": "Не можна гарантувати, що цей мод дозволений на певних серверах, оскільки він може спричинити проблеми з античитами. (ВИКОРИСТУЙТЕ ЛИШЕ З ОБЕРЕЖНОСТЮ!)",
+  "gui.enable_client_side.enable": "Увімкнути",
+  "gui.viafabric_config.title": "Налаштування ViaFabric",
+  "gui.client_side.enable": "Увімкнути на клієнті",
+  "gui.client_side.disable": "Вимкнути на клієнті",
+  "gui.ping_version.translated": "VIA: %s (%s)",
+  "gui.hide_via_button.enable": "Приховати кнопку VIA",
+  "gui.hide_via_button.disable": "Показати кнопку VIA",
+  "gui.via_button": "VIA",
+  "modmenu.descriptionTranslation.viafabric": "Клієнтська та серверна версія мода ViaVersion, впроваджена для Fabric"
+}
