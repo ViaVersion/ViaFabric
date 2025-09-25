@@ -46,7 +46,7 @@ public class FabricDecodeHandler extends MessageToMessageDecoder<ByteBuf> {
     // https://github.com/ViaVersion/ViaVersion/blob/master/velocity/src/main/java/com/viaversion/viaversion/velocity/handlers/VelocityDecodeHandler.java
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf bytebuf, List<Object> out) throws Exception {
-        if (!info.checkIncomingPacket()) throw CancelDecoderException.generate(null);
+        if (!info.checkIncomingPacket(bytebuf.readableBytes())) throw CancelDecoderException.generate(null);
         if (!info.shouldTransformPacket()) {
             out.add(bytebuf.retain());
             return;
