@@ -10,7 +10,7 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod can be installed on 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.6, 1.21.7, 1.21.8 with Fabric Loader.
+This mod can be installed on 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.6, 1.21.7, 1.21.9 with Fabric Loader.
 
 The `legacy` branch also supports Legacy Fabric 1.8.9 and 1.12.2 versions.
 
@@ -65,7 +65,7 @@ registry synchronization (fabric-registry-sync mod).
 |                       | 1.8.x | 1.9.x | 1.10-1.20.x | 1.21.x |
 |-----------------------|-------|-------|-------------|--------|
 | 1.14.4-1.20.6 clients | ✓     | ✓     | ✓           | ⟲      | ⟲   ⟲ | ⟲ | ⟲ | ⟲ | ⟲ |
-| 1.21.8 client         | ✓     | ✓     | ✓           | ✓      | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| 1.21.9 client         | ✓     | ✓     | ✓           | ✓      | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪
 = [ViaRewind](https://viaversion.com/rewind)
