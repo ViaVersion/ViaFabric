@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_21",
+  "package": "com.viaversion.fabric.mc1219.mixin.address",
+  "mixins": [
+  ],
+  "client": [
+    "client.MixinServerNameResolver"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_21",
+  "package": "com.viaversion.fabric.mc1219.mixin.gui",
+  "mixins": [
+  ],
+  "client": [
+    "client.MixinOnlineServerEntry",
+    "client.MixinServerData",
+    "client.MixinServerStatusPingerListener"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}
