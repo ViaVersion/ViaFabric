@@ -27,16 +27,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
-import net.minecraft.client.gui.components.debug.DebugScreenEntries;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class ViaFabricClient implements ClientModInitializer {
+    public static final ResourceLocation DEBUG_ENTRY = MixinDebugScreenEntriesAccessor.register("viafabric", new DebugEntryViaFabric());
+
     @Override
     public void onInitializeClient() {
         registerGui();
-        MixinDebugScreenEntriesAccessor.register("viafabric", new DebugEntryViaFabric());
     }
 
     private void registerGui() {
