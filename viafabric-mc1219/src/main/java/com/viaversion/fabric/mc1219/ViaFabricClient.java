@@ -17,23 +17,21 @@
  */
 package com.viaversion.fabric.mc1219;
 
-import com.viaversion.fabric.mc1219.gui.DebugEntryViaFabric;
 import com.viaversion.fabric.mc1219.gui.ViaConfigScreen;
-import com.viaversion.fabric.mc1219.mixin.debug.client.MixinDebugScreenEntriesAccessor;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import java.util.List;
 
 public class ViaFabricClient implements ClientModInitializer {
-    public static final ResourceLocation DEBUG_ENTRY = MixinDebugScreenEntriesAccessor.register("viafabric", new DebugEntryViaFabric());
-
     private Button enableClientSideViaVersion;
 
     @Override
@@ -44,18 +42,27 @@ public class ViaFabricClient implements ClientModInitializer {
     private void registerGui() {
         try {
             ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
-                if (!(screen instanceof JoinMultiplayerScreen)) return;
+                if (!(screen instanceof JoinMultiplayerScreen)) {
+                    return;
+                }
+
                 if (enableClientSideViaVersion == null) {
                     enableClientSideViaVersion = new ImageButton(-1, 10,
                         40, 20, // Size
                         new WidgetSprites(ResourceLocation.fromNamespaceAndPath("viafabric", "widget_unfocused"), ResourceLocation.fromNamespaceAndPath("viafabric", "widget_focused")),
                         it -> Minecraft.getInstance().setScreen(new ViaConfigScreen(screen)),
                         Component.translatable("gui.via_button"));
-                    Screens.getButtons(screen).add(enableClientSideViaVersion);
                 }
-                enableClientSideViaVersion.setX(scaledWidth / 2 + 113);
 
-                if (ViaFabric.config.isHideButton()) enableClientSideViaVersion.visible = false;
+                enableClientSideViaVersion.setX(scaledWidth / 2 + 113);
+                if (ViaFabric.config.isHideButton()) {
+                    enableClientSideViaVersion.visible = false;
+                }
+
+                List<AbstractWidget> buttons = Screens.getButtons(screen);
+                if (!buttons.contains(enableClientSideViaVersion)) {
+                    buttons.add(enableClientSideViaVersion);
+                }
             });
         } catch (NoClassDefFoundError ignored) {
             ViaFabric.JLOGGER.info("Couldn't register screen handler as Fabric Screen isn't installed");
