@@ -34,6 +34,8 @@ import net.minecraft.resources.ResourceLocation;
 public class ViaFabricClient implements ClientModInitializer {
     public static final ResourceLocation DEBUG_ENTRY = MixinDebugScreenEntriesAccessor.register("viafabric", new DebugEntryViaFabric());
 
+    private Button enableClientSideViaVersion;
+
     @Override
     public void onInitializeClient() {
         registerGui();
@@ -43,13 +45,17 @@ public class ViaFabricClient implements ClientModInitializer {
         try {
             ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> {
                 if (!(screen instanceof JoinMultiplayerScreen)) return;
-                Button enableClientSideViaVersion = new ImageButton(scaledWidth / 2 + 113, 10,
-                    40, 20, // Size
-                    new WidgetSprites(ResourceLocation.fromNamespaceAndPath("viafabric", "widget_unfocused"), ResourceLocation.fromNamespaceAndPath("viafabric", "widget_focused")),
-                    it -> Minecraft.getInstance().setScreen(new ViaConfigScreen(screen)),
-                    Component.translatable("gui.via_button"));
+                if (enableClientSideViaVersion == null) {
+                    enableClientSideViaVersion = new ImageButton(-1, 10,
+                        40, 20, // Size
+                        new WidgetSprites(ResourceLocation.fromNamespaceAndPath("viafabric", "widget_unfocused"), ResourceLocation.fromNamespaceAndPath("viafabric", "widget_focused")),
+                        it -> Minecraft.getInstance().setScreen(new ViaConfigScreen(screen)),
+                        Component.translatable("gui.via_button"));
+                    Screens.getButtons(screen).add(enableClientSideViaVersion);
+                }
+                enableClientSideViaVersion.setX(scaledWidth / 2 + 113);
+
                 if (ViaFabric.config.isHideButton()) enableClientSideViaVersion.visible = false;
-                Screens.getButtons(screen).add(enableClientSideViaVersion);
             });
         } catch (NoClassDefFoundError ignored) {
             ViaFabric.JLOGGER.info("Couldn't register screen handler as Fabric Screen isn't installed");
