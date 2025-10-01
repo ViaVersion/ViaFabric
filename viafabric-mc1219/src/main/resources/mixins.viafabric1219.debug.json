@@ -9,8 +9,7 @@
     "client.MixinClientPacketListener",
     "client.MixinConnection",
     "client.MixinConnectionAccessor",
-    "client.MixinDebugScreenEntriesAccessor",
-    "client.MixinDebugScreenEntryList",
+    "client.MixinDebugScreenEntries",
     "client.MixinRegistrySyncManager"
   ],
   "injectors": {
