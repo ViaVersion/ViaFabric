@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "id": "viafabric-mc1219",
-  "name": "ViaFabric for 1.21.9",
+  "id": "viafabric-mc12110",
+  "name": "ViaFabric for 1.21.10",
   "version": "${version}",
   "description": "${description}",
   "license": "GPL-3.0",
@@ -58,7 +58,7 @@
   },
   "depends": {
     "fabric-resource-loader-v0": "*",
-    "minecraft": "1.21.9",
+    "minecraft": "1.21.10",
     "viafabric": "*"
   },
   "recommends": {
