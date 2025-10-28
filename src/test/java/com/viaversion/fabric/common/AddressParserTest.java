@@ -79,8 +79,8 @@ public class AddressParserTest {
             params("[::]._v1_8.viafabric", "[::]", null,
                 ProtocolVersion.v1_8),
 
-            params("localhost._v1_7_2._v1_16_5.viafabric", "localhost", null,
-                ProtocolVersion.v1_7_2, ProtocolVersion.v1_16_4),
+            params("localhost._v1_8._v1_16_5.viafabric", "localhost", null,
+                ProtocolVersion.v1_8, ProtocolVersion.v1_16_4),
 
             params("0.0.0.0._v1_8._v1_9.v_1_21.viafabric", "0.0.0.0", null,
                 ProtocolVersion.v1_8, ProtocolVersion.v1_9, ProtocolVersion.v1_21),
@@ -114,8 +114,8 @@ public class AddressParserTest {
             params("viafabric.v1.8;[::]", "[::]", null,
                 ProtocolVersion.v1_8),
 
-            params("viafabric.v1.7.2+v1.16.5;localhost", "localhost", null,
-                ProtocolVersion.v1_7_2, ProtocolVersion.v1_16_4),
+            params("viafabric.v1.8+v1.16.5;localhost", "localhost", null,
+                ProtocolVersion.v1_8, ProtocolVersion.v1_16_4),
 
             params("viafabric.v1.8+v1.9+v1.21;0.0.0.0", "0.0.0.0", null,
                 ProtocolVersion.v1_8, ProtocolVersion.v1_9, ProtocolVersion.v1_21),
