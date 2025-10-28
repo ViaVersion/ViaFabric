@@ -121,13 +121,21 @@ dependencies {
 
     includeJ8("com.viaversion:viaversion:${rootProject.extra["viaver_version"]}")
     include("io.github.cottonmc:cotton-client-commands:1.1.0+1.15.2")
+
+    testImplementation("org.testng:testng:6.13.1")
 }
 
-tasks.remapJar.configure {
-    nestedJars.from(includeJ8)
-    subprojects.forEach { subproject ->
-        subproject.tasks.matching { it.name == "remapJar" }.configureEach {
-            nestedJars.from(this)
+tasks {
+    test {
+        useTestNG()
+    }
+
+    remapJar.configure {
+        nestedJars.from(includeJ8)
+        subprojects.forEach { subproject ->
+            subproject.tasks.matching { it.name == "remapJar" }.configureEach {
+                nestedJars.from(this)
+            }
         }
     }
 }

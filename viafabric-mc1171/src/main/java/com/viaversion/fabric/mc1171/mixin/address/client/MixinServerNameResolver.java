@@ -40,22 +40,20 @@ public abstract class MixinServerNameResolver {
 
     @Inject(method = "resolveAddress", at = @At(value = "HEAD"), cancellable = true)
     private void resolveVF(ServerAddress address, CallbackInfoReturnable<Optional<ResolvedServerAddress>> cir) {
-        AddressParser viaAddr = new AddressParser().parse(address.getHost());
-        if (viaAddr.viaSuffix == null) {
+        AddressParser viaAddr = AddressParser.parse(address.getHost());
+        if (!viaAddr.hasViaMetadata()) {
             return;
         }
 
-        ServerAddress realAddress = new ServerAddress(viaAddr.serverAddress, address.getPort());
+        ServerAddress realAddress = new ServerAddress(viaAddr.serverAddress(), address.getPort());
 
-        cir.setReturnValue(resolveAddress(realAddress).map(it -> viaFabric$addSuffix(it, viaAddr.getSuffixWithOptions())));
+        cir.setReturnValue(resolveAddress(realAddress).map(it -> viaFabric$addSuffix(it, viaAddr)));
     }
 
     @Unique
-    private ResolvedServerAddress viaFabric$addSuffix(ResolvedServerAddress it, String viaSuffix) {
+    private ResolvedServerAddress viaFabric$addSuffix(ResolvedServerAddress it, AddressParser viaAddr) {
         try {
-            return ResolvedServerAddress.from(new InetSocketAddress(
-                InetAddress.getByAddress(it.getHostName() + "." + viaSuffix,
-                    it.asInetSocketAddress().getAddress().getAddress()), it.getPort()));
+            return ResolvedServerAddress.from(viaAddr.addAddressSuffix(it.asInetSocketAddress()));
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }

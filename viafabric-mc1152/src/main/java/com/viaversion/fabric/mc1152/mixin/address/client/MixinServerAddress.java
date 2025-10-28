@@ -17,30 +17,33 @@
  */
 package com.viaversion.fabric.mc1152.mixin.address.client;
 
+import com.llamalad7.mixinextras.sugar.Share;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.viaversion.fabric.common.AddressParser;
 import net.minecraft.client.multiplayer.ServerAddress;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(ServerAddress.class)
 public abstract class MixinServerAddress {
-    @Shadow
-    private static String[] lookupSrv(String address) {
-        throw new AssertionError();
+
+    @ModifyVariable(method = "parseString", at = @At("HEAD"), argsOnly = true)
+    private static String modifyAddress(String address, @Share("via") LocalRef<AddressParser> via) {
+        AddressParser parser = AddressParser.parse(address);
+        via.set(parser);
+
+        return parser.toAddress();
     }
 
-    @Redirect(method = "parseString", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ServerAddress;lookupSrv(Ljava/lang/String;)[Ljava/lang/String;"))
-    private static String[] modifySrvAddr(String address) {
-        AddressParser viaAddr = new AddressParser().parse(address);
-        if (viaAddr.viaSuffix == null) {
-            return lookupSrv(address);
+    @ModifyArg(method = "parseString", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ServerAddress;<init>(Ljava/lang/String;I)V"))
+    private static String injectViaMetadata(String original, int port, @Share("via") LocalRef<AddressParser> via) {
+        final AddressParser parser = via.get();
+        if (parser == null) {
+            return original;
         }
 
-        String[] resolvedSrv = lookupSrv(viaAddr.serverAddress);
-        resolvedSrv[0] = resolvedSrv[0].replaceAll("\\.$", "") + "." + viaAddr.getSuffixWithOptions();
-
-        return resolvedSrv;
+        return parser.addAddressSuffix(original);
     }
 }

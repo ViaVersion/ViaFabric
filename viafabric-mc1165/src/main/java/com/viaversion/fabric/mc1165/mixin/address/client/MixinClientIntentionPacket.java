@@ -17,33 +17,19 @@
  */
 package com.viaversion.fabric.mc1165.mixin.address.client;
 
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.viaversion.fabric.common.AddressParser;
-import net.minecraft.client.multiplayer.ServerAddress;
+import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Mixin(ServerAddress.class)
-public abstract class MixinServerAddress {
-
-    @ModifyVariable(method = "parseString", at = @At("HEAD"), argsOnly = true)
-    private static String modifyAddress(String address, @Share("via") LocalRef<AddressParser> via) {
-        AddressParser parser = AddressParser.parse(address);
-        via.set(parser);
-
-        return parser.toAddress();
-    }
-
-    @ModifyArg(method = "parseString", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ServerAddress;<init>(Ljava/lang/String;I)V"))
-    private static String injectViaMetadata(String original, int port, @Share("via") LocalRef<AddressParser> via) {
-        final AddressParser parser = via.get();
-        if (parser == null) {
-            return original;
-        }
-
-        return parser.addAddressSuffix(original);
+/**
+ * Minimally invasive address sanitiser.
+ **/
+@Mixin(ClientIntentionPacket.class)
+public class MixinClientIntentionPacket {
+    @ModifyVariable(method = "<init>*", at = @At("LOAD"), argsOnly = true)
+    private static String removeViaMetadataFromAddress(String address) {
+        return AddressParser.parse(address).toAddress();
     }
 }

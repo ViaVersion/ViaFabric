@@ -15,12 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.viaversion.fabric.mc1165.mixin.address.client;
+package com.viaversion.fabric.mc1171.mixin.address.client;
 
+import com.google.common.net.HostAndPort;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import com.viaversion.fabric.common.AddressParser;
-import net.minecraft.client.multiplayer.ServerAddress;
+import net.minecraft.client.multiplayer.resolver.ServerAddress;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -37,13 +38,13 @@ public abstract class MixinServerAddress {
         return parser.toAddress();
     }
 
-    @ModifyArg(method = "parseString", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ServerAddress;<init>(Ljava/lang/String;I)V"))
-    private static String injectViaMetadata(String original, int port, @Share("via") LocalRef<AddressParser> via) {
+    @ModifyArg(method = "parseString", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/resolver/ServerAddress;<init>(Lcom/google/common/net/HostAndPort;)V"))
+    private static HostAndPort injectViaMetadata(HostAndPort original, @Share("via") LocalRef<AddressParser> via) {
         final AddressParser parser = via.get();
         if (parser == null) {
             return original;
         }
 
-        return parser.addAddressSuffix(original);
+        return HostAndPort.fromParts(parser.addAddressSuffix(original.getHost()), original.getPort());
     }
 }

@@ -6,6 +6,7 @@
   ],
   "client": [
     "client.MixinConnectScreenThread",
+    "client.MixinClientIntentionPacket",
     "client.MixinServerAddress",
     "client.MixinServerStatusPinger"
   ],

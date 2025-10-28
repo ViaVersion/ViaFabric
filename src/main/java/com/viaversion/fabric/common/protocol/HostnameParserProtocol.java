@@ -38,7 +38,7 @@ public class HostnameParserProtocol extends AbstractSimpleProtocol {
                 map(Types.STRING, new ValueTransformer<String, String>(Types.STRING) {
                     @Override
                     public String transform(PacketWrapper packetWrapper, String s) {
-                        return new AddressParser().parse(s).serverAddress;
+                        return AddressParser.parse(s).serverAddress();
                     }
                 });
             }

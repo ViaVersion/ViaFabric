@@ -94,8 +94,8 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
             SocketAddress addr = connection.getChannel().remoteAddress();
 
             if (addr instanceof InetSocketAddress) {
-                AddressParser parser = new AddressParser();
-                Integer addrVersion = parser.parse(((InetSocketAddress) addr).getHostName()).protocol;
+                AddressParser parser = AddressParser.parse(((InetSocketAddress) addr).getHostName());
+                Integer addrVersion = parser.protocol();
                 if (addrVersion != null) {
                     serverVer = addrVersion;
                 }
