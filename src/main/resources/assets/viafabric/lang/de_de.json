@@ -7,8 +7,6 @@
   "gui.viafabric_config.title": "ViaFabric-Konfigurationen",
   "gui.client_side.enable": "Clientseitig aktivieren",
   "gui.client_side.disable": "Clientseitig deaktivieren",
-  "gui.ping_version.translated": "VIA: %s (%s)",
   "gui.hide_via_button.enable": "VIA Button ausblenden",
-  "gui.hide_via_button.disable": "VIA Button anzeigen",
-  "gui.via_button": "VIA"
+  "gui.hide_via_button.disable": "VIA Button anzeigen"
 }

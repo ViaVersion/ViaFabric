@@ -2,7 +2,7 @@
 
 ## Language Files
 
-Language files are under ``src/main/resources/assets/viafabric/lang/``. Please edit ``.json`` files.
+See the [Crowdin project](https://crowdin.com/project/viafabric) for uploading any new translations.
 
 Use capitalization rules from your language. Try to be consistent with Minecraft language files.
 

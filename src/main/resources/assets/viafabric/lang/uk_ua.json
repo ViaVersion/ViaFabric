@@ -7,9 +7,6 @@
   "gui.viafabric_config.title": "Налаштування ViaFabric",
   "gui.client_side.enable": "Увімкнути на клієнті",
   "gui.client_side.disable": "Вимкнути на клієнті",
-  "gui.ping_version.translated": "VIA: %s (%s)",
   "gui.hide_via_button.enable": "Приховати кнопку VIA",
-  "gui.hide_via_button.disable": "Показати кнопку VIA",
-  "gui.via_button": "VIA",
-  "modmenu.descriptionTranslation.viafabric": "Клієнтська та серверна версія мода ViaVersion, впроваджена для Fabric"
+  "gui.hide_via_button.disable": "Показати кнопку VIA"
 }
