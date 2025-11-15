@@ -10,14 +10,14 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-This mod can be installed on 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.6, 1.21.7, 1.21.10 with Fabric Loader.
-
-The `legacy` branch also supports Legacy Fabric 1.8.9 and 1.12.2 versions.
-
 If you are using the latest Minecraft version and care about the gameplay being more enjoyable/functional, you may want
 to
 check [ViaFabricPlus](https://modrinth.com/mod/viafabricplus) out. See the [differences](#viafabricplus) between
 ViaFabric and ViaFabricPlus.
+
+This mod can be installed on 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.6, 1.21.7, 1.21.10 with Fabric Loader.
+
+The `legacy` branch also supports Legacy Fabric 1.8.9 and 1.12.2 versions.
 
 ## Anti cheat integration
 
@@ -87,7 +87,6 @@ servers in client-side mode.*
 - [ViaForge](https://modrinth.com/mod/viaforge): Clientside Implementation of ViaVersion for Forge.
 - [ViaFabricPlus](https://modrinth.com/mod/viafabricplus): Fabric mod for the latest Minecraft version with QoL fixes
   and enhancements to the gameplay.
-- [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): Discontinued 5zig plugin.
 - [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): Discontinued Fabric mod for connecting to
   older
   versions: down to 1.11 (stable) and 1.8 (experimental).
@@ -121,7 +120,7 @@ servers in client-side mode.*
 
 ### Commands:
 
-- There're 3 server-side alias ``/viaversion``, ``/vvfabric`` and ``/viaver``, and a client-side command
+- There are 3 server-side alias ``/viaversion``, ``/vvfabric`` and ``/viaver``, and a client-side command
   ``/viafabricclient`` for Minecraft 1.14+ (OP permission level 3 is required for these commands, received
   by [Entity Status Packet](https://wiki.vg/Entity_statuses#Player))
 
