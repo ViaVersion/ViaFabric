@@ -1,5 +1,5 @@
 dependencies {
-    minecraft("com.mojang:minecraft:1.21.11-pre3")
+    minecraft("com.mojang:minecraft:1.21.11-pre4")
     mappings(loom.officialMojangMappings())
 
     modImplementation(fabricApi.module("fabric-api-base", "0.138.3+1.21.11"))
