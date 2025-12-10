@@ -15,7 +15,7 @@ to
 check [ViaFabricPlus](https://modrinth.com/mod/viafabricplus) out. See the [differences](#viafabricplus) between
 ViaFabric and ViaFabricPlus.
 
-This mod can be installed on 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.6, 1.21.7, 1.21.11 with Fabric Loader.
+This mod can be installed on 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.6, 1.21.11 with Fabric Loader.
 
 The `legacy` branch also supports Legacy Fabric 1.8.9 and 1.12.2 versions.
 
