@@ -2,7 +2,7 @@ plugins {
     id("java")
     id("maven-publish")
     id("org.ajoberstar.grgit") version "5.3.2"
-    id("fabric-loom") version "1.11-SNAPSHOT"
+    id("fabric-loom") version "1.13-SNAPSHOT"
     id("com.github.ben-manes.versions") version "0.52.0"
     id("xyz.wagyourtail.jvmdowngrader") version "1.3.3"
     id("me.modmuss50.mod-publish-plugin") version "0.8.4"
