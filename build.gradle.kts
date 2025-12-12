@@ -128,38 +128,47 @@ dependencies {
     includeJ8("com.viaversion:viaversion:${rootProject.extra["viaver_version"]}")
     includeJ8("com.viaversion:viabackwards:${rootProject.extra["viaback_version"]}")
     includeJ8("com.viaversion:viarewind:${rootProject.extra["viarewind_version"]}")
+
+    testImplementation("org.testng:testng:6.13.1")
 }
 
-tasks.remapJar.configure {
-    nestedJars.from(includeJ8)
-    subprojects.forEach { subproject ->
-        subproject.tasks.matching { it.name == "remapJar" }.configureEach {
-            nestedJars.from(this)
+tasks {
+    test {
+        useTestNG()
+    }
+
+    remapJar.configure {
+        nestedJars.from(includeJ8)
+        subprojects.forEach { subproject ->
+            subproject.tasks.matching { it.name == "remapJar" }.configureEach {
+                nestedJars.from(this)
+            }
         }
     }
-}
 
-tasks.processResources {
-    filesMatching("assets/*/lang/*.lang") {
-        val langMap = mutableMapOf<String, String>()
-        val langDir = rootProject.file("src/main/resources/assets/viafabric/lang").toPath()
+    processResources {
+        filesMatching("assets/*/lang/*.lang") {
+            val langMap = mutableMapOf<String, String>()
+            val langDir = rootProject.file("src/main/resources/assets/viafabric/lang").toPath()
 
-        Files.list(langDir)
-            .filter { it.toString().endsWith(".json") }
-            .forEach { path ->
-                val json = JsonParser.parseReader(Files.newBufferedReader(path)).asJsonObject
-                val legacyFile = buildString {
-                    appendLine()
-                    json.entrySet().forEach { entry ->
-                        appendLine("${entry.key}=${entry.value.asString}")
+            Files.list(langDir)
+                .filter { it.toString().endsWith(".json") }
+                .forEach { path ->
+                    val json = JsonParser.parseReader(Files.newBufferedReader(path)).asJsonObject
+                    val legacyFile = buildString {
+                        appendLine()
+                        json.entrySet().forEach { entry ->
+                            appendLine("${entry.key}=${entry.value.asString}")
+                        }
                     }
+                    val langKey = path.fileName.toString().removeSuffix(".json")
+                    langMap[langKey] = legacyFile
                 }
-                val langKey = path.fileName.toString().removeSuffix(".json")
-                langMap[langKey] = legacyFile
-            }
 
-        expand(langMap)
+            expand(langMap)
+        }
     }
+
 }
 
 val mcReleases = rootProject.extra["publish_mc_versions"].toString().split(",")

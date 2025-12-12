@@ -10,12 +10,12 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
+If you are using the latest Minecraft version and care about the gameplay being more enjoyable/functional, you may want to
+check [ViaFabricPlus](https://modrinth.com/mod/viafabricplus) out. See the [differences](#viafabricplus) between ViaFabric and ViaFabricPlus.
+
 This mod can be installed on 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.1, 1.20.4, 1.20.6, 1.21.4 with Fabric Loader.
 
 The `legacy` branch also supports Legacy Fabric 1.8.9 and 1.12.2 versions.
-
-If you are using the latest Minecraft version and care about the gameplay being more enjoyable/functional, you may want to
-check [ViaFabricPlus](https://modrinth.com/mod/viafabricplus) out. See the [differences](#viafabricplus) between ViaFabric and ViaFabricPlus.
 
 ## Anti cheat integration
 
@@ -107,7 +107,7 @@ registry synchronization (fabric-registry-sync mod).
 
 ### Commands:
 
-- There're 3 server-side alias ``/viaversion``, ``/vvfabric`` and ``/viaver``, and a client-side command
+- There are 3 server-side alias ``/viaversion``, ``/vvfabric`` and ``/viaver``, and a client-side command
   ``/viafabricclient`` for Minecraft 1.14+ (OP permission level 3 is required for these commands, received
   by [Entity Status Packet](https://wiki.vg/Entity_statuses#Player))
 
@@ -132,9 +132,22 @@ registry synchronization (fabric-registry-sync mod).
 
 ### How can I set the version for specific servers?:
 
-- Append ._v(VERSION).viafabric.
-- Examples: ``minigame.example.com._v1_8.viafabric``, ``native.example.com._v-1.viafabric``
-  , ``auto.example.com._v-2.viafabric``
+#### Suffix Style
+
+- Append ``._v(VERSION).viafabric`` after the host, before any port.
+    - All dots (``.``) in a given version must be replaced with underscores (``_``).
+- Examples:
+    - ``minigame.example.com._v1_8.viafabric``
+    - ``native.example.com._v-1.viafabric``
+    - ``auto.example.com._v-2.viafabric``
+
+#### Prefix Style
+
+- Add ``viafabric.v(VERSION);`` before the address.
+- Examples:
+    - ``viafabric.v1.8;minigame.example.com``
+    - ``viafabric.v-1;native.example.com``
+    - ``viafabric.v-2;auto.example.com``
 
 ## ViaFabricPlus
 

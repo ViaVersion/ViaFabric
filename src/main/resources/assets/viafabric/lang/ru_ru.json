@@ -1,14 +1,12 @@
 {
-  "gui.protocol_version_field.name": "Версия протокола",
-  "gui.enable_client_side_button": "Включить ViaVersion",
-  "gui.enable_client_side.question": "Вы уверены, что хотите включить режим: На стороне клиента?",
-  "gui.enable_client_side.warning": "Я не могу гарантировать, что этот мод разрешён любом (или хотя бы) сервере. Этот мод может вызывать проблемы с Античит плагинами. ИСПОЛЬЗУЙТЕ НА СВОЙ СТРАХ И РИСК.",
-  "gui.enable_client_side.enable": "Включить",
-  "gui.viafabric_config.title": "Конфигурации ViaFabric",
-  "gui.client_side.enable": "Включить на стороне клиента",
-  "gui.client_side.disable": "Отключить на стороне клиента",
-  "gui.ping_version.translated": "VIA: %s (%s)",
-  "gui.hide_via_button.enable": "Скрыть кнопку VIA",
-  "gui.hide_via_button.disable": "Показать кнопку VIA",
-  "gui.via_button": "VIA"
+  "gui.protocol_version_field.name": "Протокол версиясе",
+  "gui.enable_client_side_button": "ViaVersion кушу",
+  "gui.enable_client_side.question": "Сез чыннан да «клиент тарафында» шартын кушырга телисезме?",
+  "gui.enable_client_side.warning": "Бу мод билгеле бер серверларда рөхсәт ителгән дип гарантияләргә ярамый, чөнки ул античит-плагиннар белән проблемалар китереп чыгара ала. (САК БУЛЫГЫЗ!)",
+  "gui.enable_client_side.enable": "Кушу",
+  "gui.viafabric_config.title": "ViaFabric көйләүләре",
+  "gui.client_side.enable": "Клиент тарафында кушу",
+  "gui.client_side.disable": "Клиент тарафында сүндерү",
+  "gui.hide_via_button.enable": "VIA төймәсен яшерү",
+  "gui.hide_via_button.disable": "VIA төймәсен күрсәтү"
 }

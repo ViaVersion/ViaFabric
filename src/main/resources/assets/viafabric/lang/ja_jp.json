@@ -7,8 +7,6 @@
   "gui.viafabric_config.title": "ViaFabricの構成",
   "gui.client_side.enable": "クライアント側を有効にする",
   "gui.client_side.disable": "クライアント側を無効にする",
-  "gui.ping_version.translated": "VIA: %s (%s)",
   "gui.hide_via_button.enable": "VIAボタンを隠す",
-  "gui.hide_via_button.disable": "VIAボタンを表示",
-  "gui.via_button": "VIA"
+  "gui.hide_via_button.disable": "VIAボタンを表示"
 }
