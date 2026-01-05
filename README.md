@@ -10,25 +10,30 @@
 
 Allows the connection to/from different Minecraft versions on your Minecraft client/server (LAN worlds too)
 
-If you are using the latest Minecraft version and care about the gameplay being more enjoyable/functional, you may want to
-check [ViaFabricPlus](https://modrinth.com/mod/viafabricplus) out. See the [differences](#viafabricplus) between ViaFabric and ViaFabricPlus.
+If you are using the latest Minecraft version and care about the gameplay being more enjoyable/functional, you may want
+to
+check [ViaFabricPlus](https://modrinth.com/mod/viafabricplus) out. See the [differences](#viafabricplus) between
+ViaFabric and ViaFabricPlus.
 
-This mod can be installed on 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.1, 1.20.4, 1.20.6, 1.21.4 with Fabric Loader.
+This mod can be installed on 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.6, 1.21.11 with Fabric Loader.
 
 The `legacy` branch also supports Legacy Fabric 1.8.9 and 1.12.2 versions.
 
 ## Anti cheat integration
 
-ViaFabric now supports custom payload sending to transmit player protocol version data to the server when installed on the client side. This allows servers to retrieve a player's protocol version via plugin messages, which can be useful for anti-cheat checks and version-dependent logic.
-For more details on how to use this feature, see the [Player Details Protocol wiki](https://github.com/ViaVersion/ViaVersion/wiki/Player-Details-Protocol).
+ViaFabric now supports custom payload sending to transmit player protocol version data to the server when installed on
+the client side. This allows servers to retrieve a player's protocol version via plugin messages, which can be useful
+for anti-cheat checks and version-dependent logic.
+For more details on how to use this feature, see
+the [Player Details Protocol wiki](https://github.com/ViaVersion/ViaVersion/wiki/Player-Details-Protocol).
 
 ## Dependencies
 
-| Dependency                                    | Download                                                       |
-|-----------------------------------------------|----------------------------------------------------------------|
-| (Bundled) ViaVersion                          | https://viaversion.com/                                        |
-| (Bundled) Cotton Client Commands (MC 1.14-15) | https://jitpack.io/#TinfoilMC/ClientCommands                   |
-| Fabric API                                    | https://modrinth.com/mod/fabric-api                            |
+| Dependency                                    | Download                                     |
+|-----------------------------------------------|----------------------------------------------|
+| (Bundled) ViaVersion                          | https://viaversion.com/                      |
+| (Bundled) Cotton Client Commands (MC 1.14-15) | https://jitpack.io/#TinfoilMC/ClientCommands |
+| Fabric API                                    | https://modrinth.com/mod/fabric-api          |
 
 Note: ViaVersion is designed for Vanilla Minecraft servers. It probably will not work with modded registry entries or
 registry synchronization (fabric-registry-sync mod).
@@ -60,40 +65,48 @@ registry synchronization (fabric-registry-sync mod).
 |                       | 1.8.x | 1.9.x | 1.10-1.20.x | 1.21.x |
 |-----------------------|-------|-------|-------------|--------|
 | 1.14.4-1.20.6 clients | ✓     | ✓     | ✓           | ⟲      | ⟲   ⟲ | ⟲ | ⟲ | ⟲ | ⟲ |
-| 1.21.4 client         | ✓     | ✓     | ✓           | ✓      | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| 1.21.11 client        | ✓     | ✓     | ✓           | ✓      | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ✓ = [ViaVersion](https://viaversion.com) ⟲ = [ViaBackwards](https://viaversion.com/backwards) ⏪
 = [ViaRewind](https://viaversion.com/rewind)
 
-*Note: 1.7.x is not supported in ViaFabric - 1.9.x, 1.10.x, 1.11.x, and 1.13.x may cause problems when visiting such servers in client-side mode.*
+*Note: 1.7.x is not supported in ViaFabric - 1.9.x, 1.10.x, 1.11.x, and 1.13.x may cause problems when visiting such
+servers in client-side mode.*
 
 ### Can ViaVersion, ViaBackwards and ViaRewind support snapshots?:
 
-- Check https://viaversion.com/donate for getting early access to snapshots. You can use the preview ViaVersion builds with ViaFabric by
-  putting them in the mods' folder. During Minecraft updates there will be usual a branch on this repository with the updated ViaFabric.
+- Check https://viaversion.com/donate for getting early access to snapshots. You can use the preview ViaVersion builds
+  with ViaFabric by
+  putting them in the mods' folder. During Minecraft updates there will be usual a branch on this repository with the
+  updated ViaFabric.
 
 ## Alternatives
 
 ### Client-side:
 
 - [ViaForge](https://modrinth.com/mod/viaforge): Clientside Implementation of ViaVersion for Forge.
-- [ViaFabricPlus](https://modrinth.com/mod/viafabricplus): Fabric mod for the latest Minecraft version with QoL fixes and enhancements to the gameplay.
-- [ClientViaVersion](https://github.com/Gerrygames/ClientViaVersion): Discontinued 5zig plugin.
-- [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): Discontinued Fabric mod for connecting to older
+- [ViaFabricPlus](https://modrinth.com/mod/viafabricplus): Fabric mod for the latest Minecraft version with QoL fixes
+  and enhancements to the gameplay.
+- [multiconnect](https://www.curseforge.com/minecraft/mc-mods/multiconnect): Discontinued Fabric mod for connecting to
+  older
   versions: down to 1.11 (stable) and 1.8 (experimental).
 
 ### Server-side:
 
 - [ViaVersion](https://viaversion.com): Plugin for Velocity and Paper/Bukkit (and optionally also Sponge/BungeeCord).
-- [ProtocolSupport](https://github.com/ProtocolSupport/ProtocolSupport): Discontinued Bukkit plugin for older client versions (down to 1.4.7).
+- [ProtocolSupport](https://github.com/ProtocolSupport/ProtocolSupport): Discontinued Bukkit plugin for older client
+  versions (down to 1.4.7).
 
 ### Standalone proxy:
 
-- [ViaProxy](https://github.com/ViaVersion/ViaProxy): Standalone ViaVersion proxy with ViaBackwards, ViaRewind and ViaLegacy,
-  allowing you to connect to a wide range of versions (down to classic versions) with your modern client (1.7.2+). Supports online mode.
+- [ViaProxy](https://github.com/ViaVersion/ViaProxy): Standalone ViaVersion proxy with ViaBackwards, ViaRewind and
+  ViaLegacy,
+  allowing you to connect to a wide range of versions (down to classic versions) with your modern client (1.7.2+).
+  Supports online mode.
 - [VIAaaS](https://github.com/ViaVersion/VIAaaS): Standalone ViaVersion proxy with ViaBackwards and ViaRewind, allowing
   you to connect without a mod installed on your client. Supports online mode.
-- [DirtMultiversion](https://github.com/DirtPowered/DirtMultiversion): Discontinued Proxy allowing to connect down to Beta 1.3 with
+- [DirtMultiversion](https://github.com/DirtPowered/DirtMultiversion): Discontinued Proxy allowing to connect down to
+  Beta 1.3 with
   newer Minecraft client versions.
 
 ### Cool things to try:
@@ -157,14 +170,15 @@ registry synchronization (fabric-registry-sync mod).
 
 ### Differences with ViaFabricPlus:
 
-|                                  | ViaFabric                                       | ViaFabricPlus                                                   |
-|----------------------------------|-------------------------------------------------|-----------------------------------------------------------------|
-| Can be installed on              | Multiple client/server versions with fabric     | Latest client-side version with fabric                          |
-| Objectives                       | Simply implement ViaVersion                     | Implements ViaVersion with client-side fixes to version changes |
-| How does it work?                | Modifying packets at network code               | Modifying client code more deeply                               |
-| Triggering anti-cheats           | Very likely                                     | Mostly not                                                      |
+|                        | ViaFabric                                   | ViaFabricPlus                                                   |
+|------------------------|---------------------------------------------|-----------------------------------------------------------------|
+| Can be installed on    | Multiple client/server versions with fabric | Latest client-side version with fabric                          |
+| Objectives             | Simply implement ViaVersion                 | Implements ViaVersion with client-side fixes to version changes |
+| How does it work?      | Modifying packets at network code           | Modifying client code more deeply                               |
+| Triggering anti-cheats | Very likely                                 | Mostly not                                                      |
 
 ## Disclaimer
 
-It cannot be guaranteed that this mod is allowed on specific servers as it can possibly cause problems with anti-cheat plugins.\
+It cannot be guaranteed that this mod is allowed on specific servers as it can possibly cause problems with anti-cheat
+plugins.\
 ***(USE ONLY WITH CAUTION!)***
