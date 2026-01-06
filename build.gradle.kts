@@ -157,10 +157,10 @@ publishMods {
         type = BETA // alpha is hidden by default
 
         javaVersions.addAll(
-            (8..22).map { JavaVersion.toVersion(it) }
+            (8..25).map { JavaVersion.toVersion(it) }
         )
         minecraftVersions.addAll(mcReleases)
-        optional("fabric-api")
+        requires("fabric-api")
         embeds("cotton-client-commands")
     }
     modrinth {
@@ -168,7 +168,7 @@ publishMods {
         projectId = "YlKdE5VK"
         type = ALPHA
         minecraftVersions.addAll(mcReleases)
-        optional("fabric-api")
+        requires("fabric-api")
         embeds("viaversion")
     }
 }
