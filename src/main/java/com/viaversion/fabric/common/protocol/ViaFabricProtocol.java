@@ -50,7 +50,8 @@ public class ViaFabricProtocol extends AbstractSimpleProtocol {
             return;
         }
 
-        // Just hope the id never changes
+        // Fixes an issue where the Fabric Particle API causes disconnects when both the client and server have the mod installed and both are 1.21.5+.
+        // See https://github.com/ViaVersion/ViaFabric/issues/428
         registerServerbound(State.CONFIGURATION, ServerboundConfigurationPackets1_21_6.CUSTOM_PAYLOAD, wrapper -> {
             final String channel = Key.namespaced(wrapper.passthrough(Types.STRING));
             if (channel.equals("minecraft:register") || channel.equals("minecraft:unregister")) {
