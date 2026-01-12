@@ -20,6 +20,7 @@ package com.viaversion.fabric.mc1165.mixin.pipeline;
 import com.viaversion.fabric.common.handler.CommonTransformer;
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
 import com.viaversion.fabric.common.handler.FabricEncodeHandler;
+import com.viaversion.fabric.common.protocol.ViaFabricProtocol;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
@@ -36,7 +37,7 @@ public class MixinServerConnectionListenerChInit {
     private void onInitChannel(Channel channel, CallbackInfo ci) {
         if (channel instanceof SocketChannel) {
             UserConnection user = new UserConnectionImpl(channel);
-            new ProtocolPipelineImpl(user);
+            new ProtocolPipelineImpl(user).add(ViaFabricProtocol.INSTANCE);
 
             channel.pipeline().addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new FabricEncodeHandler(user));
             channel.pipeline().addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new FabricDecodeHandler(user));

@@ -21,9 +21,8 @@ import com.viaversion.fabric.common.handler.CommonTransformer;
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
 import com.viaversion.fabric.common.handler.FabricEncodeHandler;
 import com.viaversion.fabric.common.handler.PipelineReorderEvent;
-import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
+import com.viaversion.fabric.common.protocol.ViaFabricProtocol;
 import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.api.protocol.ProtocolPipeline;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import io.netty.channel.Channel;
@@ -54,13 +53,9 @@ public class MixinConnection {
         final Channel channel = pipeline.channel();
         if (channel instanceof SocketChannel) {
             final UserConnection user = new UserConnectionImpl(channel, side == PacketFlow.CLIENTBOUND);
-            final ProtocolPipeline protocolPipeline = new ProtocolPipelineImpl(user);
+            new ProtocolPipelineImpl(user).add(ViaFabricProtocol.INSTANCE);
 
             final boolean clientSide = user.isClientSide();
-            if (clientSide) {
-                protocolPipeline.add(HostnameParserProtocol.INSTANCE);
-            }
-
             pipeline.addBefore(clientSide ? HandlerNames.ENCODER : HandlerNames.OUTBOUND_CONFIG, CommonTransformer.HANDLER_ENCODER_NAME, new FabricEncodeHandler(user));
             pipeline.addBefore(clientSide ? HandlerNames.INBOUND_CONFIG : HandlerNames.DECODER, CommonTransformer.HANDLER_DECODER_NAME, new FabricDecodeHandler(user));
         }

@@ -23,7 +23,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.viaversion.fabric.common.config.VFConfig;
 import com.viaversion.fabric.common.platform.FabricInjector;
-import com.viaversion.fabric.common.protocol.HostnameParserProtocol;
+import com.viaversion.fabric.common.protocol.ViaFabricProtocol;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
 import com.viaversion.fabric.mc12111.commands.VFCommandHandler;
 import com.viaversion.fabric.mc12111.platform.FabricPlatform;
@@ -86,8 +86,7 @@ public class ViaFabric implements ModInitializer {
         ViaManagerImpl manager = (ViaManagerImpl) Via.getManager();
         manager.init();
 
-        HostnameParserProtocol.INSTANCE.initialize();
-        HostnameParserProtocol.INSTANCE.register(Via.getManager().getProviders());
+        ViaFabricProtocol.INSTANCE.initialize();
         ProtocolVersion.register(-2, "AUTO");
 
         FabricLoader.getInstance().getEntrypoints("viafabric:via_api_initialized", Runnable.class).forEach(Runnable::run);
