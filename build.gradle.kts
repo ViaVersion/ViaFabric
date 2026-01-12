@@ -157,8 +157,10 @@ publishMods {
         type = BETA // alpha is hidden by default
 
         javaVersions.addAll(
-            (8..25).map { JavaVersion.toVersion(it) }
+            (8..22).map { JavaVersion.toVersion(it) }
         )
+        javaVersions.add(JavaVersion.VERSION_25) // CF skips some Java versions:tinfoilhat:
+
         minecraftVersions.addAll(mcReleases)
         requires("fabric-api")
         embeds("cotton-client-commands")
