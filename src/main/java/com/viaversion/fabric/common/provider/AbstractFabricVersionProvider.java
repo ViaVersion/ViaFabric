@@ -25,63 +25,17 @@ import com.viaversion.fabric.common.util.ProtocolUtils;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.packet.State;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import com.viaversion.viaversion.api.type.Types;
-import com.viaversion.viaversion.exception.CancelException;
 import com.viaversion.viaversion.protocol.version.BaseVersionProvider;
-import com.viaversion.viaversion.protocols.base.ClientboundStatusPackets;
-import com.viaversion.viaversion.protocols.base.v1_7.ClientboundBaseProtocol1_7;
-import io.netty.channel.ChannelPipeline;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
-import net.fabricmc.loader.api.FabricLoader;
 
 public abstract class AbstractFabricVersionProvider extends BaseVersionProvider {
-    private int[] multiconnectSupportedVersions = null;
-
-    {
-        multiconnectIntegration();
-    }
-
-    private void multiconnectIntegration() {
-        if (!FabricLoader.getInstance().isModLoaded("multiconnect")) return;
-        try {
-            Class<?> mcApiClass = Class.forName("net.earthcomputer.multiconnect.api.MultiConnectAPI");
-            Class<?> iProtocolClass = Class.forName("net.earthcomputer.multiconnect.api.IProtocol");
-            Object mcApiInstance = mcApiClass.getMethod("instance").invoke(null);
-            List<?> protocols = (List<?>) mcApiClass.getMethod("getSupportedProtocols").invoke(mcApiInstance);
-            Method getValue = iProtocolClass.getMethod("getValue");
-            Method isMulticonnectBeta;
-            try {
-                isMulticonnectBeta = iProtocolClass.getMethod("isMulticonnectBeta");
-            } catch (NoSuchMethodException e) {
-                isMulticonnectBeta = null;
-            }
-            Set<Integer> vers = new TreeSet<>();
-            for (Object protocol : protocols) {
-                // Do not use versions with beta multiconnect support, which may have stability issues
-                if (isMulticonnectBeta == null || !(Boolean) isMulticonnectBeta.invoke(protocol)) {
-                    vers.add((Integer) getValue.invoke(protocol));
-                }
-            }
-            multiconnectSupportedVersions = vers.stream().mapToInt(Integer::intValue).toArray();
-            getLogger().info("ViaFabric will integrate with multiconnect");
-        } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | NoSuchMethodException
-                 | ClassCastException ignored) {
-        }
-    }
 
     @Override
     public ProtocolVersion getClosestServerProtocol(UserConnection connection) throws Exception {
@@ -119,8 +73,6 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
             boolean blocked = checkAddressBlocked(addr);
             boolean supported = ProtocolUtils.isSupported(serverVersion, info.protocolVersion());
 
-            handleMulticonnectPing(connection, info, blocked, serverVersion);
-
             if (blocked || !supported) serverVer = info.getProtocolVersion();
 
             return ProtocolVersion.getProtocol(serverVer);
@@ -137,48 +89,6 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
             || ((((InetSocketAddress) addr).getAddress() != null) &&
             (isDisabled(((InetSocketAddress) addr).getAddress().getHostAddress())
                 || isDisabled(((InetSocketAddress) addr).getAddress().getHostName()))));
-    }
-
-    private void handleMulticonnectPing(UserConnection connection, ProtocolInfo info, boolean blocked, ProtocolVersion serverVer) throws Exception {
-        if (info.getServerState() == State.STATUS
-            && info.getProtocolVersion() == -1
-            && isMulticonnectHandler(connection.getChannel().pipeline())
-            && (blocked || ProtocolUtils.isSupported(serverVer, getVersionForMulticonnect(serverVer)))) { // Intercept the connection
-            ProtocolVersion multiconnectSuggestion = blocked ? ProtocolVersion.unknown : getVersionForMulticonnect(serverVer);
-            getLogger().info("Sending " + multiconnectSuggestion + " for multiconnect version detector");
-            PacketWrapper newAnswer = PacketWrapper.create(ClientboundStatusPackets.STATUS_RESPONSE, null, connection);
-            newAnswer.write(Types.STRING, "{\"version\":{\"name\":\"viafabric integration\",\"protocol\":" + multiconnectSuggestion.getVersion() + "}}");
-            newAnswer.send(ClientboundBaseProtocol1_7.class);
-            throw CancelException.generate();
-        }
-    }
-
-    protected boolean isMulticonnectHandler(ChannelPipeline pipe) {
-        return false;
-    }
-
-    private ProtocolVersion getVersionForMulticonnect(ProtocolVersion clientSideVersion) {
-        // https://github.com/ViaVersion/ViaVersion/blob/master/velocity/src/main/java/com/viaversion/viaversion/velocity/providers/VelocityVersionProvider.java
-        int[] compatibleProtocols = multiconnectSupportedVersions;
-
-        if (Arrays.binarySearch(compatibleProtocols, clientSideVersion.getVersion()) >= 0) {
-            return clientSideVersion;
-        }
-
-        if (clientSideVersion.getVersion() < compatibleProtocols[0]) {
-            return ProtocolVersion.getProtocol(compatibleProtocols[0]);
-        }
-
-        // TODO: This needs a better fix, i.e checking ProtocolRegistry to see if it would work.
-        for (int i = compatibleProtocols.length - 1; i >= 0; i--) {
-            int protocol = compatibleProtocols[i];
-            if (clientSideVersion.getVersion() > protocol && ProtocolVersion.isRegistered(protocol)) {
-                return ProtocolVersion.getProtocol(protocol);
-            }
-        }
-
-        getLogger().severe("multiconnect integration: Panic, no protocol id found for " + clientSideVersion);
-        return clientSideVersion;
     }
 
     private boolean isDisabled(String addr) {

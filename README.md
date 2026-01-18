@@ -140,8 +140,8 @@ servers in client-side mode.*
 
 - For using globally, set the protocol to AUTO or -2. For using in a specific
   server: ``ddns.example.com._v-2.viafabric``
-- The protocol detector will try to ping with the client native protocol version, differently than multiconnect which
-  uses -1 version, which may detect the native server version.
+- The protocol detector will try to ping with the client native protocol version, differently than using -1 version,
+  which may detect the native server version.
 
 ### How can I set the version for specific servers?:
 

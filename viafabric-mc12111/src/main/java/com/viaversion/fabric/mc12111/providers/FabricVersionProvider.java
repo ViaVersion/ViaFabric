@@ -22,11 +22,9 @@ import com.viaversion.fabric.common.provider.AbstractFabricVersionProvider;
 import com.viaversion.fabric.mc12111.ViaFabric;
 import com.viaversion.fabric.mc12111.service.ProtocolAutoDetector;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import io.netty.channel.ChannelPipeline;
 import java.net.InetSocketAddress;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
-import net.minecraft.network.Connection;
 
 public class FabricVersionProvider extends AbstractFabricVersionProvider {
     @Override
@@ -42,10 +40,5 @@ public class FabricVersionProvider extends AbstractFabricVersionProvider {
     @Override
     protected CompletableFuture<ProtocolVersion> detectVersion(InetSocketAddress address) {
         return ProtocolAutoDetector.detectVersion(address);
-    }
-
-    @Override
-    protected boolean isMulticonnectHandler(ChannelPipeline pipe) {
-        return pipe.get(Connection.class).getPacketListener().getClass().getName().startsWith("net.earthcomputer.multiconnect");
     }
 }
