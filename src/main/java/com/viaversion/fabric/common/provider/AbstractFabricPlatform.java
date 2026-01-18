@@ -23,8 +23,8 @@ import com.viaversion.fabric.common.util.JLoggerToLog4j;
 import com.viaversion.fabric.common.util.ProtocolUtils;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.protocol.packet.PacketType;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
 import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.libs.gson.JsonArray;
 import com.viaversion.viaversion.libs.gson.JsonObject;
@@ -135,15 +135,30 @@ public abstract class AbstractFabricPlatform extends UserConnectionViaVersionPla
 
     @Override
     public void sendCustomPayload(UserConnection connection, String channel, byte[] message) {
-        final ServerboundPacketType packetType = ProtocolUtils.getServerboundPacketType("CUSTOM_PAYLOAD", connection);
+        final PacketWrapper customPayloadPacket = constructCustomPayloadPacket(connection, channel, message, true);
+        if (customPayloadPacket != null) {
+            customPayloadPacket.scheduleSendToServerRaw();
+        }
+    }
+
+    @Override
+    public void sendCustomPayloadToClient(final UserConnection connection, final String channel, final byte[] message) {
+        final PacketWrapper customPayloadPacket = constructCustomPayloadPacket(connection, channel, message, false);
+        if (customPayloadPacket != null) {
+            customPayloadPacket.scheduleSendRaw();
+        }
+    }
+
+    private PacketWrapper constructCustomPayloadPacket(UserConnection connection, String channel, byte[] message, final boolean serverSide) {
+        final PacketType packetType = ProtocolUtils.getPacketType(connection, "CUSTOM_PAYLOAD", serverSide);
         final PacketWrapper customPayload = PacketWrapper.create(packetType, connection);
         if (packetType == null) {
-            return;
+            return null;
         }
 
         customPayload.write(Types.STRING, channel);
         customPayload.write(Types.REMAINING_BYTES, message);
-        customPayload.scheduleSendToServerRaw();
+        return customPayload;
     }
 
     @Override
