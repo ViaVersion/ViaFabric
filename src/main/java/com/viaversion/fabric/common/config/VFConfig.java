@@ -27,12 +27,12 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class VFConfig extends Config {
+
     public static final String ENABLE_CLIENT_SIDE = "enable-client-side";
     public static final String CLIENT_SIDE_VERSION = "client-side-version";
     public static final String CLIENT_SIDE_FORCE_DISABLE = "client-side-force-disable";
     public static final String HIDE_BUTTON = "hide-button";
     public static final String IGNORE_REGISTRY_SYNC_ERRORS = "ignore-registry-sync-errors";
-    public static final String SEND_CONNECTION_DETAILS = "send-connection-details";
 
     public VFConfig(File configFile, Logger logger) {
         super(configFile, logger);
@@ -42,10 +42,6 @@ public class VFConfig extends Config {
     @Override
     public URL getDefaultConfigURL() {
         return getClass().getClassLoader().getResource("assets/viafabric/config.yml");
-    }
-
-    @Override
-    protected void handleConfig(Map<String, Object> map) {
     }
 
     @Override
@@ -89,7 +85,4 @@ public class VFConfig extends Config {
         return getBoolean(IGNORE_REGISTRY_SYNC_ERRORS, false);
     }
 
-    public boolean isSendConnectionDetails() {
-        return getBoolean(SEND_CONNECTION_DETAILS, false);
-    }
 }

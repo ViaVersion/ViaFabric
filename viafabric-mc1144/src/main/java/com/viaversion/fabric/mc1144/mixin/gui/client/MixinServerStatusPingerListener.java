@@ -47,8 +47,8 @@ public abstract class MixinServerStatusPingerListener implements ClientStatusPac
         FabricDecodeHandler decoder = ((MixinConnectionAccessor) this.val$connection).getChannel()
             .pipeline().get(FabricDecodeHandler.class);
         if (decoder != null) {
-            ((ViaServerData) this.val$data).viaFabric$setTranslating(decoder.getInfo().isActive());
-            ((ViaServerData) this.val$data).viaFabric$setServerVer(decoder.getInfo().getProtocolInfo().getServerProtocolVersion());
+            ((ViaServerData) this.val$data).viaFabric$setTranslating(decoder.connection().isActive());
+            ((ViaServerData) this.val$data).viaFabric$setServerVer(decoder.connection().getProtocolInfo().getServerProtocolVersion());
         }
     }
 }

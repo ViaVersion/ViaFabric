@@ -17,27 +17,21 @@
  */
 package com.viaversion.fabric.common.provider;
 
-import com.viaversion.fabric.common.platform.FabricViaAPI;
-import com.viaversion.fabric.common.platform.FabricViaConfig;
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.common.util.FutureTaskId;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
 import com.viaversion.fabric.common.util.ProtocolUtils;
 import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.ViaAPI;
-import com.viaversion.viaversion.api.configuration.ViaVersionConfig;
 import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.api.platform.ViaPlatform;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
 import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.libs.gson.JsonArray;
 import com.viaversion.viaversion.libs.gson.JsonObject;
+import com.viaversion.viaversion.platform.UserConnectionViaVersionPlatform;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import java.io.File;
-import java.nio.file.Path;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -50,25 +44,18 @@ import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import org.apache.logging.log4j.LogManager;
 
-public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnection> {
-    private final Logger logger = new JLoggerToLog4j(LogManager.getLogger("ViaVersion"));
-    private FabricViaConfig config;
-    private File dataFolder;
-    private final ViaAPI<UserConnection> api;
+public abstract class AbstractFabricPlatform extends UserConnectionViaVersionPlatform {
 
-    {
-        api = new FabricViaAPI();
+    protected AbstractFabricPlatform() {
+        super(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric").toFile());
     }
 
-    public void init() {
-        // We'll use it early for ViaInjector
-        installNativeVersionProvider();
-        Path configDir = FabricLoader.getInstance().getConfigDir().resolve("ViaFabric");
-        dataFolder = configDir.toFile();
-        config = new FabricViaConfig(configDir.resolve("viaversion.yml").toFile(), logger);
+    @Override
+    public Logger createLogger(final String name) {
+        return new JLoggerToLog4j(LogManager.getLogger(name));
     }
 
-    protected abstract void installNativeVersionProvider();
+    public abstract void installNativeVersionProvider();
 
     protected abstract ExecutorService asyncService();
 
@@ -127,26 +114,6 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
     public boolean isProxy() {
         // We kinda of have all server versions
         return FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT;
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
-    }
-
-    @Override
-    public ViaVersionConfig getConf() {
-        return config;
-    }
-
-    @Override
-    public ViaAPI<UserConnection> getApi() {
-        return api;
-    }
-
-    @Override
-    public File getDataFolder() {
-        return dataFolder;
     }
 
     @Override
@@ -219,8 +186,4 @@ public abstract class AbstractFabricPlatform implements ViaPlatform<UserConnecti
         return FabricLoader.getInstance().isModLoaded(name);
     }
 
-    @Override
-    public boolean couldBeReloading() {
-        return false;
-    }
 }

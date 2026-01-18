@@ -21,6 +21,7 @@ import com.viaversion.fabric.common.util.ProtocolUtils;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 
 public interface AbstractViaConfigScreen {
+
     String TITLE_TRANSLATE_ID = "gui.viafabric_config.title";
     String VERSION_TRANSLATE_ID = "gui.protocol_version_field.name";
 
@@ -38,4 +39,5 @@ public interface AbstractViaConfigScreen {
     default int calculatePosY(int height, int entryNumber) {
         return height / 6 + 24 * (entryNumber / 2);
     }
+
 }

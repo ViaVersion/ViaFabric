@@ -18,6 +18,7 @@
 package com.viaversion.fabric.common.gui;
 
 public interface ViaServerData {
+
     boolean viaFabric$translating();
 
     void viaFabric$setTranslating(boolean via);
@@ -25,4 +26,5 @@ public interface ViaServerData {
     int viaFabric$getServerVer();
 
     void viaFabric$setServerVer(int ver);
+
 }

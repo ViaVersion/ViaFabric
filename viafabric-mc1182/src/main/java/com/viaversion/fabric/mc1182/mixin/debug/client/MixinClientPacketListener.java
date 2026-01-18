@@ -17,11 +17,10 @@
  */
 package com.viaversion.fabric.mc1182.mixin.debug.client;
 
-import com.viaversion.fabric.common.handler.CommonTransformer;
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
-import com.viaversion.fabric.mc1182.ViaFabric;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.ConnectionDetails;
+import com.viaversion.viaversion.platform.ViaDecodeHandler;
 import io.netty.channel.ChannelHandler;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.Connection;
@@ -42,13 +41,9 @@ public class MixinClientPacketListener {
 
     @Inject(method = "handleLogin", at = @At("RETURN"))
     public void sendConnectionDetails(ClientboundLoginPacket packet, CallbackInfo ci) {
-        if (!ViaFabric.config.isSendConnectionDetails()) {
-            return;
-        }
-
-        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinConnectionAccessor) connection).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
+        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinConnectionAccessor) connection).getChannel().pipeline().get(ViaDecodeHandler.NAME);
         if (viaDecoder instanceof FabricDecodeHandler) {
-            UserConnection connection = ((FabricDecodeHandler) viaDecoder).getInfo();
+            UserConnection connection = ((FabricDecodeHandler) viaDecoder).connection();
 
             ConnectionDetails.sendConnectionDetails(connection, ConnectionDetails.MOD_CHANNEL);
         }

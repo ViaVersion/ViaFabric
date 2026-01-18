@@ -17,12 +17,12 @@
  */
 package com.viaversion.fabric.mc1152.mixin.pipeline.client;
 
-import com.viaversion.fabric.common.handler.CommonTransformer;
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
-import com.viaversion.fabric.common.handler.FabricEncodeHandler;
 import com.viaversion.fabric.common.protocol.ViaFabricProtocol;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
+import com.viaversion.viaversion.platform.ViaDecodeHandler;
+import com.viaversion.viaversion.platform.ViaEncodeHandler;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import io.netty.channel.Channel;
 import io.netty.channel.socket.SocketChannel;
@@ -40,8 +40,8 @@ public class MixinConnectionChInit {
             new ProtocolPipelineImpl(user).add(ViaFabricProtocol.INSTANCE);
 
             channel.pipeline()
-                .addBefore("encoder", CommonTransformer.HANDLER_ENCODER_NAME, new FabricEncodeHandler(user))
-                .addBefore("decoder", CommonTransformer.HANDLER_DECODER_NAME, new FabricDecodeHandler(user));
+                .addBefore("encoder", ViaEncodeHandler.NAME, new ViaEncodeHandler(user))
+                .addBefore("decoder", ViaDecodeHandler.NAME, new FabricDecodeHandler(user));
         }
     }
 }

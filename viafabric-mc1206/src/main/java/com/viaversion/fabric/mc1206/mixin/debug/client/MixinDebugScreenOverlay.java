@@ -17,12 +17,12 @@
  */
 package com.viaversion.fabric.mc1206.mixin.debug.client;
 
-import com.viaversion.fabric.common.handler.CommonTransformer;
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import com.viaversion.viaversion.platform.ViaDecodeHandler;
 import io.netty.channel.ChannelHandler;
 import java.util.List;
 import net.minecraft.client.Minecraft;
@@ -39,9 +39,9 @@ public class MixinDebugScreenOverlay {
         String line = "[ViaFabric] I: " + Via.getManager().getConnectionManager().getConnections().size() + " (F: "
             + Via.getManager().getConnectionManager().getConnectedClients().size() + ")";
         @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinConnectionAccessor) Minecraft.getInstance().getConnection()
-            .getConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
+            .getConnection()).getChannel().pipeline().get(ViaDecodeHandler.NAME);
         if (viaDecoder instanceof FabricDecodeHandler) {
-            UserConnection connection = ((FabricDecodeHandler) viaDecoder).getInfo();
+            UserConnection connection = ((FabricDecodeHandler) viaDecoder).connection();
             ProtocolInfo protocol = connection.getProtocolInfo();
             if (protocol != null) {
                 ProtocolVersion serverVer = protocol.serverProtocolVersion();

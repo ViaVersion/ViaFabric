@@ -17,13 +17,13 @@
  */
 package com.viaversion.fabric.mc1206.mixin.pipeline;
 
-import com.viaversion.fabric.common.handler.CommonTransformer;
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
-import com.viaversion.fabric.common.handler.FabricEncodeHandler;
 import com.viaversion.fabric.common.handler.PipelineReorderEvent;
 import com.viaversion.fabric.common.protocol.ViaFabricProtocol;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
+import com.viaversion.viaversion.platform.ViaDecodeHandler;
+import com.viaversion.viaversion.platform.ViaEncodeHandler;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
@@ -56,8 +56,8 @@ public class MixinConnection {
             new ProtocolPipelineImpl(user).add(ViaFabricProtocol.INSTANCE);
 
             final boolean clientSide = user.isClientSide();
-            pipeline.addBefore(clientSide ? HandlerNames.ENCODER : HandlerNames.OUTBOUND_CONFIG, CommonTransformer.HANDLER_ENCODER_NAME, new FabricEncodeHandler(user));
-            pipeline.addBefore(clientSide ? HandlerNames.INBOUND_CONFIG : HandlerNames.DECODER, CommonTransformer.HANDLER_DECODER_NAME, new FabricDecodeHandler(user));
+            pipeline.addBefore(clientSide ? HandlerNames.ENCODER : HandlerNames.OUTBOUND_CONFIG, ViaEncodeHandler.NAME, new ViaEncodeHandler(user));
+            pipeline.addBefore(clientSide ? HandlerNames.INBOUND_CONFIG : HandlerNames.DECODER, ViaDecodeHandler.NAME, new FabricDecodeHandler(user));
         }
     }
 }

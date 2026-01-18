@@ -79,7 +79,8 @@ public class ViaFabric implements ModInitializer {
             .commandHandler(new VFCommandHandler())
             .platform(platform).build());
 
-        platform.init();
+        platform.getConf().reload();
+        platform.installNativeVersionProvider();
 
         ViaManagerImpl manager = (ViaManagerImpl) Via.getManager();
         manager.init();

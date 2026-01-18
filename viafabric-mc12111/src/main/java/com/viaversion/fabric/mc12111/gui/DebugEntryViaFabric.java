@@ -17,12 +17,12 @@
  */
 package com.viaversion.fabric.mc12111.gui;
 
-import com.viaversion.fabric.common.handler.CommonTransformer;
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
 import com.viaversion.fabric.mc12111.mixin.debug.client.MixinConnectionAccessor;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.ProtocolInfo;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import com.viaversion.viaversion.platform.ViaDecodeHandler;
 import io.netty.channel.ChannelHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.debug.DebugScreenDisplayer;
@@ -42,13 +42,13 @@ public final class DebugEntryViaFabric implements DebugScreenEntry {
         }
 
         String line = "[ViaFabric] I: " + Via.getManager().getConnectionManager().getConnections().size() + " (F: " + Via.getManager().getConnectionManager().getConnectedClients().size() + ")";
-        ChannelHandler viaDecoder = ((MixinConnectionAccessor) connection.getConnection()).getChannel().pipeline().get(CommonTransformer.HANDLER_DECODER_NAME);
+        ChannelHandler viaDecoder = ((MixinConnectionAccessor) connection.getConnection()).getChannel().pipeline().get(ViaDecodeHandler.NAME);
         if (viaDecoder instanceof FabricDecodeHandler fabricDecodeHandler) {
-            ProtocolInfo protocol = fabricDecodeHandler.getInfo().getProtocolInfo();
+            ProtocolInfo protocol = fabricDecodeHandler.connection().getProtocolInfo();
             if (protocol != null) {
                 ProtocolVersion serverVer = protocol.serverProtocolVersion();
                 ProtocolVersion clientVer = protocol.protocolVersion();
-                line += " / C: " + clientVer + " S: " + serverVer + " A: " + fabricDecodeHandler.getInfo().isActive();
+                line += " / C: " + clientVer + " S: " + serverVer + " A: " + fabricDecodeHandler.connection().isActive();
             }
         }
         debugScreenDisplayer.addLine(line);

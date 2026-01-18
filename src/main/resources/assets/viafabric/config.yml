@@ -16,6 +16,3 @@ client-side-force-disable: [ "hypixel.net", "*.hypixel.net", "minemen.club", "*.
 # Fabric registry synchronization will be disabled when installed server-side and validation errors are ignored when installed on client-side.
 # Note: this setting only works on 1.20.4+ ViaFabric versions, and it might cause issues, use with caution.
 ignore-registry-sync-errors: false
-# If enabled, ViaFabric will send connection details to the server when connecting (when installed on the client).
-# This includes the actual client version as well as the ViaFabric version.
-send-connection-details: true

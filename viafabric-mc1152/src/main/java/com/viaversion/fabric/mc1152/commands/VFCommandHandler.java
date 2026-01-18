@@ -21,19 +21,11 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import com.viaversion.fabric.common.commands.subs.LeakDetectSubCommand;
 import com.viaversion.viaversion.commands.ViaCommandHandler;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.commands.SharedSuggestionProvider;
 
 public class VFCommandHandler extends ViaCommandHandler {
-    {
-        try {
-            registerSubCommand(new LeakDetectSubCommand());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public int execute(CommandContext<? extends SharedSuggestionProvider> ctx) {
         String[] args = new String[0];

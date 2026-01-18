@@ -51,7 +51,7 @@ public class FabricPlatform extends AbstractFabricPlatform {
     }
 
     @Override
-    protected void installNativeVersionProvider() {
+    public void installNativeVersionProvider() {
         Via.getManager().getProviders().use(NativeVersionProvider.class, new FabricNativeVersionProvider());
     }
 
