@@ -24,6 +24,10 @@ import com.viaversion.fabric.mc1152.ViaFabric;
 import com.viaversion.fabric.mc1152.commands.NMSCommandSender;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.protocol.packet.ClientboundPacketType;
+import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
+import com.viaversion.viaversion.protocols.v1_13_2to1_14.packet.ServerboundPackets1_14;
+import com.viaversion.viaversion.protocols.v1_14_4to1_15.packet.ClientboundPackets1_15;
 import io.netty.channel.EventLoop;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -64,6 +68,16 @@ public class FabricPlatform extends AbstractFabricPlatform {
     @Override
     protected EventLoop eventLoop() {
         return ViaFabric.EVENT_LOOP;
+    }
+
+    @Override
+    protected ClientboundPacketType getClientboundCustomPayloadPacketType() {
+        return ClientboundPackets1_15.CUSTOM_PAYLOAD;
+    }
+
+    @Override
+    protected ServerboundPacketType getCustomPayloadPacketType() {
+        return ServerboundPackets1_14.CUSTOM_PAYLOAD;
     }
 
     @Override

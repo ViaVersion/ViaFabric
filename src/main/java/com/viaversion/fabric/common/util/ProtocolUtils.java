@@ -19,15 +19,8 @@ package com.viaversion.fabric.common.util;
 
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.api.protocol.ProtocolPathEntry;
-import com.viaversion.viaversion.api.protocol.packet.PacketType;
-import com.viaversion.viaversion.api.protocol.packet.State;
-import com.viaversion.viaversion.api.protocol.packet.provider.PacketTypeMap;
-import com.viaversion.viaversion.api.protocol.packet.provider.PacketTypesProvider;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 public class ProtocolUtils {
@@ -91,20 +84,5 @@ public class ProtocolUtils {
             .distinct()
             .filter(ver -> ver.startsWith(text))
             .toArray(String[]::new);
-    }
-
-    public static PacketType getPacketType(final UserConnection connection, final String packetName, final boolean serverSide) {
-        final ProtocolVersion clientVersion = connection.getProtocolInfo().protocolVersion();
-        final ProtocolVersion serverVersion = connection.getProtocolInfo().serverProtocolVersion();
-        final List<ProtocolPathEntry> protocols = Via.getManager().getProtocolManager().getProtocolPath(clientVersion, serverVersion);
-        if (protocols != null) {
-            final ProtocolPathEntry last = protocols.get(protocols.size() - 1);
-            final PacketTypesProvider<?, ?, ?, ?> packetTypeProvider = last.protocol().getPacketTypesProvider();
-            final PacketTypeMap<? extends PacketType> map = (serverSide ? packetTypeProvider.mappedServerboundPacketTypes() : packetTypeProvider.mappedClientboundPacketTypes()).get(State.PLAY);
-            if (map != null) {
-                return map.typeByName(packetName);
-            }
-        }
-        return null;
     }
 }

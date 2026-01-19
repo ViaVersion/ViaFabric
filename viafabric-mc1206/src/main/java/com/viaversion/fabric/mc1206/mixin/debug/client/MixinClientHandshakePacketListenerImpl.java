@@ -18,29 +18,30 @@
 package com.viaversion.fabric.mc1206.mixin.debug.client;
 
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
-import com.viaversion.fabric.mc1206.ViaFabric;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.ConnectionDetails;
 import com.viaversion.viaversion.platform.ViaDecodeHandler;
 import io.netty.channel.ChannelHandler;
-import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.ClientHandshakePacketListenerImpl;
 import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundLoginPacket;
+import net.minecraft.network.protocol.login.ClientboundGameProfilePacket;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ClientPacketListener.class)
-public abstract class MixinClientPacketListener {
+@Mixin(ClientHandshakePacketListenerImpl.class)
+public abstract class MixinClientHandshakePacketListenerImpl {
 
     @Shadow
-    public abstract Connection getConnection();
+    @Final
+    private Connection connection;
 
-    @Inject(method = "handleLogin", at = @At("RETURN"))
-    public void sendConnectionDetails(ClientboundLoginPacket packet, CallbackInfo ci) {
-        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinConnectionAccessor) getConnection()).getChannel().pipeline().get(ViaDecodeHandler.NAME);
+    @Inject(method = "handleGameProfile", at = @At("RETURN"))
+    public void sendConnectionDetails(ClientboundGameProfilePacket packet, CallbackInfo ci) {
+        @SuppressWarnings("ConstantConditions") ChannelHandler viaDecoder = ((MixinConnectionAccessor) connection).getChannel().pipeline().get(ViaDecodeHandler.NAME);
         if (viaDecoder instanceof FabricDecodeHandler) {
             UserConnection connection = ((FabricDecodeHandler) viaDecoder).connection();
 
