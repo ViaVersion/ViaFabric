@@ -26,8 +26,8 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.packet.ClientboundPacketType;
 import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
-import com.viaversion.viaversion.protocols.v1_20_3to1_20_5.packet.ClientboundConfigurationPackets1_20_5;
-import com.viaversion.viaversion.protocols.v1_20_3to1_20_5.packet.ServerboundConfigurationPackets1_20_5;
+import com.viaversion.viaversion.protocols.v1_20_3to1_20_5.packet.ClientboundPackets1_20_5;
+import com.viaversion.viaversion.protocols.v1_20_3to1_20_5.packet.ServerboundPackets1_20_5;
 import io.netty.channel.EventLoop;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -125,11 +125,11 @@ public class FabricPlatform extends AbstractFabricPlatform {
 
     @Override
     protected ClientboundPacketType getClientboundCustomPayloadPacketType() {
-        return ClientboundConfigurationPackets1_20_5.CUSTOM_PAYLOAD;
+        return ClientboundPackets1_20_5.CUSTOM_PAYLOAD;
     }
 
     @Override
     protected ServerboundPacketType getCustomPayloadPacketType() {
-        return ServerboundConfigurationPackets1_20_5.CUSTOM_PAYLOAD;
+        return ServerboundPackets1_20_5.CUSTOM_PAYLOAD;
     }
 }
