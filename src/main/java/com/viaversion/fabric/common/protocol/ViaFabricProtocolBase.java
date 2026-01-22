@@ -19,23 +19,27 @@ package com.viaversion.fabric.common.protocol;
 
 import com.google.common.collect.Lists;
 import com.viaversion.fabric.common.AddressParser;
-import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.viaversion.api.Via;
-import com.viaversion.viaversion.api.protocol.AbstractSimpleProtocol;
+import com.viaversion.viaversion.api.protocol.AbstractProtocol;
+import com.viaversion.viaversion.api.protocol.packet.ClientboundPacketType;
+import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
 import com.viaversion.viaversion.api.protocol.packet.State;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.protocols.base.ServerboundHandshakePackets;
-import com.viaversion.viaversion.protocols.v1_21_5to1_21_6.packet.ServerboundConfigurationPackets1_21_6;
 import com.viaversion.viaversion.util.Key;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class ViaFabricProtocol extends AbstractSimpleProtocol {
-    public static final ViaFabricProtocol INSTANCE = new ViaFabricProtocol();
+public class ViaFabricProtocolBase<CU extends ClientboundPacketType, CM extends ClientboundPacketType, SM extends ServerboundPacketType, SU extends ServerboundPacketType> extends AbstractProtocol<CU, CM, SM, SU> {
+
+    public ViaFabricProtocolBase(final Class<CU> unmappedClientboundPacketType, final Class<CM> mappedClientboundPacketType, final Class<SM> mappedServerboundPacketType, final Class<SU> unmappedServerboundPacketType) {
+        super(unmappedClientboundPacketType, mappedClientboundPacketType, mappedServerboundPacketType, unmappedServerboundPacketType);
+    }
 
     @Override
     protected void registerPackets() {
+        super.registerPackets();
+
         if (Via.getPlatform().isProxy()) {
             registerServerbound(State.HANDSHAKE, ServerboundHandshakePackets.CLIENT_INTENTION, wrapper -> {
                 wrapper.passthrough(Types.VAR_INT); // Protocol version
@@ -45,14 +49,14 @@ public class ViaFabricProtocol extends AbstractSimpleProtocol {
             });
         }
 
-        final NativeVersionProvider versionProvider = Via.getManager().getProviders().get(NativeVersionProvider.class);
-        if (versionProvider.getNativeServerProtocolVersion().olderThan(ProtocolVersion.v1_21_5)) {
+        final ServerboundPacketType customPayload = packetTypesProvider.unmappedServerboundType(State.CONFIGURATION, "CUSTOM_PAYLOAD");
+        if (customPayload == null) {
             return;
         }
 
         // Fixes an issue where the Fabric Particle API causes disconnects when both the client and server have the mod installed and both are 1.21.5+.
         // See https://github.com/ViaVersion/ViaFabric/issues/428
-        registerServerbound(State.CONFIGURATION, ServerboundConfigurationPackets1_21_6.CUSTOM_PAYLOAD, wrapper -> {
+        registerServerbound(State.CONFIGURATION, customPayload, wrapper -> {
             final String channel = Key.namespaced(wrapper.passthrough(Types.STRING));
             if (channel.equals("minecraft:register") || channel.equals("minecraft:unregister")) {
                 final List<String> channels = Lists.newArrayList(new String(wrapper.passthrough(Types.SERVERBOUND_CUSTOM_PAYLOAD_DATA), StandardCharsets.UTF_8).split("\0"));
@@ -66,4 +70,13 @@ public class ViaFabricProtocol extends AbstractSimpleProtocol {
             }
         });
     }
+
+    public ClientboundPacketType getClientboundCustomPayloadPacketType() {
+        return packetTypesProvider.unmappedClientboundType(State.PLAY, "CUSTOM_PAYLOAD");
+    }
+
+    public ServerboundPacketType getCustomPayloadPacketType() {
+        return packetTypesProvider.unmappedServerboundType(State.PLAY, "CUSTOM_PAYLOAD");
+    }
+
 }

@@ -18,16 +18,14 @@
 package com.viaversion.fabric.mc1206.platform;
 
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
+import com.viaversion.fabric.common.protocol.ViaFabricProtocolBase;
 import com.viaversion.fabric.common.provider.AbstractFabricPlatform;
 import com.viaversion.fabric.common.util.FutureTaskId;
 import com.viaversion.fabric.mc1206.ViaFabric;
 import com.viaversion.fabric.mc1206.commands.NMSCommandSender;
+import com.viaversion.fabric.mc1206.protocol.ViaFabricProtocol;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.api.protocol.packet.ClientboundPacketType;
-import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
-import com.viaversion.viaversion.protocols.v1_20_3to1_20_5.packet.ClientboundPackets1_20_5;
-import com.viaversion.viaversion.protocols.v1_20_3to1_20_5.packet.ServerboundPackets1_20_5;
 import io.netty.channel.EventLoop;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -124,12 +122,7 @@ public class FabricPlatform extends AbstractFabricPlatform {
     }
 
     @Override
-    protected ClientboundPacketType getClientboundCustomPayloadPacketType() {
-        return ClientboundPackets1_20_5.CUSTOM_PAYLOAD;
-    }
-
-    @Override
-    protected ServerboundPacketType getCustomPayloadPacketType() {
-        return ServerboundPackets1_20_5.CUSTOM_PAYLOAD;
+    protected ViaFabricProtocolBase<?, ?, ?, ?> customProtocol() {
+        return ViaFabricProtocol.INSTANCE;
     }
 }

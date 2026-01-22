@@ -18,14 +18,12 @@
 package com.viaversion.fabric.common.provider;
 
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
-import com.viaversion.fabric.common.protocol.ViaFabricProtocol;
+import com.viaversion.fabric.common.protocol.ViaFabricProtocolBase;
 import com.viaversion.fabric.common.util.FutureTaskId;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
-import com.viaversion.viaversion.api.protocol.packet.ClientboundPacketType;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
-import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
 import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.libs.gson.JsonArray;
 import com.viaversion.viaversion.libs.gson.JsonObject;
@@ -62,9 +60,7 @@ public abstract class AbstractFabricPlatform extends UserConnectionViaVersionPla
 
     protected abstract EventLoop eventLoop();
 
-    protected abstract ClientboundPacketType getClientboundCustomPayloadPacketType();
-
-    protected abstract ServerboundPacketType getCustomPayloadPacketType();
+    protected abstract ViaFabricProtocolBase<?, ?, ?, ?> customProtocol();
 
     protected FutureTaskId runEventLoop(Runnable runnable) {
         return new FutureTaskId(eventLoop().submit(runnable).addListener(errorLogger()));
@@ -140,18 +136,20 @@ public abstract class AbstractFabricPlatform extends UserConnectionViaVersionPla
 
     @Override
     public void sendCustomPayload(UserConnection connection, String channel, byte[] message) {
-        final PacketWrapper customPayload = PacketWrapper.create(getCustomPayloadPacketType(), connection);
+        final ViaFabricProtocolBase<?, ?, ?, ?> protocol = customProtocol();
+        final PacketWrapper customPayload = PacketWrapper.create(protocol.getCustomPayloadPacketType(), connection);
         customPayload.write(Types.STRING, channel);
         customPayload.write(Types.REMAINING_BYTES, message);
-        customPayload.scheduleSendToServer(ViaFabricProtocol.class);
+        customPayload.scheduleSendToServer(protocol.getClass());
     }
 
     @Override
     public void sendCustomPayloadToClient(final UserConnection connection, final String channel, final byte[] message) {
-        final PacketWrapper customPayload = PacketWrapper.create(getClientboundCustomPayloadPacketType(), connection);
+        final ViaFabricProtocolBase<?, ?, ?, ?> protocol = customProtocol();
+        final PacketWrapper customPayload = PacketWrapper.create(protocol.getClientboundCustomPayloadPacketType(), connection);
         customPayload.write(Types.STRING, channel);
         customPayload.write(Types.REMAINING_BYTES, message);
-        customPayload.scheduleSend(ViaFabricProtocol.class);
+        customPayload.scheduleSend(protocol.getClass());
     }
 
     @Override

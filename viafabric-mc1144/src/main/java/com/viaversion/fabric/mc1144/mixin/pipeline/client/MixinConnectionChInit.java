@@ -18,7 +18,7 @@
 package com.viaversion.fabric.mc1144.mixin.pipeline.client;
 
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
-import com.viaversion.fabric.common.protocol.ViaFabricProtocol;
+import com.viaversion.fabric.mc1144.protocol.ViaFabricProtocol;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.platform.ViaDecodeHandler;

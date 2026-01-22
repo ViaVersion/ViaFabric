@@ -19,7 +19,7 @@ package com.viaversion.fabric.mc1206.mixin.pipeline;
 
 import com.viaversion.fabric.common.handler.FabricDecodeHandler;
 import com.viaversion.fabric.common.handler.PipelineReorderEvent;
-import com.viaversion.fabric.common.protocol.ViaFabricProtocol;
+import com.viaversion.fabric.mc1206.protocol.ViaFabricProtocol;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.platform.ViaDecodeHandler;
