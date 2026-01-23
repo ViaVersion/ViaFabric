@@ -114,7 +114,9 @@ subprojects.forEach {
 
 val includeJ8 = configurations.create("includeJ8")
 
-jvmdg.dg(includeJ8)
+jvmdg.dg(includeJ8) {
+    logLevel.set("FATAL")
+}
 
 dependencies {
     // dummy version
