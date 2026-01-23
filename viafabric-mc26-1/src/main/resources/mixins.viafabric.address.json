@@ -1,6 +1,6 @@
 {
   "required": true,
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "package": "com.viaversion.fabric.mixin.address",
   "mixins": [
   ],
