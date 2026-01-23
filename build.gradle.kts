@@ -110,7 +110,6 @@ dependencies {
     minecraft("com.mojang:minecraft:26.1-snapshot-4")
 
     include("com.viaversion:viaversion:${rootProject.extra["viaver_version"]}")
-    include("io.github.cottonmc:cotton-client-commands:1.1.0+1.15.2")
 
     testImplementation("org.testng:testng:6.13.1")
 }
