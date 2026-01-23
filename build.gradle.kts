@@ -2,9 +2,8 @@ plugins {
     id("java")
     id("maven-publish")
     id("org.ajoberstar.grgit") version "5.3.2"
-    id("net.fabricmc.fabric-loom-remap") version "1.15-SNAPSHOT"
+    id("net.fabricmc.fabric-loom") version "1.15-SNAPSHOT"
     id("com.github.ben-manes.versions") version "0.53.0"
-    id("xyz.wagyourtail.jvmdowngrader") version "1.0.1" // Don't update this
     id("me.modmuss50.mod-publish-plugin") version "1.1.0"
 }
 
@@ -23,18 +22,18 @@ fun getBranch(): String {
 allprojects {
     apply(plugin = "java")
     apply(plugin = "maven-publish")
-    apply(plugin = "fabric-loom")
+    apply(plugin = "net.fabricmc.fabric-loom")
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
+            languageVersion.set(JavaLanguageVersion.of(25))
             vendor.set(JvmVendorSpec.ADOPTIUM)
         }
         withSourcesJar()
     }
 
     tasks.withType<JavaCompile>().configureEach {
-        options.release.set(8)
+        options.release.set(25)
     }
     tasks.withType<JavaExec>().configureEach {
         javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
@@ -57,7 +56,7 @@ allprojects {
             // transitive = false because Guava is conflicting on runClient
             isTransitive = false
         }
-        modImplementation("net.fabricmc:fabric-loader:${rootProject.extra["loader_version"]}")
+        implementation("net.fabricmc:fabric-loader:${rootProject.extra["loader_version"]}")
     }
 
     tasks.processResources {
@@ -106,41 +105,27 @@ publishing {
     }
 }
 
-subprojects.forEach {
-    rootProject.tasks.named("remapJar").configure {
-        dependsOn("${it.path}:remapJar")
-    }
-}
-
-val includeJ8 = configurations.create("includeJ8")
-
-jvmdg.dg(includeJ8) {
-    logLevel.set("FATAL")
-}
-
 dependencies {
     // dummy version
-    minecraft("com.mojang:minecraft:1.14.4")
-    mappings(loom.officialMojangMappings())
+    minecraft("com.mojang:minecraft:26.1-snapshot-4")
 
-    includeJ8("com.viaversion:viaversion:${rootProject.extra["viaver_version"]}")
+    include("com.viaversion:viaversion:${rootProject.extra["viaver_version"]}")
     include("io.github.cottonmc:cotton-client-commands:1.1.0+1.15.2")
 
     testImplementation("org.testng:testng:6.13.1")
 }
 
+loom {
+    subprojects.forEach { subproject ->
+        subproject.tasks.matching { it.name == "remapJar" }.configureEach {
+            nestJars(tasks.jar, outputs.files)
+        }
+    }
+}
+
 tasks {
     test {
         useTestNG()
-    }
-
-    remapJar.configure {
-        nestedJars.from(includeJ8)
-        subprojects.forEach { subproject ->
-            subproject.tasks.matching { it.name == "remapJar" }.configureEach {
-                nestedJars.from(this)
-            }
-        }
     }
 }
 
@@ -148,7 +133,7 @@ val mcReleases = rootProject.extra["publish_mc_versions"].toString().split(",")
     .map { it.trim() }
 
 publishMods {
-    file = tasks.remapJar.get().archiveFile
+    file = tasks.jar.get().archiveFile
     changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
     version = rootProject.version.toString()
     displayName = "[${getBranch()}] ViaFabric ${version.get()}"
