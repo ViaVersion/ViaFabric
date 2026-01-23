@@ -22,7 +22,7 @@ This mod can be installed on:
 - 1.8.9 / 1.12.2 
   using the Fabric Loader.
 
-For each year, there is a versioned branch named after that year (for example, `ver/2026`). Each yearly branch contains all `26.x` releases published during that year.
+For each year, there is a versioned branch named after that year (for example, `ver/26.x`). Each yearly branch contains all `26.x` releases published during that year.
 
 Additional version branches
 - `ver/1.14-1.21` supports 1.14.4, 1.15.2, 1.16.5, 1.17.1, 1.18.2, 1.19.4, 1.20.6, 1.21.11

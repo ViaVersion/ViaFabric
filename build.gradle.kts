@@ -11,7 +11,7 @@ plugins {
 private val env = System.getenv()
 group = "com.viaversion.fabric"
 description = "Client-side and server-side ViaVersion implementation for Fabric"
-version = getRunNumber() + "-" + getBranch()
+version = "0.4.21+" + getRunNumber() + "-" + getBranch()
 
 fun getRunNumber() = env["GITHUB_RUN_NUMBER"] ?: "unknown"
 
