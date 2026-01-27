@@ -107,7 +107,7 @@ publishing {
 
 dependencies {
     // dummy version
-    minecraft("com.mojang:minecraft:26.1-snapshot-4")
+    minecraft("com.mojang:minecraft:26.1-snapshot-5")
 
     include("com.viaversion:viaversion:${rootProject.extra["viaver_version"]}")
 
