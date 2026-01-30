@@ -40,7 +40,7 @@ public class NMSCommandSender implements ViaCommandSender {
     @Override
     public boolean hasPermission(String s) {
         // https://gaming.stackexchange.com/questions/138602/what-does-op-permission-level-do
-        if (provider instanceof CommandSourceStack commandSourceStack) {
+        if (provider instanceof CommandSourceStack commandSourceStack && commandSourceStack.getPlayer() != null) {
             NameAndId player = commandSourceStack.getPlayer().nameAndId();
             LevelBasedPermissionSet permissions = commandSourceStack.getServer().getProfilePermissions(player);
             return permissions.level().isEqualOrHigherThan(PermissionLevel.ADMINS);
