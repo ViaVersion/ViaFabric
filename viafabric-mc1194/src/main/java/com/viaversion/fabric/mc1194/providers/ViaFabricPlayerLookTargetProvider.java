@@ -17,28 +17,23 @@
  */
 package com.viaversion.fabric.mc1194.providers;
 
-import com.viaversion.fabric.common.config.ViaFabricConfig;
-import com.viaversion.fabric.common.provider.AbstractFabricVersionProvider;
-import com.viaversion.fabric.mc1194.ViaFabric;
-import com.viaversion.fabric.mc1194.service.ProtocolAutoDetector;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import java.net.InetSocketAddress;
-import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
+import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.minecraft.BlockPosition;
+import com.viaversion.viaversion.protocols.v1_12_2to1_13.provider.PlayerLookTargetProvider;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
 
-public class FabricVersionProvider extends AbstractFabricVersionProvider {
-    @Override
-    protected Logger getLogger() {
-        return ViaFabric.JLOGGER;
-    }
+public class ViaFabricPlayerLookTargetProvider extends PlayerLookTargetProvider {
 
     @Override
-    protected ViaFabricConfig getConfig() {
-        return ViaFabric.config;
-    }
+    public BlockPosition getPlayerLookTarget(UserConnection info) {
+        if (!info.isClientSide()) return null;
 
-    @Override
-    protected CompletableFuture<ProtocolVersion> detectVersion(InetSocketAddress address) {
-        return ProtocolAutoDetector.detectVersion(address);
+        if (Minecraft.getInstance().hitResult instanceof BlockHitResult blockHitResult) {
+            final BlockPos pos = blockHitResult.getBlockPos();
+            return new BlockPosition(pos.getX(), pos.getY(), pos.getZ());
+        }
+        return null;
     }
 }

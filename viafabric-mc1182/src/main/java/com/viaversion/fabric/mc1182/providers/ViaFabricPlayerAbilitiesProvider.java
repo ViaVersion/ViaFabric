@@ -17,28 +17,23 @@
  */
 package com.viaversion.fabric.mc1182.providers;
 
-import com.viaversion.fabric.common.config.ViaFabricConfig;
-import com.viaversion.fabric.common.provider.AbstractFabricVersionProvider;
-import com.viaversion.fabric.mc1182.ViaFabric;
-import com.viaversion.fabric.mc1182.service.ProtocolAutoDetector;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import java.net.InetSocketAddress;
-import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
+import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.protocols.v1_15_2to1_16.provider.PlayerAbilitiesProvider;
+import net.minecraft.client.Minecraft;
 
-public class FabricVersionProvider extends AbstractFabricVersionProvider {
+public class ViaFabricPlayerAbilitiesProvider extends PlayerAbilitiesProvider {
+
     @Override
-    protected Logger getLogger() {
-        return ViaFabric.JLOGGER;
+    public float getFlyingSpeed(UserConnection connection) {
+        if (!connection.isClientSide()) return super.getFlyingSpeed(connection);
+
+        return Minecraft.getInstance().player.getAbilities().getFlyingSpeed();
     }
 
     @Override
-    protected ViaFabricConfig getConfig() {
-        return ViaFabric.config;
-    }
+    public float getWalkingSpeed(UserConnection connection) {
+        if (!connection.isClientSide()) return super.getWalkingSpeed(connection);
 
-    @Override
-    protected CompletableFuture<ProtocolVersion> detectVersion(InetSocketAddress address) {
-        return ProtocolAutoDetector.detectVersion(address);
+        return Minecraft.getInstance().player.getAbilities().getWalkingSpeed();
     }
 }

@@ -51,7 +51,7 @@
       "com.viaversion.fabric.mc1144.ViaFabric"
     ],
     "cotton-client-commands": [
-      "com.viaversion.fabric.mc1144.commands.VFClientCommands"
+      "com.viaversion.fabric.mc1144.commands.ViaFabricClientCommands"
     ],
     "modmenu": [
       "com.viaversion.fabric.mc1144.gui.ModMenuConfig"

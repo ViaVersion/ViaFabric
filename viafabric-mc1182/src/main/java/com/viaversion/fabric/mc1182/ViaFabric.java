@@ -21,12 +21,12 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.viaversion.fabric.common.config.VFConfig;
+import com.viaversion.fabric.common.config.ViaFabricConfig;
 import com.viaversion.fabric.common.platform.FabricInjector;
 import com.viaversion.fabric.common.util.JLoggerToLog4j;
-import com.viaversion.fabric.mc1182.commands.VFCommandHandler;
+import com.viaversion.fabric.mc1182.commands.ViaFabricCommandHandler;
 import com.viaversion.fabric.mc1182.platform.FabricPlatform;
-import com.viaversion.fabric.mc1182.platform.VFLoader;
+import com.viaversion.fabric.mc1182.platform.ViaFabricPlatformLoader;
 import com.viaversion.fabric.mc1182.protocol.ViaFabricProtocol;
 import com.viaversion.viaversion.ViaManagerImpl;
 import com.viaversion.viaversion.api.Via;
@@ -51,7 +51,7 @@ public class ViaFabric implements ModInitializer {
     public static final ExecutorService ASYNC_EXECUTOR;
     public static final EventLoop EVENT_LOOP;
     public static final CompletableFuture<Void> INIT_FUTURE = new CompletableFuture<>();
-    public static VFConfig config;
+    public static ViaFabricConfig config;
 
     static {
         ThreadFactory factory = new ThreadFactoryBuilder().setDaemon(true).setNameFormat("ViaFabric-%d").build();
@@ -65,10 +65,10 @@ public class ViaFabric implements ModInitializer {
             .then(
                 RequiredArgumentBuilder
                     .<S, String>argument("args", StringArgumentType.greedyString())
-                    .executes(((VFCommandHandler) Via.getManager().getCommandHandler())::execute)
-                    .suggests(((VFCommandHandler) Via.getManager().getCommandHandler())::suggestion)
+                    .executes(((ViaFabricCommandHandler) Via.getManager().getCommandHandler())::execute)
+                    .suggests(((ViaFabricCommandHandler) Via.getManager().getCommandHandler())::suggestion)
             )
-            .executes(((VFCommandHandler) Via.getManager().getCommandHandler())::execute);
+            .executes(((ViaFabricCommandHandler) Via.getManager().getCommandHandler())::execute);
     }
 
     @Override
@@ -77,8 +77,8 @@ public class ViaFabric implements ModInitializer {
 
         Via.init(ViaManagerImpl.builder()
             .injector(new FabricInjector())
-            .loader(new VFLoader())
-            .commandHandler(new VFCommandHandler())
+            .loader(new ViaFabricPlatformLoader())
+            .commandHandler(new ViaFabricCommandHandler())
             .platform(platform).build());
 
         platform.getConf().reload();
@@ -94,7 +94,7 @@ public class ViaFabric implements ModInitializer {
 
         registerCommandsV1();
 
-        config = new VFConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
+        config = new ViaFabricConfig(FabricLoader.getInstance().getConfigDir().resolve("ViaFabric")
             .resolve("viafabric.yml").toFile(), JLOGGER);
 
         manager.onServerLoaded();

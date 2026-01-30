@@ -19,7 +19,7 @@ package com.viaversion.fabric.common.provider;
 
 import com.google.common.primitives.Ints;
 import com.viaversion.fabric.common.AddressParser;
-import com.viaversion.fabric.common.config.VFConfig;
+import com.viaversion.fabric.common.config.ViaFabricConfig;
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.common.util.ProtocolUtils;
 import com.viaversion.viaversion.api.Via;
@@ -114,7 +114,7 @@ public abstract class AbstractFabricVersionProvider extends BaseVersionProvider 
 
     protected abstract Logger getLogger();
 
-    protected abstract VFConfig getConfig();
+    protected abstract ViaFabricConfig getConfig();
 
     protected abstract CompletableFuture<ProtocolVersion> detectVersion(InetSocketAddress address);
 }

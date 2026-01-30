@@ -15,31 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.viaversion.fabric.mc1152.providers;
+package com.viaversion.fabric.mc1152.commands;
 
-import com.viaversion.fabric.common.config.ViaFabricConfig;
-import com.viaversion.fabric.common.provider.AbstractFabricVersionProvider;
+import com.mojang.brigadier.CommandDispatcher;
 import com.viaversion.fabric.mc1152.ViaFabric;
-import com.viaversion.fabric.mc1152.service.ProtocolAutoDetector;
-import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
-import java.net.InetSocketAddress;
-import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
+import io.github.cottonmc.clientcommands.ClientCommandPlugin;
+import io.github.cottonmc.clientcommands.CottonClientCommandSource;
 
-public class FabricVersionProvider extends AbstractFabricVersionProvider {
-
+public class ViaFabricClientCommands implements ClientCommandPlugin {
     @Override
-    protected Logger getLogger() {
-        return ViaFabric.JLOGGER;
-    }
-
-    @Override
-    protected ViaFabricConfig getConfig() {
-        return ViaFabric.config;
-    }
-
-    @Override
-    protected CompletableFuture<ProtocolVersion> detectVersion(InetSocketAddress address) {
-        return ProtocolAutoDetector.detectVersion(address);
+    public void registerCommands(CommandDispatcher<CottonClientCommandSource> commandDispatcher) {
+        commandDispatcher.register(ViaFabric.command("viafabricclient"));
     }
 }
