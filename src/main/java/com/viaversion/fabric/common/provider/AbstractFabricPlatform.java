@@ -17,6 +17,7 @@
  */
 package com.viaversion.fabric.common.provider;
 
+import com.viaversion.fabric.common.platform.FabricConfig;
 import com.viaversion.fabric.common.platform.NativeVersionProvider;
 import com.viaversion.fabric.common.protocol.ViaFabricProtocolBase;
 import com.viaversion.fabric.common.util.FutureTaskId;
@@ -25,12 +26,14 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
 import com.viaversion.viaversion.api.type.Types;
+import com.viaversion.viaversion.configuration.AbstractViaConfig;
 import com.viaversion.viaversion.libs.gson.JsonArray;
 import com.viaversion.viaversion.libs.gson.JsonObject;
 import com.viaversion.viaversion.platform.UserConnectionViaVersionPlatform;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
+import java.io.File;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -52,6 +55,11 @@ public abstract class AbstractFabricPlatform extends UserConnectionViaVersionPla
     @Override
     public Logger createLogger(final String name) {
         return new JLoggerToLog4j(LogManager.getLogger(name));
+    }
+
+    @Override
+    protected AbstractViaConfig createConfig() {
+        return new FabricConfig(new File(getDataFolder(), "viaversion.yml"), getLogger());
     }
 
     public abstract void installNativeVersionProvider();
