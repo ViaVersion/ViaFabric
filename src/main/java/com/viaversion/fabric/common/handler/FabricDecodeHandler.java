@@ -19,9 +19,10 @@ package com.viaversion.fabric.common.handler;
 
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.platform.ViaDecodeHandler;
-import com.viaversion.viaversion.platform.ViaEncodeHandler;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+
+import static com.viaversion.viaversion.platform.ViaChannelInitializer.reorderPipeline;
 
 @ChannelHandler.Sharable
 public class FabricDecodeHandler extends ViaDecodeHandler {
@@ -39,27 +40,9 @@ public class FabricDecodeHandler extends ViaDecodeHandler {
                 kryptonReorder = true;
         }
         if (evt instanceof PipelineReorderEvent || kryptonReorder) {
-            reorder(ctx);
+            reorderPipeline(ctx.pipeline(), "compress", "decompress");
         }
         super.userEventTriggered(ctx, evt);
-    }
-
-    private void reorder(ChannelHandlerContext ctx) {
-        int decoderIndex = ctx.pipeline().names().indexOf("decompress");
-        if (decoderIndex == -1) {
-            return;
-        }
-
-        if (decoderIndex > ctx.pipeline().names().indexOf(ViaDecodeHandler.NAME)) {
-            ChannelHandler encoder = ctx.pipeline().get(ViaEncodeHandler.NAME);
-            ChannelHandler decoder = ctx.pipeline().get(ViaDecodeHandler.NAME);
-
-            ctx.pipeline().remove(encoder);
-            ctx.pipeline().remove(decoder);
-
-            ctx.pipeline().addAfter("compress", ViaEncodeHandler.NAME, encoder);
-            ctx.pipeline().addAfter("decompress", ViaDecodeHandler.NAME, decoder);
-        }
     }
 
 }
