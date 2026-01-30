@@ -27,6 +27,10 @@ import net.minecraft.commands.SharedSuggestionProvider;
 
 public class ViaFabricCommandHandler extends ViaCommandHandler {
 
+    public ViaFabricCommandHandler() {
+        super(true);
+    }
+
     public int execute(CommandContext<? extends SharedSuggestionProvider> ctx) {
         String[] args = new String[0];
         try {
