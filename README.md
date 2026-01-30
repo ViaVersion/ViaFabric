@@ -30,11 +30,11 @@ Additional version branches
 
 ## Anti cheat integration
 
-ViaFabric now supports custom payload sending to transmit player protocol version data to the server when installed on
-the client side. This allows servers to retrieve a player's protocol version via plugin messages, which can be useful
-for anti-cheat checks and version-dependent logic.
+ViaFabric supports sending a custom payload to transmit player protocol version data to the server. This allows servers
+to retrieve a player's protocol version via plugin messages, which can be useful for anti-cheat checks and
+version-dependent logic.
 For more details on how to use this feature, see
-the [Player Details Protocol wiki](https://github.com/ViaVersion/ViaVersion/wiki/Player-Details-Protocol).
+the [Server and Player Details Protocol wiki](https://github.com/ViaVersion/ViaVersion/wiki/Server-and-Player-Details-Protocol).
 
 ## Dependencies
 
