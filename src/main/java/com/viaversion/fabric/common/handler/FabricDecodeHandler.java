@@ -45,4 +45,9 @@ public class FabricDecodeHandler extends ViaDecodeHandler {
         super.userEventTriggered(ctx, evt);
     }
 
+    @Deprecated
+    public UserConnection getInfo() {
+        return connection();
+    }
+
 }
