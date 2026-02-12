@@ -78,7 +78,7 @@ public class FabricPlatform extends AbstractFabricPlatform {
         runServerSync(() -> {
             ServerPlayer player = server.getPlayerList().getPlayer(uuid);
             if (player == null) return;
-            player.displayClientMessage(NMSCommandSender.fromLegacy(s), false);
+            player.sendSystemMessage(NMSCommandSender.fromLegacy(s), false);
         });
     }
 
