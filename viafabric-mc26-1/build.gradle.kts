@@ -1,11 +1,11 @@
 dependencies {
-    minecraft("com.mojang:minecraft:26.1-snapshot-7")
+    minecraft("com.mojang:minecraft:26.1-snapshot-8")
 
-    implementation(fabricApi.module("fabric-api-base", "0.143.4+26.1"))
-    implementation(fabricApi.module("fabric-resource-loader-v0", "0.143.4+26.1"))
-    implementation(fabricApi.module("fabric-command-api-v2", "0.143.4+26.1"))
-    implementation(fabricApi.module("fabric-lifecycle-events-v1", "0.143.4+26.1"))
-    implementation(fabricApi.module("fabric-screen-api-v1", "0.143.4+26.1"))
-    implementation(fabricApi.module("fabric-registry-sync-v0", "0.143.4+26.1"))
+    implementation(fabricApi.module("fabric-api-base", "0.143.5+26.1"))
+    implementation(fabricApi.module("fabric-resource-loader-v0", "0.143.5+26.1"))
+    implementation(fabricApi.module("fabric-command-api-v2", "0.143.5+26.1"))
+    implementation(fabricApi.module("fabric-lifecycle-events-v1", "0.143.5+26.1"))
+    implementation(fabricApi.module("fabric-screen-api-v1", "0.143.5+26.1"))
+    implementation(fabricApi.module("fabric-registry-sync-v0", "0.143.5+26.1"))
     compileOnly("com.terraformersmc:modmenu:18.0.0-alpha.5")
 }
