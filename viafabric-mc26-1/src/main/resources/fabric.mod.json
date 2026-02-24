@@ -56,7 +56,7 @@
   },
   "depends": {
     "fabric-resource-loader-v0": "*",
-    "minecraft": "26.1-alpha.9",
+    "minecraft": "26.1-alpha.10",
     "viafabric": "*"
   },
   "recommends": {
