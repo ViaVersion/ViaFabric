@@ -22,7 +22,7 @@ import com.viaversion.fabric.common.gui.ViaServerData;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.multiplayer.ServerSelectionList;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.network.chat.Component;
@@ -41,8 +41,8 @@ public class MixinOnlineServerEntry {
     @Final
     private ServerData serverData;
 
-    @ModifyArg(method = "renderContent", at = @At(value = "INVOKE",
-        target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
+    @ModifyArg(method = "extractContent", at = @At(value = "INVOKE",
+        target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
     private Identifier redirectPingIcon(Identifier texture) {
         if (((ViaServerData) this.serverData).viaFabric$translating() && texture.getPath().startsWith("server_list/ping")) {
             return Identifier.tryBuild("viafabric", texture.getPath());
@@ -50,8 +50,8 @@ public class MixinOnlineServerEntry {
         return texture;
     }
 
-    @Redirect(method = "renderContent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;setTooltipForNextFrame(Lnet/minecraft/network/chat/Component;II)V"))
-    private void addServerVer(GuiGraphics instance, Component component, int x, int y) {
+    @Redirect(method = "extractContent", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;setTooltipForNextFrame(Lnet/minecraft/network/chat/Component;II)V"))
+    private void addServerVer(GuiGraphicsExtractor instance, Component component, int x, int y) {
         ProtocolVersion proto = ProtocolVersion.getProtocol(((ViaServerData) this.serverData).viaFabric$getServerVer());
         List<Component> lines = new ArrayList<>();
         lines.add(component);
