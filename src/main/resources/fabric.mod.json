@@ -13,7 +13,7 @@
   },
   "depends": {
     "minecraft": [
-      "26.1-pre.2"
+      "26.1-pre.3"
     ],
     "viaversion": ">=5.0.0"
   },
