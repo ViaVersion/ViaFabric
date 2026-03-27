@@ -144,10 +144,7 @@ publishMods {
         projectId = "391298"
         type = BETA // alpha is hidden by default
 
-        javaVersions.addAll(
-            (8..22).map { JavaVersion.toVersion(it) }
-        )
-        javaVersions.add(JavaVersion.VERSION_25) // CF skips some Java versions:tinfoilhat:
+        javaVersions.add(JavaVersion.VERSION_25)
 
         minecraftVersions.addAll(mcReleases)
         requires("fabric-api")
