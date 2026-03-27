@@ -116,7 +116,7 @@ dependencies {
 
 loom {
     subprojects.forEach { subproject ->
-        subproject.tasks.matching { it.name == "remapJar" }.configureEach {
+        subproject.tasks.matching { it.name == "jar" }.configureEach {
             nestJars(tasks.jar, outputs.files)
         }
     }
