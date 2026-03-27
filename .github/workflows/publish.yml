@@ -1,5 +1,9 @@
 name: Publish to CurseForge and Modrinth
-on: [workflow_dispatch] # Manual trigger
+on:
+  push:
+    branches:
+      - ver/1.14-1.21
+  workflow_dispatch:
 permissions:
   contents: read
 
