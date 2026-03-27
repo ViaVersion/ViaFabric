@@ -126,10 +126,22 @@ tasks {
     test {
         useTestNG()
     }
+    jar {
+        subprojects.forEach { subproject ->
+            dependsOn(subproject.tasks.named("jar"))
+        }
+    }
 }
 
 val mcReleases = rootProject.extra["publish_mc_versions"].toString().split(",")
     .map { it.trim() }
+
+tasks.named("publishMods") {
+    dependsOn(tasks.jar)
+    subprojects.forEach { subproject ->
+        dependsOn(subproject.tasks.named("jar"))
+    }
+}
 
 publishMods {
     file = tasks.jar.get().archiveFile
