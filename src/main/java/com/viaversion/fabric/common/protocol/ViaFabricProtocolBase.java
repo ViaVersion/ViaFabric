@@ -71,6 +71,11 @@ public class ViaFabricProtocolBase<CU extends ClientboundPacketType, CM extends 
         });
     }
 
+    @Override
+    protected void applySharedRegistrations() {
+        // Not for us
+    }
+
     public ClientboundPacketType getClientboundCustomPayloadPacketType() {
         return packetTypesProvider.unmappedClientboundType(State.PLAY, "CUSTOM_PAYLOAD");
     }
