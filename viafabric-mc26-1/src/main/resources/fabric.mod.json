@@ -56,7 +56,7 @@
   },
   "depends": {
     "fabric-resource-loader-v0": "*",
-    "minecraft": ">=26.1 <=26.1.1",
+    "minecraft": ">=26.1 <=26.1.2",
     "viafabric": "*"
   },
   "recommends": {
