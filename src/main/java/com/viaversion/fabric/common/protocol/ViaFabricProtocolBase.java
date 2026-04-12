@@ -70,6 +70,11 @@ public class ViaFabricProtocolBase<CU extends ClientboundPacketType, CM extends 
             }
         });
     }
+    
+    @Override
+    protected void registerConfigurationChangeHandlers() {
+        // Not for us
+    }
 
     @Override
     protected void applySharedRegistrations() {
