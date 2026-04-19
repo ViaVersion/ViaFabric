@@ -49,14 +49,14 @@ public class ViaFabricProtocolBase<CU extends ClientboundPacketType, CM extends 
             });
         }
 
-        final ServerboundPacketType customPayload = packetTypesProvider.unmappedServerboundType(State.CONFIGURATION, "CUSTOM_PAYLOAD");
+        final SU customPayload = packetTypesProvider.unmappedServerboundType(State.CONFIGURATION, "CUSTOM_PAYLOAD");
         if (customPayload == null) {
             return;
         }
 
         // Fixes an issue where the Fabric Particle API causes disconnects when both the client and server have the mod installed and both are 1.21.5+.
         // See https://github.com/ViaVersion/ViaFabric/issues/428
-        registerServerbound(State.CONFIGURATION, customPayload, wrapper -> {
+        registerServerbound(customPayload, wrapper -> {
             final String channel = Key.namespaced(wrapper.passthrough(Types.STRING));
             if (channel.equals("minecraft:register") || channel.equals("minecraft:unregister")) {
                 final List<String> channels = Lists.newArrayList(new String(wrapper.passthrough(Types.SERVERBOUND_CUSTOM_PAYLOAD_DATA), StandardCharsets.UTF_8).split("\0"));
@@ -74,6 +74,11 @@ public class ViaFabricProtocolBase<CU extends ClientboundPacketType, CM extends 
     @Override
     protected void applySharedRegistrations() {
         // Not for us
+    }
+
+    @Override
+    protected void registerConfigurationChangeHandlers() {
+        // We already have the correct state set; Don't mess with older protocols
     }
 
     public ClientboundPacketType getClientboundCustomPayloadPacketType() {
