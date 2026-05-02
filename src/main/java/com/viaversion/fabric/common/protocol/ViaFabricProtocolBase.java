@@ -76,11 +76,6 @@ public class ViaFabricProtocolBase<CU extends ClientboundPacketType, CM extends 
         // Not for us
     }
 
-    @Override
-    protected void registerConfigurationChangeHandlers() {
-        // We already have the correct state set; Don't mess with older protocols
-    }
-
     public ClientboundPacketType getClientboundCustomPayloadPacketType() {
         return packetTypesProvider.unmappedClientboundType(State.PLAY, "CUSTOM_PAYLOAD");
     }
