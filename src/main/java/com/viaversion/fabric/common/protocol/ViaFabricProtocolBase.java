@@ -24,6 +24,7 @@ import com.viaversion.viaversion.api.protocol.AbstractProtocol;
 import com.viaversion.viaversion.api.protocol.packet.ClientboundPacketType;
 import com.viaversion.viaversion.api.protocol.packet.ServerboundPacketType;
 import com.viaversion.viaversion.api.protocol.packet.State;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.type.Types;
 import com.viaversion.viaversion.protocols.base.ServerboundHandshakePackets;
 import com.viaversion.viaversion.util.Key;
@@ -57,14 +58,17 @@ public class ViaFabricProtocolBase<CU extends ClientboundPacketType, CM extends 
         // Fixes an issue where the Fabric Particle API causes disconnects when both the client and server have the mod installed and both are 1.21.5+.
         // See https://github.com/ViaVersion/ViaFabric/issues/428
         registerServerbound(customPayload, wrapper -> {
-            final String channel = Key.namespaced(wrapper.passthrough(Types.STRING));
-            if (channel.equals("minecraft:register") || channel.equals("minecraft:unregister")) {
-                final List<String> channels = Lists.newArrayList(new String(wrapper.passthrough(Types.SERVERBOUND_CUSTOM_PAYLOAD_DATA), StandardCharsets.UTF_8).split("\0"));
-                if (channels.remove("fabric:extended_block_state_particle_effect_sync")) {
-                    if (!channels.isEmpty()) {
-                        wrapper.set(Types.SERVERBOUND_CUSTOM_PAYLOAD_DATA, 0, String.join("\0", channels).getBytes(StandardCharsets.UTF_8));
-                    } else {
-                        wrapper.cancel();
+            final ProtocolVersion serverVersion = wrapper.user().getProtocolInfo().serverProtocolVersion();
+            if (serverVersion.newerThanOrEqualTo(ProtocolVersion.v1_21_5) && !serverVersion.equals(wrapper.user().getProtocolInfo().protocolVersion())) {
+                final String channel = Key.namespaced(wrapper.passthrough(Types.STRING));
+                if (channel.equals("minecraft:register") || channel.equals("minecraft:unregister")) {
+                    final List<String> channels = Lists.newArrayList(new String(wrapper.passthrough(Types.SERVERBOUND_CUSTOM_PAYLOAD_DATA), StandardCharsets.UTF_8).split("\0"));
+                    if (channels.remove("fabric:extended_block_state_particle_effect_sync")) {
+                        if (!channels.isEmpty()) {
+                            wrapper.set(Types.SERVERBOUND_CUSTOM_PAYLOAD_DATA, 0, String.join("\0", channels).getBytes(StandardCharsets.UTF_8));
+                        } else {
+                            wrapper.cancel();
+                        }
                     }
                 }
             }
@@ -73,7 +77,7 @@ public class ViaFabricProtocolBase<CU extends ClientboundPacketType, CM extends 
 
     @Override
     protected void applySharedRegistrations() {
-        // Not for us
+        // Not for us, protocols will already track states down the line
     }
 
     public ClientboundPacketType getClientboundCustomPayloadPacketType() {
