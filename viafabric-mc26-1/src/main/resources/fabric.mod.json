@@ -52,6 +52,9 @@
     ],
     "client": [
       "com.viaversion.fabric.ViaFabricClient"
+    ],
+    "modmenu": [
+      "com.viaversion.fabric.gui.ModMenuConfig"
     ]
   },
   "depends": {
