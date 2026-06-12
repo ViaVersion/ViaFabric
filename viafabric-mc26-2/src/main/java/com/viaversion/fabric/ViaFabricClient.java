@@ -50,7 +50,7 @@ public class ViaFabricClient implements ClientModInitializer {
                     enableClientSideViaVersion = new ImageButton(-1, 10,
                         40, 20, // Size
                         new WidgetSprites(Identifier.fromNamespaceAndPath("viafabric", "widget_unfocused"), Identifier.fromNamespaceAndPath("viafabric", "widget_focused")),
-                        it -> Minecraft.getInstance().setScreenAndShow(new ViaConfigScreen(screen)),
+                        it -> Minecraft.getInstance().gui.setScreen(new ViaConfigScreen(screen)),
                         Component.translatable("gui.via_button"));
                 }
 

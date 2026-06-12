@@ -109,14 +109,14 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
 
     private void onClickClientSide(Button widget) {
         if (!ViaFabric.config.isClientSideEnabled()) {
-            Minecraft.getInstance().setScreenAndShow(new ConfirmScreen(
+            Minecraft.getInstance().gui.setScreen(new ConfirmScreen(
                 answer -> {
                     if (answer) {
                         ViaFabric.config.setClientSideEnabled(true);
                         ViaFabric.config.save();
                         widget.setMessage(getClientSideText());
                     }
-                    Minecraft.getInstance().setScreenAndShow(this);
+                    Minecraft.getInstance().gui.setScreen(this);
                 },
                 Component.translatable("gui.enable_client_side.question"),
                 Component.translatable("gui.enable_client_side.warning"),
@@ -137,7 +137,7 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
 
     @Override
     public void onClose() {
-        this.minecraft.setScreenAndShow(this.parent);
+        this.minecraft.gui.setScreen(this.parent);
     }
 
     private Component getClientSideText() {
