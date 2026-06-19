@@ -4,7 +4,7 @@ plugins {
     id("org.ajoberstar.grgit") version "5.3.2"
     id("net.fabricmc.fabric-loom-remap") version "1.15-SNAPSHOT"
     id("com.github.ben-manes.versions") version "0.53.0"
-    id("xyz.wagyourtail.jvmdowngrader") version "1.0.1" // Don't update this
+    id("xyz.wagyourtail.jvmdowngrader") version "1.3.6"
     id("me.modmuss50.mod-publish-plugin") version "1.1.0"
 }
 
