@@ -63,7 +63,7 @@ public class ViaFabricProtocolBase<CU extends ClientboundPacketType, CM extends 
                 final String channel = Key.namespaced(wrapper.passthrough(Types.STRING));
                 if (channel.equals("minecraft:register") || channel.equals("minecraft:unregister")) {
                     final List<String> channels = Lists.newArrayList(new String(wrapper.passthrough(Types.SERVERBOUND_CUSTOM_PAYLOAD_DATA), StandardCharsets.UTF_8).split("\0"));
-                    if (channels.remove("fabric:extended_block_state_particle_effect_sync")) {
+                    if (channels.remove("fabric:extended_block_particle_option_sync")) {
                         if (!channels.isEmpty()) {
                             wrapper.set(Types.SERVERBOUND_CUSTOM_PAYLOAD_DATA, 0, String.join("\0", channels).getBytes(StandardCharsets.UTF_8));
                         } else {
