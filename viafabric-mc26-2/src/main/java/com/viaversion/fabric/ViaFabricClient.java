@@ -55,9 +55,7 @@ public class ViaFabricClient implements ClientModInitializer {
                 }
 
                 enableClientSideViaVersion.setX(scaledWidth / 2 + 113);
-                if (ViaFabric.config.isHideButton()) {
-                    enableClientSideViaVersion.visible = false;
-                }
+                enableClientSideViaVersion.visible = !ViaFabric.config.isHideButton();
 
                 List<AbstractWidget> buttons = Screens.getWidgets(screen);
                 if (!buttons.contains(enableClientSideViaVersion)) {
