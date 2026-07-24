@@ -1,5 +1,5 @@
 dependencies {
-    minecraft("com.mojang:minecraft:26.3-snapshot-4")
+    minecraft("com.mojang:minecraft:26.3-snapshot-5")
 
     implementation(fabricApi.module("fabric-api-base", "0.155.3+26.3"))
     implementation(fabricApi.module("fabric-resource-loader-v0", "0.155.3+26.3"))
