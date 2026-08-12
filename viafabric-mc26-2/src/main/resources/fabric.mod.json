@@ -61,7 +61,7 @@
     "fabric-resource-loader-v0": "*",
     "minecraft": [
       "26.2",
-      "26.3-alpha.7"
+      "26.3-alpha.8"
     ],
     "viafabric": "*"
   },
