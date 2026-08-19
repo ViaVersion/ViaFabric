@@ -5,7 +5,7 @@ plugins {
     id("net.fabricmc.fabric-loom-remap") version "1.17-SNAPSHOT"
     id("com.github.ben-manes.versions") version "0.53.0"
     id("xyz.wagyourtail.jvmdowngrader") version "1.3.6"
-    id("me.modmuss50.mod-publish-plugin") version "1.1.0"
+    id("me.modmuss50.mod-publish-plugin") version "2.2.0"
 }
 
 private val env = System.getenv()
@@ -151,7 +151,7 @@ publishMods {
     file = tasks.remapJar.get().archiveFile
     changelog = "A changelog can be found at https://github.com/ViaVersion/ViaFabric/commits"
     version = rootProject.version.toString()
-    displayName = "[${getBranch()}] ViaFabric ${version.get()}"
+    displayName.set("[${getBranch()}] ViaFabric ${version.get()}")
     modLoaders.add("fabric")
     dryRun = providers.environmentVariable("CURSEFORGE_TOKEN").getOrNull() == null
 
@@ -166,6 +166,8 @@ publishMods {
         javaVersions.add(JavaVersion.VERSION_25) // CF skips some Java versions:tinfoilhat:
 
         minecraftVersions.addAll(mcReleases)
+        client.set(true)
+        server.set(true)
         requires("fabric-api")
         embeds("cotton-client-commands")
     }
