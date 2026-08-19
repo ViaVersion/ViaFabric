@@ -111,7 +111,7 @@ dependencies {
 
     include("com.viaversion:viaversion:${rootProject.extra["viaver_version"]}")
 
-    testImplementation("org.testng:testng:6.13.1")
+    testImplementation("org.testng:testng:7.12.0")
 }
 
 loom {
