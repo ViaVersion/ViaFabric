@@ -6,9 +6,9 @@ pluginManagement {
     }
 
     plugins {
-        id("org.ajoberstar.grgit") version "5.3.2"
+        id("org.ajoberstar.grgit") version "5.3.3"
         id("net.fabricmc.fabric-loom") version "1.17-SNAPSHOT"
-        id("com.github.ben-manes.versions") version "0.53.0"
+        id("com.github.ben-manes.versions") version "0.61.0"
         id("me.modmuss50.mod-publish-plugin") version "2.2.0"
     }
 }
