@@ -42,8 +42,19 @@ public class MixinOnlineServerEntry {
     private ServerData serverData;
 
     @ModifyArg(method = "extractContent", at = @At(value = "INVOKE",
-        target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"))
+        target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"),
+    require = 0) // TODO Remove once we need a new submodule
     private Identifier redirectPingIcon(Identifier texture) {
+        if (((ViaServerData) this.serverData).viaFabric$translating() && texture.getPath().startsWith("server_list/ping")) {
+            return Identifier.tryBuild("viafabric", texture.getPath());
+        }
+        return texture;
+    }
+
+    @ModifyArg(method = "extractContent", at = @At(value = "INVOKE",
+        target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blitSprite(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIII)V"),
+    require = 0)
+    private Identifier redirectPingIcon26_3(Identifier texture) {
         if (((ViaServerData) this.serverData).viaFabric$translating() && texture.getPath().startsWith("server_list/ping")) {
             return Identifier.tryBuild("viafabric", texture.getPath());
         }
