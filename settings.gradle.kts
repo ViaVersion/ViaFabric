@@ -21,3 +21,4 @@ rootProject.name = "ViaFabric"
 
 include("viafabric-mc26-1")
 include("viafabric-mc26-2")
+include("viafabric-mc26-4")
