@@ -51,6 +51,6 @@ public final class DebugEntryViaFabric implements DebugScreenEntry {
                 line += " / C: " + clientVer + " S: " + serverVer + " A: " + fabricDecodeHandler.connection().isActive();
             }
         }
-        debugScreenDisplayer.addLine(line);
+        debugScreenDisplayer.addPriorityLine(line);
     }
 }
