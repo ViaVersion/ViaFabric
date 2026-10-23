@@ -25,6 +25,7 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.platform.ViaDecodeHandler;
 import io.netty.channel.ChannelHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.debug.DebugGroups;
 import net.minecraft.client.gui.components.debug.DebugScreenDisplayer;
 import net.minecraft.client.gui.components.debug.DebugScreenEntry;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -51,6 +52,6 @@ public final class DebugEntryViaFabric implements DebugScreenEntry {
                 line += " / C: " + clientVer + " S: " + serverVer + " A: " + fabricDecodeHandler.connection().isActive();
             }
         }
-        debugScreenDisplayer.addPriorityLine(line);
+        debugScreenDisplayer.addToGroup(DebugGroups.MISC, line);
     }
 }

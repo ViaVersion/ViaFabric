@@ -38,7 +38,7 @@ public abstract class MixinServerAddress {
         return parser.toAddress();
     }
 
-    @ModifyArg(method = "parseString", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/resolver/ServerAddress;<init>(Lcom/google/common/net/HostAndPort;)V"))
+    @ModifyArg(method = "parseString", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/resolver/ServerAddress;<init>(Lcom/google/common/net/HostAndPort;Lnet/minecraft/network/QueryProperties;)V"), index = 0)
     private static HostAndPort injectViaMetadata(HostAndPort original, @Share("via") LocalRef<AddressParser> via) {
         final AddressParser parser = via.get();
         if (parser == null) {

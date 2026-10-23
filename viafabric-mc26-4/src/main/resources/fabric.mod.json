@@ -60,7 +60,7 @@
   "depends": {
     "fabric-resource-loader-v0": "*",
     "minecraft": [
-      "26.4-alpha.4"
+      "26.4-alpha.5"
     ],
     "viafabric": "*"
   },
