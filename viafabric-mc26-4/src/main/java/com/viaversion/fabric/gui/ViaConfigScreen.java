@@ -32,6 +32,7 @@ import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import org.jspecify.annotations.NonNull;
 
 @Environment(EnvType.CLIENT)
 public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
@@ -158,8 +159,8 @@ public class ViaConfigScreen extends Screen implements AbstractViaConfigScreen {
     }
 
     @Override
-    public void extractRenderState(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float delta) {
-        super.extractRenderState(graphics, mouseX, mouseY, delta);
+    public void extractRenderState(final @NonNull GuiGraphicsExtractor graphics) {
+        super.extractRenderState(graphics);
         graphics.centeredText(this.font, this.title, this.width / 2, 20, 0xFFFFFFFF);
     }
 
