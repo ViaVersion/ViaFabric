@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.permissions.LevelBasedPermissionSet;
@@ -31,9 +30,9 @@ import net.minecraft.server.players.NameAndId;
 import net.minecraft.world.entity.Entity;
 
 public class NMSCommandSender implements ViaCommandSender {
-    private final SharedSuggestionProvider provider;
+    private final Object provider;
 
-    public NMSCommandSender(SharedSuggestionProvider provider) {
+    public NMSCommandSender(Object provider) {
         this.provider = provider;
     }
 

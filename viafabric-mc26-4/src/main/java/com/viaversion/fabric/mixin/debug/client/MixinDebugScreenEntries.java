@@ -25,6 +25,7 @@ import net.minecraft.client.gui.components.debug.DebugScreenEntry;
 import net.minecraft.client.gui.components.debug.DebugScreenEntryStatus;
 import net.minecraft.client.gui.components.debug.DebugScreenProfile;
 import net.minecraft.core.Registry;
+import net.minecraft.core.WritableRegistry;
 import net.minecraft.resources.ResourceKey;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,7 +35,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(DebugScreenEntries.class)
 public abstract class MixinDebugScreenEntries {
@@ -53,7 +53,7 @@ public abstract class MixinDebugScreenEntries {
     private static ResourceKey<DebugScreenEntry> viaFabric$registryKey = key("viafabric");
 
     @Inject(method = "bootstrap", at = @At("HEAD"))
-    private static void registerViaFabricEntry(Registry<DebugScreenEntry> registry, CallbackInfoReturnable<Object> cir) {
+    private static void registerViaFabricEntry(WritableRegistry<DebugScreenEntry> registry, CallbackInfo ci) {
         Registry.register(registry, viaFabric$registryKey, new DebugEntryViaFabric());
     }
 

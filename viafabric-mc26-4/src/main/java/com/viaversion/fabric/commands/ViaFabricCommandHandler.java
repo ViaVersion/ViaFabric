@@ -23,7 +23,6 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.viaversion.viaversion.commands.ViaCommandHandler;
 import java.util.concurrent.CompletableFuture;
-import net.minecraft.commands.SharedSuggestionProvider;
 
 public class ViaFabricCommandHandler extends ViaCommandHandler {
 
@@ -31,7 +30,7 @@ public class ViaFabricCommandHandler extends ViaCommandHandler {
         super(true);
     }
 
-    public int execute(CommandContext<? extends SharedSuggestionProvider> ctx) {
+    public int execute(CommandContext<?> ctx) {
         String[] args = new String[0];
         try {
             args = StringArgumentType.getString(ctx, "args").split(" ");
@@ -44,7 +43,7 @@ public class ViaFabricCommandHandler extends ViaCommandHandler {
         return 1;
     }
 
-    public CompletableFuture<Suggestions> suggestion(CommandContext<? extends SharedSuggestionProvider> ctx, SuggestionsBuilder builder) {
+    public CompletableFuture<Suggestions> suggestion(CommandContext<?> ctx, SuggestionsBuilder builder) {
         String[] args;
         try {
             args = StringArgumentType.getString(ctx, "args").split(" ", -1);
