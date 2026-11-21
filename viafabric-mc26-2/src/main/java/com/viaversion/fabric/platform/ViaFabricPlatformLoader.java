@@ -17,6 +17,7 @@
  */
 package com.viaversion.fabric.platform;
 
+import com.viaversion.fabric.common.provider.FabricSessionAuthenticationProvider;
 import com.viaversion.fabric.providers.FabricVersionProvider;
 import com.viaversion.fabric.providers.ViaFabricConnectionOptionsProvider;
 import com.viaversion.fabric.providers.ViaFabricHandItemProvider;
@@ -31,6 +32,7 @@ import com.viaversion.viaversion.protocols.v1_15_2to1_16.provider.PlayerAbilitie
 import com.viaversion.viaversion.protocols.v1_8to1_9.provider.HandItemProvider;
 import com.viaversion.viaversion.protocols.v26_3to26_4.provider.ConnectionOptionsProvider;
 import com.viaversion.viaversion.protocols.v26_3to26_4.provider.KeyExchangeProvider;
+import com.viaversion.viaversion.protocols.v26_3to26_4.provider.SessionAuthenticationProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -49,6 +51,7 @@ public class ViaFabricPlatformLoader implements ViaPlatformLoader {
 
         Via.getManager().getProviders().use(PlayerAbilitiesProvider.class, new ViaFabricPlayerAbilitiesProvider());
         Via.getManager().getProviders().use(PlayerLookTargetProvider.class, new ViaFabricPlayerLookTargetProvider());
+        Via.getManager().getProviders().use(SessionAuthenticationProvider.class, FabricSessionAuthenticationProvider.INSTANCE);
 
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             Via.getManager().getProviders().use(ConnectionOptionsProvider.class, new ViaFabricConnectionOptionsProvider());

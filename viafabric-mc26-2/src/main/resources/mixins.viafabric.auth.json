@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_25",
+  "package": "com.viaversion.fabric.mixin.auth",
+  "mixins": [
+    "MixinServerLoginPacketListenerImplAuthenticator"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

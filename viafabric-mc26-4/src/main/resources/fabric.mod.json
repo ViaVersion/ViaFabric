@@ -72,6 +72,7 @@
   },
   "mixins": [
     "mixins.viafabric.address.json",
+    "mixins.viafabric.auth.json",
     "mixins.viafabric.gui.json",
     "mixins.viafabric.debug.json",
     "mixins.viafabric.pipeline.json",
