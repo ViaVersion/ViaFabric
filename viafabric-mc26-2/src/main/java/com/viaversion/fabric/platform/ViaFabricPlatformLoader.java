@@ -18,7 +18,9 @@
 package com.viaversion.fabric.platform;
 
 import com.viaversion.fabric.providers.FabricVersionProvider;
+import com.viaversion.fabric.providers.ViaFabricConnectionOptionsProvider;
 import com.viaversion.fabric.providers.ViaFabricHandItemProvider;
+import com.viaversion.fabric.providers.ViaFabricKeyExchangeProvider;
 import com.viaversion.fabric.providers.ViaFabricPlayerAbilitiesProvider;
 import com.viaversion.fabric.providers.ViaFabricPlayerLookTargetProvider;
 import com.viaversion.viaversion.api.Via;
@@ -27,6 +29,8 @@ import com.viaversion.viaversion.api.protocol.version.VersionProvider;
 import com.viaversion.viaversion.protocols.v1_12_2to1_13.provider.PlayerLookTargetProvider;
 import com.viaversion.viaversion.protocols.v1_15_2to1_16.provider.PlayerAbilitiesProvider;
 import com.viaversion.viaversion.protocols.v1_8to1_9.provider.HandItemProvider;
+import com.viaversion.viaversion.protocols.v26_3to26_4.provider.ConnectionOptionsProvider;
+import com.viaversion.viaversion.protocols.v26_3to26_4.provider.KeyExchangeProvider;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 
@@ -45,6 +49,11 @@ public class ViaFabricPlatformLoader implements ViaPlatformLoader {
 
         Via.getManager().getProviders().use(PlayerAbilitiesProvider.class, new ViaFabricPlayerAbilitiesProvider());
         Via.getManager().getProviders().use(PlayerLookTargetProvider.class, new ViaFabricPlayerLookTargetProvider());
+
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            Via.getManager().getProviders().use(ConnectionOptionsProvider.class, new ViaFabricConnectionOptionsProvider());
+            Via.getManager().getProviders().use(KeyExchangeProvider.class, new ViaFabricKeyExchangeProvider());
+        }
     }
 
     @Override
