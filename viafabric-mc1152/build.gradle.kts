@@ -3,6 +3,7 @@ dependencies {
     mappings(loom.officialMojangMappings())
 
     modImplementation(fabricApi.module("fabric-api-base", "0.28.5+1.15"))
+    include(modImplementation("me.lucko:fabric-permissions-api:0.3.1")!!)
     modImplementation(fabricApi.module("fabric-resource-loader-v0", "0.28.5+1.15"))
     modImplementation(fabricApi.module("fabric-command-api-v1", "0.28.5+1.15"))
     modImplementation(fabricApi.module("fabric-lifecycle-events-v1", "0.28.5+1.15"))

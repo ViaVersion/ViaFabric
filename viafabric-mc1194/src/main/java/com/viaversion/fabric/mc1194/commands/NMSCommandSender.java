@@ -21,6 +21,7 @@ import com.viaversion.viaversion.api.command.ViaCommandSender;
 import com.viaversion.viaversion.util.ComponentUtil;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
@@ -38,7 +39,7 @@ public class NMSCommandSender implements ViaCommandSender {
     @Override
     public boolean hasPermission(String s) {
         // https://gaming.stackexchange.com/questions/138602/what-does-op-permission-level-do
-        return provider.hasPermission(3);
+        return Permissions.check(provider, s, 3);
     }
 
     public static MutableComponent fromLegacy(String legacy) {

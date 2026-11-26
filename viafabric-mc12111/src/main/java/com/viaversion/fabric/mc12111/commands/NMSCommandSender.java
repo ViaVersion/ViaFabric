@@ -20,14 +20,13 @@ package com.viaversion.fabric.mc12111.commands;
 import com.viaversion.viaversion.api.command.ViaCommandSender;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.server.permissions.LevelBasedPermissionSet;
 import net.minecraft.server.permissions.PermissionLevel;
-import net.minecraft.server.players.NameAndId;
 import net.minecraft.world.entity.Entity;
 
 public class NMSCommandSender implements ViaCommandSender {
@@ -41,9 +40,7 @@ public class NMSCommandSender implements ViaCommandSender {
     public boolean hasPermission(String s) {
         // https://gaming.stackexchange.com/questions/138602/what-does-op-permission-level-do
         if (provider instanceof CommandSourceStack commandSourceStack && commandSourceStack.getPlayer() != null) {
-            NameAndId player = commandSourceStack.getPlayer().nameAndId();
-            LevelBasedPermissionSet permissions = commandSourceStack.getServer().getProfilePermissions(player);
-            return permissions.level().isEqualOrHigherThan(PermissionLevel.ADMINS);
+            return Permissions.check(commandSourceStack, s, PermissionLevel.ADMINS);
         }
         return true;
     }

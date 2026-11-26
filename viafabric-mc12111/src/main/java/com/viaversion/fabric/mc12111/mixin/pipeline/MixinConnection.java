@@ -27,7 +27,6 @@ import com.viaversion.viaversion.platform.ViaEncodeHandler;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelPipeline;
-import io.netty.channel.socket.SocketChannel;
 import net.minecraft.network.BandwidthDebugMonitor;
 import net.minecraft.network.Connection;
 import net.minecraft.network.HandlerNames;
@@ -50,8 +49,8 @@ public class MixinConnection {
 
     @Inject(method = "configureSerialization", at = @At("RETURN"))
     private static void onAddHandlers(ChannelPipeline pipeline, PacketFlow side, boolean local, BandwidthDebugMonitor packetSizeLogger, CallbackInfo ci) {
-        final Channel channel = pipeline.channel();
-        if (channel instanceof SocketChannel) {
+        if (!local) {
+            final Channel channel = pipeline.channel();
             final UserConnection user = new UserConnectionImpl(channel, side == PacketFlow.CLIENTBOUND);
             new ProtocolPipelineImpl(user).add(ViaFabricProtocol.INSTANCE);
 

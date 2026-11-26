@@ -6,6 +6,7 @@ dependencies {
     })
 
     modImplementation(fabricApi.module("fabric-api-base", "0.87.2+1.19.4"))
+    include(modImplementation("me.lucko:fabric-permissions-api:0.3.1")!!)
     modImplementation(fabricApi.module("fabric-resource-loader-v0", "0.87.2+1.19.4"))
     modImplementation(fabricApi.module("fabric-command-api-v1", "0.87.2+1.19.4"))
     modImplementation(fabricApi.module("fabric-lifecycle-events-v1", "0.87.2+1.19.4"))
