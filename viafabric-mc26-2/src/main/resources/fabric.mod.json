@@ -59,6 +59,7 @@
   },
   "depends": {
     "fabric-resource-loader-v0": "*",
+    "fabric-permission-api-v1": "*",
     "minecraft": [
       "26.2",
       "26.3"

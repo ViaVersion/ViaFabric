@@ -7,5 +7,6 @@ dependencies {
     implementation(fabricApi.module("fabric-lifecycle-events-v1", "0.160.6+26.3"))
     implementation(fabricApi.module("fabric-screen-api-v1", "0.160.6+26.3"))
     implementation(fabricApi.module("fabric-registry-sync-v0", "0.160.6+26.3"))
+    implementation(fabricApi.module("fabric-permission-api-v1", "0.160.6+26.3"))
     compileOnly("com.terraformersmc:modmenu:21.0.0-beta.1")
 }

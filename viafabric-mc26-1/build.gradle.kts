@@ -7,5 +7,6 @@ dependencies {
     implementation(fabricApi.module("fabric-lifecycle-events-v1", "0.145.4+26.1.2"))
     implementation(fabricApi.module("fabric-screen-api-v1", "0.145.4+26.1.2"))
     implementation(fabricApi.module("fabric-registry-sync-v0", "0.145.4+26.1.2"))
+    include(implementation("me.lucko:fabric-permissions-api:0.7.1")!!)
     compileOnly("com.terraformersmc:modmenu:18.0.0-alpha.8")
 }
