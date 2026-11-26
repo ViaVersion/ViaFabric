@@ -4,6 +4,9 @@
   "package": "com.viaversion.fabric.mixin.shutdown",
   "mixins": [
   ],
+  "client": [
+    "client.MixinMinecraft"
+  ],
   "server": [
     "server.MixinMinecraftServer"
   ],
